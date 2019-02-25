@@ -56,7 +56,8 @@ public class ReceiveOSC : MonoBehaviour {
         float yPos = message.GetFloat(3);
         float zPos = message.GetFloat(4);
 
-        gameEngine.playersPositions[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
+        if (playerID != gameEngine._playerID)
+            gameEngine.playersPositions[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
     }
 
 
