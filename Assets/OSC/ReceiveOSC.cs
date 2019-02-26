@@ -9,7 +9,7 @@ public class ReceiveOSC : MonoBehaviour {
 
     // Use this for initialization
     public void StartListening () {
-        osc.SetAddressHandler("/PlayerRegistrationRequest", RegisterPlayer);
+        osc.SetAddressHandler("/PlayerRegistrationRequest", AnswerToRegistationRequest);
         osc.SetAddressHandler("/RegistrationConfirmed", RegistrationConfirmed);
         osc.SetAddressHandler("/PlayerPosition", UpdatePartnerPosition);
         osc.SetAddressHandler("/ClientHasLeft", ErasePlayerRequest);
@@ -17,20 +17,20 @@ public class ReceiveOSC : MonoBehaviour {
         osc.SetAddressHandler("/AddPlayerFromServer", AddPlayerFromServer);
     }
 	
-
-    void RegisterPlayer(OscMessage message)
+    // server side
+    void AnswerToRegistationRequest(OscMessage message)
     {
         Debug.Log("Received : " + message);
         if (gameEngine.userNetworkType == UserNetworkType.Server)
         {
             int playerID = message.GetInt(0);
-            gameEngine.AddPlayer(playerID, gameEngine.playerParent);
+            gameEngine.AddOtherPlayer(playerID, gameEngine.playerParent);
             osc.sender.ConfirmRegistration(playerID);
         }
     }
 
 
-
+    // client side
     void RegistrationConfirmed(OscMessage message)
     {
         Debug.Log("Received : " + message);
@@ -41,10 +41,9 @@ public class ReceiveOSC : MonoBehaviour {
         }
     }
 
-
+    // triggered for each osc position message received (3 per player)
     void UpdatePartnerPosition(OscMessage message)
     {
-
         int playerID = message.GetInt(0);
 
         string playerPart="none";
@@ -57,7 +56,10 @@ public class ReceiveOSC : MonoBehaviour {
         float zPos = message.GetFloat(4);
 
         if (playerID != gameEngine._playerID)
-            gameEngine.playersPositions[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
+        {
+            //Debug.Log("Receiving " + playerID + playerPart + " : " + new Vector3(xPos, yPos, zPos));
+            gameEngine.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
+        }
     }
 
 
@@ -67,7 +69,7 @@ public class ReceiveOSC : MonoBehaviour {
         if (gameEngine.userNetworkType == UserNetworkType.Client)
         {
             int playerID = message.GetInt(0);
-            gameEngine.AddPlayer(playerID, gameEngine.playerParent);
+            gameEngine.AddOtherPlayer(playerID, gameEngine.playerParent);
         }
     }
 

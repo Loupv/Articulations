@@ -94,7 +94,6 @@ public class SendOSC : MonoBehaviour {
 
     public void AddEveryPlayerToClientDict()
     {
-
         foreach (int playerID in gameEngine.IDsList)
         {
                 message = new OscMessage();

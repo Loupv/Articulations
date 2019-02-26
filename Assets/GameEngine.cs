@@ -41,16 +41,15 @@ public enum AppState
 public class GameEngine : MonoBehaviour
 {
 
-    public Dictionary<string, Vector3> playersPositions;
-    public List<int> IDsList;
 
     public OSC osc;
     public SendOSC sendOSC;
     public ReceiveOSC receiveOSC;
     public CanvasHandler canvasHandler;
 
-    public List<GameObject> PlayerGOs;
-    //public List<GameObject> OtherPlayers;
+    public Dictionary<string, Vector3> pendingPositionsActualizations;
+    public List<int> IDsList;
+    public List<GameObject> players;
     public int _playerID;
 
     private JSONLoader jSONLoader;
@@ -85,9 +84,8 @@ public class GameEngine : MonoBehaviour
 
         jSONLoader = new JSONLoader();
         gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
-
-        playersPositions = new Dictionary<string, Vector3>();
-
+        pendingPositionsActualizations = new Dictionary<string, Vector3>();
+       
     }
 
     // Start the performance
@@ -99,7 +97,8 @@ public class GameEngine : MonoBehaviour
         if (userRole == UserRole.Player)
         {
             _playerID = Random.Range(0, 10000);
-            AddPlayer(_playerID, playerParent);
+            InitPlayer(_playerID, playerParent);
+            GameObject.Find("Player" + _playerID).GetComponent<Animator>().SetTrigger("isLocalPlayer");
         }
         else _playerID = -1;
 
@@ -168,40 +167,36 @@ public class GameEngine : MonoBehaviour
         // ici on doit juste envoyer les position du joueur / confusion thisPlayer et all players
         // si serveur on doit envoyer toutes les positions
         // si client on doit juste envoyer la sienne
-        if (PlayerGOs != null && PlayerGOs.Count > 0)
-        {
-            foreach (GameObject player in PlayerGOs)
+
+        int i = 0;
+        foreach (int playerID in IDsList)
+        { 
+            if (playerID == _playerID) { // if this is the actual instance's player
+                Debug.Log("Sending local infos :" + players[i]);
+                sendOSC.SendOSCPosition("/PlayerPosition", _playerID, 0, players[i].transform.GetChild(0).position);
+                sendOSC.SendOSCPosition("/PlayerPosition", _playerID, 1, players[i].transform.GetChild(1).position);
+                sendOSC.SendOSCPosition("/PlayerPosition", _playerID, 2, players[i].transform.GetChild(2).position);
+            } 
+            else // update every other player on the network
             {
-
-                Transform headTransform = player.transform.GetChild(0);
-                Transform leftHandTransform = player.transform.GetChild(1);
-                Transform rightHandTransform = player.transform.GetChild(2);
-
-                sendOSC.SendOSCPosition("/PlayerPosition", _playerID, 0, headTransform.position);
-                sendOSC.SendOSCPosition("/PlayerPosition", _playerID, 1, leftHandTransform.position);
-                sendOSC.SendOSCPosition("/PlayerPosition", _playerID, 2, rightHandTransform.position);
-
+                Debug.Log("Receiving external infos :" + players[i]);
+                players[i].transform.GetChild(0).position = pendingPositionsActualizations[playerID+"Head"];
+                players[i].transform.GetChild(1).position = pendingPositionsActualizations[playerID + "LeftHand"];
+                players[i].transform.GetChild(2).position = pendingPositionsActualizations[playerID + "RightHand"];
             }
-        }
+            i++;
 
-        // ici on doit ajuster les positions de tout le monde
-        if (playersPositions.Count > 0)
-        {
-            foreach (KeyValuePair<string, Vector3> player in playersPositions)
-            {
-                // update other players positions
-            }
         }
-
     }
 
 
 
-    public void AddPlayer(int playerID, GameObject parent)
+    public void InitPlayer(int playerID, GameObject parent)
     {
         if (!IDsList.Contains(playerID))
         {
             GameObject player = Instantiate(playerPrefab) as GameObject;
+            player.transform.position += new Vector3(0,Random.Range(-2f, 1.5f),0);
             player.transform.parent = playerParent.transform;
 
             GameObject head = player.transform.Find("Head").gameObject;
@@ -209,29 +204,49 @@ public class GameEngine : MonoBehaviour
             GameObject rightHand = player.transform.Find("RightHand").gameObject;
 
             player.name = "Player" + playerID.ToString();
-            head.name = "Player" + playerID.ToString() + "Head";
-            leftHand.name = "Player" + playerID.ToString() + "LeftHand";
-            rightHand.name = "Player" + playerID.ToString() + "RightHand";
+            players.Add(player);
 
-            PlayerGOs.Add(player);
+            //PlayerGOs.Add(player);
             IDsList.Add(playerID);
-            playersPositions.Add(head.name, head.transform.position);
-            playersPositions.Add(leftHand.name, leftHand.transform.position);
-            playersPositions.Add(rightHand.name, rightHand.transform.position);
+            pendingPositionsActualizations.Add(playerID+"Head", head.transform.position);
+            pendingPositionsActualizations.Add(playerID + "LeftHand", leftHand.transform.position);
+            pendingPositionsActualizations.Add(playerID + "RightHand", rightHand.transform.position);
 
-            //head.transform.parent = parent.transform;
-            //leftHand.transform.parent = parent.transform;
-            //rightHand.transform.parent = parent.transform;
         }
     }
 
+    public void AddOtherPlayer(int playerID, GameObject parent)
+    {
+        if (!IDsList.Contains(playerID))
+        {
+            GameObject player = Instantiate(playerPrefab) as GameObject;
+            player.transform.parent = playerParent.transform;
+            Destroy(player.GetComponent<Animator>());
+            GameObject head = player.transform.Find("Head").gameObject;
+            GameObject leftHand = player.transform.Find("LeftHand").gameObject;
+            GameObject rightHand = player.transform.Find("RightHand").gameObject;
+
+            player.name = "Player" + playerID.ToString();
+            players.Add(player);
+
+            //PlayerGOs.Add(player);
+            IDsList.Add(playerID);
+            pendingPositionsActualizations.Add(playerID + "Head", head.transform.position);
+            pendingPositionsActualizations.Add(playerID + "LeftHand", leftHand.transform.position);
+            pendingPositionsActualizations.Add(playerID + "RightHand", rightHand.transform.position);
+
+        }
+    }
+
+
     public void ErasePlayer(int playerID)
     {
-        playersPositions.Remove("Player" + playerID.ToString() + "Head");
-        playersPositions.Remove("Player" + playerID.ToString() + "LeftHand");
-        playersPositions.Remove("Player" + playerID.ToString() + "RightHand");
-        PlayerGOs.Remove(GameObject.Find("Player" + playerID.ToString()));
+       //PlayerGOs.Remove(GameObject.Find("Player" + playerID.ToString()));
+        pendingPositionsActualizations.Remove(playerID + "Head");
+        pendingPositionsActualizations.Remove(playerID + "LeftHand");
+        pendingPositionsActualizations.Remove(playerID + "RightHand");
         Destroy(GameObject.Find("Player" + playerID.ToString()));
+        IDsList.Remove(playerID);
     }
 
     public void KillApp()
