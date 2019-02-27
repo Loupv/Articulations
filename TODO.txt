@@ -2,14 +2,8 @@
 
 Trois PCs à chaque fois ? Un serveur + clients
 
-
-Les clients doivent envoyer leurs positions au serveur 
-qui doit actualiser chez tout le monde
-
-Un client doit envoyer ses trois positions au serveur qui
-lui communique en échange les positions des autres joueurs.
-Le client adapte les positions des joueurs sauf la sienne
-
-
-
 Est-ce que le serveur peut être player aussi ?
+
+
+
+Avoir plusieurs connexions OSCss

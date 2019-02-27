@@ -71,13 +71,13 @@ public class SendOSC : MonoBehaviour {
     }
 
 
-    public void SendQuitMessage(UserNetworkType userNetworkType, int playerID)
+    public void SendQuitMessage(UserNetworkType userNetworkType, PlayerData player)
     {
         if(userNetworkType == UserNetworkType.Client)
         {
             message = new OscMessage();
             message.address = "/ClientHasLeft";
-            message.values.Add(playerID);
+            message.values.Add(player._ID);
             osc.Send(message);
             Debug.Log("Sending : " + message);
         }

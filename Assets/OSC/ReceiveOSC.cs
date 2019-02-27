@@ -55,7 +55,7 @@ public class ReceiveOSC : MonoBehaviour {
         float yPos = message.GetFloat(3);
         float zPos = message.GetFloat(4);
 
-        if (playerID != gameEngine._playerID)
+        if (playerID != gameEngine.player._ID)
         {
             //Debug.Log("Receiving " + playerID + playerPart + " : " + new Vector3(xPos, yPos, zPos));
             gameEngine.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos);

@@ -396,7 +396,7 @@ public class UDPPacketIO
 
       private UDPPacketIO OscPacketIO;
       Thread ReadThread;
-	  private bool ReaderRunning;
+      private bool ReaderRunning;
       private OscMessageHandler AllMessageHandler;
 
       Hashtable AddressTable;

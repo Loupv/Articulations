@@ -1901,7 +1901,7 @@ MonoBehaviour:
   canvasHandler: {fileID: 667967432}
   IDsList: 
   players: []
-  _playerID: 0
+  player: {fileID: 0}
   oscToggle: {fileID: 1382342789}
   sentMessage: {fileID: 112022612}
   playerPrefab: {fileID: 6075620792603371976, guid: 10484b8557ffb4a049780c44fa624de4,
