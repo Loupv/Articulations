@@ -408,7 +408,7 @@ public class OSC : MonoBehaviour
     public string outIP = "127.0.0.1";
     public int outPort = 6161;
 
-    private UDPPacketIO OscPacketIO;
+    public UDPPacketIO OscPacketIO;
     Thread ReadThread;
     private bool ReaderRunning;
     private OscMessageHandler AllMessageHandler;

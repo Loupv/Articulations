@@ -69,7 +69,7 @@ public class SendOSC : MonoBehaviour {
             message.values.Add(pos.z);
 
             _osc.Send(message);
-            //Debug.Log("Sending : " + message);
+            Debug.Log("Sending position : " + _osc.OscPacketIO.IsOpen() + ", " + _osc.inPort+", "+ _osc.outPort+", "+ _osc.outIP);
         }
     }
 
