@@ -2,6 +2,6 @@
    "networkID" :"player2",
    "runInLocal":1,
    "OSC_IP":"192.168.8.103",
-   "OSC_ServerOutPort":7777,
-   "OSC_ClientOutPort":6666
+   "OSC_InPort":7777,
+   "OSC_OutPort":6666
 }

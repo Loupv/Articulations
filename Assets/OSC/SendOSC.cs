@@ -4,35 +4,53 @@ using UnityEngine;
 
 public class SendOSC : MonoBehaviour {
 
-    public OSC osc;
+    public OSC _osc;
     public GameEngine gameEngine;
     private OscMessage message;
 
-
-
-    public void RegisterOverNetwork(int playerID)
+    public SendOSC(OSC osc)
     {
-        if (osc.initialized)
+        _osc = osc;
+        gameEngine = GameObject.Find("GameEngine").GetComponent<GameEngine>();
+    }
+
+    public void RequestUserRegistation(int playerID, int requestedPort)
+    {
+        if (_osc.initialized)
         {
             message = new OscMessage();
             message.address = "/PlayerRegistrationRequest";
             message.values.Add(playerID);
-            osc.Send(message);
+            message.values.Add(requestedPort);
+            _osc.Send(message);
             Debug.Log("Sending : " + message);
         }
     }
 
-    public void ConfirmRegistration(int playerID)
+    public void SendRegistrationConfirmation(int playerID, int requestedPort)
     {
-        if (osc.initialized)
+        if (_osc.initialized)
         {
             message = new OscMessage();
             message.address = "/RegistrationConfirmed";
             message.values.Add(playerID);
-            osc.Send(message);
+            message.values.Add(requestedPort);
+            _osc.Send(message);
             Debug.Log("Sending : " + message);
 
             AddEveryPlayerToClientDict();
+        }
+    }
+
+    public void RefuseRegistration(int requestedPort)
+    {
+        if (_osc.initialized)
+        {
+            message = new OscMessage();
+            message.address = "/RegistrationRefused";
+            message.values.Add(requestedPort);
+            _osc.Send(message);
+            Debug.Log("Sending : " + message);
         }
     }
 
@@ -40,7 +58,7 @@ public class SendOSC : MonoBehaviour {
 
     public void SendOSCPosition(string header, int playerID, int playerPart, Vector3 pos)
     {
-        if (osc.initialized)
+        if (_osc.initialized)
         {   
             message = new OscMessage();
             message.address = header;
@@ -50,7 +68,7 @@ public class SendOSC : MonoBehaviour {
             message.values.Add(pos.y);
             message.values.Add(pos.z);
 
-            osc.Send(message);
+            _osc.Send(message);
             //Debug.Log("Sending : " + message);
         }
     }
@@ -61,31 +79,31 @@ public class SendOSC : MonoBehaviour {
 
     public void SendCustomOSCMessage(string header)
     {
-        if (osc.initialized)
+        if (_osc.initialized)
         {
             message = new OscMessage();
             message.address = header;
-            osc.Send(message);
+            _osc.Send(message);
             Debug.Log("Sending : " + message);
         }
     }
 
 
-    public void SendQuitMessage(UserNetworkType userNetworkType, PlayerData player)
+    public void SendQuitMessage(UserNetworkType userNetworkType, UserData player)
     {
         if(userNetworkType == UserNetworkType.Client)
         {
             message = new OscMessage();
             message.address = "/ClientHasLeft";
             message.values.Add(player._ID);
-            osc.Send(message);
+            _osc.Send(message);
             Debug.Log("Sending : " + message);
         }
         else if (userNetworkType == UserNetworkType.Server)
         {
             message = new OscMessage();
             message.address = "/ServerShutDown";
-            osc.Send(message);
+            _osc.Send(message);
             Debug.Log("Sending : " + message);
         }
 
@@ -99,7 +117,7 @@ public class SendOSC : MonoBehaviour {
                 message = new OscMessage();
                 message.address = "/AddPlayerFromServer";
                 message.values.Add(playerID);
-                osc.Send(message);
+                _osc.Send(message);
                 Debug.Log("Sending : " + message);
         }
           

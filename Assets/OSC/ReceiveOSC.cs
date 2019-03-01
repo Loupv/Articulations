@@ -4,28 +4,43 @@ using UnityEngine;
 
 public class ReceiveOSC : MonoBehaviour {
 
-    public OSC osc;
+    //public OSC osc;
     public GameEngine gameEngine;
+    public OSC _osc;
+
+    public ReceiveOSC(OSC osc)
+    {
+        _osc = osc;
+        gameEngine = GameObject.Find("GameEngine").GetComponent<GameEngine>();
+    }
 
     // Use this for initialization
     public void StartListening () {
-        osc.SetAddressHandler("/PlayerRegistrationRequest", AnswerToRegistationRequest);
-        osc.SetAddressHandler("/RegistrationConfirmed", RegistrationConfirmed);
-        osc.SetAddressHandler("/PlayerPosition", UpdatePartnerPosition);
-        osc.SetAddressHandler("/ClientHasLeft", ErasePlayerRequest);
-        osc.SetAddressHandler("/ServerShutDown", GoInsane);
-        osc.SetAddressHandler("/AddPlayerFromServer", AddPlayerFromServer);
+        _osc.SetAddressHandler("/PlayerRegistrationRequest", RegistationRequestedFromPlayer);
+        _osc.SetAddressHandler("/RegistrationConfirmed", RegistrationConfirmed);
+        _osc.SetAddressHandler("/PlayerPosition", UpdatePartnerPosition);
+        _osc.SetAddressHandler("/ClientHasLeft", ErasePlayerRequest);
+        _osc.SetAddressHandler("/ServerShutDown", GoInsane);
+        _osc.SetAddressHandler("/AddPlayerFromServer", AddPlayerFromServer);
     }
 	
     // server side
-    void AnswerToRegistationRequest(OscMessage message)
+    void RegistationRequestedFromPlayer(OscMessage message)
     {
         Debug.Log("Received : " + message);
         if (gameEngine.userNetworkType == UserNetworkType.Server)
         {
             int playerID = message.GetInt(0);
-            gameEngine.AddOtherPlayer(playerID, gameEngine.playerParent);
-            osc.sender.ConfirmRegistration(playerID);
+            int requestedPort = message.GetInt(1);
+
+            bool portAvailable = gameEngine.networkManager.CheckPortAvailability(requestedPort);
+
+            if (portAvailable)
+            {
+                gameEngine.AddOtherPlayer(playerID);
+                _osc.sender.SendRegistrationConfirmation(playerID, requestedPort);
+            }
+            else _osc.sender.RefuseRegistration(requestedPort);
         }
     }
 
@@ -34,12 +49,12 @@ public class ReceiveOSC : MonoBehaviour {
     void RegistrationConfirmed(OscMessage message)
     {
         Debug.Log("Received : " + message);
-        if (gameEngine.userNetworkType == UserNetworkType.Client)
-        {
-            gameEngine.EndStartProcess();
-
-        }
+        int playerID = message.GetInt(0);
+        int requestedPort = message.GetInt(1);
+        gameEngine.EndStartProcess(playerID, requestedPort);
     }
+
+
 
     // triggered for each osc position message received (3 per player)
     void UpdatePartnerPosition(OscMessage message)
@@ -55,7 +70,7 @@ public class ReceiveOSC : MonoBehaviour {
         float yPos = message.GetFloat(3);
         float zPos = message.GetFloat(4);
 
-        if (playerID != gameEngine.player._ID)
+        if (playerID != gameEngine._user._ID)
         {
             //Debug.Log("Receiving " + playerID + playerPart + " : " + new Vector3(xPos, yPos, zPos));
             gameEngine.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
@@ -69,7 +84,7 @@ public class ReceiveOSC : MonoBehaviour {
         if (gameEngine.userNetworkType == UserNetworkType.Client)
         {
             int playerID = message.GetInt(0);
-            gameEngine.AddOtherPlayer(playerID, gameEngine.playerParent);
+            gameEngine.AddOtherPlayer(playerID);
         }
     }
 

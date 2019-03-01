@@ -17,7 +17,7 @@ public class GameData
 {
     public int runInLocal;
     public string OSC_IP;
-    public int OSC_ServerOutPort, OSC_ClientOutPort;
+    public int OSC_InPort, OSC_OutPort;
 }
 
 public enum UserNetworkType
@@ -25,10 +25,6 @@ public enum UserNetworkType
     Server, Client
 }
 
-public enum UserRole
-{
-    Player, Viewer
-}
 
 public enum AppState
 {
@@ -45,23 +41,23 @@ public class GameEngine : MonoBehaviour
     public SendOSC sendOSC;
     public ReceiveOSC receiveOSC;
     public CanvasHandler canvasHandler;
+    public NetworkManager networkManager;
 
     public Dictionary<string, Vector3> pendingPositionsActualizations;
     public List<int> IDsList;
-    public List<PlayerData> players;
+    public List<UserData> usersPlaying;
     //public int _playerID;
-    public PlayerData player;
+    public UserData _user;
 
     private JSONLoader jSONLoader;
-    private GameData gameData;
-
+    private UIHandler uiHandler;
+    public GameData gameData;
     public Image oscToggle;
     public Text sentMessage;
     public GameObject playerPrefab;
     public GameObject playerParent;
 
     public UserNetworkType userNetworkType;
-    public UserRole userRole;
     public AppState appState;
 
 
@@ -78,42 +74,54 @@ public class GameEngine : MonoBehaviour
         appState = AppState.Initializing;
         canvasHandler = GetComponent<CanvasHandler>();
         canvasHandler.ChangeCanvas("initCanvas");
-
+        uiHandler = GetComponentInChildren<UIHandler>();
         userNetworkType = UserNetworkType.Server;
-        userRole = UserRole.Player;
 
         jSONLoader = new JSONLoader();
         gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
+
+        uiHandler.OSCInPortInput.text = gameData.OSC_InPort.ToString();
+        uiHandler.OSCOutPortInput.text = gameData.OSC_OutPort.ToString();
+
+        if (gameData.runInLocal == 1) uiHandler.OSCAddressInput.text = "127.0.0.1";
+        else uiHandler.OSCAddressInput.text = gameData.OSC_IP;
+        uiHandler.ChangeOSCConfig();
+
         pendingPositionsActualizations = new Dictionary<string, Vector3>();
-       
+
     }
 
     // Start the performance
-    public void StartGame()
+    public void StartGame(int isPlayer)
     {
-        InitConnexion(userNetworkType, userRole);
 
-        if (userRole == UserRole.Player)
+        int ID = Random.Range(0, 10000);
+        _user = new UserData(ID, playerPrefab, playerParent, isPlayer, true);
+
+        if (isPlayer == 0)
         {
-            int ID = Random.Range(0, 10000);
-            player = new PlayerData(ID, playerPrefab, playerParent, true);
-            players.Add(player);
-            IDsList.Add(player._ID);
-            pendingPositionsActualizations.Add(player._ID + "Head", player.head.transform.position);
-            pendingPositionsActualizations.Add(player._ID + "LeftHand", player.leftHand.transform.position);
-            pendingPositionsActualizations.Add(player._ID + "RightHand", player.rightHand.transform.position);
+            usersPlaying.Add(_user);
+            IDsList.Add(_user._ID);
+
+            pendingPositionsActualizations.Add(_user._ID + "Head", _user.head.transform.position);
+            pendingPositionsActualizations.Add(_user._ID + "LeftHand", _user.leftHand.transform.position);
+            pendingPositionsActualizations.Add(_user._ID + "RightHand", _user.rightHand.transform.position);
         }
-        //else _playerID = -1;
+
+        if (networkManager.AddNewPairingService(_user, uiHandler.OSCInPort, uiHandler.OSCOutPort, uiHandler.address, userNetworkType))
+            oscToggle.color = new Color(0, 1, 0);
+        else oscToggle.color = new Color(1, 0, 0);
 
 
-        if (userNetworkType == UserNetworkType.Server) {
+        if (userNetworkType == UserNetworkType.Server)
+        {
             appState = AppState.Running;
             canvasHandler.ChangeCanvas("gameCanvas");
         }
         else if (userNetworkType == UserNetworkType.Client)
         {
             appState = AppState.WaitingForServer;
-            sendOSC.RegisterOverNetwork(player._ID);
+            _user.osc.sender.RequestUserRegistation(_user._ID, _user.osc.inPort);
             canvasHandler.ChangeCanvas("waitingCanvas");
         }
 
@@ -121,10 +129,15 @@ public class GameEngine : MonoBehaviour
 
 
     // when server has agreed for client player registration
-    public void EndStartProcess()
+    public void EndStartProcess(int playerID, int requestedPort)
     {
-        appState = AppState.Running;
-        canvasHandler.ChangeCanvas("gameCanvas");
+        networkManager.FinishUserRegistration(playerID, requestedPort);
+
+        if (userNetworkType == UserNetworkType.Client)
+        {
+            appState = AppState.Running;
+            canvasHandler.ChangeCanvas("gameCanvas");
+        }
     }
 
 
@@ -138,49 +151,24 @@ public class GameEngine : MonoBehaviour
     }
 
 
-    public void InitConnexion(UserNetworkType userNetworkType, UserRole userRole)
-    {
 
-        if (gameData.runInLocal == 0)
-        {
-            osc.outIP = gameData.OSC_IP;
-        }
-        if (userNetworkType == UserNetworkType.Server)
-        {
-            osc.inPort = gameData.OSC_ClientOutPort;
-            osc.outPort = gameData.OSC_ServerOutPort;
-        }
-        else if (userNetworkType == UserNetworkType.Client)
-        {
-            osc.inPort = gameData.OSC_ServerOutPort;
-            osc.outPort = gameData.OSC_ClientOutPort;
-        }
-
-        osc.Init();
-        if (osc.initialized) oscToggle.color = new Color(0, 1, 0);
-        else oscToggle.color = new Color(1, 0, 0);
-    }
 
 
 
     public void UpdateGame()
     {
-    
+
+        networkManager.SendPlayerPosition(_user, usersPlaying);
+
         int i = 0;
         foreach (int playerID in IDsList)
-        { 
-            if (playerID == player._ID) { // if this is the actual instance's player
-                Debug.Log("Sending local infos :" + players[i].playerGameObject.name);
-                sendOSC.SendOSCPosition("/PlayerPosition", player._ID, 0, players[i].head.transform.position);
-                sendOSC.SendOSCPosition("/PlayerPosition", player._ID, 1, players[i].leftHand.transform.position);
-                sendOSC.SendOSCPosition("/PlayerPosition", player._ID, 2, players[i].rightHand.transform.position);
-            } 
-            else // update every other player on the network
+        {
+            if (playerID != _user._ID) // if it's not actual instance's player
             {
-                Debug.Log("Receiving external infos :" + players[i].playerGameObject.name);
-                players[i].head.transform.position = pendingPositionsActualizations[playerID+"Head"];
-                players[i].leftHand.transform.position = pendingPositionsActualizations[playerID + "LeftHand"];
-                players[i].rightHand.transform.position = pendingPositionsActualizations[playerID + "RightHand"];
+                Debug.Log("Receiving external infos :" + usersPlaying[i].playerGameObject.name);
+                usersPlaying[i].head.transform.position = pendingPositionsActualizations[playerID + "Head"];
+                usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[playerID + "LeftHand"];
+                usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[playerID + "RightHand"];
             }
             i++;
 
@@ -190,14 +178,14 @@ public class GameEngine : MonoBehaviour
 
 
 
-
-    public void AddOtherPlayer(int playerID, GameObject parent)
+    public void AddOtherPlayer(int playerID)
     {
+
         if (!IDsList.Contains(playerID))
         {
             //int ID = Random.Range(0, 10000);
-            PlayerData p = new PlayerData(playerID, playerPrefab, parent, false);
-            players.Add(p);
+            UserData p = new UserData(playerID, playerPrefab, playerParent, 0, false);
+            usersPlaying.Add(p);
             IDsList.Add(playerID);
             pendingPositionsActualizations.Add(playerID + "Head", p.head.transform.position);
             pendingPositionsActualizations.Add(playerID + "LeftHand", p.leftHand.transform.position);
@@ -206,23 +194,19 @@ public class GameEngine : MonoBehaviour
         }
     }
 
-
     public void ErasePlayer(int playerID)
     {
-       //PlayerGOs.Remove(GameObject.Find("Player" + playerID.ToString()));
+        //PlayerGOs.Remove(GameObject.Find("Player" + playerID.ToString()));
         pendingPositionsActualizations.Remove(playerID + "Head");
         pendingPositionsActualizations.Remove(playerID + "LeftHand");
         pendingPositionsActualizations.Remove(playerID + "RightHand");
 
-        foreach(PlayerData p in players)
+        foreach (UserData p in usersPlaying)
         {
-            Debug.Log(p._ID + ", " + playerID);
-
-            if(p._ID == playerID)
+            if (p._ID == playerID)
             {
-                Debug.Log("found");
                 Destroy(p.playerGameObject);
-                players.Remove(p);
+                usersPlaying.Remove(p);
                 Destroy(p);
                 IDsList.Remove(playerID);
                 break;
@@ -239,10 +223,11 @@ public class GameEngine : MonoBehaviour
 #endif
     }
 
-    void OnApplicationQuit()
+
+    public void OnApplicationQuit()
     {
-        if (userNetworkType == UserNetworkType.Client) 
-            sendOSC.SendQuitMessage(userNetworkType, player);
+        if (userNetworkType == UserNetworkType.Client)
+            _user.osc.sender.SendQuitMessage(userNetworkType, _user);
         Debug.Log("Closing Game Engine...");
     }
 
