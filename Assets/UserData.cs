@@ -5,9 +5,8 @@ using UnityEngine;
 public class UserData : MonoBehaviour
 {
 
-    public int _OSCListenPort;
     public int _isPlaying;
-    public OSC osc;
+    //public OSC osc;
     public int _ID;
     public GameObject playerGameObject, head, leftHand, rightHand;
 

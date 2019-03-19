@@ -17,7 +17,7 @@ public class GameData
 {
     public int runInLocal;
     public string OSC_IP;
-    public int OSC_InPort, OSC_OutPort;
+    public int OSC_LocalPort, OSC_OutPort;
 }
 
 public enum UserNetworkType
@@ -36,10 +36,6 @@ public enum AppState
 public class GameEngine : MonoBehaviour
 {
 
-
-    public OSC osc;
-    public SendOSC sendOSC;
-    public ReceiveOSC receiveOSC;
     public CanvasHandler canvasHandler;
     public NetworkManager networkManager;
 
@@ -48,6 +44,10 @@ public class GameEngine : MonoBehaviour
     public List<UserData> usersPlaying;
     //public int _playerID;
     public UserData _user;
+
+    public OSC osc;
+    //private SendOSC sender;
+    //private ReceiveOSC receiver;
 
     private JSONLoader jSONLoader;
     private UIHandler uiHandler;
@@ -86,6 +86,8 @@ public class GameEngine : MonoBehaviour
         if (gameData.runInLocal == 1) uiHandler.OSCAddressInput.text = "127.0.0.1";
         else uiHandler.OSCAddressInput.text = gameData.OSC_IP;
         uiHandler.ChangeOSCConfig();
+        uiHandler.SetPlayerNetworkType();
+        uiHandler.SetPlayerRole();
 
         pendingPositionsActualizations = new Dictionary<string, Vector3>();
 
@@ -98,7 +100,7 @@ public class GameEngine : MonoBehaviour
         int ID = Random.Range(0, 10000);
         _user = new UserData(ID, playerPrefab, playerParent, isPlayer, true);
 
-        if (isPlayer == 0)
+        if (isPlayer == 0) // if true
         {
             usersPlaying.Add(_user);
             IDsList.Add(_user._ID);
@@ -108,20 +110,28 @@ public class GameEngine : MonoBehaviour
             pendingPositionsActualizations.Add(_user._ID + "RightHand", _user.rightHand.transform.position);
         }
 
-        if (networkManager.AddNewPairingService(_user, uiHandler.OSCInPort, uiHandler.OSCOutPort, uiHandler.address, userNetworkType))
-            oscToggle.color = new Color(0, 1, 0);
-        else oscToggle.color = new Color(1, 0, 0);
-
 
         if (userNetworkType == UserNetworkType.Server)
         {
             appState = AppState.Running;
             canvasHandler.ChangeCanvas("gameCanvas");
+
+            osc.Init(userNetworkType);
+
+            if (networkManager.StartServerListener(uiHandler.OSCLocalPort))
+                oscToggle.color = new Color(0, 1, 0);
+            else oscToggle.color = new Color(1, 0, 0);
+
+
         }
         else if (userNetworkType == UserNetworkType.Client)
         {
+            if (networkManager.AddNewPairingService(_user, uiHandler.OSCLocalPort, uiHandler.address, userNetworkType))
+                oscToggle.color = new Color(0, 1, 0);
+            else oscToggle.color = new Color(1, 0, 0);
+
             appState = AppState.WaitingForServer;
-            _user.osc.sender.RequestUserRegistation(_user._ID, _user.osc.inPort);
+            osc.sender.RequestUserRegistation(osc, _user._ID, osc.remotePort);
             canvasHandler.ChangeCanvas("waitingCanvas");
         }
 
@@ -131,7 +141,7 @@ public class GameEngine : MonoBehaviour
     // when server has agreed for client player registration
     public void EndStartProcess(int playerID, int requestedPort)
     {
-        networkManager.FinishUserRegistration(playerID, requestedPort);
+        //networkManager.FinishUserRegistration(playerID, requestedPort);
 
         if (userNetworkType == UserNetworkType.Client)
         {
@@ -178,7 +188,7 @@ public class GameEngine : MonoBehaviour
 
 
 
-    public void AddOtherPlayer(int playerID)
+    public UserData AddOtherPlayer(int playerID, string address, int port)
     {
 
         if (!IDsList.Contains(playerID))
@@ -190,8 +200,9 @@ public class GameEngine : MonoBehaviour
             pendingPositionsActualizations.Add(playerID + "Head", p.head.transform.position);
             pendingPositionsActualizations.Add(playerID + "LeftHand", p.leftHand.transform.position);
             pendingPositionsActualizations.Add(playerID + "RightHand", p.rightHand.transform.position);
-
+            return p;
         }
+        else return null;
     }
 
     public void ErasePlayer(int playerID)
@@ -227,7 +238,7 @@ public class GameEngine : MonoBehaviour
     public void OnApplicationQuit()
     {
         if (userNetworkType == UserNetworkType.Client)
-            _user.osc.sender.SendQuitMessage(userNetworkType, _user);
+            osc.sender.SendQuitMessage(osc, userNetworkType, _user);
         Debug.Log("Closing Game Engine...");
     }
 

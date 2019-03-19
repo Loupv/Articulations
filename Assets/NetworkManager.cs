@@ -1,58 +1,82 @@
-﻿using System.Collections;
+﻿using System;
+using System.Net;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 public class NetworkManager : MonoBehaviour
 {
 
-    public Dictionary<int, int> OSCPairs;
+    public OSC osc;
     //public GameObject OSCPrefab, networkParent;
     public GameEngine gameEngine;
+
+    public string serverAddress;
+    public Dictionary<int, UDPPacketIO> IpPairs;
+
+
 
     // Start is called before the first frame update
     void Start()
     {
         //networkParent = this.gameObject;
-        OSCPairs = new Dictionary<int, int>();
+        IpPairs = new Dictionary<int, UDPPacketIO>();
+        osc = gameEngine.osc;
     }
 
 
-    public bool AddNewPairingService(UserData user, int inPort, int outPort, string address, UserNetworkType userNetworkType)
+    public bool StartServerListener(int localPort)
     {
+        try
+        {
+            UDPPacketIO udpPacket = new UDPPacketIO(IPAddress.Any.ToString(), 0, localPort);
+            //IpPairs.Add(user._ID, endPoint);
+            IpPairs.Add(udpPacket);
+            osc.receiver.StartListening(osc, UserNetworkType.Server);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("cannot create server listener hombre");
+            Debug.LogWarning(e);
+            return false;
+        }
 
-        bool initState = InitConnexion(user, inPort, outPort, address, userNetworkType);
-
-        return initState;
     }
 
 
 
-    public bool InitConnexion(UserData user, int inPort, int outPort, string adress, UserNetworkType userNetworkType)
+    public bool AddNewPairingService(UserData user, int userPort, string address, UserNetworkType userNetworkType)
     {
-        user.osc = new OSC();
-        user.osc.outIP = adress;
-        user.osc.inPort = inPort;
-        user.osc.outPort = outPort;
+        try
+        {
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(address), userPort);
+            IpPairs.Add(user._ID, endPoint);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("cannot create endpoint hombre");
+            Debug.LogWarning(e);
+            return false;
+        }
 
-        user.osc.Init();
-        if (user.osc.initialized) return true;
-        return false;
     }
 
 
 
-    public void SendPlayerPosition(UserData player, List<UserData> players)
+    public void SendPlayerPosition(UserData user, List<UserData> users)
     {
         int i = 0;
-        foreach (UserData p in players)
+        foreach (UserData p in users)
         {
 
-            if (player._ID == p._ID)
+            if (user._ID == p._ID)
             { // if this is the actual instance's player
-                Debug.Log("Sending local infos :" + players[i].playerGameObject.name);
-                player.osc.sender.SendOSCPosition("/PlayerPosition", player._ID, 0, players[i].head.transform.position);
-                player.osc.sender.SendOSCPosition("/PlayerPosition", player._ID, 1, players[i].leftHand.transform.position);
-                player.osc.sender.SendOSCPosition("/PlayerPosition", player._ID, 2, players[i].rightHand.transform.position);
+                Debug.Log("Sending local infos :" + users[i].playerGameObject.name);
+                gameEngine.osc.sender.SendOSCPosition(osc, IpPairs[user._ID], "/PlayerPosition", user._ID, 0, users[i].head.transform.position);
+                gameEngine.osc.sender.SendOSCPosition(osc, IpPairs[user._ID], "/PlayerPosition", user._ID, 1, users[i].leftHand.transform.position);
+                gameEngine.osc.sender.SendOSCPosition(osc, IpPairs[user._ID], "/PlayerPosition", user._ID, 2, users[i].rightHand.transform.position);
             }
 
             i++;
@@ -62,16 +86,16 @@ public class NetworkManager : MonoBehaviour
 
     public bool CheckPortAvailability(int requestedPort)
     {
-        foreach(int port in OSCPairs.Values)
+        foreach(IPEndPoint endPoint in IpPairs.Values)
         {
-            if (port==requestedPort) return false;
+            if (endPoint.Port==requestedPort) return false;
         }
         return true;
     }
 
 
-    public void FinishUserRegistration(int playerID, int requestedPort)
+    public void FinishUserRegistration(int playerID, IPEndPoint endPoint)
     {
-        OSCPairs.Add(playerID, requestedPort);
+        IpPairs.Add(playerID, endPoint);
     }
 }

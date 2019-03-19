@@ -9,31 +9,46 @@ public class UIHandler : MonoBehaviour
     public GameEngine gameEngine;
     public Dropdown networkDropdown, userRoleDropdown;
     public InputField OSCInPortInput, OSCOutPortInput, OSCAddressInput;
-    public int OSCInPort, OSCOutPort;
+    public GameObject clientObjectParent, serverObjectParent;
+    public int OSCLocalPort, OSCRemotePort;
     public string address;
 
     private int isPlayer;
 
     public void SetPlayerRole()
-    {   
-        if(userRoleDropdown.options[userRoleDropdown.value].text == "Player")
+    {
+        if (userRoleDropdown.options[userRoleDropdown.value].text == "Player")
+        {
             isPlayer = 0;
-        else if(userRoleDropdown.options[userRoleDropdown.value].text == "Viewer")
+        }
+
+        else if (userRoleDropdown.options[userRoleDropdown.value].text == "Viewer")
+        {
             isPlayer = 1;
+        }
     }
 
     public void SetPlayerNetworkType()
     {
         if (networkDropdown.options[networkDropdown.value].text == "Server")
+        {
             gameEngine.userNetworkType = UserNetworkType.Server;
+            if (clientObjectParent != null) clientObjectParent.gameObject.SetActive(false);
+            if (serverObjectParent != null) serverObjectParent.gameObject.SetActive(true);
+
+        }
         else if (networkDropdown.options[networkDropdown.value].text == "Client")
+        {
             gameEngine.userNetworkType = UserNetworkType.Client;
+            if(clientObjectParent != null) clientObjectParent.gameObject.SetActive(true);
+            if (serverObjectParent != null) serverObjectParent.gameObject.SetActive(false);
+        }
     }
 
     public void ChangeOSCConfig()
     {
-        int.TryParse(OSCInPortInput.text, out OSCInPort);
-        int.TryParse(OSCOutPortInput.text, out OSCOutPort);
+        int.TryParse(OSCInPortInput.text, out OSCLocalPort);
+        int.TryParse(OSCOutPortInput.text, out OSCRemotePort);
         address = OSCAddressInput.text;
     }
 
@@ -44,11 +59,11 @@ public class UIHandler : MonoBehaviour
 
     public void SwitchPortsNumbers()
     {
-        int tmp = OSCInPort;
-        OSCInPort = OSCOutPort;
-        OSCOutPort = tmp;
-        OSCInPortInput.text = OSCInPort.ToString();
-        OSCOutPortInput.text = OSCOutPort.ToString();
+        int tmp = OSCLocalPort;
+        OSCLocalPort = OSCRemotePort;
+        OSCRemotePort = tmp;
+        OSCInPortInput.text = OSCLocalPort.ToString();
+        OSCOutPortInput.text = OSCRemotePort.ToString();
         ChangeOSCConfig();
 
     }

@@ -452,9 +452,6 @@ public class OSC : MonoBehaviour
         AddressTable = new Hashtable();
         messagesReceived = new ArrayList();
 
-        receiver = new ReceiveOSC(this);
-        sender = new SendOSC(this);
-
         buffer = new byte[1000];
 
 
@@ -468,7 +465,7 @@ public class OSC : MonoBehaviour
         UnityEditor.EditorApplication.playModeStateChanged += HandleOnPlayModeChanged;  //FIX FOR UNITY POST 2017
 #endif
 
-        receiver.StartListening();
+        receiver.StartListening(this);
         //sender.Init();
         print("OSC Connexion initiation to " + outIP + " : " + outPort + "/" + inPort);
         initialized = true; // Loup
