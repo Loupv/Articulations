@@ -1,9 +1,14 @@
-﻿Comment permettre d'avoir plusieurs objets OSC pour tous les joueurs
+﻿Reprendre pas à pas la connexion 
 
-Trois PCs à chaque fois ? Un serveur + clients
+Essayer de rendre indépendant les fonctions server et client
 
-Est-ce que le serveur peut être player aussi ?
+Chaque userdata contient ses informations de connexion
+le serveur peut garder un dictionnaire d'userdata qui contiendra les infos de contact en lui
+
+tous les clients ne font qu'actualiser les positions de chaque entrée dans le dictionnaire
+
+chaque user doit garder une référence sur son OSCPacketIO
+checker l'ouverture des ports au niveau du partfeu
 
 
-
-Avoir plusieurs connexions OSCss
+Faire deux fenêtres de deux boutons au démarrage server/client et player/viewer -> deux clics pour lancer, paramétrer tout automatiquement

@@ -2,6 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+public struct OSCEndPoint{
+    string ip;
+    int remotePort;
+}
+
+
+
 public class UserData : MonoBehaviour
 {
 
@@ -9,12 +18,18 @@ public class UserData : MonoBehaviour
     //public OSC osc;
     public int _ID;
     public GameObject playerGameObject, head, leftHand, rightHand;
+    public OSCEndPoint oscEndPoint;
 
 
-    public UserData(int ID, GameObject playerPrefab, GameObject parent, int isPlaying, bool animatorMode)
+    public UserData(int ID, GameData gameData, GameObject playerPrefab, GameObject parent, int isPlaying, bool animatorMode)
     {
         _ID = ID;
         _isPlaying = isPlaying;
+
+        oscEndPoint = new OSCEndPoint();
+        oscEndPoint.ip = gameData.OSC_IP;
+        oscEndPoint.remotePort = gameData.OSC_LocalPort;
+        
 
         if (isPlaying == 0)
         {

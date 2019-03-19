@@ -465,7 +465,7 @@ public class OSC : MonoBehaviour
         UnityEditor.EditorApplication.playModeStateChanged += HandleOnPlayModeChanged;  //FIX FOR UNITY POST 2017
 #endif
 
-        receiver.StartListening(this);
+        receiver.StartListening();
         //sender.Init();
         print("OSC Connexion initiation to " + outIP + " : " + outPort + "/" + inPort);
         initialized = true; // Loup

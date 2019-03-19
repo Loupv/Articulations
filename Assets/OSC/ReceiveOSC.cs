@@ -7,9 +7,11 @@ public class ReceiveOSC : MonoBehaviour {
     //public OSC osc;
     public GameEngine gameEngine;
     public SendOSC sender;
+    public OSC osc;
+    public UserNetworkType userNetworkType;
 
     // Use this for initialization
-    public void StartListening(OSC osc, UserNetworkType userNetworkType)
+    public void StartListening()
     {
 
         if (userNetworkType == UserNetworkType.Client)

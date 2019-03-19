@@ -80,7 +80,7 @@ public class GameEngine : MonoBehaviour
         jSONLoader = new JSONLoader();
         gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
 
-        uiHandler.OSCInPortInput.text = gameData.OSC_InPort.ToString();
+        uiHandler.OSCInPortInput.text = gameData.OSC_LocalPort.ToString();
         uiHandler.OSCOutPortInput.text = gameData.OSC_OutPort.ToString();
 
         if (gameData.runInLocal == 1) uiHandler.OSCAddressInput.text = "127.0.0.1";
@@ -98,7 +98,7 @@ public class GameEngine : MonoBehaviour
     {
 
         int ID = Random.Range(0, 10000);
-        _user = new UserData(ID, playerPrefab, playerParent, isPlayer, true);
+        _user = new UserData(ID, gameData, playerPrefab, playerParent, isPlayer, true);
 
         if (isPlayer == 0) // if true
         {
@@ -116,7 +116,8 @@ public class GameEngine : MonoBehaviour
             appState = AppState.Running;
             canvasHandler.ChangeCanvas("gameCanvas");
 
-            osc.Init(userNetworkType);
+            osc.receiver.userNetworkType = userNetworkType;
+            osc.Init();
 
             if (networkManager.StartServerListener(uiHandler.OSCLocalPort))
                 oscToggle.color = new Color(0, 1, 0);
@@ -131,7 +132,7 @@ public class GameEngine : MonoBehaviour
             else oscToggle.color = new Color(1, 0, 0);
 
             appState = AppState.WaitingForServer;
-            osc.sender.RequestUserRegistation(osc, _user._ID, osc.remotePort);
+            osc.sender.RequestUserRegistation(_user);
             canvasHandler.ChangeCanvas("waitingCanvas");
         }
 

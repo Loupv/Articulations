@@ -8,23 +8,25 @@ public class SendOSC : MonoBehaviour {
 
     public GameEngine gameEngine;
     private OscMessage message;
+    public OSC osc;
 
-    public void RequestUserRegistation(OSC osc, int playerID, int requestedPort)
+    public void RequestUserRegistation(UserData userData)
     {
         if (osc.initialized)
         {
             message = new OscMessage();
             message.address = "/PlayerRegistrationRequest";
-            message.values.Add(playerID);
-            message.values.Add(requestedPort);
-            osc.OscPacketIO.RemoteHostName = endPoint.Address.ToString();
+            message.values.Add(userData._ID);
+            message.values.Add(userData.oscEndPoint.remotePort);
+            
+            osc.OscPacketIO.RemoteHostName = userData.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = endPoint.Port;
             osc.Send(message);
             Debug.Log("Sending : " + message);
         }
     }
 
-    public void SendRegistrationConfirmation(OSC osc, IPEndPoint endPoint, int playerID, int requestedPort)
+    public void SendRegistrationConfirmation(int playerID, int requestedPort)
     {
         if (osc.initialized)
         {
@@ -41,7 +43,7 @@ public class SendOSC : MonoBehaviour {
         }
     }
 
-    public void RefuseRegistration(OSC osc, IPEndPoint endPoint, int requestedPort)
+    public void RefuseRegistration(int requestedPort)
     {
         if (osc.initialized)
         {
@@ -57,13 +59,18 @@ public class SendOSC : MonoBehaviour {
 
 
 
-    public void SendOSCPosition(OSC osc, IPEndPoint endPoint, string header, int playerID, int playerPart, Vector3 pos)
+    public void SendOSCPosition(UserData userData, int playerPart)
     {
+        Vector3 pos;
+
         if (osc.initialized)
         {   
             message = new OscMessage();
-            message.address = header;
-            message.values.Add(playerID);
+            message.address =  "/PlayerPosition";
+            message.values.Add(userData.playerID);
+            if(playerPart == 0) pos = userData.head;
+            if(playerPart == 1) pos = userData.leftHand;
+            if(playerPart == 2) pos = userData.rightHand;
             message.values.Add(playerPart);
             message.values.Add(pos.x);
             message.values.Add(pos.y);
@@ -81,7 +88,7 @@ public class SendOSC : MonoBehaviour {
 
 
 
-    public void SendCustomOSCMessage(OSC osc, IPEndPoint endPoint, string header)
+    public void SendCustomOSCMessage(string header)
     {
         if (osc.initialized)
         {
@@ -95,7 +102,7 @@ public class SendOSC : MonoBehaviour {
     }
 
 
-    public void SendQuitMessage(OSC osc, IPEndPoint endPoint, UserNetworkType userNetworkType, UserData player)
+    public void SendQuitMessage(UserNetworkType userNetworkType, UserData player)
     {
         osc.OscPacketIO.RemoteHostName = endPoint.Address.ToString();
         osc.OscPacketIO.RemotePort = endPoint.Port;
@@ -119,15 +126,15 @@ public class SendOSC : MonoBehaviour {
     }
 
 
-    public void AddEveryPlayerToClientDict(OSC osc, IPEndPoint endPoint)
+    public void AddEveryPlayerToClientDict(UserData userData)
     {
         foreach (int playerID in gameEngine.IDsList)
         {
             message = new OscMessage();
             message.address = "/AddPlayerFromServer";
             message.values.Add(playerID);
-            osc.OscPacketIO.RemoteHostName = endPoint.Address.ToString();
-            osc.OscPacketIO.RemotePort = endPoint.Port;
+            osc.OscPacketIO.RemoteHostName = userData.oscEndPoint.Address.ToString();
+            osc.OscPacketIO.RemotePort = userData.oscEndPoint.Port;
             osc.Send(message);
             Debug.Log("Sending : " + message);
         }

@@ -8,9 +8,7 @@ public class NetworkManager : MonoBehaviour
 {
 
     public OSC osc;
-    //public GameObject OSCPrefab, networkParent;
-    public GameEngine gameEngine;
-
+ 
     public string serverAddress;
     public Dictionary<int, UDPPacketIO> IpPairs;
 
@@ -19,50 +17,11 @@ public class NetworkManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //networkParent = this.gameObject;
-        IpPairs = new Dictionary<int, UDPPacketIO>();
-        osc = gameEngine.osc;
-    }
-
-
-    public bool StartServerListener(int localPort)
-    {
-        try
-        {
-            UDPPacketIO udpPacket = new UDPPacketIO(IPAddress.Any.ToString(), 0, localPort);
-            //IpPairs.Add(user._ID, endPoint);
-            IpPairs.Add(udpPacket);
-            osc.receiver.StartListening(osc, UserNetworkType.Server);
-            return true;
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning("cannot create server listener hombre");
-            Debug.LogWarning(e);
-            return false;
-        }
 
     }
 
 
-
-    public bool AddNewPairingService(UserData user, int userPort, string address, UserNetworkType userNetworkType)
-    {
-        try
-        {
-            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(address), userPort);
-            IpPairs.Add(user._ID, endPoint);
-            return true;
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning("cannot create endpoint hombre");
-            Debug.LogWarning(e);
-            return false;
-        }
-
-    }
-
+    
 
 
     public void SendPlayerPosition(UserData user, List<UserData> users)
@@ -74,9 +33,9 @@ public class NetworkManager : MonoBehaviour
             if (user._ID == p._ID)
             { // if this is the actual instance's player
                 Debug.Log("Sending local infos :" + users[i].playerGameObject.name);
-                gameEngine.osc.sender.SendOSCPosition(osc, IpPairs[user._ID], "/PlayerPosition", user._ID, 0, users[i].head.transform.position);
-                gameEngine.osc.sender.SendOSCPosition(osc, IpPairs[user._ID], "/PlayerPosition", user._ID, 1, users[i].leftHand.transform.position);
-                gameEngine.osc.sender.SendOSCPosition(osc, IpPairs[user._ID], "/PlayerPosition", user._ID, 2, users[i].rightHand.transform.position);
+                osc.sender.SendOSCPosition(p, 0);
+                osc.sender.SendOSCPosition(p, 1);
+                osc.sender.SendOSCPosition(p, 2);
             }
 
             i++;
