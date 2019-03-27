@@ -162,6 +162,23 @@ public class SendOSC : MonoBehaviour {
           
     }
 
+
+    public void AddNewPlayerToClientsGames(int playerID, List<UserData> usersPlaying){
+        
+        foreach(UserData user in usersPlaying)
+        {
+            if(user._ID != gameEngine._user._ID){ // don't send to itself
+                message = new OscMessage();
+                message.address = "/AddPlayerToGame";
+                message.values.Add(playerID);
+                osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
+                osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
+                osc.Send(message);
+                Debug.Log("Sending : " + message);
+            }
+        }
+    }
+
     // triggered by server when it gets the information that one user has left
     public void RemovePlayerInClientsGame(int playerID, List<UserData> usersPlaying)
     {

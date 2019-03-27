@@ -50,6 +50,7 @@ public class ReceiveOSC : MonoBehaviour {
             if (portAvailable)
             {
                 UserData user = gameEngine.AddOtherPlayer(playerID, playerIP, requestedPort);
+                sender.AddNewPlayerToClientsGames(playerID, gameEngine.usersPlaying);
                 sender.SendRegistrationConfirmation(user);
             }
             else sender.RefuseRegistration(playerIP, requestedPort);
