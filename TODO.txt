@@ -1,4 +1,29 @@
-﻿Reprendre pas à pas la connexion 
+﻿Si server : 
+Pas besoin de renseigner une adresse IP au démarrage, simplement connaître son propre port d'écoute
+
+Si client : 
+Besoin de connaître l'adresse IP du server et son port d'écoute (remotePort)
+
+
+Le Client register sur le réseau en envoyant son propre port d'écoute et son adresse IP par le biai du combo serverIP/remotePort
+Si le port local du client n'est pas enregistré, le serveur l'ajoute à sa liste de pairs
+
+
+Client envoie une requête avec son port d'écoute
+Si le port est disponible, server renvoie une confirmation ainsi que la liste de tous les joueurs déjà présents
+
+Si client reçoit la confirmation, il enregistre tous les joueurs présents, passe en mode jeu et envoie sa position
+
+
+Dans le update :
+- les clients envoient leurs positions au server
+- le server envoie toutes les positions à tous les joueurs
+
+
+
+ID et remotePort peuvent ils être pareil ?
+
+Reprendre pas à pas la connexion 
 
 Essayer de rendre indépendant les fonctions server et client
 

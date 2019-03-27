@@ -5,8 +5,8 @@ using UnityEngine;
 
 
 public struct OSCEndPoint{
-    string ip;
-    int remotePort;
+    public string ip;
+    public int remotePort;
 }
 
 
@@ -21,33 +21,33 @@ public class UserData : MonoBehaviour
     public OSCEndPoint oscEndPoint;
 
 
-    public UserData(int ID, GameData gameData, GameObject playerPrefab, GameObject parent, int isPlaying, bool animatorMode)
+    public void Init(int ID, string address, int localPort, GameObject pGameObject, GameObject parent, int isPlaying, bool animatorMode)
     {
+        
         _ID = ID;
         _isPlaying = isPlaying;
 
         oscEndPoint = new OSCEndPoint();
-        oscEndPoint.ip = gameData.OSC_IP;
-        oscEndPoint.remotePort = gameData.OSC_LocalPort;
-        
+        oscEndPoint.ip = address;
+        oscEndPoint.remotePort = localPort;
 
+        
+        pGameObject.transform.position += new Vector3(0, Random.Range(-2f, 1.5f), 0);
+        pGameObject.transform.parent = parent.transform;
+
+        head = pGameObject.transform.Find("Head").gameObject;
+        leftHand = pGameObject.transform.Find("LeftHand").gameObject;
+        rightHand = pGameObject.transform.Find("RightHand").gameObject;
+
+        pGameObject.name = "Player" + _ID.ToString();
+    
         if (isPlaying == 0)
         {
-            playerGameObject = Instantiate(playerPrefab) as GameObject;
-            playerGameObject.transform.position += new Vector3(0, Random.Range(-2f, 1.5f), 0);
-            playerGameObject.transform.parent = parent.transform;
-
-            head = playerGameObject.transform.Find("Head").gameObject;
-            leftHand = playerGameObject.transform.Find("LeftHand").gameObject;
-            rightHand = playerGameObject.transform.Find("RightHand").gameObject;
-
-            playerGameObject.name = "Player" + _ID.ToString();
-
-            if (animatorMode) playerGameObject.GetComponent<Animator>().SetTrigger("isLocalPlayer");
-            else Destroy(playerGameObject.GetComponent<Animator>());
+            if (animatorMode) pGameObject.GetComponent<Animator>().SetTrigger("isLocalPlayer");
+            else Destroy(pGameObject.GetComponent<Animator>());
+            playerGameObject = pGameObject;
 
         }
-
     }
 
 

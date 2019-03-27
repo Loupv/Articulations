@@ -45,6 +45,7 @@ public class UIHandler : MonoBehaviour
         }
     }
 
+    // does not change OSC object values, just the UI temporary ones
     public void ChangeOSCConfig()
     {
         int.TryParse(OSCInPortInput.text, out OSCLocalPort);

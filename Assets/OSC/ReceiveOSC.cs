@@ -19,14 +19,16 @@ public class ReceiveOSC : MonoBehaviour {
             osc.SetAddressHandler("/RegistrationConfirmed", RegistrationConfirmed);
             osc.SetAddressHandler("/ServerShutDown", GoInsane);
             osc.SetAddressHandler("/AddPlayerFromServer", AddPlayerFromServer);
+            osc.SetAddressHandler("/PlayerPosition", UpdatePartnerPosition);
 
         }
         if (userNetworkType == UserNetworkType.Server)
         {
             osc.SetAddressHandler("/PlayerRegistrationRequest", RegistationRequestedFromPlayer);
             osc.SetAddressHandler("/ClientHasLeft", ErasePlayerRequest);
+            osc.SetAddressHandler("/ClientPlayerPosition", UpdateClientPosition);
+
         }
-        osc.SetAddressHandler("/PlayerPosition", UpdatePartnerPosition);
 
     }
 	
@@ -34,20 +36,22 @@ public class ReceiveOSC : MonoBehaviour {
     void RegistationRequestedFromPlayer(OscMessage message)
     {
         Debug.Log("Received : " + message);
+
         if (gameEngine.userNetworkType == UserNetworkType.Server)
         {
             int playerID = message.GetInt(0);
-            int requestedPort = message.GetInt(1);
-            string playerIP = message.address;
 
-            bool portAvailable = gameEngine.networkManager.CheckPortAvailability(requestedPort);
+            int requestedPort = message.GetInt(1);
+            string playerIP = gameEngine.GetIpFromInt(message.GetInt(2));
+
+            bool portAvailable = gameEngine.networkManager.CheckPortAvailability(gameEngine.usersPlaying, requestedPort);
 
             if (portAvailable)
             {
                 UserData user = gameEngine.AddOtherPlayer(playerID, playerIP, requestedPort);
-                //sender.SendRegistrationConfirmation(gameEngine.networkManager., playerID, requestedPort);
+                sender.SendRegistrationConfirmation(user);
             }
-            //else sender.RefuseRegistration(osc, requestedPort);
+            else sender.RefuseRegistration(playerIP, requestedPort);
         }
     }
 
@@ -55,10 +59,12 @@ public class ReceiveOSC : MonoBehaviour {
     // client side
     void RegistrationConfirmed(OscMessage message)
     {
-        Debug.Log("Received : " + message);
-        int playerID = message.GetInt(0);
-        int requestedPort = message.GetInt(1);
-        gameEngine.EndStartProcess(playerID, requestedPort);
+        if(message.GetInt(0) == gameEngine._user._ID && gameEngine.appState == AppState.WaitingForServer){
+            Debug.Log("Received : " + message);
+            int playerID = message.GetInt(0);
+            int requestedPort = message.GetInt(1);
+            gameEngine.EndStartProcess(playerID, requestedPort);
+        }
     }
 
 
@@ -67,7 +73,26 @@ public class ReceiveOSC : MonoBehaviour {
     void UpdatePartnerPosition(OscMessage message)
     {
         int playerID = message.GetInt(0);
+        string playerPart="none";
+        if(message.GetInt(1) == 0) playerPart = "Head";
+        else if (message.GetInt(1) == 1) playerPart = "LeftHand";
+        else if (message.GetInt(1) == 2) playerPart = "RightHand";
 
+        float xPos = message.GetFloat(2);
+        float yPos = message.GetFloat(3);
+        float zPos = message.GetFloat(4);
+
+        if (playerID != gameEngine._user._ID)
+        {
+            //Debug.Log("Receiving " + playerID + playerPart + " : " + new Vector3(xPos, yPos, zPos));
+            gameEngine.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
+        }
+    }
+
+    void UpdateClientPosition(OscMessage message)
+    {
+        int playerID = message.GetInt(0);
+        Debug.Log("Received : " + message);
         string playerPart="none";
         if(message.GetInt(1) == 0) playerPart = "Head";
         else if (message.GetInt(1) == 1) playerPart = "LeftHand";
@@ -88,11 +113,12 @@ public class ReceiveOSC : MonoBehaviour {
     void AddPlayerFromServer(OscMessage message)
     {
         Debug.Log("Received : " + message);
-        if (gameEngine.userNetworkType == UserNetworkType.Client)
+        int playerID = message.GetInt(0);
+        //int port = message.GetInt(1);
+        if (gameEngine.userNetworkType == UserNetworkType.Client && playerID != gameEngine._user._ID)
         {
-            int playerID = message.GetInt(0);
-            int port = message.GetInt(1);
-            gameEngine.AddOtherPlayer(playerID, message.address, port);
+            Debug.Log(playerID+" vs "+gameEngine._user._ID);
+            gameEngine.AddOtherPlayer(playerID, "null", -1);
         }
     }
 

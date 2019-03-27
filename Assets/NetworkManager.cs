@@ -8,53 +8,52 @@ public class NetworkManager : MonoBehaviour
 {
 
     public OSC osc;
- 
+    public GameEngine gameEngine;
     public string serverAddress;
-    public Dictionary<int, UDPPacketIO> IpPairs;
+    public Dictionary<int, OSCEndPoint> IpPairs;    
 
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
+    // client only
+    public void SendOwnPosition(UserData user, OSCEndPoint serverEndPoint)
+    {        
+        osc.sender.SendClientOSCPosition(user, 0);
+        osc.sender.SendClientOSCPosition(user, 1);
+        osc.sender.SendClientOSCPosition(user, 2);
     }
 
-
-    
-
-
-    public void SendPlayerPosition(UserData user, List<UserData> users)
+    // server only
+    public void SendAllPositionsToClients(List<UserData> users)
     {
-        int i = 0;
-        foreach (UserData p in users)
+        //int i = 0;
+        foreach (UserData targetUser in users)
         {
-
-            if (user._ID == p._ID)
+            if (targetUser._ID != gameEngine._user._ID)
             { // if this is the actual instance's player
-                Debug.Log("Sending local infos :" + users[i].playerGameObject.name);
-                osc.sender.SendOSCPosition(p, 0);
-                osc.sender.SendOSCPosition(p, 1);
-                osc.sender.SendOSCPosition(p, 2);
+                foreach(UserData user in users){              
+                    osc.sender.SendOSCPosition(user, 0, targetUser.oscEndPoint);
+                    osc.sender.SendOSCPosition(user, 1, targetUser.oscEndPoint);
+                    osc.sender.SendOSCPosition(user, 2, targetUser.oscEndPoint);
+                }
             }
 
-            i++;
+           // i++;
 
         }
     }
 
-    public bool CheckPortAvailability(int requestedPort)
+
+    public bool CheckPortAvailability(List<UserData> users, int requestedPort)
     {
-        foreach(IPEndPoint endPoint in IpPairs.Values)
+        Debug.Log("Checking availability for :" +requestedPort);
+        foreach(UserData user in users)
         {
-            if (endPoint.Port==requestedPort) return false;
+            if (user.oscEndPoint.remotePort==requestedPort) return false;
         }
         return true;
     }
 
 
-    public void FinishUserRegistration(int playerID, IPEndPoint endPoint)
+    /* public void FinishUserRegistration(int playerID, IPEndPoint endPoint)
     {
         IpPairs.Add(playerID, endPoint);
-    }
+    }*/
 }

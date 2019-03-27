@@ -6,7 +6,7 @@ using System.IO;
 
 
 
-public class JSONLoader : MonoBehaviour {
+public class JSONLoader {
 
     [HideInInspector]
     public bool jsonDataInitialized = false;
