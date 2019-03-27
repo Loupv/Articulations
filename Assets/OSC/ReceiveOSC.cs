@@ -18,7 +18,9 @@ public class ReceiveOSC : MonoBehaviour {
         {
             osc.SetAddressHandler("/RegistrationConfirmed", RegistrationConfirmed);
             osc.SetAddressHandler("/ServerShutDown", GoInsane);
-            osc.SetAddressHandler("/AddPlayerFromServer", AddPlayerFromServer);
+            osc.SetAddressHandler("/AddPlayerToGame", AddPlayerToGame);
+            osc.SetAddressHandler("/RemovePlayerFromGame", RemovePlayerFromGame);
+            
             osc.SetAddressHandler("/PlayerPosition", UpdatePartnerPosition);
 
         }
@@ -27,7 +29,6 @@ public class ReceiveOSC : MonoBehaviour {
             osc.SetAddressHandler("/PlayerRegistrationRequest", RegistationRequestedFromPlayer);
             osc.SetAddressHandler("/ClientHasLeft", ErasePlayerRequest);
             osc.SetAddressHandler("/ClientPlayerPosition", UpdateClientPosition);
-
         }
 
     }
@@ -110,7 +111,7 @@ public class ReceiveOSC : MonoBehaviour {
     }
 
 
-    void AddPlayerFromServer(OscMessage message)
+    void AddPlayerToGame(OscMessage message)
     {
         Debug.Log("Received : " + message);
         int playerID = message.GetInt(0);
@@ -122,12 +123,21 @@ public class ReceiveOSC : MonoBehaviour {
         }
     }
 
+    // client side
+    void RemovePlayerFromGame(OscMessage message)
+    {
+        Debug.Log("Received : " + message);
+        int playerID = message.GetInt(0);
+        gameEngine.ErasePlayer(playerID);
+    }
+
+    // server side
     void ErasePlayerRequest(OscMessage message)
     {
         Debug.Log("Received : " + message);
         int playerID = message.GetInt(0);
         gameEngine.ErasePlayer(playerID);
-        // TODO something to suppress this instance
+        osc.sender.RemovePlayerInClientsGame(playerID, gameEngine.usersPlaying);
     }
 
     // server has quit

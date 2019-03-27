@@ -120,22 +120,6 @@ public class SendOSC : MonoBehaviour {
 
 
 
-
-
-    /*public void SendCustomOSCMessage(string header)
-    {
-        if (osc.initialized)
-        {
-            message = new OscMessage();
-            message.address = header;
-            osc.OscPacketIO.RemoteHostName = endPoint.Address.ToString();
-            osc.OscPacketIO.RemotePort = endPoint.Port;
-            osc.Send(message);
-            Debug.Log("Sending : " + message);
-        }
-    }*/
-
-
     public void SendQuitMessage(UserNetworkType userNetworkType)
     {
         if (userNetworkType == UserNetworkType.Client)
@@ -162,13 +146,13 @@ public class SendOSC : MonoBehaviour {
 
     }
 
-// after registration confirmation server sends every existing player to client
+    // after registration confirmation server sends every existing player to client
     public void AddEveryPlayerToClientDict(UserData userTarget, List<UserData> usersPlaying)
     {
         foreach (UserData user in usersPlaying)
         {
             message = new OscMessage();
-            message.address = "/AddPlayerFromServer";
+            message.address = "/AddPlayerToGame";
             message.values.Add(user._ID);
             osc.OscPacketIO.RemoteHostName = userTarget.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = userTarget.oscEndPoint.remotePort;
@@ -176,6 +160,23 @@ public class SendOSC : MonoBehaviour {
             Debug.Log("Sending : " + message);
         }
           
+    }
+
+    // triggered by server when it gets the information that one user has left
+    public void RemovePlayerInClientsGame(int playerID, List<UserData> usersPlaying)
+    {
+        foreach (UserData user in usersPlaying)
+        {
+            if(user._ID != playerID){
+                message = new OscMessage();
+                message.address = "/RemovePlayerFromGame";
+                message.values.Add(playerID);
+                osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
+                osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
+                osc.Send(message);
+                Debug.Log("Sending : " + message);
+            }  
+        }
     }
 
 }

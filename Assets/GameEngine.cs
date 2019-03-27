@@ -224,6 +224,7 @@ public class GameEngine : MonoBehaviour
         return p;
     }
 
+    // server's reaction to clienthasleft message
     public void ErasePlayer(int playerID)
     {
         //PlayerGOs.Remove(GameObject.Find("Player" + playerID.ToString()));
@@ -243,7 +244,6 @@ public class GameEngine : MonoBehaviour
                 break;
             }
         }
-
     }
 
     public void KillApp()
