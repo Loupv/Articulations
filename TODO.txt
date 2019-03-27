@@ -1,10 +1,4 @@
-﻿Si server : 
-Pas besoin de renseigner une adresse IP au démarrage, simplement connaître son propre port d'écoute
-
-Si client : 
-Besoin de connaître l'adresse IP du server et son port d'écoute (remotePort)
-
-
+﻿
 Le Client register sur le réseau en envoyant son propre port d'écoute et son adresse IP par le biai du combo serverIP/remotePort
 Si le port local du client n'est pas enregistré, le serveur l'ajoute à sa liste de pairs
 
@@ -22,6 +16,8 @@ Dans le update :
 
 
 ID et remotePort peuvent ils être pareil ?
+
+Penser à envoyer la couleur d'affichage pour garder la même couleur / client sur toutes les instances qui jouent
 
 Reprendre pas à pas la connexion 
 

@@ -39,6 +39,11 @@ public class UserData : MonoBehaviour
         leftHand = pGameObject.transform.Find("LeftHand").gameObject;
         rightHand = pGameObject.transform.Find("RightHand").gameObject;
 
+        Color col = new Color(Random.Range(0f,1f),Random.Range(0f,1f),Random.Range(0f,1f));
+        head.GetComponent<MeshRenderer>().materials[0].color = col;
+        leftHand.GetComponent<MeshRenderer>().materials[0].color = col;
+        rightHand.GetComponent<MeshRenderer>().materials[0].color = col;
+
         pGameObject.name = "Player" + _ID.ToString();
     
         if (isPlaying == 0)
