@@ -43,8 +43,8 @@ public class UserData : MonoBehaviour
     
         if (isPlaying == 0)
         {
-            if (animatorMode) pGameObject.GetComponent<Animator>().SetTrigger("isLocalPlayer");
-            else Destroy(pGameObject.GetComponent<Animator>());
+            //if (animatorMode) pGameObject.GetComponent<Animator>().SetTrigger("isLocalPlayer");
+            //else Destroy(pGameObject.GetComponent<Animator>());
             playerGameObject = pGameObject;
 
         }
