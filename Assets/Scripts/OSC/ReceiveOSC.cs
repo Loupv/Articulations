@@ -36,7 +36,7 @@ public class ReceiveOSC : MonoBehaviour {
     // server side
     void RegistationRequestedFromPlayer(OscMessage message)
     {
-        Debug.Log("Received : " + message);
+        if(gameEngine.debugMode) Debug.Log("Received : " + message);
 
         if (gameEngine.userNetworkType == UserNetworkType.Server)
         {
@@ -62,7 +62,7 @@ public class ReceiveOSC : MonoBehaviour {
     void RegistrationConfirmed(OscMessage message)
     {
         if(message.GetInt(0) == gameEngine._user._ID && gameEngine.appState == AppState.WaitingForServer){
-            Debug.Log("Received : " + message);
+            if(gameEngine.debugMode) Debug.Log("Received : " + message);
             int playerID = message.GetInt(0);
             int requestedPort = message.GetInt(1);
             gameEngine.EndStartProcess(playerID, requestedPort);
@@ -94,7 +94,7 @@ public class ReceiveOSC : MonoBehaviour {
     void UpdateClientPosition(OscMessage message)
     {
         int playerID = message.GetInt(0);
-        Debug.Log("Received : " + message);
+        if(gameEngine.debugMode) Debug.Log("Received : " + message);
         string playerPart="none";
         if(message.GetInt(1) == 0) playerPart = "Head";
         else if (message.GetInt(1) == 1) playerPart = "LeftHand";
@@ -114,7 +114,7 @@ public class ReceiveOSC : MonoBehaviour {
 
     void AddPlayerToGame(OscMessage message)
     {
-        Debug.Log("Received : " + message);
+        if(gameEngine.debugMode) Debug.Log("Received : " + message);
         int playerID = message.GetInt(0);
         //int port = message.GetInt(1);
         if (gameEngine.userNetworkType == UserNetworkType.Client && playerID != gameEngine._user._ID)
@@ -127,7 +127,7 @@ public class ReceiveOSC : MonoBehaviour {
     // client side
     void RemovePlayerFromGame(OscMessage message)
     {
-        Debug.Log("Received : " + message);
+        if(gameEngine.debugMode) Debug.Log("Received : " + message);
         int playerID = message.GetInt(0);
         gameEngine.ErasePlayer(playerID);
     }
@@ -135,7 +135,7 @@ public class ReceiveOSC : MonoBehaviour {
     // server side
     void ErasePlayerRequest(OscMessage message)
     {
-        Debug.Log("Received : " + message);
+        if(gameEngine.debugMode) Debug.Log("Received : " + message);
         int playerID = message.GetInt(0);
         gameEngine.ErasePlayer(playerID);
         osc.sender.RemovePlayerInClientsGame(playerID, gameEngine.usersPlaying);

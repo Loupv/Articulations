@@ -18,6 +18,7 @@ public class GameData
     public int runInLocal;
     public string OSC_ServerIP, OSC_LocalIP;
     public int OSC_LocalPort, OSC_RemotePort;
+    public int DebugMode;
 }
 
 public enum UserNetworkType
@@ -41,8 +42,9 @@ public class GameEngine : MonoBehaviour
 
     public Dictionary<string, Vector3> pendingPositionsActualizations;
     public List<UserData> usersPlaying;
-    //public int _playerID;
+    [HideInInspector]
     public GameObject _userGameObject;
+    [HideInInspector]
     public UserData _user;
 
     public OSC osc;
@@ -53,9 +55,7 @@ public class GameEngine : MonoBehaviour
     private UIHandler uiHandler;
     public GameData gameData;
     public Image oscToggle;
-    public Text sentMessage;
     public GameObject playerPrefab;
-    public GameObject playerParent;
 
     public UserNetworkType userNetworkType;
     public AppState appState;
@@ -64,6 +64,9 @@ public class GameEngine : MonoBehaviour
         viveHeadName  = "Camera", 
         viveLeftHandName = "Controller (left)", 
         viveRightHandName = "Controller (right)";
+    
+    public bool debugMode = false;
+    public GameObject debugPrefab;
 
 
     private void Start()
@@ -96,6 +99,11 @@ public class GameEngine : MonoBehaviour
         uiHandler.SetPlayerRole();
 
         pendingPositionsActualizations = new Dictionary<string, Vector3>();
+        
+        if(gameData.DebugMode == 1){
+             Instantiate(debugPrefab);
+             debugMode = true;
+        }
 
     }
 
@@ -211,16 +219,10 @@ public class GameEngine : MonoBehaviour
     public UserData AddOtherPlayer(int playerID, string address, int port)
     {
         // check si dispo
-        Debug.Log("adding player at : "+address+", "+port);
-        //int ID = Random.Range(0, 10000);
         GameObject go = Instantiate(playerPrefab);
         UserData p = go.GetComponent<UserData>();
         p.Init(this, playerID, address, port, go, 1, 0);
         usersPlaying.Add(p);
-
-        /*Debug.Log(p._ID);
-        Debug.Log(p.oscEndPoint.ip);
-        Debug.Log(p.oscEndPoint.remotePort);*/
 
         networkManager.IpPairs.Add(p._ID, p.oscEndPoint);
 
@@ -239,10 +241,8 @@ public class GameEngine : MonoBehaviour
 
         foreach (UserData p in usersPlaying)
         {
-            //Debug.Log(p._ID+", "+playerID);
             if (p._ID == playerID)
             {
-                //Debug.Log("found , ready to destroy");
                 Destroy(p.gameObject);
                 usersPlaying.Remove(p);
                 Destroy(p);

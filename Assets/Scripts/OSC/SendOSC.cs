@@ -24,7 +24,7 @@ public class SendOSC : MonoBehaviour {
             osc.OscPacketIO.RemoteHostName = userData.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = userData.oscEndPoint.remotePort;
             osc.Send(message);
-            Debug.Log("Sending : " + message);
+            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
         }
     }
 
@@ -40,7 +40,7 @@ public class SendOSC : MonoBehaviour {
             osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
             osc.Send(message);
-            Debug.Log("Sending : " + message);
+            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
 
             AddEveryPlayerToClientDict(user, gameEngine.usersPlaying);
         }
@@ -48,8 +48,7 @@ public class SendOSC : MonoBehaviour {
 
     public void RefuseRegistration(string playerIP, int requestedPort)
     {
-        Debug.Log("no");
-
+       
         if (osc.initialized)
         {
             message = new OscMessage();
@@ -58,7 +57,7 @@ public class SendOSC : MonoBehaviour {
             osc.OscPacketIO.RemoteHostName = playerIP;
             osc.OscPacketIO.RemotePort = requestedPort;
             osc.Send(message);
-            Debug.Log("Sending : " + message);
+            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
         }
     }
 
@@ -86,7 +85,7 @@ public class SendOSC : MonoBehaviour {
              osc.OscPacketIO.RemoteHostName = gameEngine.osc.outIP;
             osc.OscPacketIO.RemotePort = gameEngine.osc.outPort;
             osc.Send(message);
-            Debug.Log("Sending : "+message);
+            if(gameEngine.debugMode) Debug.Log("Sending : "+message);
             //Debug.Log("Sending client position of : " + userData._ID + ", to " + targetEndPoint.remotePort+", and "+targetEndPoint.ip);
         }
     }
@@ -130,7 +129,7 @@ public class SendOSC : MonoBehaviour {
             message.address = "/ClientHasLeft";
             message.values.Add(gameEngine._user._ID);
             osc.Send(message);
-            Debug.Log("Sending : " + message);
+            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
         }
         else if (userNetworkType == UserNetworkType.Server)
         {
@@ -140,7 +139,7 @@ public class SendOSC : MonoBehaviour {
                 message = new OscMessage();
                 message.address = "/ServerShutDown";
                 osc.Send(message);
-                Debug.Log("Sending : " + message);
+                if(gameEngine.debugMode) Debug.Log("Sending : " + message);
             }
         }
 
@@ -157,7 +156,7 @@ public class SendOSC : MonoBehaviour {
             osc.OscPacketIO.RemoteHostName = userTarget.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = userTarget.oscEndPoint.remotePort;
             osc.Send(message);
-            Debug.Log("Sending : " + message);
+            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
         }
           
     }
@@ -174,7 +173,7 @@ public class SendOSC : MonoBehaviour {
                 osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
                 osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
                 osc.Send(message);
-                Debug.Log("Sending : " + message);
+                if(gameEngine.debugMode) Debug.Log("Sending : " + message);
             }
         }
     }
@@ -191,7 +190,7 @@ public class SendOSC : MonoBehaviour {
                 osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
                 osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
                 osc.Send(message);
-                Debug.Log("Sending : " + message);
+                if(gameEngine.debugMode) Debug.Log("Sending : " + message);
             }  
         }
     }

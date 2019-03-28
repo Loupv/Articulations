@@ -4,5 +4,6 @@
    "OSC_ServerIP":"127.0.0.1",
    "OSC_LocalIP":"127.0.0.1",
    "OSC_LocalPort":5555,
-   "OSC_RemotePort":8888
+   "OSC_RemotePort":8888,
+   "DebugMode":1
 }
