@@ -1,4 +1,9 @@
-﻿
+﻿TODO :
+
+Problème pour viewer, serveur crée quand même un joueur et client n'a pas la confirmation d'enregistrement
+
+
+
 Le Client register sur le réseau en envoyant son propre port d'écoute et son adresse IP par le biai du combo serverIP/remotePort
 Si le port local du client n'est pas enregistré, le serveur l'ajoute à sa liste de pairs
 
@@ -12,7 +17,6 @@ Si client reçoit la confirmation, il enregistre tous les joueurs présents, pas
 Dans le update :
 - les clients envoient leurs positions au server
 - le server envoie toutes les positions à tous les joueurs
-
 
 
 ID et remotePort peuvent ils être pareil ?

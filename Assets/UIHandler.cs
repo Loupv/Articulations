@@ -13,18 +13,18 @@ public class UIHandler : MonoBehaviour
     public int OSCLocalPort, OSCRemotePort;
     public string address;
 
-    private int isPlayer;
+    public int isPlayer;
 
     public void SetPlayerRole()
     {
         if (userRoleDropdown.options[userRoleDropdown.value].text == "Player")
         {
-            isPlayer = 0;
+            isPlayer = 1;
         }
 
         else if (userRoleDropdown.options[userRoleDropdown.value].text == "Viewer")
         {
-            isPlayer = 1;
+            isPlayer = 0;
         }
     }
 

@@ -61,6 +61,7 @@ public class GameEngine : MonoBehaviour
     public UserNetworkType userNetworkType;
     public AppState appState;
     private OSCEndPoint serverEndpoint;
+    public string viveSystemName = "ViveTrackingSystem";
 
 
     private void Start()
@@ -104,9 +105,9 @@ public class GameEngine : MonoBehaviour
 
         _userGameObject = Instantiate(playerPrefab);
         _user = _userGameObject.GetComponent<UserData>();
-        _user.Init(ID, gameData.OSC_ServerIP, gameData.OSC_LocalPort, _userGameObject, playerParent, isPlayer, true);
+        _user.Init(ID, gameData.OSC_ServerIP, gameData.OSC_LocalPort, _userGameObject, viveSystemName, isPlayer, 1);
 
-        if (isPlayer == 0) // if true
+        if (isPlayer == 1)
         {
             usersPlaying.Add(_user);
 
@@ -209,7 +210,7 @@ public class GameEngine : MonoBehaviour
         //int ID = Random.Range(0, 10000);
         GameObject go = Instantiate(playerPrefab);
         UserData p = go.GetComponent<UserData>();
-        p.Init(playerID, address, port, go, playerParent, 0, false);
+        p.Init(playerID, address, port, go, viveSystemName, 1, 0);
         usersPlaying.Add(p);
 
         /*Debug.Log(p._ID);
@@ -227,7 +228,6 @@ public class GameEngine : MonoBehaviour
     // server's reaction to clienthasleft message
     public void ErasePlayer(int playerID)
     {
-        //PlayerGOs.Remove(GameObject.Find("Player" + playerID.ToString()));
         pendingPositionsActualizations.Remove(playerID + "Head");
         pendingPositionsActualizations.Remove(playerID + "LeftHand");
         pendingPositionsActualizations.Remove(playerID + "RightHand");
