@@ -35,6 +35,8 @@ public class UIHandler : MonoBehaviour
             gameEngine.userNetworkType = UserNetworkType.Server;
             if (clientObjectParent != null) clientObjectParent.gameObject.SetActive(false);
             if (serverObjectParent != null) serverObjectParent.gameObject.SetActive(true);
+            SetPlayerRole();
+            userRoleDropdown.gameObject.SetActive(true);
 
         }
         else if (networkDropdown.options[networkDropdown.value].text == "Client")
@@ -42,6 +44,9 @@ public class UIHandler : MonoBehaviour
             gameEngine.userNetworkType = UserNetworkType.Client;
             if(clientObjectParent != null) clientObjectParent.gameObject.SetActive(true);
             if (serverObjectParent != null) serverObjectParent.gameObject.SetActive(false);
+            SetPlayerRole();
+            userRoleDropdown.value= 0; // to prevent client/viewer case that is not handled atm
+            userRoleDropdown.gameObject.SetActive(false);
         }
     }
 

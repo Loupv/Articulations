@@ -168,6 +168,9 @@ public class GameEngine : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetKeyDown("space") && appState == AppState.Initializing)
+            StartGame(1);
+
         if (appState == AppState.Running)
         {
             UpdateGame();
