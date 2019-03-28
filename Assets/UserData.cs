@@ -21,7 +21,7 @@ public class UserData : MonoBehaviour
     public OSCEndPoint oscEndPoint;
 
 
-    public void Init(int ID, string address, int localPort, GameObject pGameObject, string viveSystemName, int isPlayer, int isLocalPlayer)
+    public void Init(GameEngine gameEngine, int ID, string address, int localPort, GameObject pGameObject, int isPlayer, int isLocalPlayer)
     {
         
         _ID = ID;
@@ -39,12 +39,15 @@ public class UserData : MonoBehaviour
         
         if (isPlayer == 1) // if player and not just viewer
         {
-            GameObject parent = GameObject.Find(viveSystemName);
-
+            GameObject parent = GameObject.Find(gameEngine.viveSystemName);
+            
             if(isLocalPlayer == 1 && parent != null){ // if Init is launched at startup by this instance's player
-                head.transform.parent = parent.transform.Find("ViveHead").gameObject.transform;
-                leftHand.transform.parent = parent.transform.Find("ViveLeftHand").gameObject.transform;
-                rightHand.transform.parent = parent.transform.Find("ViveRightHand").gameObject.transform;
+                head.transform.parent = parent.transform.Find(gameEngine.viveHeadName).gameObject.transform;
+                leftHand.transform.parent = parent.transform.Find(gameEngine.viveLeftHandName).gameObject.transform;
+                rightHand.transform.parent = parent.transform.Find(gameEngine.viveRightHandName).gameObject.transform;
+                head.transform.position = Vector3.zero;
+                leftHand.transform.position = Vector3.zero;
+                rightHand.transform.position = Vector3.zero;
                 pGameObject.transform.parent = parent.transform;
             }
             else{ // else we store the player under an empty named Players

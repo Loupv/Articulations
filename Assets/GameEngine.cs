@@ -40,7 +40,6 @@ public class GameEngine : MonoBehaviour
     public NetworkManager networkManager;
 
     public Dictionary<string, Vector3> pendingPositionsActualizations;
-    public List<int> IDsList;
     public List<UserData> usersPlaying;
     //public int _playerID;
     public GameObject _userGameObject;
@@ -61,7 +60,10 @@ public class GameEngine : MonoBehaviour
     public UserNetworkType userNetworkType;
     public AppState appState;
     private OSCEndPoint serverEndpoint;
-    public string viveSystemName = "ViveTrackingSystem";
+    public string viveSystemName = "[CameraRig]", 
+        viveHeadName  = "Camera", 
+        viveLeftHandName = "Controller (left)", 
+        viveRightHandName = "Controller (right)";
 
 
     private void Start()
@@ -105,7 +107,7 @@ public class GameEngine : MonoBehaviour
 
         _userGameObject = Instantiate(playerPrefab);
         _user = _userGameObject.GetComponent<UserData>();
-        _user.Init(ID, gameData.OSC_ServerIP, gameData.OSC_LocalPort, _userGameObject, viveSystemName, isPlayer, 1);
+        _user.Init(this, ID, gameData.OSC_ServerIP, gameData.OSC_LocalPort, _userGameObject, isPlayer, 1);
 
         if (isPlayer == 1)
         {
@@ -210,7 +212,7 @@ public class GameEngine : MonoBehaviour
         //int ID = Random.Range(0, 10000);
         GameObject go = Instantiate(playerPrefab);
         UserData p = go.GetComponent<UserData>();
-        p.Init(playerID, address, port, go, viveSystemName, 1, 0);
+        p.Init(this, playerID, address, port, go, 1, 0);
         usersPlaying.Add(p);
 
         /*Debug.Log(p._ID);
