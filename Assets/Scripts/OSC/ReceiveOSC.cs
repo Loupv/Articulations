@@ -33,6 +33,15 @@ public class ReceiveOSC : MonoBehaviour {
 
     }
 	
+
+
+/*
+    -------------------------------------
+    -----------SERVER FUNCTIONS----------
+    -------------------------------------
+ */
+
+
     // server side
     void RegistationRequestedFromPlayer(OscMessage message)
     {
@@ -43,7 +52,7 @@ public class ReceiveOSC : MonoBehaviour {
             int playerID = message.GetInt(0);
 
             int requestedPort = message.GetInt(1);
-            string playerIP = gameEngine.GetIpFromInt(message.GetInt(2));
+            string playerIP = Utils.GetIpFromInt(message.GetInt(2), gameEngine.gameData.OSC_LocalIP);
 
             bool portAvailable = gameEngine.networkManager.CheckPortAvailability(gameEngine.usersPlaying, requestedPort);
 
@@ -58,7 +67,21 @@ public class ReceiveOSC : MonoBehaviour {
     }
 
 
-    // client side
+    void ErasePlayerRequest(OscMessage message)
+    {
+        if(gameEngine.debugMode) Debug.Log("Received : " + message);
+        int playerID = message.GetInt(0);
+        gameEngine.ErasePlayer(playerID);
+        osc.sender.RemovePlayerInClientsGame(playerID, gameEngine.usersPlaying);
+    }
+
+
+/*
+    -------------------------------------
+    -----------CLIENT FUNCTIONS----------
+    -------------------------------------
+ */
+
     void RegistrationConfirmed(OscMessage message)
     {
         if(message.GetInt(0) == gameEngine._user._ID && gameEngine.appState == AppState.WaitingForServer){
@@ -68,8 +91,6 @@ public class ReceiveOSC : MonoBehaviour {
             gameEngine.EndStartProcess(playerID, requestedPort);
         }
     }
-
-
 
     // triggered for each osc position message received (3 per player)
     void UpdatePartnerPosition(OscMessage message)
@@ -86,7 +107,6 @@ public class ReceiveOSC : MonoBehaviour {
 
         if (playerID != gameEngine._user._ID)
         {
-            //Debug.Log("Receiving " + playerID + playerPart + " : " + new Vector3(xPos, yPos, zPos));
             gameEngine.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
         }
     }
@@ -106,17 +126,14 @@ public class ReceiveOSC : MonoBehaviour {
 
         if (playerID != gameEngine._user._ID)
         {
-            //Debug.Log("Receiving " + playerID + playerPart + " : " + new Vector3(xPos, yPos, zPos));
             gameEngine.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
         }
     }
-
-
     void AddPlayerToGame(OscMessage message)
     {
         if(gameEngine.debugMode) Debug.Log("Received : " + message);
         int playerID = message.GetInt(0);
-        //int port = message.GetInt(1);
+        
         if (gameEngine.userNetworkType == UserNetworkType.Client && playerID != gameEngine._user._ID)
         {
             Debug.Log(playerID+" vs "+gameEngine._user._ID);
@@ -132,15 +149,7 @@ public class ReceiveOSC : MonoBehaviour {
         gameEngine.ErasePlayer(playerID);
     }
 
-    // server side
-    void ErasePlayerRequest(OscMessage message)
-    {
-        if(gameEngine.debugMode) Debug.Log("Received : " + message);
-        int playerID = message.GetInt(0);
-        gameEngine.ErasePlayer(playerID);
-        osc.sender.RemovePlayerInClientsGame(playerID, gameEngine.usersPlaying);
-    }
-
+ 
     // server has quit
     void GoInsane(OscMessage message)
     {

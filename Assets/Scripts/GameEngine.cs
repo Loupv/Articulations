@@ -54,7 +54,7 @@ public class GameEngine : MonoBehaviour
     private JSONLoader jSONLoader;
     private UIHandler uiHandler;
     public GameData gameData;
-    public Image oscToggle;
+    
     public GameObject playerPrefab;
 
     public UserNetworkType userNetworkType;
@@ -80,26 +80,29 @@ public class GameEngine : MonoBehaviour
     {
         Screen.fullScreen = false;
         appState = AppState.Initializing;
+
         canvasHandler = GetComponent<CanvasHandler>();
-        canvasHandler.ChangeCanvas("initCanvas");
         uiHandler = GetComponentInChildren<UIHandler>();
+        canvasHandler.ChangeCanvas("initCanvas");
+
         userNetworkType = UserNetworkType.Server;
-        networkManager.IpPairs = new Dictionary<int, OSCEndPoint>();
 
         jSONLoader = new JSONLoader();
         gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
 
+        pendingPositionsActualizations = new Dictionary<string, Vector3>();
+
         uiHandler.OSCInPortInput.text = gameData.OSC_LocalPort.ToString();
         uiHandler.OSCOutPortInput.text = gameData.OSC_RemotePort.ToString();
-
         if (gameData.runInLocal == 1) uiHandler.OSCAddressInput.text = "127.0.0.1";
         else uiHandler.OSCAddressInput.text = gameData.OSC_ServerIP;
+        
+        // adjust user's parameters
         uiHandler.ChangeOSCConfig();
         uiHandler.SetPlayerNetworkType();
         uiHandler.SetPlayerRole();
-
-        pendingPositionsActualizations = new Dictionary<string, Vector3>();
         
+        // do we print sent and received messages
         if(gameData.DebugMode == 1){
              Instantiate(debugPrefab);
              debugMode = true;
@@ -110,7 +113,6 @@ public class GameEngine : MonoBehaviour
     // Start the performance when button's pressed
     public void StartGame(int isPlayer)
     {
-
         int ID = Random.Range(0, 10000); //TODO remplacer par le port
 
         _userGameObject = Instantiate(playerPrefab);
@@ -138,11 +140,8 @@ public class GameEngine : MonoBehaviour
         if (userNetworkType == UserNetworkType.Server)
         {
             appState = AppState.Running;
+            networkManager.ShowConnexionState();
             canvasHandler.ChangeCanvas("gameCanvas");     
-            
-            if (osc.initialized)
-                oscToggle.color = new Color(0, 1, 0);
-            else oscToggle.color = new Color(1, 0, 0);
         }
 
         else if (userNetworkType == UserNetworkType.Client)
@@ -158,16 +157,11 @@ public class GameEngine : MonoBehaviour
     // when server has agreed for client registration
     public void EndStartProcess(int playerID, int requestedPort)
     {
-        //networkManager.FinishUserRegistration(playerID, requestedPort);
-
         if (userNetworkType == UserNetworkType.Client)
         {
-            Debug.Log(playerID+", and "+requestedPort+" registered");
+            Debug.Log(playerID+"registered on port "+requestedPort);
             appState = AppState.Running;
-            if (osc.initialized)
-                oscToggle.color = new Color(0, 1, 0);
-            else oscToggle.color = new Color(1, 0, 0);
-
+            networkManager.ShowConnexionState();
             canvasHandler.ChangeCanvas("gameCanvas");
         }
     }
@@ -176,6 +170,7 @@ public class GameEngine : MonoBehaviour
 
     private void Update()
     {
+        // TODO fix game start with VR headset -> multiple cameras and displays
         if(Input.GetKeyDown("space") && appState == AppState.Initializing)
             StartGame(1);
 
@@ -192,13 +187,20 @@ public class GameEngine : MonoBehaviour
 
     public void UpdateGame()
     {
-
         if(userNetworkType == UserNetworkType.Client)
             networkManager.SendOwnPosition(_user, serverEndpoint);
         else 
             networkManager.SendAllPositionsToClients(usersPlaying);
 
+        ActualizePlayersPositions();
+        
+    }
 
+
+
+
+    // adjust players positions from stored one
+    public void ActualizePlayersPositions(){
         int i = 0;
         foreach (UserData user in usersPlaying)
         {
@@ -209,13 +211,10 @@ public class GameEngine : MonoBehaviour
                 usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[user._ID + "RightHand"];
             }
             i++;
-
         }
     }
 
 
-
-// conflict between use from client and server ? -> client does not create the server player at the moment
     public UserData AddOtherPlayer(int playerID, string address, int port)
     {
         // check si dispo
@@ -223,8 +222,6 @@ public class GameEngine : MonoBehaviour
         UserData p = go.GetComponent<UserData>();
         p.Init(this, playerID, address, port, go, 1, 0);
         usersPlaying.Add(p);
-
-        networkManager.IpPairs.Add(p._ID, p.oscEndPoint);
 
         pendingPositionsActualizations.Add(playerID + "Head", p.head.transform.position);
         pendingPositionsActualizations.Add(playerID + "LeftHand", p.leftHand.transform.position);
@@ -254,9 +251,9 @@ public class GameEngine : MonoBehaviour
     public void KillApp()
     {
         Application.Quit();
-#if UnityEditor
+        #if UnityEditor
             if(Application.isEditor) EditorApplication.ExecuteMenuItem("Edit/Play");
-#endif
+        #endif
     }
 
 
@@ -268,28 +265,5 @@ public class GameEngine : MonoBehaviour
             osc.sender.SendQuitMessage(userNetworkType); // TODO adapt if server
         Debug.Log("Closing Game Engine...");
     }
-
-
-    public string GetIpFromInt(int i){
-        int index = gameData.OSC_LocalIP.LastIndexOf(".");
-        if(index>0) {
-            string ip = gameData.OSC_LocalIP.Substring(0, index)+"."+i.ToString();
-            return ip;
-            }
-        else return "null";
-    }
-
-    public int GetLastIntFromIp(string ip){
-        int index = ip.LastIndexOf(".");
-        
-        if(index>0){ 
-            string tmp = ip.Substring(index+1, ip.Length-index-1);
-            int.TryParse(tmp, out int r);
-            return r;
-
-        }
-        else return -1;
-    }
-
 
 }

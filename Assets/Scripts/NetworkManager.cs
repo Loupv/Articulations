@@ -2,6 +2,7 @@
 using System.Net;
 using System.Collections.Generic;
 
+using UnityEngine.UI;
 using UnityEngine;
 
 public class NetworkManager : MonoBehaviour
@@ -9,8 +10,8 @@ public class NetworkManager : MonoBehaviour
 
     public OSC osc;
     public GameEngine gameEngine;
-    public string serverAddress;
-    public Dictionary<int, OSCEndPoint> IpPairs;    
+    public string serverAddress;  
+    public Image oscToggle;
 
     // client only
     public void SendOwnPosition(UserData user, OSCEndPoint serverEndPoint)
@@ -23,7 +24,6 @@ public class NetworkManager : MonoBehaviour
     // server only
     public void SendAllPositionsToClients(List<UserData> users)
     {
-        //int i = 0;
         foreach (UserData targetUser in users)
         {
             if (targetUser._ID != gameEngine._user._ID)
@@ -34,10 +34,14 @@ public class NetworkManager : MonoBehaviour
                     osc.sender.SendOSCPosition(user, 2, targetUser.oscEndPoint);
                 }
             }
-
-           // i++;
-
         }
+    }
+
+
+    public void ShowConnexionState(){
+        if (osc.initialized)
+            oscToggle.color = new Color(0, 1, 0);
+        else oscToggle.color = new Color(1, 0, 0);
     }
 
 
@@ -51,9 +55,4 @@ public class NetworkManager : MonoBehaviour
         return true;
     }
 
-
-    /* public void FinishUserRegistration(int playerID, IPEndPoint endPoint)
-    {
-        IpPairs.Add(playerID, endPoint);
-    }*/
 }

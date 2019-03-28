@@ -11,24 +11,14 @@ public class SendOSC : MonoBehaviour {
     public OSC osc;
 
 
-    public void RequestUserRegistation(UserData userData, int serverPort)
-    {
-        if (osc.initialized)
-        {
-            message = new OscMessage();
-            message.address = "/PlayerRegistrationRequest";
-            message.values.Add(userData._ID);
-            message.values.Add(gameEngine.osc.inPort);
-            message.values.Add(gameEngine.GetLastIntFromIp(gameEngine.gameData.OSC_LocalIP));
 
-            osc.OscPacketIO.RemoteHostName = userData.oscEndPoint.ip;
-            osc.OscPacketIO.RemotePort = userData.oscEndPoint.remotePort;
-            osc.Send(message);
-            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
-        }
-    }
+/*
+    -------------------------------------
+    -----------SERVER FUNCTIONS----------
+    -------------------------------------
+ */
 
-    // server sends confirmation to client that he's registered
+     // server sends confirmation to client that he's registered
     public void SendRegistrationConfirmation(UserData user)
     {
         if (osc.initialized)
@@ -62,34 +52,6 @@ public class SendOSC : MonoBehaviour {
     }
 
 
-
-    public void SendClientOSCPosition(UserData userData, int playerPart)
-    {
-        Vector3 pos = new Vector3();
-
-        if (osc.initialized)
-        {   
-            message = new OscMessage();
-            message.address =  "/ClientPlayerPosition";
-            message.values.Add(userData._ID);
-
-            if(playerPart == 0) pos = userData.head.transform.position;
-            if(playerPart == 1) pos = userData.leftHand.transform.position;
-            if(playerPart == 2) pos = userData.rightHand.transform.position;
-
-            message.values.Add(playerPart);
-            message.values.Add(pos.x);
-            message.values.Add(pos.y);
-            message.values.Add(pos.z);
-
-             osc.OscPacketIO.RemoteHostName = gameEngine.osc.outIP;
-            osc.OscPacketIO.RemotePort = gameEngine.osc.outPort;
-            osc.Send(message);
-            if(gameEngine.debugMode) Debug.Log("Sending : "+message);
-            //Debug.Log("Sending client position of : " + userData._ID + ", to " + targetEndPoint.remotePort+", and "+targetEndPoint.ip);
-        }
-    }
-
     public void SendOSCPosition(UserData userData, int playerPart, OSCEndPoint targetEndPoint)
     {
         Vector3 pos = new Vector3();
@@ -112,38 +74,10 @@ public class SendOSC : MonoBehaviour {
             osc.OscPacketIO.RemoteHostName = targetEndPoint.ip;
             osc.OscPacketIO.RemotePort = targetEndPoint.remotePort;
             osc.Send(message);
-            //Debug.Log(message);
-            //Debug.Log("Sending position of : " + userData._ID + ", to " + targetEndPoint.remotePort+", and "+targetEndPoint.ip);
+            
         }
     }
 
-
-
-    public void SendQuitMessage(UserNetworkType userNetworkType)
-    {
-        if (userNetworkType == UserNetworkType.Client)
-        {
-            osc.OscPacketIO.RemoteHostName = gameEngine.osc.outIP;
-            osc.OscPacketIO.RemotePort = gameEngine.osc.outPort;
-            message = new OscMessage();
-            message.address = "/ClientHasLeft";
-            message.values.Add(gameEngine._user._ID);
-            osc.Send(message);
-            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
-        }
-        else if (userNetworkType == UserNetworkType.Server)
-        {
-            foreach(UserData user in gameEngine.usersPlaying){
-                osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
-                osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
-                message = new OscMessage();
-                message.address = "/ServerShutDown";
-                osc.Send(message);
-                if(gameEngine.debugMode) Debug.Log("Sending : " + message);
-            }
-        }
-
-    }
 
     // after registration confirmation server sends every existing player to client
     public void AddEveryPlayerToClientDict(UserData userTarget, List<UserData> usersPlaying)
@@ -178,6 +112,7 @@ public class SendOSC : MonoBehaviour {
         }
     }
 
+
     // triggered by server when it gets the information that one user has left
     public void RemovePlayerInClientsGame(int playerID, List<UserData> usersPlaying)
     {
@@ -194,5 +129,88 @@ public class SendOSC : MonoBehaviour {
             }  
         }
     }
+
+
+/*
+    -------------------------------------
+    -----------CLIENT FUNCTIONS----------
+    -------------------------------------
+ */
+
+    public void RequestUserRegistation(UserData userData, int serverPort)
+    {
+        if (osc.initialized)
+        {
+            message = new OscMessage();
+            message.address = "/PlayerRegistrationRequest";
+            message.values.Add(userData._ID);
+            message.values.Add(gameEngine.osc.inPort);
+            message.values.Add(Utils.GetLastIntFromIp(gameEngine.gameData.OSC_LocalIP));
+
+            osc.OscPacketIO.RemoteHostName = userData.oscEndPoint.ip;
+            osc.OscPacketIO.RemotePort = userData.oscEndPoint.remotePort;
+            osc.Send(message);
+            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
+        }
+    }
+
+
+    public void SendClientOSCPosition(UserData userData, int playerPart)
+    {
+        Vector3 pos = new Vector3();
+
+        if (osc.initialized)
+        {   
+            message = new OscMessage();
+            message.address =  "/ClientPlayerPosition";
+            message.values.Add(userData._ID);
+
+            if(playerPart == 0) pos = userData.head.transform.position;
+            if(playerPart == 1) pos = userData.leftHand.transform.position;
+            if(playerPart == 2) pos = userData.rightHand.transform.position;
+
+            message.values.Add(playerPart);
+            message.values.Add(pos.x);
+            message.values.Add(pos.y);
+            message.values.Add(pos.z);
+
+             osc.OscPacketIO.RemoteHostName = gameEngine.osc.outIP;
+            osc.OscPacketIO.RemotePort = gameEngine.osc.outPort;
+            osc.Send(message);
+            if(gameEngine.debugMode) Debug.Log("Sending : "+message);
+            
+        }
+    }
+
+
+
+    public void SendQuitMessage(UserNetworkType userNetworkType)
+    {
+        if (userNetworkType == UserNetworkType.Client)
+        {
+            osc.OscPacketIO.RemoteHostName = gameEngine.osc.outIP;
+            osc.OscPacketIO.RemotePort = gameEngine.osc.outPort;
+            message = new OscMessage();
+            message.address = "/ClientHasLeft";
+            message.values.Add(gameEngine._user._ID);
+            osc.Send(message);
+            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
+        }
+        else if (userNetworkType == UserNetworkType.Server)
+        {
+            foreach(UserData user in gameEngine.usersPlaying){
+                osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
+                osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
+                message = new OscMessage();
+                message.address = "/ServerShutDown";
+                osc.Send(message);
+                if(gameEngine.debugMode) Debug.Log("Sending : " + message);
+            }
+        }
+
+    }
+
+
+
 
 }
