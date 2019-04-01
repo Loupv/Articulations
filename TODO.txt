@@ -2,6 +2,22 @@
 
 Problème pour viewer, serveur crée quand même un joueur et client n'a pas la confirmation d'enregistrement
 
+- Faire des gros boutons au début pour paramétrer vite le client/serveur et viewer/player
+- adapter la config pour avoir possiblement 5 membres envoyés , transformer les slots en list de Gameobjects
+- offrir un GUI au serveur afin de pouvoir changer les modes d'affichage rapidement
+- ajouter les messages OSC d'orientation de la tête, de mode d'affichage
+
+
+Rôles update :
+- serveur n'a pas d'affichage de la scène, c'est juste un GUI qui renvoie les positions de chaque client et peut changer le mode d'affichage
+- parmi eux : voir les mains de l'autre, voir juste ses mains, voir des trainées sur les mains de l'autre, voir des trainées sur les siennes aussi,
+un bouton par mode
+
+
+- client viewer : peut choisir le point de vue de chaque joueur / piloter une cam en free mode / avoir un plan d'ensemble, fonctionne comme
+un client normal et ajoute des joueurs + leur point de vue (besoin de l'orientation de la cam)
+
+- client : same
 
 
 Le Client register sur le réseau en envoyant son propre port d'écoute et son adresse IP par le biai du combo serverIP/remotePort

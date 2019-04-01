@@ -39,21 +39,28 @@ public class UserData : MonoBehaviour
         
         if (isPlayer == 1) // if player and not just viewer
         {
-            GameObject parent = GameObject.Find(gameEngine.viveSystemName);
-            
-            if(isLocalPlayer == 1 && parent != null){ // if Init is launched at startup by this instance's player
-                head.transform.parent = parent.transform.Find(gameEngine.viveHeadName).gameObject.transform;
+
+            if(isLocalPlayer == 1 && gameEngine.findVive){ // if Init is launched at startup by this instance's player
+                
+                GameObject parent = GameObject.Instantiate(gameEngine.ViveSystemPrefab);
+                GameObject camera = parent.transform.Find(gameEngine.viveHeadName).gameObject;
+                head.transform.parent = camera.transform;
                 leftHand.transform.parent = parent.transform.Find(gameEngine.viveLeftHandName).gameObject.transform;
                 rightHand.transform.parent = parent.transform.Find(gameEngine.viveRightHandName).gameObject.transform;
                 head.transform.position = Vector3.zero;
                 leftHand.transform.position = Vector3.zero;
                 rightHand.transform.position = Vector3.zero;
                 pGameObject.transform.parent = parent.transform;
+
+                Camera.main.gameObject.SetActive(false);
+                camera.tag = "MainCamera";
+                
+
             }
             else{ // else we store the player under an empty named Players
-                Debug.Log("Vive System not Found");
+                Debug.Log("Vive System Missing");
                 
-                parent = GameObject.Find("Players");
+                GameObject parent = GameObject.Find("Players");
                 if(parent == null) {
                     parent = new GameObject();
                     parent.name = "Players";

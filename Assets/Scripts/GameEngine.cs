@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +20,7 @@ public class GameData
 {
     public int runInLocal;
     public string OSC_ServerIP, OSC_LocalIP;
-    public int OSC_LocalPort, OSC_RemotePort;
+    public int OSC_ServerPort, OSC_ClientPort;
     public int DebugMode;
 }
 
@@ -55,11 +58,12 @@ public class GameEngine : MonoBehaviour
     private UIHandler uiHandler;
     public GameData gameData;
     
-    public GameObject playerPrefab;
+    public GameObject playerPrefab, ViveSystemPrefab;
 
     public UserNetworkType userNetworkType;
     public AppState appState;
     private OSCEndPoint serverEndpoint;
+    public bool findVive;
     public string viveSystemName = "[CameraRig]", 
         viveHeadName  = "Camera", 
         viveLeftHandName = "Controller (left)", 
@@ -80,6 +84,9 @@ public class GameEngine : MonoBehaviour
     {
         Screen.fullScreen = false;
         appState = AppState.Initializing;
+        
+
+        Debug.Log("my ip : "+CheckIp());
 
         canvasHandler = GetComponent<CanvasHandler>();
         uiHandler = GetComponentInChildren<UIHandler>();
@@ -92,15 +99,17 @@ public class GameEngine : MonoBehaviour
 
         pendingPositionsActualizations = new Dictionary<string, Vector3>();
 
-        uiHandler.OSCInPortInput.text = gameData.OSC_LocalPort.ToString();
-        uiHandler.OSCOutPortInput.text = gameData.OSC_RemotePort.ToString();
-        if (gameData.runInLocal == 1) uiHandler.OSCAddressInput.text = "127.0.0.1";
-        else uiHandler.OSCAddressInput.text = gameData.OSC_ServerIP;
-        
+        if (gameData.runInLocal == 1) {
+            uiHandler.OSCServerPortInput.text = "127.0.0.1";
+            gameData.OSC_LocalIP = "127.0.0.1";
+            gameData.OSC_ClientPort = UnityEngine.Random.Range(5555,8888);
+        }
+        else {
+            uiHandler.OSCServerPortInput.text = gameData.OSC_ServerIP;
+            gameData.OSC_LocalIP = CheckIp();
+        }
         // adjust user's parameters
-        uiHandler.ChangeOSCConfig();
-        uiHandler.SetPlayerNetworkType();
-        uiHandler.SetPlayerRole();
+        uiHandler.SetPlayerNetworkType(0);
         
         // do we print sent and received messages
         if(gameData.DebugMode == 1){
@@ -113,11 +122,11 @@ public class GameEngine : MonoBehaviour
     // Start the performance when button's pressed
     public void StartGame(int isPlayer)
     {
-        int ID = Random.Range(0, 10000); //TODO remplacer par le port
+        int ID = UnityEngine.Random.Range(0, 10000); //TODO remplacer par le port
 
         _userGameObject = Instantiate(playerPrefab);
         _user = _userGameObject.GetComponent<UserData>();
-        _user.Init(this, ID, gameData.OSC_ServerIP, gameData.OSC_LocalPort, _userGameObject, isPlayer, 1);
+        _user.Init(this, ID, gameData.OSC_ServerIP, gameData.OSC_ServerPort, _userGameObject, isPlayer, 1);
 
         if (isPlayer == 1)
         {
@@ -129,25 +138,29 @@ public class GameEngine : MonoBehaviour
         }
 
         osc.receiver.userNetworkType = userNetworkType;
-        osc.inPort = uiHandler.OSCLocalPort;
-        osc.outPort = uiHandler.OSCRemotePort;
-        osc.outIP = uiHandler.address;
-        osc.Init();
-
+        
         serverEndpoint.ip = gameData.OSC_ServerIP;
-        serverEndpoint.remotePort = gameData.OSC_RemotePort;
+        serverEndpoint.remotePort = gameData.OSC_ClientPort;
 
         if (userNetworkType == UserNetworkType.Server)
         {
+            osc.inPort = gameData.OSC_ServerPort;
+            osc.outPort = gameData.OSC_ClientPort;
+            osc.outIP = uiHandler.address;
+            osc.Init();
             appState = AppState.Running;
             networkManager.ShowConnexionState();
-            canvasHandler.ChangeCanvas("gameCanvas");     
+            canvasHandler.ChangeCanvas("serverCanvas");     
         }
 
         else if (userNetworkType == UserNetworkType.Client)
         {
+            osc.inPort = gameData.OSC_ClientPort;
+            osc.outPort = gameData.OSC_ServerPort;
+            osc.outIP = uiHandler.address;
+            osc.Init();
             appState = AppState.WaitingForServer;
-            osc.sender.RequestUserRegistation(_user, gameData.OSC_RemotePort);
+            osc.sender.RequestUserRegistation(_user, gameData.OSC_ClientPort);
             canvasHandler.ChangeCanvas("waitingCanvas");
         }
 
@@ -179,9 +192,6 @@ public class GameEngine : MonoBehaviour
             UpdateGame();
         }
     }
-
-
-
 
 
 
@@ -264,6 +274,19 @@ public class GameEngine : MonoBehaviour
         else if (userNetworkType == UserNetworkType.Server && osc.initialized)
             osc.sender.SendQuitMessage(userNetworkType); // TODO adapt if server
         Debug.Log("Closing Game Engine...");
+    }
+
+
+    public static string CheckIp()
+    {
+        string localIP;
+        using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+        {
+            socket.Connect("8.8.8.8", 65530);
+            IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+            localIP = endPoint.Address.ToString();
+        }
+        return localIP;
     }
 
 }

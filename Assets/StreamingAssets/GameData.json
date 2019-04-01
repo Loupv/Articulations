@@ -1,9 +1,9 @@
 {
    "networkID" :"player1",
    "runInLocal":1,
-   "OSC_ServerIP":"127.0.0.1",
-   "OSC_LocalIP":"127.0.0.1",
-   "OSC_LocalPort":5555,
-   "OSC_RemotePort":8888,
-   "DebugMode":0
+   "DebugMode":0,
+   "OSC_ServerIP":"172.28.5.165",
+   "OSC_LocalIP":"",
+   "OSC_ServerPort":5555,
+   "OSC_ClientPort":8888
 }

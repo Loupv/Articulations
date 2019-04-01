@@ -7,72 +7,64 @@ public class UIHandler : MonoBehaviour
 {
 
     public GameEngine gameEngine;
-    public Dropdown networkDropdown, userRoleDropdown;
-    public InputField OSCInPortInput, OSCOutPortInput, OSCAddressInput;
-    public GameObject clientObjectParent, serverObjectParent;
-    public int OSCLocalPort, OSCRemotePort;
+    public Button networkButtonChoice1, networkButtonChoice2, roleButtonChoice1, roleButtonChoice2;
+    public InputField OSCServerPortInput;
+    public GameObject clientObjectParent, userRoleButton;
+    public int OSCServerPort, OSCClientPort;
     public string address;
+    public Sprite selectedButtonSprite, normalButtonSprite, lockedButtonSprite;
 
     public int isPlayer;
 
-    public void SetPlayerRole()
-    {
-        if (userRoleDropdown.options[userRoleDropdown.value].text == "Player")
-        {
-            isPlayer = 1;
-        }
 
-        else if (userRoleDropdown.options[userRoleDropdown.value].text == "Viewer")
-        {
-            isPlayer = 0;
-        }
-    }
-
-    public void SetPlayerNetworkType()
+    public void SetPlayerNetworkType(int i) // 0 for server, 1 for client
     {
-        if (networkDropdown.options[networkDropdown.value].text == "Server")
+        if (i == 0) // server
         {
             gameEngine.userNetworkType = UserNetworkType.Server;
             if (clientObjectParent != null) clientObjectParent.gameObject.SetActive(false);
-            if (serverObjectParent != null) serverObjectParent.gameObject.SetActive(true);
-            SetPlayerRole();
-            userRoleDropdown.gameObject.SetActive(true);
+            SetPlayerRole(1);
+            networkButtonChoice1.image.sprite = selectedButtonSprite;
+            networkButtonChoice2.image.sprite = normalButtonSprite;
+            clientObjectParent.gameObject.SetActive(false);
+            userRoleButton.gameObject.SetActive(false);
 
         }
-        else if (networkDropdown.options[networkDropdown.value].text == "Client")
+        else if (i == 1) // client
         {
             gameEngine.userNetworkType = UserNetworkType.Client;
             if(clientObjectParent != null) clientObjectParent.gameObject.SetActive(true);
-            if (serverObjectParent != null) serverObjectParent.gameObject.SetActive(false);
-            SetPlayerRole();
-            userRoleDropdown.value= 0; // to prevent client/viewer case that is not handled atm
-            userRoleDropdown.gameObject.SetActive(false);
+            SetPlayerRole(0);
+            networkButtonChoice1.image.sprite = normalButtonSprite;
+            networkButtonChoice2.image.sprite = selectedButtonSprite;
+            clientObjectParent.gameObject.SetActive(true);
+            userRoleButton.gameObject.SetActive(true);
         }
     }
 
-    // does not change OSC object values, just the UI temporary ones
-    public void ChangeOSCConfig()
+
+
+    public void SetPlayerRole(int i) // 0 for player, 1 for viewer
     {
-        int.TryParse(OSCInPortInput.text, out OSCLocalPort);
-        int.TryParse(OSCOutPortInput.text, out OSCRemotePort);
-        address = OSCAddressInput.text;
+        if (i == 0) // player
+        {
+            isPlayer = 1;
+            roleButtonChoice1.image.sprite = selectedButtonSprite;
+            roleButtonChoice2.image.sprite = normalButtonSprite;
+        }
+
+        else if (i == 1) // viewer
+        {
+            isPlayer = 0;
+            roleButtonChoice1.image.sprite = normalButtonSprite;
+            roleButtonChoice2.image.sprite = selectedButtonSprite;
+        }
     }
+
 
     public void StartButtonPressed()
     {
         gameEngine.StartGame(isPlayer);
     }
-
-    public void SwitchPortsNumbers()
-    {
-        int tmp = OSCLocalPort;
-        OSCLocalPort = OSCRemotePort;
-        OSCRemotePort = tmp;
-        OSCInPortInput.text = OSCLocalPort.ToString();
-        OSCOutPortInput.text = OSCRemotePort.ToString();
-        ChangeOSCConfig();
-
-    }
-
 
 }
