@@ -17,7 +17,7 @@ public class UserData : MonoBehaviour
     public int _isPlayer;
     //public OSC osc;
     public int _ID;
-    public GameObject playerGameObject, head, leftHand, rightHand;
+    public GameObject playerGameObject, head, leftHand, rightHand, leftHold, rightHold;
     public OSCEndPoint oscEndPoint;
 
 
@@ -47,6 +47,7 @@ public class UserData : MonoBehaviour
                 head.transform.parent = camera.transform;
                 leftHand.transform.parent = parent.transform.Find(gameEngine.viveLeftHandName).gameObject.transform;
                 rightHand.transform.parent = parent.transform.Find(gameEngine.viveRightHandName).gameObject.transform;
+            
                 head.transform.position = Vector3.zero;
                 leftHand.transform.position = Vector3.zero;
                 rightHand.transform.position = Vector3.zero;
@@ -68,13 +69,22 @@ public class UserData : MonoBehaviour
                 pGameObject.transform.parent = parent.transform;                
             }
 
+            leftHold = Instantiate(gameEngine.LongTrailsPrefab);
+            rightHold = Instantiate(gameEngine.LongTrailsPrefab);
+            leftHold.transform.parent = leftHand.transform;
+            rightHold.transform.parent = rightHand.transform;
+            leftHold.transform.position = Vector3.zero;
+            rightHold.transform.position = Vector3.zero;
+            leftHold.SetActive(false);
+            rightHold.SetActive(false);
+
+
             pGameObject.name = "Player" + _ID.ToString();
             playerGameObject = pGameObject;
             Color col = new Color(Random.Range(0f,1f),Random.Range(0f,1f),Random.Range(0f,1f));
             head.GetComponent<MeshRenderer>().materials[0].color = col;
             leftHand.GetComponent<MeshRenderer>().materials[0].color = col;
             rightHand.GetComponent<MeshRenderer>().materials[0].color = col;
-
         }
         else{
             pGameObject.name = "Viewer" + _ID.ToString();
@@ -84,5 +94,26 @@ public class UserData : MonoBehaviour
         }
     }
 
+
+    public void ChangeSkin(GameEngine gameEngine, string skin){
+        if(skin == "noHands"){
+            leftHand.GetComponent<MeshRenderer>().enabled = false;            
+            rightHand.GetComponent<MeshRenderer>().enabled = false;
+            leftHold.SetActive(false);
+            rightHold.SetActive(false);
+        }
+        else if(skin == "justHands"){
+            leftHand.GetComponent<MeshRenderer>().enabled = true;            
+            rightHand.GetComponent<MeshRenderer>().enabled = true;
+            leftHold.SetActive(false);
+            rightHold.SetActive(false);
+        }
+        else if(skin == "longTrails"){
+            leftHand.GetComponent<MeshRenderer>().enabled = false;            
+            rightHand.GetComponent<MeshRenderer>().enabled = false;
+            leftHold.SetActive(true);
+            rightHold.SetActive(true);
+        }
+    }
 
 }

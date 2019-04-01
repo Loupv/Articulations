@@ -33,7 +33,7 @@ public class CanvasHandler : MonoBehaviour
         else if(canvasName == "serverCanvas"){
             initCanvas.SetActive(false);
             gameCanvas.SetActive(true);
-            waitingCanvas.SetActive(true);
+            waitingCanvas.SetActive(false);
             serverCanvas.SetActive(true);
         }
         else Debug.Log("Wrong Canvas Name !");

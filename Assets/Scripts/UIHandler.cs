@@ -67,4 +67,10 @@ public class UIHandler : MonoBehaviour
         gameEngine.StartGame(isPlayer);
     }
 
+
+    public void ChangeVisualizationMode(int i){
+        gameEngine.osc.sender.SendVisualisationChange(i, gameEngine.usersPlaying);
+        gameEngine.ChangeVisualisationMode(i);
+    }
+
 }

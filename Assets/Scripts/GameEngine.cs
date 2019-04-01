@@ -58,10 +58,11 @@ public class GameEngine : MonoBehaviour
     private UIHandler uiHandler;
     public GameData gameData;
     
-    public GameObject playerPrefab, ViveSystemPrefab;
+    public GameObject playerPrefab, ViveSystemPrefab, LongTrailsPrefab;
 
     public UserNetworkType userNetworkType;
     public AppState appState;
+    public int currentVisualisationMode = 1; // justHands
     private OSCEndPoint serverEndpoint;
     public bool findVive;
     public string viveSystemName = "[CameraRig]", 
@@ -168,10 +169,11 @@ public class GameEngine : MonoBehaviour
 
 
     // when server has agreed for client registration
-    public void EndStartProcess(int playerID, int requestedPort)
+    public void EndStartProcess(int playerID, int requestedPort, int visualisationMode)
     {
         if (userNetworkType == UserNetworkType.Client)
         {
+            ChangeVisualisationMode(visualisationMode);
             Debug.Log(playerID+"registered on port "+requestedPort);
             appState = AppState.Running;
             networkManager.ShowConnexionState();
@@ -257,6 +259,30 @@ public class GameEngine : MonoBehaviour
             }
         }
     }
+
+    // in the case we want to have local user differents from other players, we place the loops here
+    public void ChangeVisualisationMode(int mode){
+
+        if(mode == 0){
+            foreach(UserData user in usersPlaying){
+                if(user._ID == _user._ID)
+                    user.ChangeSkin(this, "noHands");
+                else user.ChangeSkin(this, "justHands");
+            }
+        }
+        else if(mode == 1){
+            foreach(UserData user in usersPlaying){
+                user.ChangeSkin(this, "justHands");
+            }
+        }
+        else if(mode == 2){
+            foreach(UserData user in usersPlaying){
+                user.ChangeSkin(this, "longTrails");
+            }
+        }
+        currentVisualisationMode = mode;
+    }
+
 
     public void KillApp()
     {

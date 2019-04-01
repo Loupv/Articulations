@@ -27,6 +27,7 @@ public class SendOSC : MonoBehaviour {
             message.address = "/RegistrationConfirmed";
             message.values.Add(user._ID);
             message.values.Add(user.oscEndPoint.remotePort);
+            message.values.Add(gameEngine.currentVisualisationMode);
             osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
             osc.Send(message);
@@ -130,6 +131,23 @@ public class SendOSC : MonoBehaviour {
         }
     }
 
+    public void SendVisualisationChange(int mode, List<UserData> usersPlaying){
+
+        foreach (UserData user in usersPlaying)
+        {
+            if(user._ID != gameEngine._user._ID){
+                osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
+                osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
+                message = new OscMessage();
+                message.address = "/VisualisationModeChange";
+                message.values.Add(mode);
+                osc.Send(message);
+                Debug.Log("Sending : " + message);
+            }  
+        }
+
+    }
+
 
 /*
     -------------------------------------
@@ -182,7 +200,11 @@ public class SendOSC : MonoBehaviour {
         }
     }
 
-
+/*
+    -------------------------------------
+    -------------BOTH FUNCTIONS----------
+    -------------------------------------
+ */
 
     public void SendQuitMessage(UserNetworkType userNetworkType)
     {

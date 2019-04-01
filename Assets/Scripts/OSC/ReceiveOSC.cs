@@ -20,7 +20,7 @@ public class ReceiveOSC : MonoBehaviour {
             osc.SetAddressHandler("/ServerShutDown", GoInsane);
             osc.SetAddressHandler("/AddPlayerToGame", AddPlayerToGame);
             osc.SetAddressHandler("/RemovePlayerFromGame", RemovePlayerFromGame);
-            
+            osc.SetAddressHandler("/VisualisationModeChange", VisualisationModeChange);
             osc.SetAddressHandler("/PlayerPosition", UpdatePartnerPosition);
 
         }
@@ -88,7 +88,8 @@ public class ReceiveOSC : MonoBehaviour {
             if(gameEngine.debugMode) Debug.Log("Received : " + message);
             int playerID = message.GetInt(0);
             int requestedPort = message.GetInt(1);
-            gameEngine.EndStartProcess(playerID, requestedPort);
+            int visualisationMode = message.GetInt(2);
+            gameEngine.EndStartProcess(playerID, requestedPort, visualisationMode);
         }
     }
 
@@ -147,6 +148,13 @@ public class ReceiveOSC : MonoBehaviour {
         if(gameEngine.debugMode) Debug.Log("Received : " + message);
         int playerID = message.GetInt(0);
         gameEngine.ErasePlayer(playerID);
+    }
+
+    void VisualisationModeChange(OscMessage message){
+        Debug.Log("Received : " + message);
+        int mode = message.GetInt(0);
+
+        gameEngine.ChangeVisualisationMode(mode);
     }
 
  
