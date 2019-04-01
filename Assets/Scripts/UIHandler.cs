@@ -10,6 +10,7 @@ public class UIHandler : MonoBehaviour
     public Button networkButtonChoice1, networkButtonChoice2, roleButtonChoice1, roleButtonChoice2;
     public InputField OSCServerPortInput;
     public GameObject clientObjectParent, userRoleButton;
+    public GameObject recordGizmo, pauseGizmo;
     public int OSCServerPort, OSCClientPort;
     public string address;
     public Sprite selectedButtonSprite, normalButtonSprite, lockedButtonSprite;
@@ -71,6 +72,22 @@ public class UIHandler : MonoBehaviour
     public void ChangeVisualizationMode(int i){
         gameEngine.osc.sender.SendVisualisationChange(i, gameEngine.usersPlaying);
         gameEngine.ChangeVisualisationMode(i);
+    }
+
+    
+    public void ActualizeGizmos(bool isRecording, bool isPaused){
+        if(isRecording && !isPaused){
+            recordGizmo.SetActive(true);
+            pauseGizmo.SetActive(false);
+        }
+        else if(isRecording && isPaused){    
+            recordGizmo.SetActive(false);
+            pauseGizmo.SetActive(true);
+        }
+        else if(!isRecording){    
+            recordGizmo.SetActive(false);
+            pauseGizmo.SetActive(false);
+        }
     }
 
 }

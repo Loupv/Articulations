@@ -60,11 +60,12 @@ public class GameEngine : MonoBehaviour
     
     public GameObject playerPrefab, ViveSystemPrefab, LongTrailsPrefab;
 
+    public PerformanceRecorder performanceRecorder;
     public UserNetworkType userNetworkType;
     public AppState appState;
     public int currentVisualisationMode = 1; // justHands
     private OSCEndPoint serverEndpoint;
-    public bool findVive;
+    public bool useVRHeadset;
     public string viveSystemName = "[CameraRig]", 
         viveHeadName  = "Camera", 
         viveLeftHandName = "Controller (left)", 
@@ -86,9 +87,6 @@ public class GameEngine : MonoBehaviour
         Screen.fullScreen = false;
         appState = AppState.Initializing;
         
-
-        Debug.Log("my ip : "+CheckIp());
-
         canvasHandler = GetComponent<CanvasHandler>();
         uiHandler = GetComponentInChildren<UIHandler>();
         canvasHandler.ChangeCanvas("initCanvas");
@@ -204,6 +202,7 @@ public class GameEngine : MonoBehaviour
         else 
             networkManager.SendAllPositionsToClients(usersPlaying);
 
+        if(performanceRecorder.isRecording && !performanceRecorder.isPaused) performanceRecorder.SaveData(usersPlaying);
         ActualizePlayersPositions();
         
     }
@@ -297,8 +296,12 @@ public class GameEngine : MonoBehaviour
     {
         if (userNetworkType == UserNetworkType.Client && osc.initialized)
             osc.sender.SendQuitMessage(userNetworkType);
-        else if (userNetworkType == UserNetworkType.Server && osc.initialized)
+        else if (userNetworkType == UserNetworkType.Server && osc.initialized){
+            if(performanceRecorder.isRecording) performanceRecorder.SaveTofile();
             osc.sender.SendQuitMessage(userNetworkType); // TODO adapt if server
+        }
+        
+
         Debug.Log("Closing Game Engine...");
     }
 

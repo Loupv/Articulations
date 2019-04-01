@@ -40,7 +40,7 @@ public class UserData : MonoBehaviour
         if (isPlayer == 1) // if player and not just viewer
         {
 
-            if(isLocalPlayer == 1 && gameEngine.findVive){ // if Init is launched at startup by this instance's player
+            if(isLocalPlayer == 1 && gameEngine.useVRHeadset){ // if Init is launched at startup by this instance's player
                 
                 GameObject parent = GameObject.Instantiate(gameEngine.ViveSystemPrefab);
                 GameObject camera = parent.transform.Find(gameEngine.viveHeadName).gameObject;

@@ -1,11 +1,21 @@
 ﻿TODO :
 
-Problème pour viewer, serveur crée quand même un joueur et client n'a pas la confirmation d'enregistrement
 
-- Faire des gros boutons au début pour paramétrer vite le client/serveur et viewer/player
+- checker la fin de l'enregistrement des fichiers -message d'erreur quand en écriture
+Problème pour viewer, serveur crée quand même un joueur et client n'a pas la confirmation d'enregistrement
 - adapter la config pour avoir possiblement 5 membres envoyés , transformer les slots en list de Gameobjects
+- ajouter les messages OSC d'orientation de la tête
+- enregistrement des noms des participants associés à leurs IDs
+- enregistrer les rotations ? sous quelle forme
+
+Done:
+- Faire des gros boutons au début pour paramétrer vite le client/serveur et viewer/player
 - offrir un GUI au serveur afin de pouvoir changer les modes d'affichage rapidement
-- ajouter les messages OSC d'orientation de la tête, de mode d'affichage
+- ajouter les messages OSC d'orientation de la tête
+
+
+
+
 
 
 Rôles update :
