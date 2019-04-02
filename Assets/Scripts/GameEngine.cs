@@ -58,7 +58,7 @@ public class GameEngine : MonoBehaviour
     private UIHandler uiHandler;
     public GameData gameData;
     
-    public GameObject playerPrefab, ViveSystemPrefab, LongTrailsPrefab;
+    public GameObject playerPrefab, ViveSystemPrefab, LongTrailsPrefab, ShortTrailsPrefab;
 
     public PerformanceRecorder performanceRecorder;
     public UserNetworkType userNetworkType;
@@ -275,6 +275,11 @@ public class GameEngine : MonoBehaviour
             }
         }
         else if(mode == 2){
+            foreach(UserData user in usersPlaying){
+                user.ChangeSkin(this, "shortTrails");
+            }
+        }
+        else if(mode == 3){
             foreach(UserData user in usersPlaying){
                 user.ChangeSkin(this, "longTrails");
             }

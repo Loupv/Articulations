@@ -17,7 +17,7 @@ public class UserData : MonoBehaviour
     public int _isPlayer;
     //public OSC osc;
     public int _ID;
-    public GameObject playerGameObject, head, leftHand, rightHand, leftHold, rightHold;
+    public GameObject playerGameObject, head, leftHand, rightHand;//, leftHold, rightHold;
     public OSCEndPoint oscEndPoint;
 
 
@@ -69,14 +69,7 @@ public class UserData : MonoBehaviour
                 pGameObject.transform.parent = parent.transform;                
             }
 
-            leftHold = Instantiate(gameEngine.LongTrailsPrefab);
-            rightHold = Instantiate(gameEngine.LongTrailsPrefab);
-            leftHold.transform.parent = leftHand.transform;
-            rightHold.transform.parent = rightHand.transform;
-            leftHold.transform.position = Vector3.zero;
-            rightHold.transform.position = Vector3.zero;
-            leftHold.SetActive(false);
-            rightHold.SetActive(false);
+            
 
 
             pGameObject.name = "Player" + _ID.ToString();
@@ -97,23 +90,50 @@ public class UserData : MonoBehaviour
 
     public void ChangeSkin(GameEngine gameEngine, string skin){
         if(skin == "noHands"){
+            RemovePlayerHold();
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
             rightHand.GetComponent<MeshRenderer>().enabled = false;
-            leftHold.SetActive(false);
-            rightHold.SetActive(false);
+            //leftHold.SetActive(false);
+            //rightHold.SetActive(false);
         }
         else if(skin == "justHands"){
+            RemovePlayerHold();
             leftHand.GetComponent<MeshRenderer>().enabled = true;            
             rightHand.GetComponent<MeshRenderer>().enabled = true;
-            leftHold.SetActive(false);
-            rightHold.SetActive(false);
+            //leftHold.SetActive(false);
+            //rightHold.SetActive(false);
         }
         else if(skin == "longTrails"){
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
-            rightHand.GetComponent<MeshRenderer>().enabled = false;
-            leftHold.SetActive(true);
-            rightHold.SetActive(true);
+            rightHand.GetComponent<MeshRenderer>().enabled = false;          
+            ReplacePlayerHold(gameEngine.LongTrailsPrefab);
         }
+        else if(skin == "shortTrails"){
+            leftHand.GetComponent<MeshRenderer>().enabled = false;            
+            rightHand.GetComponent<MeshRenderer>().enabled = false;
+            ReplacePlayerHold(gameEngine.ShortTrailsPrefab);            
+        }
+    }
+
+
+    void RemovePlayerHold(){
+        foreach(Transform t in leftHand.transform){
+            GameObject.Destroy(t.gameObject);
+        }
+        foreach(Transform t in rightHand.transform){
+            GameObject.Destroy(t.gameObject);
+        }
+    }
+    void ReplacePlayerHold(GameObject hold){
+        
+        RemovePlayerHold();
+
+        GameObject tmp1 = Instantiate(hold);
+        GameObject tmp2 = Instantiate(hold);
+        tmp1.transform.parent = leftHand.transform;
+        tmp2.transform.parent = rightHand.transform;        
+        tmp1.transform.position = leftHand.transform.position;
+        tmp2.transform.position = rightHand.transform.position;
     }
 
 }
