@@ -34,12 +34,12 @@ public class UserData : MonoBehaviour
         head = pGameObject.transform.Find("Head").gameObject;
         leftHand = pGameObject.transform.Find("LeftHand").gameObject;
         rightHand = pGameObject.transform.Find("RightHand").gameObject;
+
         
         //pGameObject.transform.position += new Vector3(0, Random.Range(-2f, 1.5f), 0);
         
         if (isPlayer == 1) // if player and not just viewer
-        {
-
+        {            
             if(isLocalPlayer == 1 && gameEngine.useVRHeadset){ // if Init is launched at startup by this instance's player
                 
                 GameObject parent = GameObject.Instantiate(gameEngine.ViveSystemPrefab);
@@ -55,7 +55,6 @@ public class UserData : MonoBehaviour
 
                 Camera.main.gameObject.SetActive(false);
                 camera.tag = "MainCamera";
-                
 
             }
             else{ // else we store the player under an empty named Players
@@ -69,9 +68,6 @@ public class UserData : MonoBehaviour
                 pGameObject.transform.parent = parent.transform;                
             }
 
-            
-
-
             pGameObject.name = "Player" + _ID.ToString();
             playerGameObject = pGameObject;
             Color col = new Color(Random.Range(0f,1f),Random.Range(0f,1f),Random.Range(0f,1f));
@@ -81,10 +77,17 @@ public class UserData : MonoBehaviour
         }
         else{
             pGameObject.name = "Viewer" + _ID.ToString();
+            GameObject parent = GameObject.Find("Players");
+             if(parent == null) {
+                    parent = new GameObject();
+                    parent.name = "Players";
+            }
+            pGameObject.transform.parent = parent.transform;  
             head.SetActive(false);
             leftHand.SetActive(false);
             rightHand.SetActive(false);
         }
+        
     }
 
 

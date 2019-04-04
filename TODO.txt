@@ -7,6 +7,9 @@ Problème pour viewer, serveur crée quand même un joueur et client n'a pas la 
 - ajouter les messages OSC d'orientation de la tête
 - enregistrement des noms des participants associés à leurs IDs
 - enregistrer les rotations ? sous quelle forme
+- ajouter des contrôles pour le viewer afin de lui permettre de choisir son point de vue
+- miroir
+
 
 Done:
 - Faire des gros boutons au début pour paramétrer vite le client/serveur et viewer/player

@@ -159,7 +159,7 @@ public class GameEngine : MonoBehaviour
             osc.outIP = uiHandler.address;
             osc.Init();
             appState = AppState.WaitingForServer;
-            osc.sender.RequestUserRegistation(_user, gameData.OSC_ClientPort);
+            osc.sender.RequestUserRegistation(_user, gameData.OSC_ClientPort, isPlayer);
             canvasHandler.ChangeCanvas("waitingCanvas");
         }
 
@@ -197,14 +197,14 @@ public class GameEngine : MonoBehaviour
 
     public void UpdateGame()
     {
-        if(userNetworkType == UserNetworkType.Client)
-            networkManager.SendOwnPosition(_user, serverEndpoint);
-        else 
+        if(userNetworkType == UserNetworkType.Client){
+            if(_user._isPlayer == 1) networkManager.SendOwnPosition(_user, serverEndpoint); // don't send if you're viewer
+        }
+        else if(userNetworkType == UserNetworkType.Server){
             networkManager.SendAllPositionsToClients(usersPlaying);
-
+        }
         if(performanceRecorder.isRecording && !performanceRecorder.isPaused) performanceRecorder.SaveData(usersPlaying);
-        ActualizePlayersPositions();
-        
+        ActualizePlayersPositions(); 
     }
 
 
@@ -215,7 +215,7 @@ public class GameEngine : MonoBehaviour
         int i = 0;
         foreach (UserData user in usersPlaying)
         {
-            if (user._ID != _user._ID) // if it's not actual instance's player
+            if (user._ID != _user._ID && user._isPlayer == 1) // if it's not actual instance's player
             {
                 usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"];
                 usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"];
@@ -226,17 +226,18 @@ public class GameEngine : MonoBehaviour
     }
 
 
-    public UserData AddOtherPlayer(int playerID, string address, int port)
+    public UserData AddOtherPlayer(int playerID, string address, int port, int isPlayer)
     {
         // check si dispo
         GameObject go = Instantiate(playerPrefab);
         UserData p = go.GetComponent<UserData>();
-        p.Init(this, playerID, address, port, go, 1, 0);
+        p.Init(this, playerID, address, port, go, isPlayer, 0);
         usersPlaying.Add(p);
-
-        pendingPositionsActualizations.Add(playerID + "Head", p.head.transform.position);
-        pendingPositionsActualizations.Add(playerID + "LeftHand", p.leftHand.transform.position);
-        pendingPositionsActualizations.Add(playerID + "RightHand", p.rightHand.transform.position);
+        if(isPlayer == 1){
+            pendingPositionsActualizations.Add(playerID + "Head", p.head.transform.position);
+            pendingPositionsActualizations.Add(playerID + "LeftHand", p.leftHand.transform.position);
+            pendingPositionsActualizations.Add(playerID + "RightHand", p.rightHand.transform.position);
+        }
         return p;
     }
 
