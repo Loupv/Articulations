@@ -8,6 +8,7 @@ public class UIHandler : MonoBehaviour
 
     public GameEngine gameEngine;
     public Button networkButtonChoice1, networkButtonChoice2, roleButtonChoice1, roleButtonChoice2;
+    public ViewerController viewerController;
     public InputField OSCServerPortInput;
     public GameObject clientObjectParent, userRoleButton;
     public GameObject recordGizmo, pauseGizmo;
@@ -87,6 +88,36 @@ public class UIHandler : MonoBehaviour
         else if(!isRecording){    
             recordGizmo.SetActive(false);
             pauseGizmo.SetActive(false);
+        }
+    }
+
+    public void ChangeViewerPOV(int pov){
+        switch(pov){
+        case 0:
+        Debug.Log("not sure what to do");
+        viewerController.transform.position = new Vector3(0,0,0);
+        break;
+        case 1:
+        if(gameEngine.usersPlaying.Count > 0){
+            if(gameEngine.usersPlaying[0]._isPlayer == 1){
+            viewerController.transform.position = gameEngine.usersPlaying[0].head.transform.position;
+            viewerController.transform.rotation = gameEngine.usersPlaying[0].head.transform.rotation;}
+            else Debug.Log("user is not a player");
+        }
+        break;
+        case 2:
+        if(gameEngine.usersPlaying.Count > 1){
+            if(gameEngine.usersPlaying[1]._isPlayer == 1){
+            viewerController.transform.position = gameEngine.usersPlaying[1].head.transform.position;
+            viewerController.transform.rotation = gameEngine.usersPlaying[1].head.transform.rotation;
+            }
+            else Debug.Log("user is not a player");
+        }
+        break;
+        case 3:
+        viewerController.transform.position = gameEngine.POVs[0].transform.position;
+        viewerController.transform.rotation = gameEngine.POVs[0].transform.rotation;
+        break;
         }
     }
 

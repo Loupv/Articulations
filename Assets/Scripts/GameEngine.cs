@@ -58,7 +58,8 @@ public class GameEngine : MonoBehaviour
     private UIHandler uiHandler;
     public GameData gameData;
     
-    public GameObject playerPrefab, ViveSystemPrefab, LongTrailsPrefab, ShortTrailsPrefab;
+    public GameObject playerPrefab, viewerPrefab, ViveSystemPrefab, LongTrailsPrefab, ShortTrailsPrefab;
+    public List<GameObject> POVs;
 
     public PerformanceRecorder performanceRecorder;
     public UserNetworkType userNetworkType;
@@ -123,7 +124,11 @@ public class GameEngine : MonoBehaviour
     {
         int ID = UnityEngine.Random.Range(0, 10000); //TODO remplacer par le port
 
-        _userGameObject = Instantiate(playerPrefab);
+        if (isPlayer == 1) _userGameObject = Instantiate(playerPrefab);
+        else  {
+            _userGameObject = Instantiate(viewerPrefab);
+            uiHandler.viewerController = _userGameObject.GetComponent<ViewerController>();
+        }
         _user = _userGameObject.GetComponent<UserData>();
         _user.Init(this, ID, gameData.OSC_ServerIP, gameData.OSC_ServerPort, _userGameObject, isPlayer, 1);
 
@@ -175,7 +180,9 @@ public class GameEngine : MonoBehaviour
             Debug.Log(playerID+"registered on port "+requestedPort);
             appState = AppState.Running;
             networkManager.ShowConnexionState();
-            canvasHandler.ChangeCanvas("gameCanvas");
+
+            if(_user._isPlayer == 1) canvasHandler.ChangeCanvas("gameCanvas");
+            else if(_user._isPlayer == 0) canvasHandler.ChangeCanvas("viewerCanvas");
         }
     }
 
