@@ -132,7 +132,12 @@ public class GameEngine : MonoBehaviour
             uiHandler.viewerController = _userGameObject.GetComponent<ViewerController>();
         }
         _user = _userGameObject.GetComponent<UserData>();
-        _user.Init(this, ID, gameData.OSC_ServerIP, gameData.OSC_ServerPort, _userGameObject, isPlayer, 1);
+        
+        string tmpIp;
+        if(gameData.runInLocal == 1) tmpIp = "127.0.0.1";
+        else tmpIp = gameData.OSC_ServerIP;
+        
+        _user.Init(this, ID, tmpIp, gameData.OSC_ServerPort, _userGameObject, isPlayer, 1);
 
         if (isPlayer == 1)
         {
