@@ -103,7 +103,8 @@ public class ViewerController : MonoBehaviour
 			{
 					Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - mouseOrigin);
 
-					Vector3 move = new Vector3(pos.x * panSpeed, pos.y * panSpeed, 0);
+					//Vector3 move = new Vector3(pos.x * panSpeed, pos.y * panSpeed, 0);
+					Vector3 move = new Vector3(0, pos.y * panSpeed, 0);
 					transform.Translate(move, Space.Self);
 			}
 			
@@ -118,32 +119,40 @@ public class ViewerController : MonoBehaviour
 		}
 	}
 
-	public void UpdatePOV(int pov){
+	public void UpdatePOV(int pov, int id){
 
 		switch(pov){
 
 		case 0: // free mode
 		isFollowing1 = false;
 		isFollowing2 = false;
-		this.transform.position = new Vector3(0,0,0);
+		
 		break;
 
 		case 1:
-		isFollowing1 = true;
-		isFollowing2 = false;
-		followingPlayerID = gameEngine.ReturnPlayerRank(1);
+		
+			isFollowing1 = true;
+			isFollowing2 = false;
+			followingPlayerID = id;
+			
+		
 		break;
 
 		case 2:
-		isFollowing1 = false;
-		isFollowing2 = true;
-		this.followingPlayerID = gameEngine.ReturnPlayerRank(2);
+		
+			isFollowing1 = false;
+			isFollowing2 = true;
+			followingPlayerID = id;
+			
+		
 		break;
 
 		case 3:
 		isFollowing1 = false;
 		isFollowing2 = false;
 		this.transform.position = gameEngine.POVs[0].transform.position;
+		this.transform.rotation = gameEngine.POVs[0].transform.rotation;
+		
 		break;
 
 

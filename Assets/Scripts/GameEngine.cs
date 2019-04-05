@@ -55,7 +55,7 @@ public class GameEngine : MonoBehaviour
     //private ReceiveOSC receiver;
 
     private JSONLoader jSONLoader;
-    private UIHandler uiHandler;
+    public UIHandler uiHandler;
     public GameData gameData;
     
     public GameObject playerPrefab, viewerPrefab, ViveSystemPrefab, LongTrailsPrefab, ShortTrailsPrefab;
