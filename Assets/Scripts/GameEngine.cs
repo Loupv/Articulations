@@ -44,6 +44,7 @@ public class GameEngine : MonoBehaviour
     public NetworkManager networkManager;
 
     public Dictionary<string, Vector3> pendingPositionsActualizations;
+    public Dictionary<string, Quaternion> pendingRotationsActualizations;
     public List<UserData> usersPlaying;
     [HideInInspector]
     public GameObject _userGameObject;
@@ -98,7 +99,8 @@ public class GameEngine : MonoBehaviour
         gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
 
         pendingPositionsActualizations = new Dictionary<string, Vector3>();
-
+        pendingRotationsActualizations = new Dictionary<string, Quaternion>();
+        
         if (gameData.runInLocal == 1) {
             uiHandler.OSCServerPortInput.text = "127.0.0.1";
             gameData.OSC_LocalIP = "127.0.0.1";
@@ -139,6 +141,10 @@ public class GameEngine : MonoBehaviour
             pendingPositionsActualizations.Add(_user._ID + "Head", _user.head.transform.position);
             pendingPositionsActualizations.Add(_user._ID + "LeftHand", _user.leftHand.transform.position);
             pendingPositionsActualizations.Add(_user._ID + "RightHand", _user.rightHand.transform.position);
+            pendingRotationsActualizations.Add(_user._ID + "Head", _user.head.transform.rotation);
+            pendingRotationsActualizations.Add(_user._ID + "LeftHand", _user.leftHand.transform.rotation);
+            pendingRotationsActualizations.Add(_user._ID + "RightHand", _user.rightHand.transform.rotation);
+            
         }
 
         osc.receiver.userNetworkType = userNetworkType;
@@ -227,6 +233,9 @@ public class GameEngine : MonoBehaviour
                 usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"];
                 usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"];
                 usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[user._ID + "RightHand"];
+                usersPlaying[i].head.transform.rotation = pendingRotationsActualizations[user._ID + "Head"];
+                usersPlaying[i].leftHand.transform.rotation = pendingRotationsActualizations[user._ID + "LeftHand"];
+                usersPlaying[i].rightHand.transform.rotation = pendingRotationsActualizations[user._ID + "RightHand"];
             }
             i++;
         }
@@ -244,6 +253,9 @@ public class GameEngine : MonoBehaviour
             pendingPositionsActualizations.Add(playerID + "Head", p.head.transform.position);
             pendingPositionsActualizations.Add(playerID + "LeftHand", p.leftHand.transform.position);
             pendingPositionsActualizations.Add(playerID + "RightHand", p.rightHand.transform.position);
+            pendingRotationsActualizations.Add(playerID + "Head", p.head.transform.rotation);
+            pendingRotationsActualizations.Add(playerID + "LeftHand", p.leftHand.transform.rotation);
+            pendingRotationsActualizations.Add(playerID + "RightHand", p.rightHand.transform.rotation);
         }
         return p;
     }
@@ -254,6 +266,9 @@ public class GameEngine : MonoBehaviour
         pendingPositionsActualizations.Remove(playerID + "Head");
         pendingPositionsActualizations.Remove(playerID + "LeftHand");
         pendingPositionsActualizations.Remove(playerID + "RightHand");
+        pendingRotationsActualizations.Remove(playerID + "Head");
+        pendingRotationsActualizations.Remove(playerID + "LeftHand");
+        pendingRotationsActualizations.Remove(playerID + "RightHand");
 
         foreach (UserData p in usersPlaying)
         {

@@ -29,7 +29,7 @@ public class PerformanceRecorder : MonoBehaviour
             return;
         }
         sr = File.CreateText(filePath+fileName);
-        sr.WriteLine ("ID;Time;x;y;z;lhx;lhy;lhz;rhx;rhy;rhz");
+        sr.WriteLine ("ID;Time;x;y;z;rotx;roty;rotz;lhx;lhy;lhz;lhrotx;lhroty;lhrotz;rhx;rhy;rhz;rhrotx;rhroty;rhrotz");
         isRecording = true;
         uiHandler.ActualizeGizmos(isRecording, isPaused);
         startButton.SetActive(false);
@@ -63,8 +63,11 @@ public class PerformanceRecorder : MonoBehaviour
 
     public void AddLine(int ID, Transform headTransform, Transform leftHandTransform, Transform rightHandTransform){
         sr.WriteLine (ID+";"+Time.frameCount+";"+headTransform.position.x+";"+headTransform.position.y+";"+headTransform.position.z+
+        ";"+headTransform.rotation.x+";"+headTransform.rotation.y+";"+headTransform.rotation.z+
         ";"+leftHandTransform.position.x+";"+leftHandTransform.position.y+";"+leftHandTransform.position.z+
-        ";"+rightHandTransform.position.x+";"+rightHandTransform.position.y+";"+rightHandTransform.position.z);
+        ";"+leftHandTransform.rotation.x+";"+leftHandTransform.rotation.y+";"+leftHandTransform.rotation.z+
+        ";"+rightHandTransform.position.x+";"+rightHandTransform.position.y+";"+rightHandTransform.position.z+
+        ";"+rightHandTransform.rotation.x+";"+rightHandTransform.rotation.y+";"+rightHandTransform.rotation.z);
     }
 
 

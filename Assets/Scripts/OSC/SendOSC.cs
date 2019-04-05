@@ -56,7 +56,7 @@ public class SendOSC : MonoBehaviour {
     public void SendOSCPosition(UserData userData, int playerPart, OSCEndPoint targetEndPoint)
     {
         Vector3 pos = new Vector3();
-
+        Quaternion rot = new Quaternion();
 
         if (osc.initialized)
         {   
@@ -64,14 +64,28 @@ public class SendOSC : MonoBehaviour {
             message.address =  "/PlayerPosition";
             message.values.Add(userData._ID);
 
-            if(playerPart == 0) pos = userData.head.transform.position;
-            if(playerPart == 1) pos = userData.leftHand.transform.position;
-            if(playerPart == 2) pos = userData.rightHand.transform.position;
+            if(playerPart == 0){ 
+                pos = userData.head.transform.position;
+                rot = userData.head.transform.rotation;
+            }
+            if(playerPart == 1){ 
+                pos = userData.leftHand.transform.position;
+                rot = userData.leftHand.transform.rotation;
+            }
+            if(playerPart == 2){ 
+                pos = userData.rightHand.transform.position;
+                rot = userData.rightHand.transform.rotation;
+            }
 
             message.values.Add(playerPart);
             message.values.Add(pos.x);
             message.values.Add(pos.y);
             message.values.Add(pos.z);
+            message.values.Add(rot.x);
+            message.values.Add(rot.y);
+            message.values.Add(rot.z);
+            message.values.Add(rot.w);
+            
 
             osc.OscPacketIO.RemoteHostName = targetEndPoint.ip;
             osc.OscPacketIO.RemotePort = targetEndPoint.remotePort;
@@ -181,23 +195,37 @@ public class SendOSC : MonoBehaviour {
     public void SendClientOSCPosition(UserData userData, int playerPart)
     {
         Vector3 pos = new Vector3();
-
+        Quaternion rot = new Quaternion();
+        
         if (osc.initialized)
         {   
             message = new OscMessage();
             message.address =  "/ClientPlayerPosition";
             message.values.Add(userData._ID);
 
-            if(playerPart == 0) pos = userData.head.transform.position;
-            if(playerPart == 1) pos = userData.leftHand.transform.position;
-            if(playerPart == 2) pos = userData.rightHand.transform.position;
+            if(playerPart == 0){ 
+                pos = userData.head.transform.position;
+                rot = userData.head.transform.rotation;
+            }
+            if(playerPart == 1){ 
+                pos = userData.leftHand.transform.position;
+                rot = userData.leftHand.transform.rotation;
+            }
+            if(playerPart == 2){ 
+                pos = userData.rightHand.transform.position;
+                rot = userData.rightHand.transform.rotation;
+            }
 
             message.values.Add(playerPart);
             message.values.Add(pos.x);
             message.values.Add(pos.y);
             message.values.Add(pos.z);
+            message.values.Add(rot.x);
+            message.values.Add(rot.y);
+            message.values.Add(rot.z);
+            message.values.Add(rot.w);
 
-             osc.OscPacketIO.RemoteHostName = gameEngine.osc.outIP;
+            osc.OscPacketIO.RemoteHostName = gameEngine.osc.outIP;
             osc.OscPacketIO.RemotePort = gameEngine.osc.outPort;
             osc.Send(message);
             if(gameEngine.debugMode) Debug.Log("Sending : "+message);

@@ -79,10 +79,15 @@ public class ReceiveOSC : MonoBehaviour {
         float xPos = message.GetFloat(2);
         float yPos = message.GetFloat(3);
         float zPos = message.GetFloat(4);
+        float xRot = message.GetFloat(5);
+        float yRot = message.GetFloat(6);
+        float zRot = message.GetFloat(7);
+        float wRot = message.GetFloat(8);
 
         if (playerID != gameEngine._user._ID)
         {
             gameEngine.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
+            gameEngine.pendingRotationsActualizations[playerID + playerPart] = new Quaternion(xRot, yRot, zRot, wRot);
         }
     }
 
@@ -124,10 +129,15 @@ public class ReceiveOSC : MonoBehaviour {
         float xPos = message.GetFloat(2);
         float yPos = message.GetFloat(3);
         float zPos = message.GetFloat(4);
+        float xRot = message.GetFloat(5);
+        float yRot = message.GetFloat(6);
+        float zRot = message.GetFloat(7);
+        float wRot = message.GetFloat(8);
 
         if (playerID != gameEngine._user._ID)
         {
             gameEngine.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
+            gameEngine.pendingRotationsActualizations[playerID + playerPart] = new Quaternion(xRot, yRot, zRot, wRot);
         }
     }
 
