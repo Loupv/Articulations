@@ -1,20 +1,37 @@
 ﻿TODO :
 
-
+Feats :
 - checker la fin de l'enregistrement des fichiers -message d'erreur quand en écriture
-Problème pour viewer, serveur crée quand même un joueur et client n'a pas la confirmation d'enregistrement
 - adapter la config pour avoir possiblement 5 membres envoyés , transformer les slots en list de Gameobjects
-- ajouter les messages OSC d'orientation de la tête
 - enregistrement des noms des participants associés à leurs IDs
-- enregistrer les rotations ? sous quelle forme
-- ajouter des contrôles pour le viewer afin de lui permettre de choisir son point de vue
-- miroir
+- mettre le nom au dessus de la tête pour les viewers
+- mettre un champ pour renseigner les prénoms des participants au démarrage
+- fsync ?
+- marquer le temps avec un bouton
+
+Misc :
+- Viz - fusion avec l'autre ? (toile d'araignée, fils,)
+- Sauver la trace
+- Trail texture fumée
+- avoir plein de sphères qui bougent
+- repères visuels du monde réel
+
+
+
+
+Workshop Artec : 
+https://docs.google.com/document/d/1n7zsj8FU2iJMob8DN4jmzC_PnF_lnULN8pXtodo_VDM/edit
 
 
 Done:
+- ajouter les messages OSC d'orientation de la tête
 - Faire des gros boutons au début pour paramétrer vite le client/serveur et viewer/player
 - offrir un GUI au serveur afin de pouvoir changer les modes d'affichage rapidement
 - ajouter les messages OSC d'orientation de la tête
+- Problème pour viewer, serveur crée quand même un joueur et client n'a pas la confirmation d'enregistrement
+- enregistrer les rotations ? sous quelle forme
+- ajouter des contrôles pour le viewer afin de lui permettre de choisir son point de vue
+- miroir
 
 
 
@@ -32,7 +49,6 @@ un client normal et ajoute des joueurs + leur point de vue (besoin de l'orientat
 
 - client : same
 
-
 Le Client register sur le réseau en envoyant son propre port d'écoute et son adresse IP par le biai du combo serverIP/remotePort
 Si le port local du client n'est pas enregistré, le serveur l'ajoute à sa liste de pairs
 
@@ -47,22 +63,9 @@ Dans le update :
 - les clients envoient leurs positions au server
 - le server envoie toutes les positions à tous les joueurs
 
-
-ID et remotePort peuvent ils être pareil ?
-
-Penser à envoyer la couleur d'affichage pour garder la même couleur / client sur toutes les instances qui jouent
-
-Reprendre pas à pas la connexion 
-
-Essayer de rendre indépendant les fonctions server et client
-
 Chaque userdata contient ses informations de connexion
 le serveur peut garder un dictionnaire d'userdata qui contiendra les infos de contact en lui
 
 tous les clients ne font qu'actualiser les positions de chaque entrée dans le dictionnaire
 
-chaque user doit garder une référence sur son OSCPacketIO
 checker l'ouverture des ports au niveau du partfeu
-
-
-Faire deux fenêtres de deux boutons au démarrage server/client et player/viewer -> deux clics pour lancer, paramétrer tout automatiquement

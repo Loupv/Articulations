@@ -42,6 +42,10 @@ public class PerformanceRecorder : MonoBehaviour
         }
     }
 
+    // mettre dans un autre doc ? préciser que c'est un timemark dans le fichier
+    public void TimeMark(int id){
+        sr.WriteLine(id+";"+Time.frameCount);
+    }
 
     public void PauseRecording(){
         if(isRecording)
