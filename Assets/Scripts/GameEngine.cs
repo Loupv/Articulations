@@ -108,6 +108,7 @@ public class GameEngine : MonoBehaviour
         }
         else {
             uiHandler.OSCServerPortInput.text = gameData.OSC_ServerIP;
+            uiHandler.address = gameData.OSC_ServerIP;
             gameData.OSC_LocalIP = CheckIp();
         }
         // adjust user's parameters

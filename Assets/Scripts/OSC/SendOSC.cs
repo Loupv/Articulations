@@ -187,7 +187,7 @@ public class SendOSC : MonoBehaviour {
             osc.OscPacketIO.RemoteHostName = userData.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = userData.oscEndPoint.remotePort;
             osc.Send(message);
-            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
+            if(gameEngine.debugMode) Debug.Log("Sending : " + message+ ", "+userData.oscEndPoint.remotePort+", "+userData.oscEndPoint.ip);
         }
     }
 
@@ -228,7 +228,7 @@ public class SendOSC : MonoBehaviour {
             osc.OscPacketIO.RemoteHostName = gameEngine.osc.outIP;
             osc.OscPacketIO.RemotePort = gameEngine.osc.outPort;
             osc.Send(message);
-            if(gameEngine.debugMode) Debug.Log("Sending : "+message);
+            if(gameEngine.debugMode) Debug.Log("Sending : "+message+", "+gameEngine.osc.outIP);
             
         }
     }
