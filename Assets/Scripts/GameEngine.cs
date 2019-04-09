@@ -103,7 +103,9 @@ public class GameEngine : MonoBehaviour
         
         if (gameData.runInLocal == 1) {
             uiHandler.OSCServerPortInput.text = "127.0.0.1";
+            uiHandler.address = "127.0.0.1";
             gameData.OSC_LocalIP = "127.0.0.1";
+            
             gameData.OSC_ClientPort = UnityEngine.Random.Range(5555,8888);
         }
         else {
