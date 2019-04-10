@@ -379,6 +379,22 @@ public class OscMessage
         }
     }
 
+    public string GetString(int index)
+    {
+
+        if (values[index].GetType() == typeof(string))
+        {
+            string data = (string)values[index];
+            //if (Double.IsNaN(data)) return 0f;
+            return data;
+        }
+        else
+        {
+            Debug.Log("Wrong type");
+            return "";
+        }
+    }
+
 }
 
 public delegate void OscMessageHandler(OscMessage oscM);

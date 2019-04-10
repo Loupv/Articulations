@@ -10,14 +10,13 @@ public class UIHandler : MonoBehaviour
     public Button networkButtonChoice1, networkButtonChoice2, roleButtonChoice1, roleButtonChoice2;
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
     public ViewerController viewerController;
-    public InputField OSCServerPortInput;
+    public InputField OSCServerPortInput, PlayerName;
     public GameObject clientObjectParent, userRoleButton;
     public GameObject recordGizmo, pauseGizmo;
     public int OSCServerPort, OSCClientPort;
     public string address;
     public Sprite selectedButtonSprite, normalButtonSprite, lockedButtonSprite;
 
-    public int isPlayer;
 
 
     public void SetPlayerNetworkType(int i) // 0 for server, 1 for client
@@ -30,6 +29,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice1.image.sprite = selectedButtonSprite;
             networkButtonChoice2.image.sprite = normalButtonSprite;
             clientObjectParent.gameObject.SetActive(false);
+            //serverObjectParent.gameObject.SetActive(true);
             userRoleButton.gameObject.SetActive(false);
 
         }
@@ -41,6 +41,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice1.image.sprite = normalButtonSprite;
             networkButtonChoice2.image.sprite = selectedButtonSprite;
             clientObjectParent.gameObject.SetActive(true);
+            //serverObjectParent.gameObject.SetActive(false);
             userRoleButton.gameObject.SetActive(true);
         }
     }
@@ -51,14 +52,14 @@ public class UIHandler : MonoBehaviour
     {
         if (i == 0) // player
         {
-            isPlayer = 1;
+            gameEngine._userRole = UserRole.Player;
             roleButtonChoice1.image.sprite = selectedButtonSprite;
             roleButtonChoice2.image.sprite = normalButtonSprite;
         }
 
         else if (i == 1) // viewer
         {
-            isPlayer = 0;
+            gameEngine._userRole = UserRole.Viewer;
             roleButtonChoice1.image.sprite = normalButtonSprite;
             roleButtonChoice2.image.sprite = selectedButtonSprite;
         }
@@ -67,7 +68,7 @@ public class UIHandler : MonoBehaviour
 
     public void StartButtonPressed()
     {
-        gameEngine.StartGame(isPlayer);
+        gameEngine.StartGame();
     }
 
 

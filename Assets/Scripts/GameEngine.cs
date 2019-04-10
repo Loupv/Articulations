@@ -9,10 +9,7 @@ using UnityEditor;
 //using UnityEditor.SceneManagement;
 
 
-public struct AppConfig
-{
-    public int playerRole;
-}
+
 
 
 [System.Serializable]
@@ -22,6 +19,7 @@ public class GameData
     public string OSC_ServerIP, OSC_LocalIP;
     public int OSC_ServerPort, OSC_ClientPort;
     public int DebugMode;
+    public int keepNamesVisibleForPlayers;
 }
 
 public enum UserNetworkType
@@ -29,6 +27,10 @@ public enum UserNetworkType
     Server, Client
 }
 
+public enum UserRole
+{
+    Player, Viewer
+}
 
 public enum AppState
 {
@@ -64,10 +66,11 @@ public class GameEngine : MonoBehaviour
 
     public PerformanceRecorder performanceRecorder;
     public UserNetworkType userNetworkType;
+    public UserRole _userRole;
     public AppState appState;
     public int currentVisualisationMode = 1; // justHands
     private OSCEndPoint serverEndpoint;
-    public bool useVRHeadset;
+    public bool useVRHeadset, keepNamesVisibleForPlayers;
     public string viveSystemName = "[CameraRig]", 
         viveHeadName  = "Camera", 
         viveLeftHandName = "Controller (left)", 
@@ -80,6 +83,8 @@ public class GameEngine : MonoBehaviour
     private void Start()
     {
         InitApplication();
+
+        Application.targetFrameRate = 60;
     }
 
 
@@ -116,6 +121,8 @@ public class GameEngine : MonoBehaviour
         // adjust user's parameters
         uiHandler.SetPlayerNetworkType(0);
         
+        keepNamesVisibleForPlayers = (gameData.keepNamesVisibleForPlayers == 1);
+
         // do we print sent and received messages
         if(gameData.DebugMode == 1){
              Instantiate(debugPrefab);
@@ -125,11 +132,11 @@ public class GameEngine : MonoBehaviour
     }
 
     // Start the performance when button's pressed
-    public void StartGame(int isPlayer)
+    public void StartGame()
     {
         int ID = UnityEngine.Random.Range(0, 10000); //TODO remplacer par le port
 
-        if (isPlayer == 1) _userGameObject = Instantiate(playerPrefab);
+        if (_userRole == UserRole.Player) _userGameObject = Instantiate(playerPrefab);
         else  {
             _userGameObject = Instantiate(viewerPrefab);
             uiHandler.viewerController = _userGameObject.GetComponent<ViewerController>();
@@ -140,9 +147,11 @@ public class GameEngine : MonoBehaviour
         if(gameData.runInLocal == 1) tmpIp = "127.0.0.1";
         else tmpIp = gameData.OSC_ServerIP;
         
-        _user.Init(this, ID, tmpIp, gameData.OSC_ServerPort, _userGameObject, isPlayer, 1);
+        string n = uiHandler.PlayerName.text;
+        
+        _user.Init(this, ID, n, tmpIp, gameData.OSC_ServerPort, _userGameObject, 1, _userRole);
 
-        if (isPlayer == 1)
+        if (_userRole == UserRole.Player)
         {
             usersPlaying.Add(_user);
 
@@ -178,7 +187,7 @@ public class GameEngine : MonoBehaviour
             osc.outIP = uiHandler.address;
             osc.Init();
             appState = AppState.WaitingForServer;
-            osc.sender.RequestUserRegistation(_user, gameData.OSC_ClientPort, isPlayer);
+            osc.sender.RequestUserRegistation(_user, _userRole);
             canvasHandler.ChangeCanvas("waitingCanvas");
         }
 
@@ -206,7 +215,7 @@ public class GameEngine : MonoBehaviour
     {
         // TODO fix game start with VR headset -> multiple cameras and displays
         if(Input.GetKeyDown("space") && appState == AppState.Initializing)
-            StartGame(1);
+            StartGame();
 
         if (appState == AppState.Running)
         {
@@ -250,12 +259,15 @@ public class GameEngine : MonoBehaviour
     }
 
 
-    public UserData AddOtherPlayer(int playerID, string address, int port, int isPlayer)
+    public UserData AddOtherPlayer(int playerID, string playerName, string address, int port, int isPlayer)
     {
         // check si dispo
         GameObject go = Instantiate(playerPrefab);
         UserData p = go.GetComponent<UserData>();
-        p.Init(this, playerID, address, port, go, isPlayer, 0);
+        UserRole role = UserRole.Viewer; 
+        if(isPlayer == 1) role = UserRole.Player;
+
+        p.Init(this, playerID, playerName, address, port, go, 0, role);
         usersPlaying.Add(p);
         if(isPlayer == 1){
             pendingPositionsActualizations.Add(playerID + "Head", p.head.transform.position);

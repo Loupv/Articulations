@@ -17,6 +17,23 @@ Misc :
 - repères visuels du monde réel
 
 
+viewer instancie un joueur lorsque quelqu'un se logge mais il lui donne son nom
+viewer peut bouger les spheres
+
+
+Init doit à la fois créer des
+
+1. Server/viewer en local
+2. Client/player en local
+3. Client/viewer en local
+
+4. Client/viewer en externe
+5. client/player en externe
+
+
+1.
+Instancie un viewerPrefab
+
 
 
 Workshop Artec : 

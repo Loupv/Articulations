@@ -54,13 +54,14 @@ public class ReceiveOSC : MonoBehaviour {
             int requestedPort = message.GetInt(1);
             string playerIP = Utils.GetIpFromInt(message.GetInt(2), gameEngine.gameData.OSC_LocalIP);
             int isPlayer = message.GetInt(3);
+            string playerName = message.GetString(4);
 
             bool portAvailable = gameEngine.networkManager.CheckPortAvailability(gameEngine.usersPlaying, requestedPort);
 
             if (portAvailable)
             {
-                UserData user = gameEngine.AddOtherPlayer(playerID, playerIP, requestedPort, isPlayer);
-                sender.AddNewPlayerToClientsGames(playerID, gameEngine.usersPlaying, isPlayer);
+                UserData user = gameEngine.AddOtherPlayer(playerID, playerName, playerIP, requestedPort, isPlayer);
+                sender.AddNewPlayerToClientsGames(playerID, playerName, gameEngine.usersPlaying, isPlayer);
                 sender.SendRegistrationConfirmation(user);
             }
             else sender.RefuseRegistration(playerIP, requestedPort);
@@ -147,11 +148,12 @@ public class ReceiveOSC : MonoBehaviour {
         if(gameEngine.debugMode) Debug.Log("Received : " + message);
         int playerID = message.GetInt(0);
         int isPlayer = message.GetInt(1);
+        string playerName = message.GetString(2);
         
         if (gameEngine.userNetworkType == UserNetworkType.Client && playerID != gameEngine._user._ID)
         {
             Debug.Log(playerID+" vs "+gameEngine._user._ID);
-            gameEngine.AddOtherPlayer(playerID, "null", -1, isPlayer);
+            gameEngine.AddOtherPlayer(playerID, playerName, "null", -1, isPlayer);
         }
     }
 

@@ -10,6 +10,19 @@ public class SendOSC : MonoBehaviour {
     private OscMessage message;
     public OSC osc;
 
+    public void tmpStringOSC(UserData userData){
+        if (osc.initialized)
+        {
+            message = new OscMessage();
+            message.address = "/Say";
+            message.values.Add("Hello");
+            osc.OscPacketIO.RemoteHostName = userData.oscEndPoint.ip;
+            osc.OscPacketIO.RemotePort = userData.oscEndPoint.remotePort;
+            osc.Send(message);
+            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
+        }
+    }
+
 
 
 /*
@@ -105,6 +118,7 @@ public class SendOSC : MonoBehaviour {
             message.address = "/AddPlayerToGame";
             message.values.Add(user._ID);
             message.values.Add(user._isPlayer);
+            message.values.Add(user._playerName);
             osc.OscPacketIO.RemoteHostName = userTarget.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = userTarget.oscEndPoint.remotePort;
             osc.Send(message);
@@ -113,8 +127,8 @@ public class SendOSC : MonoBehaviour {
           
     }
 
-
-    public void AddNewPlayerToClientsGames(int playerID, List<UserData> usersPlaying, int isPlayer){
+    // sent to all existing client when a new one is registering
+    public void AddNewPlayerToClientsGames(int playerID, string name, List<UserData> usersPlaying, int isPlayer){
         
         foreach(UserData user in usersPlaying)
         {
@@ -123,6 +137,7 @@ public class SendOSC : MonoBehaviour {
                 message.address = "/AddPlayerToGame";
                 message.values.Add(playerID);
                 message.values.Add(isPlayer);
+                message.values.Add(user._playerName);
                 osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
                 osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
                 osc.Send(message);
@@ -173,8 +188,11 @@ public class SendOSC : MonoBehaviour {
     -------------------------------------
  */
 
-    public void RequestUserRegistation(UserData userData, int serverPort, int isPlayer)
+    public void RequestUserRegistation(UserData userData, UserRole userRole)
     {
+        int isPlayer = 0;
+        if(userRole == UserRole.Player) isPlayer = 1; 
+
         if (osc.initialized)
         {
             message = new OscMessage();
@@ -183,6 +201,7 @@ public class SendOSC : MonoBehaviour {
             message.values.Add(gameEngine.osc.inPort);
             message.values.Add(Utils.GetLastIntFromIp(gameEngine.gameData.OSC_LocalIP));
             message.values.Add(isPlayer);
+            message.values.Add(userData._playerName);
 
             osc.OscPacketIO.RemoteHostName = userData.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = userData.oscEndPoint.remotePort;

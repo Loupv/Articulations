@@ -17,15 +17,19 @@ public class UserData : MonoBehaviour
     public int _isPlayer;
     //public OSC osc;
     public int _ID;
+    public string _playerName;
     public GameObject playerGameObject, head, leftHand, rightHand;//, leftHold, rightHold;
+    public UnityEngine.UI.Text headText;
     public OSCEndPoint oscEndPoint;
 
 
-    public void Init(GameEngine gameEngine, int ID, string address, int localPort, GameObject pGameObject, int isPlayer, int isLocalPlayer)
+    public void Init(GameEngine gameEngine, int ID, string playerName, string address, int localPort, GameObject pGameObject, int isCurrentInstance, UserRole userRole)
     {
         
         _ID = ID;
-        _isPlayer = isPlayer;
+        if(userRole == UserRole.Player) _isPlayer = 1;
+        else _isPlayer = 0;
+        _playerName = playerName; 
 
         oscEndPoint = new OSCEndPoint();
         oscEndPoint.ip = address;
@@ -34,60 +38,86 @@ public class UserData : MonoBehaviour
         head = pGameObject.transform.Find("Head").gameObject;
         leftHand = pGameObject.transform.Find("LeftHand").gameObject;
         rightHand = pGameObject.transform.Find("RightHand").gameObject;
-
         
         //pGameObject.transform.position += new Vector3(0, Random.Range(-2f, 1.5f), 0);
-        
-        if (isPlayer == 1) // if player and not just viewer
+
+        // things that change depending on this instance's mode
+        if((gameEngine._userRole == UserRole.Player && gameEngine.keepNamesVisibleForPlayers) // if we're a player and we decided to keep UI
+        || (gameEngine._userRole == UserRole.Viewer && userRole == UserRole.Player)) // if we're a viewer and we instantiate a plyer
+        {
+            headText = head.transform.Find("Canvas").Find("Text").GetComponent<UnityEngine.UI.Text>();
+            headText.text = _playerName;
+        }
+        else if(gameEngine._userRole == UserRole.Player && !gameEngine.keepNamesVisibleForPlayers) // mask UI for players when not wanted
+        {
+            headText = head.transform.Find("Canvas").Find("Text").GetComponent<UnityEngine.UI.Text>();
+            headText.text = _playerName;
+            headText.gameObject.SetActive(false);
+        }
+
+
+        // things that change depending on the kind of player we try to instantiate
+        // PLAYER //
+        if (userRole == UserRole.Player)
         {            
-            if(isLocalPlayer == 1 && gameEngine.useVRHeadset && gameEngine.userNetworkType == UserNetworkType.Client){ // if Init is launched at startup by this instance's player
-                
-                GameObject parent = GameObject.Instantiate(gameEngine.ViveSystemPrefab);
-                GameObject camera = parent.transform.Find(gameEngine.viveHeadName).gameObject;
-                head.transform.parent = camera.transform;
-                leftHand.transform.parent = parent.transform.Find(gameEngine.viveLeftHandName).gameObject.transform;
-                rightHand.transform.parent = parent.transform.Find(gameEngine.viveRightHandName).gameObject.transform;
             
-                head.transform.position = Vector3.zero;
-                leftHand.transform.position = Vector3.zero;
-                rightHand.transform.position = Vector3.zero;
-                pGameObject.transform.parent = parent.transform;
+            if(!gameEngine.useVRHeadset) Debug.Log("Not looking for Vive System");
 
-                Camera.main.gameObject.SetActive(false);
-                camera.tag = "MainCamera";
-
-            }
-            else{ // else we store the player under an empty named Players
-                Debug.Log("Not looking for Vive System");
-                
-                GameObject parent = GameObject.Find("Players");
-                if(parent == null) {
-                    parent = new GameObject();
-                    parent.name = "Players";
-                }
-                pGameObject.transform.parent = parent.transform;                
-            }
-
+            PlaceUserPartsInScene(gameEngine, gameEngine.useVRHeadset, pGameObject); 
+            
             pGameObject.name = "Player" + _ID.ToString();
             playerGameObject = pGameObject;
+
             Color col = new Color(Random.Range(0f,1f),Random.Range(0f,1f),Random.Range(0f,1f));
             head.GetComponent<MeshRenderer>().materials[0].color = col;
             leftHand.GetComponent<MeshRenderer>().materials[0].color = col;
             rightHand.GetComponent<MeshRenderer>().materials[0].color = col;
         }
+        
+        // VIEWER //
         else{
             pGameObject.name = "Viewer" + _ID.ToString();
-            GameObject parent = GameObject.Find("Players");
-             if(parent == null) {
-                    parent = new GameObject();
-                    parent.name = "Players";
-            }
-            pGameObject.transform.parent = parent.transform;  
+            PlaceUserPartsInScene(gameEngine, false, pGameObject);
+
             head.SetActive(false);
             leftHand.SetActive(false);
             rightHand.SetActive(false);
         }
         
+    }
+
+
+    void PlaceUserPartsInScene(GameEngine gameEngine, bool vr, GameObject pGameObject){
+
+        GameObject parent;
+
+        if(vr){
+
+            parent = GameObject.Instantiate(gameEngine.ViveSystemPrefab);
+            GameObject camera = parent.transform.Find(gameEngine.viveHeadName).gameObject;
+            camera.tag = "MainCamera";
+            Camera.main.gameObject.SetActive(false);
+
+            head.transform.parent = camera.transform;
+            leftHand.transform.parent = parent.transform.Find(gameEngine.viveLeftHandName).gameObject.transform;
+            rightHand.transform.parent = parent.transform.Find(gameEngine.viveRightHandName).gameObject.transform;
+        
+            head.transform.position = Vector3.zero;
+            leftHand.transform.position = Vector3.zero;
+            rightHand.transform.position = Vector3.zero;
+            pGameObject.transform.parent = parent.transform;
+
+        }
+        else{
+            parent = GameObject.Find("Players");
+            if(parent == null) {
+                parent = new GameObject();
+                parent.name = "Players";
+            }
+
+        }
+        pGameObject.transform.parent = parent.transform;  
+
     }
 
 
