@@ -145,8 +145,12 @@ public class GameEngine : MonoBehaviour
             _userGameObject = Instantiate(viewerPrefab);
             uiHandler.viewerController = _userGameObject.GetComponent<ViewerController>();
         }
+        if (userNetworkType == UserNetworkType.Server)
+        {
+            useVRHeadset = false;
+        }
+
         _user = _userGameObject.GetComponent<UserData>();
-        
         string tmpIp;
         if(gameData.runInLocal == 1) tmpIp = "127.0.0.1";
         else tmpIp = gameData.OSC_ServerIP;

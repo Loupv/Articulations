@@ -17,6 +17,12 @@ Misc :
 - repères visuels du monde réel
 
 
+UI VR probleme
+déocher use vr headset quand on est server
+lancer le client automatiquement si VR
+filepath encore calé sur mon 
+
+
 viewer instancie un joueur lorsque quelqu'un se logge mais il lui donne son nom
 viewer peut bouger les spheres
 

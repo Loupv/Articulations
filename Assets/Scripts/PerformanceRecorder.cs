@@ -6,8 +6,8 @@ using UnityEngine;
 public class PerformanceRecorder : MonoBehaviour
 {
     public GameEngine gameEngine;
-    public string filePrefix = "";
-    public string filePath = Application.streamingAssetsPath+"/Recordings/";
+    //public string filePrefix = "";
+    public string filePath;
     public GameObject startButton, pauseButton;
     public UIHandler uiHandler;
     StreamWriter sr;
@@ -15,6 +15,7 @@ public class PerformanceRecorder : MonoBehaviour
 
     void Start(){
        uiHandler.ActualizeGizmos(isRecording, isPaused);
+       filePath = Application.streamingAssetsPath+"/Recordings/";
     }
 
     public void StartRecording()
