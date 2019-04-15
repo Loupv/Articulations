@@ -483,7 +483,7 @@ public class OSC : MonoBehaviour
 
         receiver.StartListening();
         //sender.Init();
-        print("OSC Connexion initiation to " + outIP + " : " + outPort + "/" + inPort);
+        
         initialized = true; // Loup
 
     }

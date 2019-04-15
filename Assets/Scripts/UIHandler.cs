@@ -10,11 +10,10 @@ public class UIHandler : MonoBehaviour
     public Button networkButtonChoice1, networkButtonChoice2, roleButtonChoice1, roleButtonChoice2;
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
     public ViewerController viewerController;
-    public InputField OSCServerPortInput, PlayerName;
+    public InputField OSCServerAddressInput, PlayerName;
     public GameObject clientObjectParent, userRoleButton;
     public GameObject recordGizmo, pauseGizmo;
     public int OSCServerPort, OSCClientPort;
-    public string address;
     public Sprite selectedButtonSprite, normalButtonSprite, lockedButtonSprite;
 
 

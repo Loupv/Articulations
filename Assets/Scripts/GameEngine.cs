@@ -16,7 +16,7 @@ using UnityEditor;
 public class GameData
 {
     public int runInLocal;
-    public string OSC_ServerIP, OSC_LocalIP;
+    public string OSC_ServerIP, OSC_LocalIP = "";
     public int OSC_ServerPort, OSC_ClientPort;
     public int DebugMode;
     public int keepNamesVisibleForPlayers;
@@ -107,15 +107,15 @@ public class GameEngine : MonoBehaviour
         pendingRotationsActualizations = new Dictionary<string, Quaternion>();
         
         if (gameData.runInLocal == 1) {
-            uiHandler.OSCServerPortInput.text = "127.0.0.1";
-            uiHandler.address = "127.0.0.1";
+            uiHandler.OSCServerAddressInput.text = "127.0.0.1";
+            uiHandler.OSCServerAddressInput.text = "127.0.0.1";
             gameData.OSC_LocalIP = "127.0.0.1";
             
             gameData.OSC_ClientPort = UnityEngine.Random.Range(5555,8888);
         }
         else {
-            uiHandler.OSCServerPortInput.text = gameData.OSC_ServerIP;
-            uiHandler.address = gameData.OSC_ServerIP;
+            uiHandler.OSCServerAddressInput.text = gameData.OSC_ServerIP;
+            uiHandler.OSCServerAddressInput.text = gameData.OSC_ServerIP;
             gameData.OSC_LocalIP = CheckIp();
         }
 
@@ -153,8 +153,11 @@ public class GameEngine : MonoBehaviour
         _user = _userGameObject.GetComponent<UserData>();
         string tmpIp;
         if(gameData.runInLocal == 1) tmpIp = "127.0.0.1";
-        else tmpIp = gameData.OSC_ServerIP;
-        
+        else {
+            tmpIp = uiHandler.OSCServerAddressInput.text;
+            gameData.OSC_ServerIP = tmpIp;
+        }
+
         string n = uiHandler.PlayerName.text;
         
         _user.Init(this, ID, n, tmpIp, gameData.OSC_ServerPort, _userGameObject, 1, _userRole);
@@ -181,8 +184,9 @@ public class GameEngine : MonoBehaviour
         {
             osc.inPort = gameData.OSC_ServerPort;
             osc.outPort = gameData.OSC_ClientPort;
-            osc.outIP = uiHandler.address;
+            osc.outIP = uiHandler.OSCServerAddressInput.text;
             osc.Init();
+            print("OSC Server - Connexion initiation");
             appState = AppState.Running;
             networkManager.ShowConnexionState();
             canvasHandler.ChangeCanvas("serverCanvas");     
@@ -192,8 +196,9 @@ public class GameEngine : MonoBehaviour
         {
             osc.inPort = gameData.OSC_ClientPort;
             osc.outPort = gameData.OSC_ServerPort;
-            osc.outIP = uiHandler.address;
+            osc.outIP = uiHandler.OSCServerAddressInput.text;
             osc.Init();
+            print("OSC Connexion initiation to " + osc.outIP + " : " + osc.outPort + "/" + osc.inPort);
             appState = AppState.WaitingForServer;
             osc.sender.RequestUserRegistation(_user, _userRole);
             canvasHandler.ChangeCanvas("waitingCanvas");

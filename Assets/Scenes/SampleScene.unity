@@ -7551,8 +7551,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameEngine: {fileID: 667967430}
-  filePrefix: 
-  filePath: C:/Users/l.vuarnesson/Documents/GitHub/Articulations/Assets/StreamingAssets/Recordings/
+  filePath: 
   startButton: {fileID: 305427021}
   pauseButton: {fileID: 1502089131}
   uiHandler: {fileID: 2107918503}
@@ -8296,7 +8295,7 @@ MonoBehaviour:
   POVPlayer2: {fileID: 221952714}
   POV3: {fileID: 1490687388}
   viewerController: {fileID: 0}
-  OSCServerPortInput: {fileID: 907264587}
+  OSCServerAddressInput: {fileID: 907264587}
   PlayerName: {fileID: 1015297339}
   clientObjectParent: {fileID: 1014792654}
   userRoleButton: {fileID: 816120991}
@@ -8304,7 +8303,6 @@ MonoBehaviour:
   pauseGizmo: {fileID: 211391146}
   OSCServerPort: 0
   OSCClientPort: 0
-  address: 
   selectedButtonSprite: {fileID: 21300000, guid: 6c9b7cd0d25afa64e8571f5cce274839,
     type: 3}
   normalButtonSprite: {fileID: 21300000, guid: b183381bd4fb6c6488485e268758bb2c, type: 3}
