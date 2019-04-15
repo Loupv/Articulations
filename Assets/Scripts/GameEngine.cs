@@ -118,7 +118,11 @@ public class GameEngine : MonoBehaviour
             uiHandler.address = gameData.OSC_ServerIP;
             gameData.OSC_LocalIP = CheckIp();
         }
+
         // adjust user's parameters
+        if(useVRHeadset)
+                uiHandler.SetPlayerNetworkType(1);
+        else 
         uiHandler.SetPlayerNetworkType(0);
         
         keepNamesVisibleForPlayers = (gameData.keepNamesVisibleForPlayers == 1);
