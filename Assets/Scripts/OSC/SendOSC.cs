@@ -200,7 +200,8 @@ public class SendOSC : MonoBehaviour {
             message.address = "/PlayerRegistrationRequest";
             message.values.Add(userData._ID);
             message.values.Add(gameEngine.osc.inPort);
-            message.values.Add(Utils.GetLastIntFromIp(gameEngine.gameData.OSC_LocalIP));
+            //message.values.Add(Utils.GetLastIntFromIp(gameEngine.gameData.OSC_LocalIP));
+            message.values.Add(gameEngine.gameData.OSC_LocalIP);
             message.values.Add(isPlayer);
             message.values.Add(userData._playerName);
 

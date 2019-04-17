@@ -11,6 +11,7 @@ public class PerformanceRecorder : MonoBehaviour
     public GameObject startButton, pauseButton;
     public UIHandler uiHandler;
     StreamWriter sr;
+    public double startTime;
     public bool isRecording, isPaused;
 
     void Start(){
@@ -20,7 +21,7 @@ public class PerformanceRecorder : MonoBehaviour
 
     public void StartRecording()
     {
-
+        startTime = Time.time * 1000;
         string fileName = gameEngine._user._ID+"_"+System.DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".csv";
         //Debug.Log(filePath+fileName);
 
@@ -67,7 +68,7 @@ public class PerformanceRecorder : MonoBehaviour
     }
 
     public void AddLine(int ID, Transform headTransform, Transform leftHandTransform, Transform rightHandTransform){
-        sr.WriteLine (ID+";"+Time.frameCount+";"+headTransform.position.x+";"+headTransform.position.y+";"+headTransform.position.z+
+        sr.WriteLine (ID+";"+(Time.time*1000 - startTime).ToString("N3")+";"+headTransform.position.x+";"+headTransform.position.y+";"+headTransform.position.z+
         ";"+headTransform.rotation.x+";"+headTransform.rotation.y+";"+headTransform.rotation.z+
         ";"+leftHandTransform.position.x+";"+leftHandTransform.position.y+";"+leftHandTransform.position.z+
         ";"+leftHandTransform.rotation.x+";"+leftHandTransform.rotation.y+";"+leftHandTransform.rotation.z+

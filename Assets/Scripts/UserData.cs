@@ -94,11 +94,11 @@ public class UserData : MonoBehaviour
         if(vr && isMe){
 
             parent = Instantiate(gameEngine.ViveSystemPrefab);
-            GameObject camera = parent.transform.Find(gameEngine.viveHeadName).gameObject;
-            camera.tag = "MainCamera";
+            GameObject cam = parent.transform.Find(gameEngine.viveHeadName).gameObject;
+            cam.tag = "MainCamera";
             Camera.main.gameObject.SetActive(false);
 
-            head.transform.parent = camera.transform;
+            head.transform.parent = cam.transform;
             leftHand.transform.parent = parent.transform.Find(gameEngine.viveLeftHandName).gameObject.transform;
             rightHand.transform.parent = parent.transform.Find(gameEngine.viveRightHandName).gameObject.transform;
         
@@ -151,10 +151,10 @@ public class UserData : MonoBehaviour
 
     void RemovePlayerHold(){
         foreach(Transform t in leftHand.transform){
-            GameObject.Destroy(t.gameObject);
+            Destroy(t.gameObject);
         }
         foreach(Transform t in rightHand.transform){
-            GameObject.Destroy(t.gameObject);
+            Destroy(t.gameObject);
         }
     }
     void ReplacePlayerHold(GameObject hold){

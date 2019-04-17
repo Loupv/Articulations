@@ -9,11 +9,14 @@ Feats :
 - marquer le temps avec un bouton
 - checker que l'envoi OSC se fait bien au framerate demandé
 - Envoyer l'adresse IP entière à la registration
+- pb Trainées qui se désactivent
+- vérifier le customupdate et framerate
+- locker la taille de l'écran
+
+A tester avec casque :
 - VR Mode : client crée un caméra Rig pour l'autre player et du coup influence les mains de l'autre - fonctionne si on enlève le script steam behaviour 
 sur le Gameobject Controller (Left/Right) et qu'on désactive le GameObject Model
-- tête et mains même taille
-- recording - ne pas enregistrer le serveur et les viewers + changer la valeur de temps (pas framecount !!)
-- pb Trainées qui se désactivent
+
 
 Misc :
 - Viz - fusion avec l'autre ? (toile d'araignée, fils,)
@@ -24,36 +27,13 @@ Misc :
 - UI VR probleme
 
 
-
-
-
-viewer instancie un joueur lorsque quelqu'un se logge mais il lui donne son nom
-viewer peut bouger les spheres
-
-Cas où server et client sont sur le même ordi mais client 2 est sur un autre :
-Server écoute sur 5555 et envoie sur 8888
-Client 1 envoie sur 5555 et écoute sur 8888
-
-Init doit à la fois créer des
-
-1. Server/viewer en local
-2. Client/player en local
-3. Client/viewer en local
-
-4. Client/viewer en externe
-5. client/player en externe
-
-
-1.
-Instancie un viewerPrefab
-
-
-
 Workshop Artec : 
 https://docs.google.com/document/d/1n7zsj8FU2iJMob8DN4jmzC_PnF_lnULN8pXtodo_VDM/edit
 
 
 Done:
+- tête et mains même taille
+- recording - ne pas enregistrer le serveur et les viewers + changer la valeur de temps (pas framecount !!)
 - ajouter les messages OSC d'orientation de la tête
 - Faire des gros boutons au début pour paramétrer vite le client/serveur et viewer/player
 - offrir un GUI au serveur afin de pouvoir changer les modes d'affichage rapidement

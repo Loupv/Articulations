@@ -52,7 +52,7 @@ public class ReceiveOSC : MonoBehaviour {
             int playerID = message.GetInt(0);
 
             int requestedPort = message.GetInt(1);
-            string playerIP = Utils.GetIpFromInt(message.GetInt(2), gameEngine.gameData.OSC_LocalIP);
+            string playerIP = message.GetString(2);
 
             UserRole role;
             int isPlayer = message.GetInt(3);
