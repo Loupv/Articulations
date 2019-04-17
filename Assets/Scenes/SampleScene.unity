@@ -2511,7 +2511,7 @@ MonoBehaviour:
   _userRole: 0
   appState: 0
   currentVisualisationMode: 1
-  useVRHeadset: 0
+  useVRHeadset: 1
   keepNamesVisibleForPlayers: 0
   viveSystemName: '[CameraRig](Clone)'
   viveHeadName: Camera
@@ -2521,7 +2521,6 @@ MonoBehaviour:
   debugPrefab: {fileID: 2656459893160420101, guid: fd1ed9442d1b4a94b8a9ec29aeceaebc,
     type: 3}
   targetFrameRate: 60
-  tmpTime: 0
 --- !u!4 &667967431
 Transform:
   m_ObjectHideFlags: 0

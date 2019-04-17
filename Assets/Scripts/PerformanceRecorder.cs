@@ -39,7 +39,7 @@ public class PerformanceRecorder : MonoBehaviour
     public void SaveData(List<UserData> usersPlaying){
 
         foreach(UserData user in usersPlaying){
-            AddLine(user._ID, user.head.transform, user.leftHand.transform, user.rightHand.transform);
+            if(user._userRole == UserRole.Player) AddLine(user._ID, user.head.transform, user.leftHand.transform, user.rightHand.transform);
         }
     }
 

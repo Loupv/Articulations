@@ -53,14 +53,19 @@ public class ReceiveOSC : MonoBehaviour {
 
             int requestedPort = message.GetInt(1);
             string playerIP = Utils.GetIpFromInt(message.GetInt(2), gameEngine.gameData.OSC_LocalIP);
+
+            UserRole role;
             int isPlayer = message.GetInt(3);
+            if (isPlayer == 1) role = UserRole.Player;
+            else role = UserRole.Viewer;
+
             string playerName = message.GetString(4);
 
             bool portAvailable = gameEngine.networkManager.CheckPortAvailability(gameEngine.usersPlaying, requestedPort);
 
             if (portAvailable || gameEngine.gameData.runInLocal == 0)
             {
-                UserData user = gameEngine.AddOtherPlayer(playerID, playerName, playerIP, requestedPort, isPlayer);
+                UserData user = gameEngine.AddOtherPlayer(playerID, playerName, playerIP, requestedPort, role);
                 sender.AddNewPlayerToClientsGames(playerID, playerName, gameEngine.usersPlaying, isPlayer);
                 sender.SendRegistrationConfirmation(user);
             }
@@ -147,13 +152,18 @@ public class ReceiveOSC : MonoBehaviour {
     {
         if(gameEngine.debugMode) Debug.Log("Received : " + message);
         int playerID = message.GetInt(0);
-        int isPlayer = message.GetInt(1);
+
+        UserRole userRole;
+        int playerRole = message.GetInt(1);
+        if (playerRole == 1) userRole = UserRole.Player;
+        else userRole = UserRole.Viewer;
+
         string playerName = message.GetString(2);
         
         if (gameEngine.userNetworkType == UserNetworkType.Client && playerID != gameEngine._user._ID)
         {
             Debug.Log(playerID+" vs "+gameEngine._user._ID);
-            gameEngine.AddOtherPlayer(playerID, playerName, "null", -1, isPlayer);
+            gameEngine.AddOtherPlayer(playerID, playerName, "null", -1, userRole);
         }
     }
 

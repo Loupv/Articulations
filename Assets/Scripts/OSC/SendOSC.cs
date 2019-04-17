@@ -117,7 +117,8 @@ public class SendOSC : MonoBehaviour {
             message = new OscMessage();
             message.address = "/AddPlayerToGame";
             message.values.Add(user._ID);
-            message.values.Add(user._isPlayer);
+            if (user._userRole == UserRole.Player) message.values.Add(1);
+            else message.values.Add(0);
             message.values.Add(user._playerName);
             osc.OscPacketIO.RemoteHostName = userTarget.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = userTarget.oscEndPoint.remotePort;

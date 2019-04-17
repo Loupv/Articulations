@@ -14,7 +14,7 @@ public struct OSCEndPoint{
 public class UserData : MonoBehaviour
 {
 
-    public int _isPlayer;
+    public UserRole _userRole;
     //public OSC osc;
     public int _ID;
     public string _playerName;
@@ -23,12 +23,12 @@ public class UserData : MonoBehaviour
     public OSCEndPoint oscEndPoint;
 
 
-    public void Init(GameEngine gameEngine, int ID, string playerName, string address, int localPort, GameObject pGameObject, int isCurrentInstance, UserRole userRole)
+    public void Init(GameEngine gameEngine, int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, UserRole userRole)
     {
         
         _ID = ID;
-        if(userRole == UserRole.Player) _isPlayer = 1;
-        else _isPlayer = 0;
+
+        _userRole = userRole;
         _playerName = playerName; 
 
         oscEndPoint = new OSCEndPoint();
@@ -43,7 +43,7 @@ public class UserData : MonoBehaviour
 
         // things that change depending on this instance's mode
         if((gameEngine._userRole == UserRole.Player && gameEngine.keepNamesVisibleForPlayers) // if we're a player and we decided to keep UI
-        || (gameEngine._userRole == UserRole.Viewer && userRole == UserRole.Player)) // if we're a viewer and we instantiate a plyer
+        || (gameEngine._userRole == UserRole.Viewer && _userRole == UserRole.Player)) // if we're a viewer and we instantiate a plyer
         {
             headText = head.transform.Find("Canvas").Find("Text").GetComponent<UnityEngine.UI.Text>();
             headText.text = _playerName;
@@ -58,12 +58,12 @@ public class UserData : MonoBehaviour
 
         // things that change depending on the kind of player we try to instantiate
         // PLAYER //
-        if (userRole == UserRole.Player)
+        if (_userRole == UserRole.Player)
         {            
             
             if(!gameEngine.useVRHeadset) Debug.Log("Not looking for Vive System");
 
-            PlaceUserPartsInScene(gameEngine, gameEngine.useVRHeadset, pGameObject); 
+            PlaceUserPartsInScene(gameEngine, gameEngine.useVRHeadset, pGameObject, isMe); 
             
             pGameObject.name = "Player" + _ID.ToString();
             playerGameObject = pGameObject;
@@ -77,7 +77,7 @@ public class UserData : MonoBehaviour
         // VIEWER //
         else{
             pGameObject.name = "Viewer" + _ID.ToString();
-            PlaceUserPartsInScene(gameEngine, false, pGameObject);
+            PlaceUserPartsInScene(gameEngine, false, pGameObject, isMe);
 
             head.SetActive(false);
             leftHand.SetActive(false);
@@ -87,13 +87,13 @@ public class UserData : MonoBehaviour
     }
 
 
-    void PlaceUserPartsInScene(GameEngine gameEngine, bool vr, GameObject pGameObject){
+    void PlaceUserPartsInScene(GameEngine gameEngine, bool vr, GameObject pGameObject, bool isMe){
 
         GameObject parent;
 
-        if(vr){
+        if(vr && isMe){
 
-            parent = GameObject.Instantiate(gameEngine.ViveSystemPrefab);
+            parent = Instantiate(gameEngine.ViveSystemPrefab);
             GameObject camera = parent.transform.Find(gameEngine.viveHeadName).gameObject;
             camera.tag = "MainCamera";
             Camera.main.gameObject.SetActive(false);

@@ -79,7 +79,7 @@ public class GameEngine : MonoBehaviour
     public bool debugMode = false;
     public GameObject debugPrefab;
     public int targetFrameRate = 60;
-    public float tmpTime;
+    private float tmpTime;
 
 
     private void Start()
@@ -87,6 +87,7 @@ public class GameEngine : MonoBehaviour
         InitApplication();
 
         Application.targetFrameRate = targetFrameRate;
+        InvokeRepeating("TimedUpdate", 0.5f, 1f / targetFrameRate);
     }
 
 
@@ -160,7 +161,7 @@ public class GameEngine : MonoBehaviour
 
         string n = uiHandler.PlayerName.text;
         
-        _user.Init(this, ID, n, tmpIp, gameData.OSC_ServerPort, _userGameObject, 1, _userRole);
+        _user.Init(this, ID, n, tmpIp, gameData.OSC_ServerPort, _userGameObject, true, _userRole);
 
         if (_userRole == UserRole.Player)
         {
@@ -189,7 +190,8 @@ public class GameEngine : MonoBehaviour
             print("OSC Server - Connexion initiation");
             appState = AppState.Running;
             networkManager.ShowConnexionState();
-            canvasHandler.ChangeCanvas("serverCanvas");     
+            canvasHandler.ChangeCanvas("serverCanvas");
+
         }
 
         else if (userNetworkType == UserNetworkType.Client)
@@ -217,14 +219,14 @@ public class GameEngine : MonoBehaviour
             appState = AppState.Running;
             networkManager.ShowConnexionState();
 
-            if(_user._isPlayer == 1) canvasHandler.ChangeCanvas("gameCanvas");
-            else if(_user._isPlayer == 0) canvasHandler.ChangeCanvas("viewerCanvas");
+            if(_user._userRole == UserRole.Player) canvasHandler.ChangeCanvas("gameCanvas");
+            else if(_user._userRole == UserRole.Viewer) canvasHandler.ChangeCanvas("viewerCanvas");
         }
     }
 
 
 
-    private void Update()
+    private void TimedUpdate()
     {
         // TODO fix game start with VR headset -> multiple cameras and displays
         if(Input.GetKeyDown("space") && appState == AppState.Initializing)
@@ -235,7 +237,8 @@ public class GameEngine : MonoBehaviour
             UpdateGame();
         }
 
-       //Debug.Log(Time.deltaTime);
+       //Debug.Log(Time.time*1000 - tmpTime);
+       //tmpTime = Time.time * 1000;
     }
 
 
@@ -243,7 +246,7 @@ public class GameEngine : MonoBehaviour
     public void UpdateGame()
     {
         if(userNetworkType == UserNetworkType.Client){
-            if(_user._isPlayer == 1) networkManager.SendOwnPosition(_user, serverEndpoint); // don't send if you're viewer
+            if(_user._userRole == UserRole.Player) networkManager.SendOwnPosition(_user, serverEndpoint); // don't send if you're viewer
         }
         else if(userNetworkType == UserNetworkType.Server){
             networkManager.SendAllPositionsToClients(usersPlaying);
@@ -260,7 +263,7 @@ public class GameEngine : MonoBehaviour
         int i = 0;
         foreach (UserData user in usersPlaying)
         {
-            if (user._ID != _user._ID && user._isPlayer == 1) // if it's not actual instance's player
+            if (user._ID != _user._ID && user._userRole == UserRole.Player) // if it's not actual instance's player
             {
                 usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"];
                 usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"];
@@ -274,17 +277,15 @@ public class GameEngine : MonoBehaviour
     }
 
 
-    public UserData AddOtherPlayer(int playerID, string playerName, string address, int port, int isPlayer)
+    public UserData AddOtherPlayer(int playerID, string playerName, string address, int port, UserRole role)
     {
         // check si dispo
         GameObject go = Instantiate(playerPrefab);
         UserData p = go.GetComponent<UserData>();
-        UserRole role = UserRole.Viewer; 
-        if(isPlayer == 1) role = UserRole.Player;
 
-        p.Init(this, playerID, playerName, address, port, go, 0, role);
+        p.Init(this, playerID, playerName, address, port, go, false, role);
         usersPlaying.Add(p);
-        if(isPlayer == 1){
+        if(role == UserRole.Player){
             pendingPositionsActualizations.Add(playerID + "Head", p.head.transform.position);
             pendingPositionsActualizations.Add(playerID + "LeftHand", p.leftHand.transform.position);
             pendingPositionsActualizations.Add(playerID + "RightHand", p.rightHand.transform.position);
@@ -350,7 +351,7 @@ public class GameEngine : MonoBehaviour
         int r = 0;
         int i = 0;
         foreach(UserData user in usersPlaying){
-            if(user._isPlayer == 1) r +=1; // if we found a player thats number r
+            if(user._userRole == UserRole.Player) r +=1; // if we find a player thats number r
             if(r == n) return i; // if r was needed, return it
             i++;
         }

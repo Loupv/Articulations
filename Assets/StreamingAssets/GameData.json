@@ -3,7 +3,7 @@
    "runInLocal":0,
    "DebugMode":0,
    "keepNamesVisibleForPlayers":0,
-   "OSC_ServerIP":"192.168.43.113",
+   "OSC_ServerIP":"172.30.41.106",
    "OSC_LocalIP":"",
    "OSC_ServerPort":5555,
    "OSC_ClientPort":8888

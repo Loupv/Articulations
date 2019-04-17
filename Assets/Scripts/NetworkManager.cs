@@ -29,7 +29,7 @@ public class NetworkManager : MonoBehaviour
             if (targetUser._ID != gameEngine._user._ID) // if this is the actual instance's player
             { 
                 foreach(UserData user in usersPlaying){      
-                    if(user._isPlayer == 1){  // don't send viewers positions
+                    if(user._userRole == UserRole.Player){  // don't send viewers positions
                         osc.sender.SendOSCPosition(user, 0, targetUser.oscEndPoint);
                         osc.sender.SendOSCPosition(user, 1, targetUser.oscEndPoint);
                         osc.sender.SendOSCPosition(user, 2, targetUser.oscEndPoint);
