@@ -78,13 +78,15 @@ public class GameEngine : MonoBehaviour
     
     public bool debugMode = false;
     public GameObject debugPrefab;
+    public int targetFrameRate = 60;
+    public float tmpTime;
 
 
     private void Start()
     {
         InitApplication();
 
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = targetFrameRate;
     }
 
 
@@ -108,13 +110,11 @@ public class GameEngine : MonoBehaviour
         
         if (gameData.runInLocal == 1) {
             uiHandler.OSCServerAddressInput.text = "127.0.0.1";
-            uiHandler.OSCServerAddressInput.text = "127.0.0.1";
             gameData.OSC_LocalIP = "127.0.0.1";
             
             gameData.OSC_ClientPort = UnityEngine.Random.Range(5555,8888);
         }
         else {
-            uiHandler.OSCServerAddressInput.text = gameData.OSC_ServerIP;
             uiHandler.OSCServerAddressInput.text = gameData.OSC_ServerIP;
             gameData.OSC_LocalIP = CheckIp();
         }
@@ -234,6 +234,8 @@ public class GameEngine : MonoBehaviour
         {
             UpdateGame();
         }
+
+       //Debug.Log(Time.deltaTime);
     }
 
 

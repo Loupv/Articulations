@@ -58,7 +58,7 @@ public class ReceiveOSC : MonoBehaviour {
 
             bool portAvailable = gameEngine.networkManager.CheckPortAvailability(gameEngine.usersPlaying, requestedPort);
 
-            if (portAvailable)
+            if (portAvailable || gameEngine.gameData.runInLocal == 0)
             {
                 UserData user = gameEngine.AddOtherPlayer(playerID, playerName, playerIP, requestedPort, isPlayer);
                 sender.AddNewPlayerToClientsGames(playerID, playerName, gameEngine.usersPlaying, isPlayer);
