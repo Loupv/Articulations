@@ -2511,7 +2511,7 @@ MonoBehaviour:
   _userRole: 0
   appState: 0
   currentVisualisationMode: 1
-  useVRHeadset: 1
+  useVRHeadset: 0
   keepNamesVisibleForPlayers: 0
   viveSystemName: '[CameraRig](Clone)'
   viveHeadName: Camera
@@ -7556,6 +7556,7 @@ MonoBehaviour:
   startButton: {fileID: 305427021}
   pauseButton: {fileID: 1502089131}
   uiHandler: {fileID: 2107918503}
+  startTime: 0
   isRecording: 0
   isPaused: 0
 --- !u!4 &1899021881

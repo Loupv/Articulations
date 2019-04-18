@@ -1,14 +1,10 @@
 ﻿TODO :
 
 Feats :
-- checker la fin de l'enregistrement des fichiers -message d'erreur quand en écriture
 - adapter la config pour avoir possiblement 5 membres envoyés , transformer les slots en list de Gameobjects
-- enregistrement des noms des participants associés à leurs IDs
-- mettre un champ pour renseigner les prénoms des participants au démarrage
 - fsync ?
 - marquer le temps avec un bouton
 - checker que l'envoi OSC se fait bien au framerate demandé
-- Envoyer l'adresse IP entière à la registration
 - pb Trainées qui se désactivent
 - vérifier le customupdate et framerate
 - locker la taille de l'écran
@@ -19,19 +15,23 @@ sur le Gameobject Controller (Left/Right) et qu'on désactive le GameObject Mode
 
 
 Misc :
+- enregistrement des noms des participants associés à leurs IDs
 - Viz - fusion avec l'autre ? (toile d'araignée, fils,)
 - Sauver la trace
 - Trail texture fumée
 - avoir plein de sphères qui bougent
 - repères visuels du monde réel
-- UI VR probleme
-
+- UI VR probleme -> faire plusieurs displays quand on est au casque
+- Laisser server donner des IDs à tout le monde plutôt que de laisser faire sle client
 
 Workshop Artec : 
 https://docs.google.com/document/d/1n7zsj8FU2iJMob8DN4jmzC_PnF_lnULN8pXtodo_VDM/edit
 
 
 Done:
+- checker la fin de l'enregistrement des fichiers -message d'erreur quand en écriture
+- mettre un champ pour renseigner les prénoms des participants au démarrage
+- Envoyer l'adresse IP entière à la registration
 - tête et mains même taille
 - recording - ne pas enregistrer le serveur et les viewers + changer la valeur de temps (pas framecount !!)
 - ajouter les messages OSC d'orientation de la tête
