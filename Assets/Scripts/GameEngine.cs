@@ -233,9 +233,18 @@ public class GameEngine : MonoBehaviour
 
     private void TimedUpdate()
     {
-        // TODO fix game start with VR headset -> multiple cameras and displays
+        // initialization step  
         if(Input.GetKeyDown("space") && appState == AppState.Initializing)
             StartGame();
+        if(Input.GetKeyDown(KeyCode.Tab) && appState == AppState.Initializing)
+        {
+            int t;
+            if(userNetworkType == UserNetworkType.Server) t = 1;
+            else t= 0;
+            uiHandler.SetPlayerNetworkType(t);
+        }
+        
+
 
         if (appState == AppState.Running)
         {

@@ -1,54 +1,35 @@
 ﻿TODO :
 
-Feats :
-- checker la fin de l'enregistrement des fichiers -message d'erreur quand en écriture
-- adapter la config pour avoir possiblement 5 membres envoyés , transformer les slots en list de Gameobjects
+Prio1 :
+- UI VR probleme
+
+Prio2 :
+- repères visuels du monde réel
 - enregistrement des noms des participants associés à leurs IDs
-- mettre le nom au dessus de la tête pour les viewers
 - mettre un champ pour renseigner les prénoms des participants au démarrage
+- Trail texture fumée
+- pouvoir éditer le temps des trails
+
+Prio3 :
 - fsync ?
 - marquer le temps avec un bouton
 - virer le mode runinlocal -> plutôt identifier si ip server et ip client son pareils, dans ce cas envoyer un port diff à la registration
 - waiting for server devrait invoker un init régulier d'OSC
 - faire un ping in/out et mesurer le temps de latence
-- ne pas pouvoir modifier les ip/ports dans l'éditeur pour forcer l'usage du json 
+- ne pas pouvoir modifier les ip/ports dans l'éditeur pour forcer à l'utilisation du json - les mettre tous à 0 ?
 
-Misc :
+Prio4
+- adapter la config pour avoir possiblement 5 membres envoyés , transformer les slots en list de Gameobjects
+- checker la fin de l'enregistrement des fichiers -message d'erreur quand en écriture
 - Viz - fusion avec l'autre ? (toile d'araignée, fils,)
 - Sauver la trace
-- Trail texture fumée
 - avoir plein de sphères qui bougent
-- repères visuels du monde réel
-- UI VR probleme
 
 
-viewer instancie un joueur lorsque quelqu'un se logge mais il lui donne son nom
-viewer peut bouger les spheres
-
-Cas où server et client sont sur le même ordi mais client 2 est sur un autre :
-Server écoute sur 5555 et envoie sur 8888
-Client 1 envoie sur 5555 et écoute sur 8888
-
-Init doit à la fois créer des
-
-1. Server/viewer en local
-2. Client/player en local
-3. Client/viewer en local
-
-4. Client/viewer en externe
-5. client/player en externe
-
-
-1.
-Instancie un viewerPrefab
-
-
-
-Workshop Artec : 
-https://docs.google.com/document/d/1n7zsj8FU2iJMob8DN4jmzC_PnF_lnULN8pXtodo_VDM/edit
 
 
 Done:
+- mettre le nom au dessus de la tête pour les viewers
 - ajouter les messages OSC d'orientation de la tête
 - Faire des gros boutons au début pour paramétrer vite le client/serveur et viewer/player
 - offrir un GUI au serveur afin de pouvoir changer les modes d'affichage rapidement
@@ -65,30 +46,29 @@ filepath encore calé sur mon
 
 -----------------------------------------------------------
 
+Workshop Artec : 
+https://docs.google.com/document/d/1n7zsj8FU2iJMob8DN4jmzC_PnF_lnULN8pXtodo_VDM/edit
 
 
 
 
-Rôles update :
-- serveur n'a pas d'affichage de la scène, c'est juste un GUI qui renvoie les positions de chaque client et peut changer le mode d'affichage
-- parmi eux : voir les mains de l'autre, voir juste ses mains, voir des trainées sur les mains de l'autre, voir des trainées sur les siennes aussi,
-un bouton par mode
 
 
-- client viewer : peut choisir le point de vue de chaque joueur / piloter une cam en free mode / avoir un plan d'ensemble, fonctionne comme
+
+README 
+
+-- serveur - n'a pas d'affichage de la scène, c'est juste un GUI qui renvoie les positions de chaque client et peut changer le mode d'affichage
+    - parmi eux : voir les mains de l'autre, voir juste ses mains, voir des trainées sur les mains de l'autre, voir des trainées sur les siennes aussi,
+    un bouton par mode
+
+-- client viewer : peut choisir le point de vue de chaque joueur / piloter une cam en free mode / avoir un plan d'ensemble, fonctionne comme
 un client normal et ajoute des joueurs + leur point de vue (besoin de l'orientation de la cam)
-
-- client : same
 
 Le Client register sur le réseau en envoyant son propre port d'écoute et son adresse IP par le biai du combo serverIP/remotePort
 Si le port local du client n'est pas enregistré, le serveur l'ajoute à sa liste de pairs
-
-
 Client envoie une requête avec son port d'écoute
 Si le port est disponible, server renvoie une confirmation ainsi que la liste de tous les joueurs déjà présents
-
 Si client reçoit la confirmation, il enregistre tous les joueurs présents, passe en mode jeu et envoie sa position
-
 
 Dans le update :
 - les clients envoient leurs positions au server
@@ -96,7 +76,12 @@ Dans le update :
 
 Chaque userdata contient ses informations de connexion
 le serveur peut garder un dictionnaire d'userdata qui contiendra les infos de contact en lui
-
 tous les clients ne font qu'actualiser les positions de chaque entrée dans le dictionnaire
 
+
+PB-SOLVER
+
 checker l'ouverture des ports au niveau du partfeu
+activer mode debug
+checker les logs
+regarder les adresses dans les Gameobjects
