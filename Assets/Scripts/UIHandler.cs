@@ -15,8 +15,15 @@ public class UIHandler : MonoBehaviour
     public GameObject recordGizmo, pauseGizmo;
     public int OSCServerPort, OSCClientPort;
     public Sprite selectedButtonSprite, normalButtonSprite, lockedButtonSprite;
+    public Toggle sendToAudioDeviceToggle;
 
 
+    void Start(){
+
+        if(sendToAudioDeviceToggle.isOn) gameEngine.sendToAudioDevice = true;
+        else gameEngine.sendToAudioDevice = false;
+
+    }
 
     public void SetPlayerNetworkType(int i) // 0 for server, 1 for client
     {
@@ -133,6 +140,10 @@ public class UIHandler : MonoBehaviour
 		break;
         }
         viewerController.UpdatePOV(pov, tmp);
+    }
+
+    public void ToggleSendToAudioHandler(){
+        gameEngine.sendToAudioDevice = !gameEngine.sendToAudioDevice;
     }
 
 }

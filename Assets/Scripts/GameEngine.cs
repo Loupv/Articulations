@@ -73,7 +73,7 @@ public class GameEngine : MonoBehaviour
     public AppState appState;
     public int currentVisualisationMode = 1; // justHands
     private OSCEndPoint serverEndpoint;
-    public bool useVRHeadset, keepNamesVisibleForPlayers, audioDeviceListening;
+    public bool useVRHeadset, keepNamesVisibleForPlayers, sendToAudioDevice;
     public string viveSystemName = "[CameraRig]", 
         viveHeadName  = "Camera", 
         viveLeftHandName = "Controller (left)", 
@@ -252,7 +252,7 @@ public class GameEngine : MonoBehaviour
         }
         else if(userNetworkType == UserNetworkType.Server){
             networkManager.SendAllPositionsToClients(usersPlaying);
-            if(audioDeviceListening) networkManager.SendAllPositionsToAudioSystem(usersPlaying, soundHandler);
+            if(sendToAudioDevice) networkManager.SendAllPositionsToAudioSystem(usersPlaying, soundHandler);
         }
         if(performanceRecorder.isRecording && !performanceRecorder.isPaused) performanceRecorder.SaveData(usersPlaying);
         ActualizePlayersPositions(); 
