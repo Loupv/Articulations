@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -112,6 +112,49 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &28622094
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 28622095}
+  - component: {fileID: 28622096}
+  m_Layer: 0
+  m_Name: SoundHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &28622095
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28622094}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 667967431}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &28622096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28622094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 498c0e5b5c0dcfc41987fe4b9cef83a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &45429275
 GameObject:
   m_ObjectHideFlags: 0
@@ -2487,12 +2530,15 @@ MonoBehaviour:
   _user: {fileID: 0}
   osc: {fileID: 1137383004}
   uiHandler: {fileID: 2107918503}
+  soundHandler: {fileID: 28622096}
   gameData:
     runInLocal: 0
     OSC_ServerIP: 
     OSC_LocalIP: 
     OSC_ServerPort: 0
     OSC_ClientPort: 0
+    OSC_SoundHandlerIP: 
+    OSC_SoundHandlerPort: 0
     DebugMode: 0
     keepNamesVisibleForPlayers: 0
   playerPrefab: {fileID: 6075620792603371976, guid: 10484b8557ffb4a049780c44fa624de4,
@@ -2513,6 +2559,7 @@ MonoBehaviour:
   currentVisualisationMode: 1
   useVRHeadset: 0
   keepNamesVisibleForPlayers: 0
+  audioDeviceListening: 0
   viveSystemName: '[CameraRig](Clone)'
   viveHeadName: Camera
   viveLeftHandName: Controller (left)
@@ -2520,7 +2567,6 @@ MonoBehaviour:
   debugMode: 0
   debugPrefab: {fileID: 2656459893160420101, guid: fd1ed9442d1b4a94b8a9ec29aeceaebc,
     type: 3}
-  targetFrameRate: 60
 --- !u!4 &667967431
 Transform:
   m_ObjectHideFlags: 0
@@ -2536,6 +2582,7 @@ Transform:
   - {fileID: 1137383001}
   - {fileID: 1899021881}
   - {fileID: 504376290}
+  - {fileID: 28622095}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

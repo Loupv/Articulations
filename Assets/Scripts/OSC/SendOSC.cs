@@ -109,6 +109,52 @@ public class SendOSC : MonoBehaviour {
     }
 
 
+    public void SendUserDataToAudioSystem(UserData userData, OSCEndPoint audioHandlerEndPoint){
+        
+        Vector3 pos = new Vector3();
+        Quaternion rot = new Quaternion();
+
+        if (osc.initialized)
+        {   
+            
+            osc.OscPacketIO.RemoteHostName = audioHandlerEndPoint.ip;
+            osc.OscPacketIO.RemotePort = audioHandlerEndPoint.remotePort;
+
+            for(int i = 0; i < 3; i++){
+
+            message = new OscMessage();
+            message.address =  "/PlayerPosition";
+            message.values.Add(userData._ID);
+
+                if(i == 0){ 
+                    pos = userData.head.transform.position;
+                    rot = userData.head.transform.rotation;
+                }
+                if(i == 1){ 
+                    pos = userData.leftHand.transform.position;
+                    rot = userData.leftHand.transform.rotation;
+                }
+                if(i == 2){ 
+                    pos = userData.rightHand.transform.position;
+                    rot = userData.rightHand.transform.rotation;
+                }
+
+                message.values.Add(i);
+                message.values.Add(pos.x);
+                message.values.Add(pos.y);
+                message.values.Add(pos.z);
+                message.values.Add(rot.x);
+                message.values.Add(rot.y);
+                message.values.Add(rot.z);
+                message.values.Add(rot.w);
+
+                osc.Send(message);
+                if(gameEngine.debugMode) Debug.Log("Sending : " + message);
+            }
+        }
+    }
+
+
     // after registration confirmation server sends every existing player to client
     public void AddEveryPlayerToClientDict(UserData userTarget, List<UserData> usersPlaying)
     {
@@ -117,8 +163,9 @@ public class SendOSC : MonoBehaviour {
             message = new OscMessage();
             message.address = "/AddPlayerToGame";
             message.values.Add(user._ID);
-            if (user._userRole == UserRole.Player) message.values.Add(1);
-            else message.values.Add(0);
+            if(user._userRole == UserRole.Player) message.values.Add(1);
+            else if (user._userRole == UserRole.Viewer) message.values.Add(0);
+
             message.values.Add(user._playerName);
             osc.OscPacketIO.RemoteHostName = userTarget.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = userTarget.oscEndPoint.remotePort;
@@ -200,7 +247,6 @@ public class SendOSC : MonoBehaviour {
             message.address = "/PlayerRegistrationRequest";
             message.values.Add(userData._ID);
             message.values.Add(gameEngine.osc.inPort);
-            //message.values.Add(Utils.GetLastIntFromIp(gameEngine.gameData.OSC_LocalIP));
             message.values.Add(gameEngine.gameData.OSC_LocalIP);
             message.values.Add(isPlayer);
             message.values.Add(userData._playerName);

@@ -39,6 +39,21 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
+    public void SendAllPositionsToAudioSystem(List<UserData> usersPlaying, SoundHandler soundHandler)
+    {
+        foreach (UserData targetUser in usersPlaying)
+        {
+            if (targetUser._ID != gameEngine._user._ID) // if this is the actual instance's player
+            { 
+                foreach(UserData user in usersPlaying){      
+                    if(user._userRole == UserRole.Player){  // don't send viewers positions
+                        osc.sender.SendUserDataToAudioSystem(user, soundHandler.oscEndPoint);
+                    }
+                }
+            }
+        }
+    }
+
 
     public void ShowConnexionState(){
         if (osc.initialized)

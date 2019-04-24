@@ -18,6 +18,8 @@ public class GameData
     public int runInLocal;
     public string OSC_ServerIP, OSC_LocalIP = "";
     public int OSC_ServerPort, OSC_ClientPort;
+    public string OSC_SoundHandlerIP ;
+    public int OSC_SoundHandlerPort ;
     public int DebugMode;
     public int keepNamesVisibleForPlayers;
 }
@@ -59,6 +61,7 @@ public class GameEngine : MonoBehaviour
 
     private JSONLoader jSONLoader;
     public UIHandler uiHandler;
+    public SoundHandler soundHandler;
     public GameData gameData;
     
     public GameObject playerPrefab, viewerPrefab, ViveSystemPrefab, LongTrailsPrefab, ShortTrailsPrefab;
@@ -70,7 +73,7 @@ public class GameEngine : MonoBehaviour
     public AppState appState;
     public int currentVisualisationMode = 1; // justHands
     private OSCEndPoint serverEndpoint;
-    public bool useVRHeadset, keepNamesVisibleForPlayers;
+    public bool useVRHeadset, keepNamesVisibleForPlayers, audioDeviceListening;
     public string viveSystemName = "[CameraRig]", 
         viveHeadName  = "Camera", 
         viveLeftHandName = "Controller (left)", 
@@ -81,13 +84,13 @@ public class GameEngine : MonoBehaviour
     public int targetFrameRate = 60;
     private float tmpTime;
 
-
     private void Start()
     {
         InitApplication();
-
+        
         Application.targetFrameRate = targetFrameRate;
-        InvokeRepeating("TimedUpdate", 0.5f, 1f / targetFrameRate);
+        InvokeRepeating("TimedUpdate", 0.5f, 1f / targetFrameRate);  
+          
     }
 
 
@@ -119,6 +122,9 @@ public class GameEngine : MonoBehaviour
             uiHandler.OSCServerAddressInput.text = gameData.OSC_ServerIP;
             gameData.OSC_LocalIP = CheckIp();
         }
+
+        soundHandler.oscEndPoint.ip = gameData.OSC_SoundHandlerIP;
+        soundHandler.oscEndPoint.remotePort = gameData.OSC_SoundHandlerPort;
 
         // adjust user's parameters
         if(useVRHeadset)
@@ -190,8 +196,7 @@ public class GameEngine : MonoBehaviour
             print("OSC Server - Connexion initiation");
             appState = AppState.Running;
             networkManager.ShowConnexionState();
-            canvasHandler.ChangeCanvas("serverCanvas");
-
+            canvasHandler.ChangeCanvas("serverCanvas");     
         }
 
         else if (userNetworkType == UserNetworkType.Client)
@@ -236,9 +241,6 @@ public class GameEngine : MonoBehaviour
         {
             UpdateGame();
         }
-
-       //Debug.Log(Time.time*1000 - tmpTime);
-       //tmpTime = Time.time * 1000;
     }
 
 
@@ -250,6 +252,7 @@ public class GameEngine : MonoBehaviour
         }
         else if(userNetworkType == UserNetworkType.Server){
             networkManager.SendAllPositionsToClients(usersPlaying);
+            if(audioDeviceListening) networkManager.SendAllPositionsToAudioSystem(usersPlaying, soundHandler);
         }
         if(performanceRecorder.isRecording && !performanceRecorder.isPaused) performanceRecorder.SaveData(usersPlaying);
         ActualizePlayersPositions(); 
