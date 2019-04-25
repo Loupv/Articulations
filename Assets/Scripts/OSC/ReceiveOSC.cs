@@ -21,18 +21,22 @@ public class ReceiveOSC : MonoBehaviour {
             osc.SetAddressHandler("/AddPlayerToGame", AddPlayerToGame);
             osc.SetAddressHandler("/RemovePlayerFromGame", RemovePlayerFromGame);
             osc.SetAddressHandler("/VisualisationModeChange", VisualisationModeChange);
-            osc.SetAddressHandler("/PlayerPosition", UpdatePartnerPosition);
+            osc.SetAddressHandler("/PlayerData", UpdatePartnerPosition);
+            //osc.SetAddressHandler("/AudioData", DebugTemp); // debugtest
 
         }
         if (userNetworkType == UserNetworkType.Server)
         {
             osc.SetAddressHandler("/PlayerRegistrationRequest", RegistationRequestedFromPlayer);
             osc.SetAddressHandler("/ClientHasLeft", ErasePlayerRequest);
-            osc.SetAddressHandler("/ClientPlayerPosition", UpdateClientPosition);
+            osc.SetAddressHandler("/ClientPlayerData", UpdateClientPosition);
         }
 
     }
 	
+    void DebugTemp(OscMessage message){
+        Debug.Log(message);
+    }
 
 
 /*

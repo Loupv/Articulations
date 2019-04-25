@@ -74,7 +74,7 @@ public class SendOSC : MonoBehaviour {
         if (osc.initialized)
         {   
             message = new OscMessage();
-            message.address =  "/PlayerPosition";
+            message.address =  "/PlayerData";
             message.values.Add(userData._ID);
 
             if(playerPart == 0){ 
@@ -122,9 +122,9 @@ public class SendOSC : MonoBehaviour {
 
             for(int i = 0; i < 3; i++){
 
-            message = new OscMessage();
-            message.address =  "/PlayerPosition";
-            message.values.Add(userData._ID);
+                message = new OscMessage();
+                message.address =  "/AudioData";
+                message.values.Add(userData._ID);
 
                 if(i == 0){ 
                     pos = userData.head.transform.position;
@@ -267,7 +267,7 @@ public class SendOSC : MonoBehaviour {
         if (osc.initialized)
         {   
             message = new OscMessage();
-            message.address =  "/ClientPlayerPosition";
+            message.address =  "/ClientPlayerData";
             message.values.Add(userData._ID);
 
             if(playerPart == 0){ 

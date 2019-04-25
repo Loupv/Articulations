@@ -2,6 +2,8 @@
 
 Prio1 :
 - UI VR probleme
+- pouvoir rejouer une performance CSV
+- 
 
 Prio2 :
 - repères visuels du monde réel
@@ -24,7 +26,6 @@ Prio4
 - Viz - fusion avec l'autre ? (toile d'araignée, fils,)
 - Sauver la trace
 - avoir plein de sphères qui bougent
-
 
 
 
