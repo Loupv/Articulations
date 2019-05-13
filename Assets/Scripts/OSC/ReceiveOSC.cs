@@ -22,6 +22,8 @@ public class ReceiveOSC : MonoBehaviour {
             osc.SetAddressHandler("/RemovePlayerFromGame", RemovePlayerFromGame);
             osc.SetAddressHandler("/VisualisationModeChange", VisualisationModeChange);
             osc.SetAddressHandler("/PlayerData", UpdatePartnerPosition);
+            osc.SetAddressHandler("/TrailsParameterChange", UpdateTrailsVisualisation);
+            
             //osc.SetAddressHandler("/AudioData", DebugTemp); // debugtest
 
         }
@@ -193,6 +195,14 @@ public class ReceiveOSC : MonoBehaviour {
         Debug.Log("Received : " + message);
         Debug.Log("HAAAAAAAAAAAAAAA");
         gameEngine.KillApp();
+    }
+
+
+    void UpdateTrailsVisualisation(OscMessage message){
+        //
+        int valueId = message.GetInt(0);
+        float value = message.GetFloat(1);
+        gameEngine.ChangeVisualisationParameter(valueId, value);
     }
 
 }

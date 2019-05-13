@@ -229,6 +229,23 @@ public class SendOSC : MonoBehaviour {
 
     }
 
+    public void SendTrailValueChange(int valueId, float value, List<UserData> usersPlaying){
+        
+        foreach (UserData user in usersPlaying)
+        {
+            if(user._ID != gameEngine._user._ID){
+                osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
+                osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
+                message = new OscMessage();
+                message.address = "/TrailsParameterChange";
+                message.values.Add(valueId);
+                message.values.Add(value);
+                osc.Send(message);
+                Debug.Log("Sending : " + message);
+            }  
+        }
+    }
+
 
 /*
     -------------------------------------

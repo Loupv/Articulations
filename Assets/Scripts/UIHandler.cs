@@ -16,6 +16,8 @@ public class UIHandler : MonoBehaviour
     public int OSCServerPort, OSCClientPort;
     public Sprite selectedButtonSprite, normalButtonSprite, lockedButtonSprite;
     public Toggle sendToAudioDeviceToggle;
+    public Slider trailsDecaySlider;
+    public Text trailTime;
 
 
     void Start(){
@@ -144,6 +146,13 @@ public class UIHandler : MonoBehaviour
 
     public void ToggleSendToAudioHandler(){
         gameEngine.sendToAudioDevice = !gameEngine.sendToAudioDevice;
+    }
+
+    // Is a server function // triggered by UI button
+    public void TrailsDecaySliderChanged(int id){
+        gameEngine.osc.sender.SendTrailValueChange(id, trailsDecaySlider.value, gameEngine.usersPlaying);
+        gameEngine.ChangeVisualisationParameter(id, trailsDecaySlider.value); // update also for server visualisation
+        trailTime.text = "TrailTime : "+trailsDecaySlider.value;
     }
 
 }

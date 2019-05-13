@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6239542035501982456}
   m_Layer: 0
   m_Name: HandParticleSystem2
-  m_TagString: Untagged
+  m_TagString: HandParticleSystem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

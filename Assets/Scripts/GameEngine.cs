@@ -358,6 +358,15 @@ public class GameEngine : MonoBehaviour
         currentVisualisationMode = mode;
     }
 
+    public void ChangeVisualisationParameter(int valueId, float value){
+            
+        if(valueId == 0){
+            foreach(GameObject hand in GameObject.FindGameObjectsWithTag("HandParticleSystem")){
+                hand.GetComponent<TrailRenderer>().time = value;
+            }
+        }
+    }
+
 
     public int ReturnPlayerRank(int n){ // n may be equal to 1 or 2 (player1 or 2) 
         int r = 0;
