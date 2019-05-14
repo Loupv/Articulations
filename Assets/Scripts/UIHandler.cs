@@ -169,4 +169,10 @@ public class UIHandler : MonoBehaviour
         trailTime.text = "TrailTime : "+trailsDecaySlider.value;
     }
 
+
+    public void CalibratePlayersPosition(){
+        
+    }
+
+
 }
