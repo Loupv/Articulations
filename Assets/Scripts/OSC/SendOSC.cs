@@ -255,7 +255,7 @@ public class SendOSC : MonoBehaviour {
 
     public void RequestUserRegistation(UserData userData, UserRole userRole)
     {
-        int isPlayer = 0;
+        int isPlayer = 0; // 0 is always viewer
         if(userRole == UserRole.Player) isPlayer = 1; 
 
         if (osc.initialized)
@@ -271,7 +271,7 @@ public class SendOSC : MonoBehaviour {
             osc.OscPacketIO.RemoteHostName = userData.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = userData.oscEndPoint.remotePort;
             osc.Send(message);
-            if(gameEngine.debugMode) Debug.Log("Sending : " + message+ ", "+userData.oscEndPoint.remotePort+", "+userData.oscEndPoint.ip);
+            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
         }
     }
 
@@ -323,9 +323,9 @@ public class SendOSC : MonoBehaviour {
     -------------------------------------
  */
 
-    public void SendQuitMessage(UserNetworkType userNetworkType)
+    public void SendQuitMessage(UserRole userRole)
     {
-        if (userNetworkType == UserNetworkType.Client)
+        if (userRole == UserRole.Player || userRole == UserRole.Viewer)
         {
             osc.OscPacketIO.RemoteHostName = gameEngine.osc.outIP;
             osc.OscPacketIO.RemotePort = gameEngine.osc.outPort;
@@ -335,7 +335,7 @@ public class SendOSC : MonoBehaviour {
             osc.Send(message);
             if(gameEngine.debugMode) Debug.Log("Sending : " + message);
         }
-        else if (userNetworkType == UserNetworkType.Server)
+        else if (userRole == UserRole.Server)
         {
             foreach(UserData user in gameEngine.usersPlaying){
                 osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;

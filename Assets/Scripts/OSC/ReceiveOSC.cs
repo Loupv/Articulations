@@ -8,13 +8,13 @@ public class ReceiveOSC : MonoBehaviour {
     public GameEngine gameEngine;
     public SendOSC sender;
     public OSC osc;
-    public UserNetworkType userNetworkType;
+    public UserRole userRole;
 
     // Use this for initialization
     public void StartListening()
     {
 
-        if (userNetworkType == UserNetworkType.Client)
+        if (gameEngine._userRole == UserRole.Player || gameEngine._userRole == UserRole.Viewer)
         {
             osc.SetAddressHandler("/RegistrationConfirmed", RegistrationConfirmed);
             osc.SetAddressHandler("/ServerShutDown", GoInsane);
@@ -27,7 +27,7 @@ public class ReceiveOSC : MonoBehaviour {
             //osc.SetAddressHandler("/AudioData", DebugTemp); // debugtest
 
         }
-        if (userNetworkType == UserNetworkType.Server)
+        if (userRole == UserRole.Server)
         {
             osc.SetAddressHandler("/PlayerRegistrationRequest", RegistationRequestedFromPlayer);
             osc.SetAddressHandler("/ClientHasLeft", ErasePlayerRequest);
@@ -53,7 +53,7 @@ public class ReceiveOSC : MonoBehaviour {
     {
         if(gameEngine.debugMode) Debug.Log("Received : " + message);
 
-        if (gameEngine.userNetworkType == UserNetworkType.Server)
+        if (gameEngine._userRole == UserRole.Server)
         {
             int playerID = message.GetInt(0);
 
@@ -166,7 +166,7 @@ public class ReceiveOSC : MonoBehaviour {
 
         string playerName = message.GetString(2);
         
-        if (gameEngine.userNetworkType == UserNetworkType.Client && playerID != gameEngine._user._ID)
+        if ((gameEngine._userRole == UserRole.Player || gameEngine._userRole == UserRole.Viewer) && playerID != gameEngine._user._ID)
         {
             Debug.Log(playerID+" vs "+gameEngine._user._ID);
             gameEngine.AddOtherPlayer(playerID, playerName, "null", -1, userRole);

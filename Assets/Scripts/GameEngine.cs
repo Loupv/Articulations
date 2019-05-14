@@ -24,14 +24,9 @@ public class GameData
     public int keepNamesVisibleForPlayers;
 }
 
-public enum UserNetworkType
-{
-    Server, Client
-}
-
 public enum UserRole
 {
-    Player, Viewer
+    Server, Player, Viewer
 }
 
 public enum AppState
@@ -68,7 +63,6 @@ public class GameEngine : MonoBehaviour
     public List<GameObject> POVs;
 
     public PerformanceRecorder performanceRecorder;
-    public UserNetworkType userNetworkType;
     public UserRole _userRole;
     public AppState appState;
     public int currentVisualisationMode = 1; // justHands
@@ -104,7 +98,7 @@ public class GameEngine : MonoBehaviour
         uiHandler = GetComponentInChildren<UIHandler>();
         canvasHandler.ChangeCanvas("initCanvas");
 
-        userNetworkType = UserNetworkType.Server;
+        _userRole = UserRole.Server;
 
         jSONLoader = new JSONLoader();
         gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
@@ -152,7 +146,7 @@ public class GameEngine : MonoBehaviour
             _userGameObject = Instantiate(viewerPrefab);
             uiHandler.viewerController = _userGameObject.GetComponent<ViewerController>();
         }
-        if (userNetworkType == UserNetworkType.Server)
+        if (_userRole == UserRole.Server)
         {
             useVRHeadset = false;
         }
@@ -182,12 +176,12 @@ public class GameEngine : MonoBehaviour
             
         }
 
-        osc.receiver.userNetworkType = userNetworkType;
+        osc.receiver.userRole = _userRole;
         
         serverEndpoint.ip = gameData.OSC_ServerIP;
         serverEndpoint.remotePort = gameData.OSC_ClientPort;
 
-        if (userNetworkType == UserNetworkType.Server)
+        if (_userRole == UserRole.Server)
         {
             osc.inPort = gameData.OSC_ServerPort;
             osc.outPort = gameData.OSC_ClientPort;
@@ -199,7 +193,7 @@ public class GameEngine : MonoBehaviour
             canvasHandler.ChangeCanvas("serverCanvas");     
         }
 
-        else if (userNetworkType == UserNetworkType.Client)
+        else if ((_userRole == UserRole.Player || _userRole == UserRole.Viewer))
         {
             osc.inPort = gameData.OSC_ClientPort;
             osc.outPort = gameData.OSC_ServerPort;
@@ -217,7 +211,7 @@ public class GameEngine : MonoBehaviour
     // when server has agreed for client registration
     public void EndStartProcess(int playerID, int requestedPort, int visualisationMode)
     {
-        if (userNetworkType == UserNetworkType.Client)
+        if (_userRole == UserRole.Player || _userRole == UserRole.Viewer)
         {
             ChangeVisualisationMode(visualisationMode);
             Debug.Log(playerID+"registered on port "+requestedPort);
@@ -239,7 +233,7 @@ public class GameEngine : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Tab) && appState == AppState.Initializing)
         {
             int t;
-            if(userNetworkType == UserNetworkType.Server) t = 1;
+            if(_userRole == UserRole.Server) t = 1;
             else t= 0;
             uiHandler.SetPlayerNetworkType(t);
         }
@@ -256,10 +250,10 @@ public class GameEngine : MonoBehaviour
 
     public void UpdateGame()
     {
-        if(userNetworkType == UserNetworkType.Client){
+        if(_userRole == UserRole.Player || _userRole == UserRole.Viewer){
             if(_user._userRole == UserRole.Player) networkManager.SendOwnPosition(_user, serverEndpoint); // don't send if you're viewer
         }
-        else if(userNetworkType == UserNetworkType.Server){
+        else if(_userRole == UserRole.Server){
             networkManager.SendAllPositionsToClients(usersPlaying);
             if(sendToAudioDevice) networkManager.SendAllPositionsToAudioSystem(usersPlaying, soundHandler);
         }
@@ -391,11 +385,11 @@ public class GameEngine : MonoBehaviour
 
     public void OnApplicationQuit()
     {
-        if (userNetworkType == UserNetworkType.Client && osc.initialized)
-            osc.sender.SendQuitMessage(userNetworkType);
-        else if (userNetworkType == UserNetworkType.Server && osc.initialized){
+        if ((_userRole == UserRole.Player || _userRole == UserRole.Viewer) && osc.initialized)
+            osc.sender.SendQuitMessage(_userRole);
+        else if (_userRole == UserRole.Server && osc.initialized){
             if(performanceRecorder.isRecording) performanceRecorder.SaveTofile();
-            osc.sender.SendQuitMessage(userNetworkType); // TODO adapt if server
+            osc.sender.SendQuitMessage(_userRole); // TODO adapt if server
         }
         
 
