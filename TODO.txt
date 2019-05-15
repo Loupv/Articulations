@@ -3,14 +3,18 @@
 Prio1 :
 - UI VR probleme
 - pouvoir rejouer une performance CSV
-- 
+- désactiver colliders sur les spheres si projet déployé (ou si ce n'est pas le current player)
+- server ne doit pas avoir de camera scene ?
+- bouton calibration -> les participants se retrouvent à un mètre l'un de l'autre quelle que soit leur position réelle -> replacer l'ensemble du monde au centre des deux personnes - on veut que les danseurs se placent à l'endroit où ils se retrouveront l'un en face de l'autre, avec l'environnement aligné. On doit donc altérer la position de l'autre et la position de l'environnement - on doit enregistrer le gap par rapport au point 0 mais les capteur vive doivent rester aligner -> décaler pour chaque participant à la fois le monde et les partenaires. Le serveur doit donc connaitre la position relative de tout le monde et envoyer un ordre de calibration de l'environnement lors du clic sur le bouton calibration. Chaque participant reste physiquement aligné avec l'ensemble de l'environnement, tout est par contre décalé par le serveur. Mettre des repères au sol symbolisant la position de départ et un flash lors de la calibration ?
+Calibrate enregistre donc toutes les positions actuelles des danseurs, et calcule la position centrale où ils doivent se retrouver pour être l'un en face de l'autre. Il store pour chaque danseur ce gap, et envoie à tout le monde la position adaptée (gap du joueur adverse + gap du joueur cible !). Chaque joueur ne prenant pas en compte 
+- penser à enregistrer la position relative et non la position réelle dans les csv. 
+
 
 Prio2 :
 - repères visuels du monde réel
 - enregistrement des noms des participants associés à leurs IDs
-- mettre un champ pour renseigner les prénoms des participants au démarrage
 - Trail texture fumée
-- pouvoir éditer le temps des trails
+
 
 Prio3 :
 - fsync ?
@@ -30,6 +34,8 @@ Prio4
 
 
 Done:
+- mettre un champ pour renseigner les prénoms des participants au démarrage
+- pouvoir éditer le temps des trails
 - mettre le nom au dessus de la tête pour les viewers
 - ajouter les messages OSC d'orientation de la tête
 - Faire des gros boutons au début pour paramétrer vite le client/serveur et viewer/player

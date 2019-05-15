@@ -7,7 +7,7 @@ public class UIHandler : MonoBehaviour
 {
 
     public GameEngine gameEngine;
-    public Button networkButtonChoice1, networkButtonChoice2, roleButtonChoice1, roleButtonChoice2;
+    public Button networkButtonChoice1, networkButtonChoice2, networkButtonChoice3;
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
     public ViewerController viewerController;
     public InputField OSCServerAddressInput, PlayerName;
@@ -16,6 +16,8 @@ public class UIHandler : MonoBehaviour
     public int OSCServerPort, OSCClientPort;
     public Sprite selectedButtonSprite, normalButtonSprite, lockedButtonSprite;
     public Toggle sendToAudioDeviceToggle;
+    public Slider trailsDecaySlider;
+    public Text trailTime;
 
 
     void Start(){
@@ -29,31 +31,45 @@ public class UIHandler : MonoBehaviour
     {
         if (i == 0) // server
         {
-            gameEngine.userNetworkType = UserNetworkType.Server;
+            gameEngine._userRole = UserRole.Server;
             if (clientObjectParent != null) clientObjectParent.gameObject.SetActive(false);
-            SetPlayerRole(1);
+            //SetPlayerRole(1);
             networkButtonChoice1.image.sprite = selectedButtonSprite;
             networkButtonChoice2.image.sprite = normalButtonSprite;
+            networkButtonChoice3.image.sprite = normalButtonSprite;
             clientObjectParent.gameObject.SetActive(false);
             //serverObjectParent.gameObject.SetActive(true);
-            userRoleButton.gameObject.SetActive(false);
+            //userRoleButton.gameObject.SetActive(false);
 
         }
         else if (i == 1) // client
         {
-            gameEngine.userNetworkType = UserNetworkType.Client;
+            gameEngine._userRole = UserRole.Player;
             if(clientObjectParent != null) clientObjectParent.gameObject.SetActive(true);
-            SetPlayerRole(0);
+            //SetPlayerRole(0);
             networkButtonChoice1.image.sprite = normalButtonSprite;
             networkButtonChoice2.image.sprite = selectedButtonSprite;
+            networkButtonChoice3.image.sprite = normalButtonSprite;
             clientObjectParent.gameObject.SetActive(true);
             //serverObjectParent.gameObject.SetActive(false);
-            userRoleButton.gameObject.SetActive(true);
+            //userRoleButton.gameObject.SetActive(true);
+        }
+        else if (i == 2) // client
+        {
+            gameEngine._userRole = UserRole.Viewer;
+            if(clientObjectParent != null) clientObjectParent.gameObject.SetActive(true);
+            //SetPlayerRole(0);
+            networkButtonChoice1.image.sprite = normalButtonSprite;
+            networkButtonChoice2.image.sprite = normalButtonSprite;
+            networkButtonChoice3.image.sprite = selectedButtonSprite;
+            clientObjectParent.gameObject.SetActive(true);
+            //serverObjectParent.gameObject.SetActive(false);
+            //userRoleButton.gameObject.SetActive(true);
         }
     }
 
 
-
+/* 
     public void SetPlayerRole(int i) // 0 for player, 1 for viewer
     {
         if (i == 0) // player
@@ -69,7 +85,7 @@ public class UIHandler : MonoBehaviour
             roleButtonChoice1.image.sprite = normalButtonSprite;
             roleButtonChoice2.image.sprite = selectedButtonSprite;
         }
-    }
+    }*/
 
 
     public void StartButtonPressed()
@@ -145,5 +161,18 @@ public class UIHandler : MonoBehaviour
     public void ToggleSendToAudioHandler(){
         gameEngine.sendToAudioDevice = !gameEngine.sendToAudioDevice;
     }
+
+    // Is a server function // triggered by UI button
+    public void TrailsDecaySliderChanged(int id){
+        gameEngine.osc.sender.SendTrailValueChange(id, trailsDecaySlider.value, gameEngine.usersPlaying);
+        gameEngine.ChangeVisualisationParameter(id, trailsDecaySlider.value); // update also for server visualisation
+        trailTime.text = "TrailTime : "+trailsDecaySlider.value;
+    }
+
+
+    public void CalibratePlayersPosition(){
+        
+    }
+
 
 }
