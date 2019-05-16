@@ -8,6 +8,7 @@ TagManager:
   - UIHandler
   - ParticleSystem
   - HandParticleSystem
+  - UserManager
   layers:
   - Default
   - TransparentFX

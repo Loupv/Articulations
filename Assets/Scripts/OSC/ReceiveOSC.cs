@@ -6,6 +6,7 @@ public class ReceiveOSC : MonoBehaviour {
 
     //public OSC osc;
     public GameEngine gameEngine;
+    public UserManager userManager;
     public SendOSC sender;
     public OSC osc;
     public UserRole userRole;
@@ -67,12 +68,12 @@ public class ReceiveOSC : MonoBehaviour {
 
             string playerName = message.GetString(4);
 
-            bool portAvailable = gameEngine.networkManager.CheckPortAvailability(gameEngine.usersPlaying, requestedPort);
+            bool portAvailable = gameEngine.networkManager.CheckPortAvailability(userManager.usersPlaying, requestedPort);
 
             if (portAvailable || gameEngine.gameData.runInLocal == 0)
             {
-                UserData user = gameEngine.AddOtherPlayer(playerID, playerName, playerIP, requestedPort, role);
-                sender.AddNewPlayerToClientsGames(playerID, playerName, gameEngine.usersPlaying, isPlayer);
+                UserData user = userManager.AddOtherPlayer(gameEngine, playerID, playerName, playerIP, requestedPort, role);
+                sender.AddNewPlayerToClientsGames(playerID, playerName, userManager.usersPlaying, isPlayer);
                 sender.SendRegistrationConfirmation(user);
             }
             else sender.RefuseRegistration(playerIP, requestedPort);
@@ -98,8 +99,8 @@ public class ReceiveOSC : MonoBehaviour {
 
         if (playerID != gameEngine._user._ID)
         {
-            gameEngine.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
-            gameEngine.pendingRotationsActualizations[playerID + playerPart] = new Quaternion(xRot, yRot, zRot, wRot);
+            userManager.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
+            userManager.pendingRotationsActualizations[playerID + playerPart] = new Quaternion(xRot, yRot, zRot, wRot);
         }
     }
 
@@ -107,8 +108,8 @@ public class ReceiveOSC : MonoBehaviour {
     {
         if(gameEngine.debugMode) Debug.Log("Received : " + message);
         int playerID = message.GetInt(0);
-        gameEngine.ErasePlayer(playerID);
-        osc.sender.RemovePlayerInClientsGame(playerID, gameEngine.usersPlaying);
+        userManager.ErasePlayer(playerID);
+        osc.sender.RemovePlayerInClientsGame(playerID, userManager.usersPlaying);
     }
 
 
@@ -148,8 +149,8 @@ public class ReceiveOSC : MonoBehaviour {
 
         if (playerID != gameEngine._user._ID)
         {
-            gameEngine.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
-            gameEngine.pendingRotationsActualizations[playerID + playerPart] = new Quaternion(xRot, yRot, zRot, wRot);
+            userManager.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
+            userManager.pendingRotationsActualizations[playerID + playerPart] = new Quaternion(xRot, yRot, zRot, wRot);
         }
     }
 
@@ -169,7 +170,7 @@ public class ReceiveOSC : MonoBehaviour {
         if ((gameEngine._userRole == UserRole.Player || gameEngine._userRole == UserRole.Viewer) && playerID != gameEngine._user._ID)
         {
             Debug.Log(playerID+" vs "+gameEngine._user._ID);
-            gameEngine.AddOtherPlayer(playerID, playerName, "null", -1, userRole);
+            userManager.AddOtherPlayer(gameEngine, playerID, playerName, "null", -1, userRole);
         }
     }
 
@@ -178,14 +179,14 @@ public class ReceiveOSC : MonoBehaviour {
     {
         if(gameEngine.debugMode) Debug.Log("Received : " + message);
         int playerID = message.GetInt(0);
-        gameEngine.ErasePlayer(playerID);
+        userManager.ErasePlayer(playerID);
     }
 
     void VisualisationModeChange(OscMessage message){
         Debug.Log("Received : " + message);
         int mode = message.GetInt(0);
 
-        gameEngine.ChangeVisualisationMode(mode);
+        userManager.ChangeVisualisationMode(mode, gameEngine);
     }
 
  
@@ -202,7 +203,7 @@ public class ReceiveOSC : MonoBehaviour {
         //
         int valueId = message.GetInt(0);
         float value = message.GetFloat(1);
-        gameEngine.ChangeVisualisationParameter(valueId, value);
+        userManager.ChangeVisualisationParameter(valueId, value);
     }
 
 }

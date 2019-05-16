@@ -1526,9 +1526,9 @@ PrefabInstance:
       objectReference: {fileID: 667967430}
     - target: {fileID: 2266149140579104216, guid: 76cb6a4c86ff5491aa8a8120f2148f44,
         type: 3}
-      propertyPath: osc
+      propertyPath: userManager
       value: 
-      objectReference: {fileID: 1137383004}
+      objectReference: {fileID: 655950337}
     - target: {fileID: 1823618877182279855, guid: 76cb6a4c86ff5491aa8a8120f2148f44,
         type: 3}
       propertyPath: gameEngine
@@ -1536,14 +1536,9 @@ PrefabInstance:
       objectReference: {fileID: 667967430}
     - target: {fileID: 1823618877182279855, guid: 76cb6a4c86ff5491aa8a8120f2148f44,
         type: 3}
-      propertyPath: sender
+      propertyPath: userManager
       value: 
-      objectReference: {fileID: 1137383003}
-    - target: {fileID: 1823618877182279855, guid: 76cb6a4c86ff5491aa8a8120f2148f44,
-        type: 3}
-      propertyPath: osc
-      value: 
-      objectReference: {fileID: 1137383004}
+      objectReference: {fileID: 655950337}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76cb6a4c86ff5491aa8a8120f2148f44, type: 3}
 --- !u!1 &358874069
@@ -2701,6 +2696,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 652059166}
   m_CullTransparentMesh: 0
+--- !u!1 &655950335
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 655950336}
+  - component: {fileID: 655950337}
+  m_Layer: 0
+  m_Name: UserManager
+  m_TagString: UserManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &655950336
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 655950335}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 667967431}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &655950337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 655950335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58003915208300e469f55f3855f26a16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  usersPlaying: []
+  playerPrefab: {fileID: 6075620792603371976, guid: 10484b8557ffb4a049780c44fa624de4,
+    type: 3}
+  viewerPrefab: {fileID: 6075620792603371976, guid: c5732bc9e74ce8e4d9894a361334bf4b,
+    type: 3}
+  _userGameObject: {fileID: 0}
+  keepNamesVisibleForPlayers: 0
 --- !u!1 &667967429
 GameObject:
   m_ObjectHideFlags: 0
@@ -2733,8 +2778,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvasHandler: {fileID: 667967432}
   networkManager: {fileID: 504376291}
-  usersPlaying: []
-  _userGameObject: {fileID: 0}
+  userManager: {fileID: 655950337}
   _user: {fileID: 0}
   osc: {fileID: 1137383004}
   uiHandler: {fileID: 2107918503}
@@ -2749,10 +2793,6 @@ MonoBehaviour:
     OSC_SoundHandlerPort: 0
     DebugMode: 0
     keepNamesVisibleForPlayers: 0
-  playerPrefab: {fileID: 6075620792603371976, guid: 10484b8557ffb4a049780c44fa624de4,
-    type: 3}
-  viewerPrefab: {fileID: 6075620792603371976, guid: c5732bc9e74ce8e4d9894a361334bf4b,
-    type: 3}
   ViveSystemPrefab: {fileID: 146900, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
   LongTrailsPrefab: {fileID: 7632359022049117597, guid: 35349948085509847b8d11f1ced88d3e,
     type: 3}
@@ -2765,13 +2805,12 @@ MonoBehaviour:
   appState: 0
   currentVisualisationMode: 1
   useVRHeadset: 0
-  keepNamesVisibleForPlayers: 0
   sendToAudioDevice: 0
   viveSystemName: '[CameraRig](Clone)'
   viveHeadName: Camera
   viveLeftHandName: Controller (left)
   viveRightHandName: Controller (right)
-  debugMode: 0
+  debugMode: 1
   debugPrefab: {fileID: 2656459893160420101, guid: fd1ed9442d1b4a94b8a9ec29aeceaebc,
     type: 3}
   targetFrameRate: 60
@@ -2791,6 +2830,7 @@ Transform:
   - {fileID: 1899021881}
   - {fileID: 504376290}
   - {fileID: 28622095}
+  - {fileID: 655950336}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5465,18 +5505,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 339987530}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1137383003 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2266149140579104216, guid: 76cb6a4c86ff5491aa8a8120f2148f44,
-    type: 3}
-  m_PrefabInstance: {fileID: 339987530}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f28fecdbb95d84bf9a258d7aa4cae345, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1137383004 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 744700430079787049, guid: 76cb6a4c86ff5491aa8a8120f2148f44,
@@ -9551,6 +9579,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameEngine: {fileID: 667967430}
+  userManager: {fileID: 655950337}
   networkButtonChoice1: {fileID: 1202137671}
   networkButtonChoice2: {fileID: 522398102}
   networkButtonChoice3: {fileID: 477849578}

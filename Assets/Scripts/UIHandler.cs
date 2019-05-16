@@ -7,6 +7,7 @@ public class UIHandler : MonoBehaviour
 {
 
     public GameEngine gameEngine;
+    public UserManager userManager;
     public Button networkButtonChoice1, networkButtonChoice2, networkButtonChoice3;
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
     public ViewerController viewerController;
@@ -24,6 +25,21 @@ public class UIHandler : MonoBehaviour
 
         if(sendToAudioDeviceToggle.isOn) gameEngine.sendToAudioDevice = true;
         else gameEngine.sendToAudioDevice = false;
+
+    }
+
+    public GameData AdjustBasicUIParameters(GameData gameData, string tmpIp){
+
+        if (gameData.runInLocal == 1) {
+            OSCServerAddressInput.text = "127.0.0.1";
+            gameData.OSC_LocalIP = "127.0.0.1";
+            gameData.OSC_ClientPort = UnityEngine.Random.Range(5555,8888);
+        }
+        else {
+            OSCServerAddressInput.text = gameData.OSC_ServerIP;
+            gameData.OSC_LocalIP = tmpIp;
+        }
+        return gameData;
 
     }
 
@@ -95,11 +111,13 @@ public class UIHandler : MonoBehaviour
 
 
     public void ChangeVisualizationMode(int i){
-        gameEngine.osc.sender.SendVisualisationChange(i, gameEngine.usersPlaying);
-        gameEngine.ChangeVisualisationMode(i);
+        gameEngine.osc.sender.SendVisualisationChange(i, userManager.usersPlaying);
+        userManager.ChangeVisualisationMode(i, gameEngine);
     }
 
     
+
+
     public void ActualizeGizmos(bool isRecording, bool isPaused){
         if(isRecording && !isPaused){
             recordGizmo.SetActive(true);
@@ -164,8 +182,8 @@ public class UIHandler : MonoBehaviour
 
     // Is a server function // triggered by UI button
     public void TrailsDecaySliderChanged(int id){
-        gameEngine.osc.sender.SendTrailValueChange(id, trailsDecaySlider.value, gameEngine.usersPlaying);
-        gameEngine.ChangeVisualisationParameter(id, trailsDecaySlider.value); // update also for server visualisation
+        gameEngine.osc.sender.SendTrailValueChange(id, trailsDecaySlider.value, userManager.usersPlaying);
+        userManager.ChangeVisualisationParameter(id, trailsDecaySlider.value); // update also for server visualisation
         trailTime.text = "TrailTime : "+trailsDecaySlider.value;
     }
 

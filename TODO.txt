@@ -2,6 +2,7 @@
 
 Prio1 :
 - UI VR probleme
+- désactiver le casque en mode serveur (userVRHeadset marche pas)
 - pouvoir rejouer une performance CSV
 - désactiver colliders sur les spheres si projet déployé (ou si ce n'est pas le current player)
 - server ne doit pas avoir de camera scene ?
@@ -14,6 +15,7 @@ Prio2 :
 - repères visuels du monde réel
 - enregistrement des noms des participants associés à leurs IDs
 - Trail texture fumée
+- Network manager ne gère que des peers, usermanager gère les positions et les gameobjects, get/set pour communiquer l'un avec l'autre
 
 
 Prio3 :

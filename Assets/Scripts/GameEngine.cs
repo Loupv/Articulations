@@ -42,11 +42,9 @@ public class GameEngine : MonoBehaviour
     public CanvasHandler canvasHandler;
     public NetworkManager networkManager;
 
-    public Dictionary<string, Vector3> pendingPositionsActualizations;
-    public Dictionary<string, Quaternion> pendingRotationsActualizations;
-    public List<UserData> usersPlaying;
-    [HideInInspector]
-    public GameObject _userGameObject;
+    public UserManager userManager;
+
+    
     [HideInInspector]
     public UserData _user;
 
@@ -59,15 +57,15 @@ public class GameEngine : MonoBehaviour
     public SoundHandler soundHandler;
     public GameData gameData;
     
-    public GameObject playerPrefab, viewerPrefab, ViveSystemPrefab, LongTrailsPrefab, ShortTrailsPrefab;
+    public GameObject ViveSystemPrefab, LongTrailsPrefab, ShortTrailsPrefab;
     public List<GameObject> POVs;
 
     public PerformanceRecorder performanceRecorder;
     public UserRole _userRole;
     public AppState appState;
     public int currentVisualisationMode = 1; // justHands
-    private OSCEndPoint serverEndpoint;
-    public bool useVRHeadset, keepNamesVisibleForPlayers, sendToAudioDevice;
+    
+    public bool useVRHeadset, sendToAudioDevice;
     public string viveSystemName = "[CameraRig]", 
         viveHeadName  = "Camera", 
         viveLeftHandName = "Controller (left)", 
@@ -80,78 +78,56 @@ public class GameEngine : MonoBehaviour
 
     private void Start()
     {
-        InitApplication();
         
         Application.targetFrameRate = targetFrameRate;
-        InvokeRepeating("TimedUpdate", 0.5f, 1f / targetFrameRate);  
-          
+        InitApplication();
+        InvokeRepeating("TimedUpdate", 0.5f, 1f / targetFrameRate);    
     }
 
 
     // The very start of the program
     public void InitApplication()
     {
+
         Screen.fullScreen = false;
         appState = AppState.Initializing;
         
         canvasHandler = GetComponent<CanvasHandler>();
         uiHandler = GetComponentInChildren<UIHandler>();
-        canvasHandler.ChangeCanvas("initCanvas");
-
-        _userRole = UserRole.Server;
-
         jSONLoader = new JSONLoader();
-        gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
 
-        pendingPositionsActualizations = new Dictionary<string, Vector3>();
-        pendingRotationsActualizations = new Dictionary<string, Quaternion>();
         
-        if (gameData.runInLocal == 1) {
-            uiHandler.OSCServerAddressInput.text = "127.0.0.1";
-            gameData.OSC_LocalIP = "127.0.0.1";
-            
-            gameData.OSC_ClientPort = UnityEngine.Random.Range(5555,8888);
-        }
-        else {
-            uiHandler.OSCServerAddressInput.text = gameData.OSC_ServerIP;
-            gameData.OSC_LocalIP = CheckIp();
-        }
+        canvasHandler.ChangeCanvas("initCanvas");
+        _userRole = UserRole.Server; // base setting
+        
+        gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
+        gameData = uiHandler.AdjustBasicUIParameters(gameData, CheckIp()); // change UI and gameData depending on actual conditions
 
-        soundHandler.oscEndPoint.ip = gameData.OSC_SoundHandlerIP;
-        soundHandler.oscEndPoint.remotePort = gameData.OSC_SoundHandlerPort;
+
+        userManager.keepNamesVisibleForPlayers = (gameData.keepNamesVisibleForPlayers == 1);
+
+        soundHandler.Init(gameData.OSC_SoundHandlerIP, gameData.OSC_SoundHandlerPort);
+
 
         // adjust user's parameters
-        if(useVRHeadset)
-                uiHandler.SetPlayerNetworkType(1);
-        else 
-        uiHandler.SetPlayerNetworkType(0);
+        if(useVRHeadset) uiHandler.SetPlayerNetworkType(1);
+        else uiHandler.SetPlayerNetworkType(0);
         
-        keepNamesVisibleForPlayers = (gameData.keepNamesVisibleForPlayers == 1);
 
         // do we print sent and received messages
         if(gameData.DebugMode == 1){
-             Instantiate(debugPrefab);
-             debugMode = true;
+            Instantiate(debugPrefab);
+            debugMode = true;
         }
 
     }
+
 
     // Start the performance when button's pressed
     public void StartGame()
     {
         int ID = UnityEngine.Random.Range(0, 10000); //TODO remplacer par le port
 
-        if (_userRole == UserRole.Player) _userGameObject = Instantiate(playerPrefab);
-        else  {
-            _userGameObject = Instantiate(viewerPrefab);
-            uiHandler.viewerController = _userGameObject.GetComponent<ViewerController>();
-        }
-        if (_userRole == UserRole.Server)
-        {
-            useVRHeadset = false;
-        }
-
-        _user = _userGameObject.GetComponent<UserData>();
         string tmpIp;
         if(gameData.runInLocal == 1) tmpIp = "127.0.0.1";
         else {
@@ -160,50 +136,29 @@ public class GameEngine : MonoBehaviour
         }
 
         string n = uiHandler.PlayerName.text;
+
+        if (_userRole == UserRole.Server) useVRHeadset = false;
+
+        _user = userManager.InitLocalUser(this, ID, n, tmpIp, gameData.OSC_ServerPort, true, _userRole);
+
+
+       
+
+        networkManager.InitNetwork(_userRole, gameData, uiHandler.OSCServerAddressInput.text);
         
-        _user.Init(this, ID, n, tmpIp, gameData.OSC_ServerPort, _userGameObject, true, _userRole);
-
-        if (_userRole == UserRole.Player)
-        {
-            usersPlaying.Add(_user);
-
-            pendingPositionsActualizations.Add(_user._ID + "Head", _user.head.transform.position);
-            pendingPositionsActualizations.Add(_user._ID + "LeftHand", _user.leftHand.transform.position);
-            pendingPositionsActualizations.Add(_user._ID + "RightHand", _user.rightHand.transform.position);
-            pendingRotationsActualizations.Add(_user._ID + "Head", _user.head.transform.rotation);
-            pendingRotationsActualizations.Add(_user._ID + "LeftHand", _user.leftHand.transform.rotation);
-            pendingRotationsActualizations.Add(_user._ID + "RightHand", _user.rightHand.transform.rotation);
-            
-        }
-
-        osc.receiver.userRole = _userRole;
-        
-        serverEndpoint.ip = gameData.OSC_ServerIP;
-        serverEndpoint.remotePort = gameData.OSC_ClientPort;
-
         if (_userRole == UserRole.Server)
         {
-            osc.inPort = gameData.OSC_ServerPort;
-            osc.outPort = gameData.OSC_ClientPort;
-            osc.outIP = uiHandler.OSCServerAddressInput.text;
-            osc.Init();
-            print("OSC Server - Connexion initiation");
             appState = AppState.Running;
             networkManager.ShowConnexionState();
             canvasHandler.ChangeCanvas("serverCanvas");     
         }
-
-        else if ((_userRole == UserRole.Player || _userRole == UserRole.Viewer))
+        else
         {
-            osc.inPort = gameData.OSC_ClientPort;
-            osc.outPort = gameData.OSC_ServerPort;
-            osc.outIP = uiHandler.OSCServerAddressInput.text;
-            osc.Init();
-            print("OSC Connexion initiation to " + osc.outIP + " : " + osc.outPort + "/" + osc.inPort);
             appState = AppState.WaitingForServer;
-            osc.sender.RequestUserRegistation(_user, _userRole);
+            networkManager.RegisterUSer(_user, _userRole);
             canvasHandler.ChangeCanvas("waitingCanvas");
         }
+
 
     }
 
@@ -213,7 +168,7 @@ public class GameEngine : MonoBehaviour
     {
         if (_userRole == UserRole.Player || _userRole == UserRole.Viewer)
         {
-            ChangeVisualisationMode(visualisationMode);
+            userManager.ChangeVisualisationMode(visualisationMode, this);
             Debug.Log(playerID+"registered on port "+requestedPort);
             appState = AppState.Running;
             networkManager.ShowConnexionState();
@@ -250,122 +205,32 @@ public class GameEngine : MonoBehaviour
 
     public void UpdateGame()
     {
-        if(_userRole == UserRole.Player || _userRole == UserRole.Viewer){
-            if(_user._userRole == UserRole.Player) networkManager.SendOwnPosition(_user, serverEndpoint); // don't send if you're viewer
+        
+        if(_userRole == UserRole.Player){
+            networkManager.SendOwnPosition(_user, networkManager.serverEndpoint); // don't send if you're viewer
         }
         else if(_userRole == UserRole.Server){
-            networkManager.SendAllPositionsToClients(usersPlaying);
-            if(sendToAudioDevice) networkManager.SendAllPositionsToAudioSystem(usersPlaying, soundHandler);
+            networkManager.SendAllPositionsToClients(userManager.usersPlaying);
+            if(sendToAudioDevice) networkManager.SendAllPositionsToAudioSystem(userManager.usersPlaying, soundHandler);
         }
-        if(performanceRecorder.isRecording && !performanceRecorder.isPaused) performanceRecorder.SaveData(usersPlaying);
-        ActualizePlayersPositions(); 
+
+        if(performanceRecorder.isRecording && !performanceRecorder.isPaused) performanceRecorder.SaveData(userManager.usersPlaying);
+        
+        userManager.ActualizePlayersPositions(_user); 
     }
 
 
 
 
-    // adjust players positions from stored one
-    public void ActualizePlayersPositions(){
-        int i = 0;
-        foreach (UserData user in usersPlaying)
-        {
-            if (user._ID != _user._ID && user._userRole == UserRole.Player) // if it's not actual instance's player
-            {
-                usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"];
-                usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"];
-                usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[user._ID + "RightHand"];
-                usersPlaying[i].head.transform.rotation = pendingRotationsActualizations[user._ID + "Head"];
-                usersPlaying[i].leftHand.transform.rotation = pendingRotationsActualizations[user._ID + "LeftHand"];
-                usersPlaying[i].rightHand.transform.rotation = pendingRotationsActualizations[user._ID + "RightHand"];
-            }
-            i++;
-        }
-    }
-
-
-    public UserData AddOtherPlayer(int playerID, string playerName, string address, int port, UserRole role)
-    {
-        // check si dispo
-        GameObject go = Instantiate(playerPrefab);
-        UserData p = go.GetComponent<UserData>();
-
-        p.Init(this, playerID, playerName, address, port, go, false, role);
-        usersPlaying.Add(p);
-        if(role == UserRole.Player){
-            pendingPositionsActualizations.Add(playerID + "Head", p.head.transform.position);
-            pendingPositionsActualizations.Add(playerID + "LeftHand", p.leftHand.transform.position);
-            pendingPositionsActualizations.Add(playerID + "RightHand", p.rightHand.transform.position);
-            pendingRotationsActualizations.Add(playerID + "Head", p.head.transform.rotation);
-            pendingRotationsActualizations.Add(playerID + "LeftHand", p.leftHand.transform.rotation);
-            pendingRotationsActualizations.Add(playerID + "RightHand", p.rightHand.transform.rotation);
-        }
-        return p;
-    }
-
-    // server's reaction to clienthasleft message
-    public void ErasePlayer(int playerID)
-    {
-        pendingPositionsActualizations.Remove(playerID + "Head");
-        pendingPositionsActualizations.Remove(playerID + "LeftHand");
-        pendingPositionsActualizations.Remove(playerID + "RightHand");
-        pendingRotationsActualizations.Remove(playerID + "Head");
-        pendingRotationsActualizations.Remove(playerID + "LeftHand");
-        pendingRotationsActualizations.Remove(playerID + "RightHand");
-
-        foreach (UserData p in usersPlaying)
-        {
-            if (p._ID == playerID)
-            {
-                Destroy(p.gameObject);
-                usersPlaying.Remove(p);
-                Destroy(p);
-                break;
-            }
-        }
-    }
 
     // in the case we want to have local user differents from other players, we place the loops here
-    public void ChangeVisualisationMode(int mode){
-
-        if(mode == 0){
-            foreach(UserData user in usersPlaying){
-                if(user._ID == _user._ID)
-                    user.ChangeSkin(this, "noHands");
-                else user.ChangeSkin(this, "justHands");
-            }
-        }
-        else if(mode == 1){
-            foreach(UserData user in usersPlaying){
-                user.ChangeSkin(this, "justHands");
-            }
-        }
-        else if(mode == 2){
-            foreach(UserData user in usersPlaying){
-                user.ChangeSkin(this, "shortTrails");
-            }
-        }
-        else if(mode == 3){
-            foreach(UserData user in usersPlaying){
-                user.ChangeSkin(this, "longTrails");
-            }
-        }
-        currentVisualisationMode = mode;
-    }
-
-    public void ChangeVisualisationParameter(int valueId, float value){
-            
-        if(valueId == 0){
-            foreach(GameObject hand in GameObject.FindGameObjectsWithTag("HandParticleSystem")){
-                hand.GetComponent<TrailRenderer>().time = value;
-            }
-        }
-    }
+    
 
 
     public int ReturnPlayerRank(int n){ // n may be equal to 1 or 2 (player1 or 2) 
         int r = 0;
         int i = 0;
-        foreach(UserData user in usersPlaying){
+        foreach(UserData user in userManager.usersPlaying){
             if(user._userRole == UserRole.Player) r +=1; // if we find a player thats number r
             if(r == n) return i; // if r was needed, return it
             i++;

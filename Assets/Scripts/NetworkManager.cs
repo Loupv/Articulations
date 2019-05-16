@@ -12,6 +12,39 @@ public class NetworkManager : MonoBehaviour
     public GameEngine gameEngine;
     public string serverAddress;  
     public Image oscToggle;
+    public OSCEndPoint serverEndpoint;
+
+
+    public void InitNetwork(UserRole userRole, GameData gameData, string uiServerIP){
+
+        SetUserRole(userRole);
+        
+        serverEndpoint.ip = gameData.OSC_ServerIP;
+        serverEndpoint.remotePort = gameData.OSC_ClientPort;
+
+        int inPort;
+        int outPort;
+
+        if (userRole == UserRole.Server)
+        {
+            inPort = gameData.OSC_ServerPort;
+            outPort = gameData.OSC_ClientPort;
+        }
+        else
+        {
+            inPort = gameData.OSC_ClientPort;
+            outPort = gameData.OSC_ServerPort;    
+        }
+
+        osc.inPort = inPort;
+        osc.outPort = outPort;
+        osc.outIP = uiServerIP;
+        osc.Init();
+
+        print("OSC Connexion initiation to " + osc.outIP + " : " + osc.outPort + "/" + osc.inPort);
+        
+    }
+
 
     // client only
     public void SendOwnPosition(UserData user, OSCEndPoint serverEndPoint)
@@ -70,6 +103,13 @@ public class NetworkManager : MonoBehaviour
             if (user.oscEndPoint.remotePort==requestedPort) return false;
         }
         return true;
+    }
+
+    public void RegisterUSer(UserData _user, UserRole _userRole){
+        osc.sender.RequestUserRegistation(_user, _userRole);
+    }
+    public void SetUserRole(UserRole userRole){
+        osc.receiver.userRole = userRole;
     }
 
 }

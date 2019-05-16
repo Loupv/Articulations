@@ -7,6 +7,7 @@ using UnityEngine;
 public class SendOSC : MonoBehaviour {
 
     public GameEngine gameEngine;
+    public UserManager userManager;
     private OscMessage message;
     public OSC osc;
 
@@ -46,7 +47,7 @@ public class SendOSC : MonoBehaviour {
             osc.Send(message);
             if(gameEngine.debugMode) Debug.Log("Sending : " + message);
 
-            AddEveryPlayerToClientDict(user, gameEngine.usersPlaying);
+            AddEveryPlayerToClientDict(user, userManager.usersPlaying);
         }
     }
 
@@ -337,7 +338,7 @@ public class SendOSC : MonoBehaviour {
         }
         else if (userRole == UserRole.Server)
         {
-            foreach(UserData user in gameEngine.usersPlaying){
+            foreach(UserData user in userManager.usersPlaying){
                 osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
                 osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
                 message = new OscMessage();

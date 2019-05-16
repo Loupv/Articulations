@@ -7,4 +7,10 @@ public class SoundHandler : MonoBehaviour
     public OSCEndPoint oscEndPoint;
     
 
+    public void Init(string ip, int remotePort){
+        oscEndPoint.ip = ip;
+        oscEndPoint.remotePort = remotePort;
+
+    }
+
 }
