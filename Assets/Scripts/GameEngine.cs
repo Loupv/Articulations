@@ -94,12 +94,11 @@ public class GameEngine : MonoBehaviour
         
         canvasHandler = GetComponent<CanvasHandler>();
         uiHandler = GetComponentInChildren<UIHandler>();
-        jSONLoader = new JSONLoader();
-
-        
         canvasHandler.ChangeCanvas("initCanvas");
         _userRole = UserRole.Server; // base setting
         
+        // load preferences file
+        jSONLoader = new JSONLoader();
         gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
         gameData = uiHandler.AdjustBasicUIParameters(gameData, CheckIp()); // change UI and gameData depending on actual conditions
 
@@ -108,12 +107,10 @@ public class GameEngine : MonoBehaviour
 
         soundHandler.Init(gameData.OSC_SoundHandlerIP, gameData.OSC_SoundHandlerPort);
 
-
         // adjust user's parameters
         if(useVRHeadset) uiHandler.SetPlayerNetworkType(1);
         else uiHandler.SetPlayerNetworkType(0);
         
-
         // do we print sent and received messages
         if(gameData.DebugMode == 1){
             Instantiate(debugPrefab);
@@ -140,9 +137,6 @@ public class GameEngine : MonoBehaviour
         if (_userRole == UserRole.Server) useVRHeadset = false;
 
         _user = userManager.InitLocalUser(this, ID, n, tmpIp, gameData.OSC_ServerPort, true, _userRole);
-
-
-       
 
         networkManager.InitNetwork(_userRole, gameData, uiHandler.OSCServerAddressInput.text);
         

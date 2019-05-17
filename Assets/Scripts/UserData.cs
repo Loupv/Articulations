@@ -35,10 +35,12 @@ public class UserData : MonoBehaviour
         oscEndPoint.ip = address;
         oscEndPoint.remotePort = localPort;
 
-        head = pGameObject.transform.Find("Head").gameObject;
-        leftHand = pGameObject.transform.Find("LeftHand").gameObject;
-        rightHand = pGameObject.transform.Find("RightHand").gameObject;
-        
+        if(userRole == UserRole.Player){
+            head = pGameObject.transform.Find("Head").gameObject;
+            leftHand = pGameObject.transform.Find("LeftHand").gameObject;
+            rightHand = pGameObject.transform.Find("RightHand").gameObject;
+        }
+
         //pGameObject.transform.position += new Vector3(0, Random.Range(-2f, 1.5f), 0);
 
         // things that change depending on this instance's mode
@@ -79,9 +81,9 @@ public class UserData : MonoBehaviour
             pGameObject.name = "Viewer" + _ID.ToString();
             PlaceUserPartsInScene(gameEngine, false, pGameObject, isMe);
 
-            head.SetActive(false);
+            /*head.SetActive(false);
             leftHand.SetActive(false);
-            rightHand.SetActive(false);
+            rightHand.SetActive(false);*/
         }
         
     }

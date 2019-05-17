@@ -72,8 +72,8 @@ public class ReceiveOSC : MonoBehaviour {
 
             if (portAvailable || gameEngine.gameData.runInLocal == 0)
             {
-                UserData user = userManager.AddOtherPlayer(gameEngine, playerID, playerName, playerIP, requestedPort, role);
-                sender.AddNewPlayerToClientsGames(playerID, playerName, userManager.usersPlaying, isPlayer);
+                UserData user = userManager.AddNewUser(gameEngine, playerID, playerName, playerIP, requestedPort, role);
+                if(role == UserRole.Player) sender.AddNewPlayerToClientsGames(playerID, playerName, userManager.usersPlaying, isPlayer);
                 sender.SendRegistrationConfirmation(user);
             }
             else sender.RefuseRegistration(playerIP, requestedPort);
@@ -170,7 +170,7 @@ public class ReceiveOSC : MonoBehaviour {
         if ((gameEngine._userRole == UserRole.Player || gameEngine._userRole == UserRole.Viewer) && playerID != gameEngine._user._ID)
         {
             Debug.Log(playerID+" vs "+gameEngine._user._ID);
-            userManager.AddOtherPlayer(gameEngine, playerID, playerName, "null", -1, userRole);
+            userManager.AddNewUser(gameEngine, playerID, playerName, "null", -1, userRole);
         }
     }
 

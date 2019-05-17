@@ -23,19 +23,22 @@ public class ViewerController : MonoBehaviour
 	private UserManager userManager;
 
 	
-    // Start is called before the first frame update
-    void Start()
-    {
+
+	public void InitViewerController(bool isMe){
+
 		gameEngine = GameObject.FindGameObjectWithTag("GameEngine").GetComponent<GameEngine>();
 		userManager = GameObject.FindGameObjectWithTag("UserManager").GetComponent<UserManager>();
         camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 		UIHandler = GameObject.FindGameObjectWithTag("UIHandler").GetComponent<UIHandler>();
-		this.transform.position = camera.transform.position;
-		this.transform.rotation = camera.transform.rotation;
-        camera.transform.parent = this.transform; 
-		//camera.transform.position = Vector3.zero;
-		initialTransform = this.transform;
-    }
+
+		if(isMe){
+			this.transform.position = camera.transform.position;
+			this.transform.rotation = camera.transform.rotation;
+			camera.transform.parent = this.transform; 
+			//camera.transform.position = Vector3.zero;
+			initialTransform = this.transform;
+		}
+	}
 	
 	void Update () 
 	{

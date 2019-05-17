@@ -12,7 +12,7 @@ public class UIHandler : MonoBehaviour
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
     public ViewerController viewerController;
     public InputField OSCServerAddressInput, PlayerName;
-    public GameObject clientObjectParent, userRoleButton;
+    public GameObject clientObjectParent, playerNameTextBox, userRoleButton;
     public GameObject recordGizmo, pauseGizmo;
     public int OSCServerPort, OSCClientPort;
     public Sprite selectedButtonSprite, normalButtonSprite, lockedButtonSprite;
@@ -53,6 +53,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice1.image.sprite = selectedButtonSprite;
             networkButtonChoice2.image.sprite = normalButtonSprite;
             networkButtonChoice3.image.sprite = normalButtonSprite;
+            playerNameTextBox.gameObject.SetActive(false);
             clientObjectParent.gameObject.SetActive(false);
             //serverObjectParent.gameObject.SetActive(true);
             //userRoleButton.gameObject.SetActive(false);
@@ -66,11 +67,12 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice1.image.sprite = normalButtonSprite;
             networkButtonChoice2.image.sprite = selectedButtonSprite;
             networkButtonChoice3.image.sprite = normalButtonSprite;
+            playerNameTextBox.gameObject.SetActive(true);
             clientObjectParent.gameObject.SetActive(true);
             //serverObjectParent.gameObject.SetActive(false);
             //userRoleButton.gameObject.SetActive(true);
         }
-        else if (i == 2) // client
+        else if (i == 2) // viewer
         {
             gameEngine._userRole = UserRole.Viewer;
             if(clientObjectParent != null) clientObjectParent.gameObject.SetActive(true);
@@ -78,6 +80,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice1.image.sprite = normalButtonSprite;
             networkButtonChoice2.image.sprite = normalButtonSprite;
             networkButtonChoice3.image.sprite = selectedButtonSprite;
+            playerNameTextBox.gameObject.SetActive(false);
             clientObjectParent.gameObject.SetActive(true);
             //serverObjectParent.gameObject.SetActive(false);
             //userRoleButton.gameObject.SetActive(true);

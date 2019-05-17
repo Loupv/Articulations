@@ -30,9 +30,10 @@ public class UserManager : MonoBehaviour
         if (userRole == UserRole.Player) _userGameObject = Instantiate(playerPrefab);
         else if(userRole == UserRole.Viewer || userRole == UserRole.Server)  _userGameObject = Instantiate(viewerPrefab);
 
-        if (userRole == UserRole.Viewer) gameEngine.uiHandler.viewerController = _userGameObject.GetComponent<ViewerController>();
-        
-
+        if (userRole == UserRole.Viewer) {
+            gameEngine.uiHandler.viewerController = _userGameObject.GetComponent<ViewerController>();
+            gameEngine.uiHandler.viewerController.InitViewerController(isMe);
+        }
         UserData user = _userGameObject.GetComponent<UserData>();
         user.Init(gameEngine, ID, name, address, localPort, _userGameObject, isMe, userRole);
 
@@ -46,10 +47,17 @@ public class UserManager : MonoBehaviour
     }
 
 
-    public UserData AddOtherPlayer(GameEngine gameEngine, int ID, string name, string address, int port, UserRole role)
+    public UserData AddNewUser(GameEngine gameEngine, int ID, string name, string address, int port, UserRole role)
     {
-        // check si dispo
-        GameObject go = Instantiate(playerPrefab);
+        GameObject go;
+
+        if(role == UserRole.Player) go = Instantiate(playerPrefab);
+        else if(role == UserRole.Viewer){
+            go = Instantiate(viewerPrefab);
+            go.GetComponent<ViewerController>().InitViewerController(false);
+        } 
+        else go = new GameObject(); // useless
+
         UserData p = go.GetComponent<UserData>();
 
         p.Init(gameEngine, ID, name, address, port, go, false, role);
