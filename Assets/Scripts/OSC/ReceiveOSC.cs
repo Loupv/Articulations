@@ -15,7 +15,7 @@ public class ReceiveOSC : MonoBehaviour {
     public void StartListening()
     {
 
-        if (gameEngine._userRole == UserRole.Player || gameEngine._userRole == UserRole.Viewer)
+        if (gameEngine._userRole == UserRole.Player || gameEngine._userRole == UserRole.Viewer || userRole == UserRole.Tracker)
         {
             osc.SetAddressHandler("/RegistrationConfirmed", RegistrationConfirmed);
             osc.SetAddressHandler("/ServerShutDown", GoInsane);
@@ -64,6 +64,7 @@ public class ReceiveOSC : MonoBehaviour {
             UserRole role;
             int isPlayer = message.GetInt(3);
             if (isPlayer == 1) role = UserRole.Player;
+            else if (isPlayer == 2) role = UserRole.Tracker;
             else role = UserRole.Viewer;
 
             string playerName = message.GetString(4);
@@ -163,11 +164,12 @@ public class ReceiveOSC : MonoBehaviour {
         UserRole userRole;
         int playerRole = message.GetInt(1);
         if (playerRole == 1) userRole = UserRole.Player;
+        else if (playerRole == 2) userRole = UserRole.Tracker;
         else userRole = UserRole.Viewer;
 
         string playerName = message.GetString(2);
         
-        if ((gameEngine._userRole == UserRole.Player || gameEngine._userRole == UserRole.Viewer) && playerID != gameEngine._user._ID)
+        if ((gameEngine._userRole == UserRole.Player || gameEngine._userRole == UserRole.Viewer || gameEngine._userRole == UserRole.Tracker) && playerID != gameEngine._user._ID)
         {
             Debug.Log(playerID+" vs "+gameEngine._user._ID);
             userManager.AddNewUser(gameEngine, playerID, playerName, "null", -1, userRole);

@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using System.IO;
+using UnityEngine.Networking;
 //using UnityEditor.SceneManagement;
 
 
@@ -26,7 +28,7 @@ public class GameData
 
 public enum UserRole
 {
-    Server, Player, Viewer
+    Server, Player, Viewer, Tracker
 }
 
 public enum AppState
@@ -79,13 +81,15 @@ public class GameEngine : MonoBehaviour
     {
         
         Application.targetFrameRate = targetFrameRate;
-        InitApplication();
+        //InitApplication();
+        StartCoroutine(InitApplication());
         InvokeRepeating("TimedUpdate", 0.5f, 1f / targetFrameRate);    
     }
 
 
     // The very start of the program
-    public void InitApplication()
+   // public void InitApplication()
+    public IEnumerator InitApplication()
     {
 
         Screen.fullScreen = false;
@@ -101,6 +105,15 @@ public class GameEngine : MonoBehaviour
         gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
         gameData = uiHandler.AdjustBasicUIParameters(gameData, CheckIp()); // change UI and gameData depending on actual conditions
 
+#if UNITY_ANDROID
+        Debug.Log("tablet initializing");
+        string filePath = Path.Combine(Application.streamingAssetsPath, "GameData.json");
+        UnityWebRequest www = UnityWebRequest.Get(filePath);
+        yield return www.SendWebRequest();
+        string dataAsJson = www.downloadHandler.text;
+        Debug.Log(dataAsJson);
+        gameData = JsonUtility.FromJson<GameData>(dataAsJson);
+#endif
 
         userManager.keepNamesVisibleForPlayers = (gameData.keepNamesVisibleForPlayers == 1);
 
@@ -115,6 +128,7 @@ public class GameEngine : MonoBehaviour
             Instantiate(debugPrefab);
             debugMode = true;
         }
+        yield return new WaitForSeconds(1);
 
     }
 
@@ -159,7 +173,7 @@ public class GameEngine : MonoBehaviour
     // when server has agreed for client registration
     public void EndStartProcess(int playerID, int requestedPort, int visualisationMode)
     {
-        if (_userRole == UserRole.Player || _userRole == UserRole.Viewer)
+        if (_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker)
         {
             userManager.ChangeVisualisationMode(visualisationMode, this);
             Debug.Log(playerID+"registered on port "+requestedPort);
@@ -167,7 +181,7 @@ public class GameEngine : MonoBehaviour
             networkManager.ShowConnexionState();
 
             if(_user._userRole == UserRole.Player) canvasHandler.ChangeCanvas("gameCanvas");
-            else if(_user._userRole == UserRole.Viewer) canvasHandler.ChangeCanvas("viewerCanvas");
+            else if(_user._userRole == UserRole.Viewer || _userRole == UserRole.Tracker) canvasHandler.ChangeCanvas("viewerCanvas");
         }
     }
 
@@ -216,15 +230,15 @@ public class GameEngine : MonoBehaviour
     public void KillApp()
     {
         Application.Quit();
-        #if UnityEditor
+#if UnityEditor
             if(Application.isEditor) EditorApplication.ExecuteMenuItem("Edit/Play");
-        #endif
+#endif
     }
 
 
     public void OnApplicationQuit()
     {
-        if ((_userRole == UserRole.Player || _userRole == UserRole.Viewer) && osc.initialized)
+        if ((_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker) && osc.initialized)
             osc.sender.SendQuitMessage(_userRole);
         else if (_userRole == UserRole.Server && osc.initialized){
             if(performanceRecorder.isRecording) performanceRecorder.SaveTofile();

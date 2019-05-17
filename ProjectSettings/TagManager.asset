@@ -9,6 +9,7 @@ TagManager:
   - ParticleSystem
   - HandParticleSystem
   - UserManager
+  - Tracker
   layers:
   - Default
   - TransparentFX

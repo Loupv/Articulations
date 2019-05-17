@@ -8,7 +8,7 @@ public class UserManager : MonoBehaviour
     public List<UserData> usersPlaying;
     public Dictionary<string, Vector3> pendingPositionsActualizations;
     public Dictionary<string, Quaternion> pendingRotationsActualizations;
-    public GameObject playerPrefab, viewerPrefab, LongTrailsPrefab, ShortTrailsPrefab;
+    public GameObject playerPrefab, viewerPrefab, trackerPrefab, LongTrailsPrefab, ShortTrailsPrefab;
     
     [HideInInspector]
     public GameObject _userGameObject;
@@ -28,9 +28,10 @@ public class UserManager : MonoBehaviour
     public UserData InitLocalUser(GameEngine gameEngine, int ID, string name, string address, int localPort, bool isMe, UserRole userRole){
         
         if (userRole == UserRole.Player) _userGameObject = Instantiate(playerPrefab);
+        else if (userRole == UserRole.Tracker) _userGameObject = Instantiate(trackerPrefab);
         else if(userRole == UserRole.Viewer || userRole == UserRole.Server)  _userGameObject = Instantiate(viewerPrefab);
 
-        if (userRole == UserRole.Viewer) {
+        if (userRole == UserRole.Viewer || userRole == UserRole.Tracker) {
             gameEngine.uiHandler.viewerController = _userGameObject.GetComponent<ViewerController>();
             gameEngine.uiHandler.viewerController.InitViewerController(isMe);
         }
@@ -51,11 +52,17 @@ public class UserManager : MonoBehaviour
     {
         GameObject go;
 
-        if(role == UserRole.Player) go = Instantiate(playerPrefab);
-        else if(role == UserRole.Viewer){
+        if (role == UserRole.Player) go = Instantiate(playerPrefab);
+        else if (role == UserRole.Tracker)
+        {
+            go = Instantiate(trackerPrefab);
+            go.GetComponent<ViewerController>().InitViewerController(false);
+        }
+        else if (role == UserRole.Viewer)
+        {
             go = Instantiate(viewerPrefab);
             go.GetComponent<ViewerController>().InitViewerController(false);
-        } 
+        }
         else go = new GameObject(); // useless
 
         UserData p = go.GetComponent<UserData>();

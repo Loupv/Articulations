@@ -45,7 +45,7 @@ public class UserData : MonoBehaviour
 
         // things that change depending on this instance's mode
         if((gameEngine._userRole == UserRole.Player && gameEngine.userManager.keepNamesVisibleForPlayers) // if we're a player and we decided to keep UI
-        || ((gameEngine._userRole == UserRole.Viewer || gameEngine._userRole == UserRole.Server) && _userRole == UserRole.Player)) // if we're a viewer and we instantiate a plyer
+        || ((gameEngine._userRole == UserRole.Viewer || gameEngine._userRole == UserRole.Server || gameEngine._userRole == UserRole.Tracker) && _userRole == UserRole.Player)) // if we're a viewer and we instantiate a plyer
         {
             headText = head.transform.Find("Canvas").Find("Text").GetComponent<UnityEngine.UI.Text>();
             headText.text = _playerName;
@@ -74,6 +74,16 @@ public class UserData : MonoBehaviour
             head.GetComponent<MeshRenderer>().materials[0].color = col;
             leftHand.GetComponent<MeshRenderer>().materials[0].color = col;
             rightHand.GetComponent<MeshRenderer>().materials[0].color = col;
+        }
+        // TRACKER //
+        else if (_userRole == UserRole.Tracker)
+        {
+            pGameObject.name = "Tracker" + _ID.ToString();
+            PlaceUserPartsInScene(gameEngine, false, pGameObject, isMe);
+
+            /*head.SetActive(false);
+            leftHand.SetActive(false);
+            rightHand.SetActive(false);*/
         }
         
         // VIEWER //

@@ -8,7 +8,7 @@ public class UIHandler : MonoBehaviour
 
     public GameEngine gameEngine;
     public UserManager userManager;
-    public Button networkButtonChoice1, networkButtonChoice2, networkButtonChoice3;
+    public Button networkButtonChoice1, networkButtonChoice2, networkButtonChoice3, networkButtonChoice4;
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
     public ViewerController viewerController;
     public InputField OSCServerAddressInput, PlayerName;
@@ -53,6 +53,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice1.image.sprite = selectedButtonSprite;
             networkButtonChoice2.image.sprite = normalButtonSprite;
             networkButtonChoice3.image.sprite = normalButtonSprite;
+            networkButtonChoice4.image.sprite = normalButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
             serverIPTextBox.gameObject.SetActive(false);
 
@@ -65,6 +66,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice1.image.sprite = normalButtonSprite;
             networkButtonChoice2.image.sprite = selectedButtonSprite;
             networkButtonChoice3.image.sprite = normalButtonSprite;
+            networkButtonChoice4.image.sprite = normalButtonSprite;
             playerNameTextBox.gameObject.SetActive(true);
             serverIPTextBox.gameObject.SetActive(true);
         }
@@ -76,6 +78,19 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice1.image.sprite = normalButtonSprite;
             networkButtonChoice2.image.sprite = normalButtonSprite;
             networkButtonChoice3.image.sprite = selectedButtonSprite;
+            networkButtonChoice4.image.sprite = normalButtonSprite;
+            playerNameTextBox.gameObject.SetActive(false);
+            serverIPTextBox.gameObject.SetActive(true);
+        }
+        else if (i == 3) // tracker
+        {
+            gameEngine._userRole = UserRole.Tracker;
+            if (serverIPTextBox != null) serverIPTextBox.gameObject.SetActive(true);
+            //SetPlayerRole(0);
+            networkButtonChoice1.image.sprite = normalButtonSprite;
+            networkButtonChoice2.image.sprite = normalButtonSprite;
+            networkButtonChoice3.image.sprite = normalButtonSprite;
+            networkButtonChoice4.image.sprite = selectedButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
             serverIPTextBox.gameObject.SetActive(true);
         }
@@ -189,5 +204,8 @@ public class UIHandler : MonoBehaviour
         
     }
 
-
+    public void quitApp()
+    {
+        Application.Quit();
+    }
 }

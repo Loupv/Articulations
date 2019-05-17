@@ -165,6 +165,7 @@ public class SendOSC : MonoBehaviour {
             message.address = "/AddPlayerToGame";
             message.values.Add(user._ID);
             if(user._userRole == UserRole.Player) message.values.Add(1);
+            else if (user._userRole == UserRole.Tracker) message.values.Add(2);
             else if (user._userRole == UserRole.Viewer) message.values.Add(0);
 
             message.values.Add(user._playerName);
@@ -257,7 +258,8 @@ public class SendOSC : MonoBehaviour {
     public void RequestUserRegistation(UserData userData, UserRole userRole)
     {
         int isPlayer = 0; // 0 is always viewer
-        if(userRole == UserRole.Player) isPlayer = 1; 
+        if(userRole == UserRole.Player) isPlayer = 1;
+        if (userRole == UserRole.Tracker) isPlayer = 2;
 
         if (osc.initialized)
         {
@@ -326,7 +328,7 @@ public class SendOSC : MonoBehaviour {
 
     public void SendQuitMessage(UserRole userRole)
     {
-        if (userRole == UserRole.Player || userRole == UserRole.Viewer)
+        if (userRole == UserRole.Player || userRole == UserRole.Viewer || userRole == UserRole.Tracker)
         {
             osc.OscPacketIO.RemoteHostName = gameEngine.osc.outIP;
             osc.OscPacketIO.RemotePort = gameEngine.osc.outPort;
