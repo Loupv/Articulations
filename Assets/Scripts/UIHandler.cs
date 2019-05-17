@@ -12,10 +12,10 @@ public class UIHandler : MonoBehaviour
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
     public ViewerController viewerController;
     public InputField OSCServerAddressInput, PlayerName;
-    public GameObject clientObjectParent, playerNameTextBox, userRoleButton;
+    public GameObject serverIPTextBox, playerNameTextBox;
     public GameObject recordGizmo, pauseGizmo;
     public int OSCServerPort, OSCClientPort;
-    public Sprite selectedButtonSprite, normalButtonSprite, lockedButtonSprite;
+    public Sprite selectedButtonSprite, normalButtonSprite;
     public Toggle sendToAudioDeviceToggle;
     public Slider trailsDecaySlider;
     public Text trailTime;
@@ -48,42 +48,36 @@ public class UIHandler : MonoBehaviour
         if (i == 0) // server
         {
             gameEngine._userRole = UserRole.Server;
-            if (clientObjectParent != null) clientObjectParent.gameObject.SetActive(false);
+            if (serverIPTextBox != null) serverIPTextBox.gameObject.SetActive(false);
             //SetPlayerRole(1);
             networkButtonChoice1.image.sprite = selectedButtonSprite;
             networkButtonChoice2.image.sprite = normalButtonSprite;
             networkButtonChoice3.image.sprite = normalButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
-            clientObjectParent.gameObject.SetActive(false);
-            //serverObjectParent.gameObject.SetActive(true);
-            //userRoleButton.gameObject.SetActive(false);
+            serverIPTextBox.gameObject.SetActive(false);
 
         }
         else if (i == 1) // client
         {
             gameEngine._userRole = UserRole.Player;
-            if(clientObjectParent != null) clientObjectParent.gameObject.SetActive(true);
+            if(serverIPTextBox != null) serverIPTextBox.gameObject.SetActive(true);
             //SetPlayerRole(0);
             networkButtonChoice1.image.sprite = normalButtonSprite;
             networkButtonChoice2.image.sprite = selectedButtonSprite;
             networkButtonChoice3.image.sprite = normalButtonSprite;
             playerNameTextBox.gameObject.SetActive(true);
-            clientObjectParent.gameObject.SetActive(true);
-            //serverObjectParent.gameObject.SetActive(false);
-            //userRoleButton.gameObject.SetActive(true);
+            serverIPTextBox.gameObject.SetActive(true);
         }
         else if (i == 2) // viewer
         {
             gameEngine._userRole = UserRole.Viewer;
-            if(clientObjectParent != null) clientObjectParent.gameObject.SetActive(true);
+            if(serverIPTextBox != null) serverIPTextBox.gameObject.SetActive(true);
             //SetPlayerRole(0);
             networkButtonChoice1.image.sprite = normalButtonSprite;
             networkButtonChoice2.image.sprite = normalButtonSprite;
             networkButtonChoice3.image.sprite = selectedButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
-            clientObjectParent.gameObject.SetActive(true);
-            //serverObjectParent.gameObject.SetActive(false);
-            //userRoleButton.gameObject.SetActive(true);
+            serverIPTextBox.gameObject.SetActive(true);
         }
     }
 

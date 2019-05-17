@@ -8,7 +8,7 @@ public class UserManager : MonoBehaviour
     public List<UserData> usersPlaying;
     public Dictionary<string, Vector3> pendingPositionsActualizations;
     public Dictionary<string, Quaternion> pendingRotationsActualizations;
-    public GameObject playerPrefab, viewerPrefab;
+    public GameObject playerPrefab, viewerPrefab, LongTrailsPrefab, ShortTrailsPrefab;
     
     [HideInInspector]
     public GameObject _userGameObject;
@@ -76,23 +76,23 @@ public void ChangeVisualisationMode(int mode, GameEngine gameEngine){
         if(mode == 0){
             foreach(UserData user in usersPlaying){
                 if(user._ID == gameEngine._user._ID)
-                    user.ChangeSkin(gameEngine, "noHands");
-                else user.ChangeSkin(gameEngine, "justHands");
+                    user.ChangeSkin(this, "noHands");
+                else user.ChangeSkin(this, "justHands");
             }
         }
         else if(mode == 1){
             foreach(UserData user in usersPlaying){
-                user.ChangeSkin(gameEngine, "justHands");
+                user.ChangeSkin(this, "justHands");
             }
         }
         else if(mode == 2){
             foreach(UserData user in usersPlaying){
-                user.ChangeSkin(gameEngine, "shortTrails");
+                user.ChangeSkin(this, "shortTrails");
             }
         }
         else if(mode == 3){
             foreach(UserData user in usersPlaying){
-                user.ChangeSkin(gameEngine, "longTrails");
+                user.ChangeSkin(this, "longTrails");
             }
         }
         gameEngine.currentVisualisationMode = mode;

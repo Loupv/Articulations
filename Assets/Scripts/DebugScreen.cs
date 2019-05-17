@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// allow console message to be printed on screen - useful when compiling and reading osc message in playmode
 public class DebugScreen : MonoBehaviour
 {
          string myLog;

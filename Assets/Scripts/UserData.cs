@@ -123,7 +123,7 @@ public class UserData : MonoBehaviour
     }
 
 
-    public void ChangeSkin(GameEngine gameEngine, string skin){
+    public void ChangeSkin(UserManager userManager, string skin){
         if(skin == "noHands"){
             RemovePlayerHold();
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
@@ -141,12 +141,12 @@ public class UserData : MonoBehaviour
         else if(skin == "longTrails"){
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
             rightHand.GetComponent<MeshRenderer>().enabled = false;          
-            ReplacePlayerHold(gameEngine.LongTrailsPrefab);
+            ReplacePlayerHold(userManager.LongTrailsPrefab);
         }
         else if(skin == "shortTrails"){
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
             rightHand.GetComponent<MeshRenderer>().enabled = false;
-            ReplacePlayerHold(gameEngine.ShortTrailsPrefab);            
+            ReplacePlayerHold(userManager.ShortTrailsPrefab);            
         }
     }
 

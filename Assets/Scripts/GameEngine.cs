@@ -31,7 +31,7 @@ public enum UserRole
 
 public enum AppState
 {
-    Initializing, StartScreen, WaitingForServer, Home, Running
+    Initializing, WaitingForServer, Running
 }
 
 
@@ -57,7 +57,7 @@ public class GameEngine : MonoBehaviour
     public SoundHandler soundHandler;
     public GameData gameData;
     
-    public GameObject ViveSystemPrefab, LongTrailsPrefab, ShortTrailsPrefab;
+    public GameObject ViveSystemPrefab;
     public List<GameObject> POVs;
 
     public PerformanceRecorder performanceRecorder;
@@ -74,7 +74,6 @@ public class GameEngine : MonoBehaviour
     public bool debugMode = false;
     public GameObject debugPrefab;
     public int targetFrameRate = 60;
-    private float tmpTime;
 
     private void Start()
     {
