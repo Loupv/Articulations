@@ -2481,7 +2481,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: StartButton
+  m_Text: Start
 --- !u!222 &555331011
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9705,7 +9705,7 @@ MonoBehaviour:
   viewerController: {fileID: 0}
   OSCServerAddressInput: {fileID: 907264587}
   PlayerName: {fileID: 1015297339}
-  serverIPTextBox: {fileID: 0}
+  serverIPTextBox: {fileID: 1014792654}
   playerNameTextBox: {fileID: 230827603}
   recordGizmo: {fileID: 775172754}
   pauseGizmo: {fileID: 211391146}
