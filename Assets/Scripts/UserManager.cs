@@ -141,6 +141,20 @@ public void ChangeVisualisationMode(int mode, GameEngine gameEngine){
     }
 
 
+
+    public int ReturnPlayerRank(int n){ // n may be equal to 1 or 2 (player1 or 2) 
+        int r = 0;
+        int i = 0;
+        foreach(UserData user in usersPlaying){
+            if(user._userRole == UserRole.Player) r +=1; // if we find a player thats number r
+            if(r == n) return i; // if r was needed, return it
+            i++;
+        }
+        Debug.Log("Player not found");
+        return -1;
+    }
+
+
     
     // server's reaction to clienthasleft message
     public void ErasePlayer(int playerID)

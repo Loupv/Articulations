@@ -150,7 +150,7 @@ public class UIHandler : MonoBehaviour
 		break;
 
 		case 1:
-        tmp = gameEngine.ReturnPlayerRank(1);
+        tmp = userManager.ReturnPlayerRank(1);
 		if(tmp != -1){
             FreeCam.image.sprite = normalButtonSprite;
             POVPlayer1.image.sprite = selectedButtonSprite;
@@ -160,7 +160,7 @@ public class UIHandler : MonoBehaviour
 		break;
 
 		case 2:
-        tmp = gameEngine.ReturnPlayerRank(2);
+        tmp = userManager.ReturnPlayerRank(2);
 		if(tmp != -1){
             FreeCam.image.sprite = normalButtonSprite;
             POVPlayer1.image.sprite = normalButtonSprite;

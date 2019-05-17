@@ -214,25 +214,6 @@ public class GameEngine : MonoBehaviour
     }
 
 
-
-
-
-    // in the case we want to have local user differents from other players, we place the loops here
-    
-
-
-    public int ReturnPlayerRank(int n){ // n may be equal to 1 or 2 (player1 or 2) 
-        int r = 0;
-        int i = 0;
-        foreach(UserData user in userManager.usersPlaying){
-            if(user._userRole == UserRole.Player) r +=1; // if we find a player thats number r
-            if(r == n) return i; // if r was needed, return it
-            i++;
-        }
-        Debug.Log("Player not found");
-        return -1;
-    }
-
     public void KillApp()
     {
         Application.Quit();
