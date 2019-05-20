@@ -5,7 +5,9 @@ using UnityEngine;
 public class scenarioEvents : MonoBehaviour
 {
     public GameObject [] mirror;
+    public GameObject bubbles;
     public bool mirrorAct;
+    public bool bubblesAct;
 
     public Material[] skyboxes;
     int i;
@@ -27,6 +29,18 @@ public class scenarioEvents : MonoBehaviour
         else { 
             mirror[0].SetActive(false);
             mirror[1].SetActive(false);
+        }
+
+        if (Input.GetKeyUp(KeyCode.B))
+            bubblesAct = !bubblesAct;
+
+        if (bubblesAct)
+        {
+            bubbles.SetActive(true);
+        }
+        else 
+        {
+            bubbles.SetActive(false);
         }
 
         if (Input.GetKeyUp(KeyCode.S))

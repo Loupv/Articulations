@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.articulations.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "D:\\_SpatialMedia\\Articulations\\Articulations\\actions.json",
+      "action_manifest_path": "D:\\Articulations\\Repository\\Articulations\\actions.json",
       "strings": {
         "en_us": {
           "name": "Articulations [Testing]"
