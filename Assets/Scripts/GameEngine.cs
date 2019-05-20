@@ -62,6 +62,7 @@ public class GameEngine : MonoBehaviour
     public GameData gameData;
     
     public GameObject ViveSystemPrefab;
+    public GameObject sceneGameObjects;
     public List<GameObject> POVs;
 
     public PerformanceRecorder performanceRecorder;
@@ -81,7 +82,9 @@ public class GameEngine : MonoBehaviour
 
     private void Start()
     {
-        XRSettings.enabled = false;
+        StartCoroutine(EnableDisableVRMode(false));
+
+        //VRSettings.LoadDeviceByName("None");
         Application.targetFrameRate = targetFrameRate;
         //InitApplication();
         StartCoroutine(InitApplication());
@@ -167,7 +170,7 @@ public class GameEngine : MonoBehaviour
             appState = AppState.WaitingForServer;
             networkManager.RegisterUSer(_user, _userRole);
             canvasHandler.ChangeCanvas("waitingCanvas");
-            if(useVRHeadset) XRSettings.enabled = true;
+            if (useVRHeadset) StartCoroutine(EnableDisableVRMode(true));
             foreach(GameObject model in GameObject.FindGameObjectsWithTag("SteamModel"))
             {
                 model.SetActive(false);
@@ -268,6 +271,30 @@ public class GameEngine : MonoBehaviour
             localIP = endPoint.Address.ToString();
         }
         return localIP;
+    }
+
+
+    public IEnumerator EnableDisableVRMode(bool bEnable)
+    {
+        if (true == bEnable)
+        {
+            yield return new WaitForEndOfFrame();
+            UnityEngine.XR.XRSettings.LoadDeviceByName("OpenVR");
+            yield return new WaitForEndOfFrame();
+            UnityEngine.XR.XRSettings.enabled = true;
+        }
+        else
+        {
+            yield return new WaitForEndOfFrame();
+            UnityEngine.XR.XRSettings.LoadDeviceByName("None");
+            yield return new WaitForEndOfFrame();
+            UnityEngine.XR.XRSettings.enabled = false;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        Debug.Log("<color=yellow>UnityEngine.XR.XRSettings.enabled = " + UnityEngine.XR.XRSettings.enabled + "</color>");
+        Debug.Log("<color=yellow>UnityEngine.XR.XRSettings.loadedDeviceName = " + UnityEngine.XR.XRSettings.loadedDeviceName + "</color>");
     }
 
 }
