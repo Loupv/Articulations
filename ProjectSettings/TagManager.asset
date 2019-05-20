@@ -10,6 +10,9 @@ TagManager:
   - HandParticleSystem
   - UserManager
   - Tracker
+  - projectile
+  - FxTemporaire
+  - SteamModel
   layers:
   - Default
   - TransparentFX

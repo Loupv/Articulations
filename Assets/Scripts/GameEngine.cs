@@ -168,6 +168,10 @@ public class GameEngine : MonoBehaviour
             networkManager.RegisterUSer(_user, _userRole);
             canvasHandler.ChangeCanvas("waitingCanvas");
             if(useVRHeadset) XRSettings.enabled = true;
+            foreach(GameObject model in GameObject.FindGameObjectsWithTag("SteamModel"))
+            {
+                model.SetActive(false);
+            }
         }
 
 
