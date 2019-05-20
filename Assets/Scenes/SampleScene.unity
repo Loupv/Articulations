@@ -3125,7 +3125,7 @@ MonoBehaviour:
   _userRole: 0
   appState: 0
   currentVisualisationMode: 1
-  useVRHeadset: 0
+  useVRHeadset: 1
   sendToAudioDevice: 0
   viveSystemName: '[CameraRig](Clone)'
   viveHeadName: Camera
@@ -4587,7 +4587,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 345}
-  m_SizeDelta: {x: 1024, y: 100}
+  m_SizeDelta: {x: 2048, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &891990059
 MonoBehaviour:
@@ -8602,7 +8602,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1024, y: 768}
+  m_SizeDelta: {x: 2048, y: 768}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1768966551
 MonoBehaviour:
