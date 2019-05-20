@@ -10,14 +10,15 @@ public class UserManager : MonoBehaviour
     public Dictionary<string, Quaternion> pendingRotationsActualizations;
     public GameObject playerPrefab, viewerPrefab, trackerPrefab, LongTrailsPrefab, ShortTrailsPrefab;
 
-    
+
     [HideInInspector]
     public GameObject _userGameObject;
+    public NetworkManager networkManager;
 
     public bool keepNamesVisibleForPlayers;
 
     // Start is called before the first frame update
-    
+
 
     void Start()
     {
@@ -26,11 +27,11 @@ public class UserManager : MonoBehaviour
     }
 
 
-    public UserData InitLocalUser(GameEngine gameEngine, int ID, string name, string address, int localPort, bool isMe, UserRole userRole){
-        
+    public UserData InitLocalUser(GameEngine gameEngine, int ID, string name, string address, int localPort, bool isMe, UserRole userRole) {
+
         if (userRole == UserRole.Player) _userGameObject = Instantiate(playerPrefab);
         else if (userRole == UserRole.Tracker) _userGameObject = Instantiate(trackerPrefab);
-        else if(userRole == UserRole.Viewer || userRole == UserRole.Server)  _userGameObject = Instantiate(viewerPrefab);
+        else if (userRole == UserRole.Viewer || userRole == UserRole.Server) _userGameObject = Instantiate(viewerPrefab);
 
         if (userRole == UserRole.Viewer || userRole == UserRole.Tracker) {
             gameEngine.uiHandler.viewerController = _userGameObject.GetComponent<ViewerController>();
@@ -71,7 +72,7 @@ public class UserManager : MonoBehaviour
         p.Init(gameEngine, ID, name, address, port, go, false, role);
         usersPlaying.Add(p);
 
-        if(role == UserRole.Player){
+        if (role == UserRole.Player) {
             StoreUserParts(p);
         }
         return p;
@@ -79,37 +80,37 @@ public class UserManager : MonoBehaviour
 
 
 
-public void ChangeVisualisationMode(int mode, GameEngine gameEngine){
+    public void ChangeVisualisationMode(int mode, GameEngine gameEngine) {
 
-        if(mode == 0){
-            foreach(UserData user in usersPlaying){
-                if(user._ID == gameEngine._user._ID)
+        if (mode == 0) {
+            foreach (UserData user in usersPlaying) {
+                if (user._ID == gameEngine._user._ID)
                     user.ChangeSkin(this, "noHands");
                 else user.ChangeSkin(this, "justHands");
             }
         }
-        else if(mode == 1){
-            foreach(UserData user in usersPlaying){
+        else if (mode == 1) {
+            foreach (UserData user in usersPlaying) {
                 user.ChangeSkin(this, "justHands");
             }
         }
-        else if(mode == 2){
-            foreach(UserData user in usersPlaying){
+        else if (mode == 2) {
+            foreach (UserData user in usersPlaying) {
                 user.ChangeSkin(this, "shortTrails");
             }
         }
-        else if(mode == 3){
-            foreach(UserData user in usersPlaying){
+        else if (mode == 3) {
+            foreach (UserData user in usersPlaying) {
                 user.ChangeSkin(this, "longTrails");
             }
         }
         gameEngine.currentVisualisationMode = mode;
     }
 
-    public void ChangeVisualisationParameter(int valueId, float value){
-            
-        if(valueId == 0){
-            foreach(GameObject hand in GameObject.FindGameObjectsWithTag("HandParticleSystem")){
+    public void ChangeVisualisationParameter(int valueId, float value) {
+
+        if (valueId == 0) {
+            foreach (GameObject hand in GameObject.FindGameObjectsWithTag("HandParticleSystem")) {
                 hand.GetComponent<TrailRenderer>().time = value;
             }
         }
@@ -117,7 +118,7 @@ public void ChangeVisualisationMode(int mode, GameEngine gameEngine){
 
 
 
-    public void StoreUserParts(UserData user){
+    public void StoreUserParts(UserData user) {
 
         pendingPositionsActualizations.Add(user._ID + "Head", user.head.transform.position);
         pendingPositionsActualizations.Add(user._ID + "LeftHand", user.leftHand.transform.position);
@@ -129,17 +130,17 @@ public void ChangeVisualisationMode(int mode, GameEngine gameEngine){
     }
 
 
-    
+
     // adjust players positions from stored one
-    public void ActualizePlayersPositions(UserData me){
+    public void ActualizePlayersPositions(UserData me) {
         int i = 0;
         foreach (UserData user in usersPlaying)
         {
             if (user._ID != me._ID && user._userRole == UserRole.Player) // if it's not actual instance's player
             {
-                usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"];
-                usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"];
-                usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[user._ID + "RightHand"];
+                usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"] - usersPlaying[i].calibrationPositionGap;
+                usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"] - usersPlaying[i].calibrationPositionGap;
+                usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[user._ID + "RightHand"] - usersPlaying[i].calibrationPositionGap;
                 usersPlaying[i].head.transform.rotation = pendingRotationsActualizations[user._ID + "Head"];
                 usersPlaying[i].leftHand.transform.rotation = pendingRotationsActualizations[user._ID + "LeftHand"];
                 usersPlaying[i].rightHand.transform.rotation = pendingRotationsActualizations[user._ID + "RightHand"];
@@ -150,12 +151,12 @@ public void ChangeVisualisationMode(int mode, GameEngine gameEngine){
 
 
 
-    public int ReturnPlayerRank(int n){ // n may be equal to 1 or 2 (player1 or 2) 
+    public int ReturnPlayerRank(int n) { // n may be equal to 1 or 2 (player1 or 2) 
         int r = 0;
         int i = 0;
-        foreach(UserData user in usersPlaying){
-            if(user._userRole == UserRole.Player) r +=1; // if we find a player thats number r
-            if(r == n) return i; // if r was needed, return it
+        foreach (UserData user in usersPlaying) {
+            if (user._userRole == UserRole.Player) r += 1; // if we find a player thats number r
+            if (r == n) return i; // if r was needed, return it
             i++;
         }
         Debug.Log("Player not found");
@@ -163,7 +164,7 @@ public void ChangeVisualisationMode(int mode, GameEngine gameEngine){
     }
 
 
-    
+
     // server's reaction to clienthasleft message
     public void ErasePlayer(int playerID)
     {
@@ -186,4 +187,16 @@ public void ChangeVisualisationMode(int mode, GameEngine gameEngine){
         }
     }
 
+    public void CalibratePlayerTransform()
+    {
+        foreach (UserData user in usersPlaying) // we take each actual player one by one
+        {
+            if (user._userRole == UserRole.Player)
+            {
+                user.calibrationPositionGap = user.head.transform.position;
+                networkManager.SendClientPositionGap(user, usersPlaying); // we send for each of them the list of positiongaps
+                // upon reception, each user has to adapt its own position to be centered
+            }
+        }
+    }
 }

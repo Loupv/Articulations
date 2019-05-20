@@ -200,8 +200,12 @@ public class UIHandler : MonoBehaviour
     }
 
 
+    // this method has to do several things :
+    // store each player position and substract it permanentely to place them at the center of the scene
+    // centers all scenegameobjects between both players
+
     public void CalibratePlayersPosition(){
-        
+           // userManager.CalibratePlayerTransform();
     }
 
     public void quitApp()

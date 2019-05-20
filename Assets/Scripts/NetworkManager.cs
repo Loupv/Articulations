@@ -112,4 +112,10 @@ public class NetworkManager : MonoBehaviour
         osc.receiver.userRole = userRole;
     }
 
+
+    public void SendClientPositionGap(UserData user, List<UserData> usersPlaying)
+    {
+        // send absolute position 
+    }
+
 }

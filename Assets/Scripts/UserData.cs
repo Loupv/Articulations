@@ -21,6 +21,8 @@ public class UserData : MonoBehaviour
     public GameObject playerGameObject, head, leftHand, rightHand;//, leftHold, rightHold;
     public UnityEngine.UI.Text headText;
     public OSCEndPoint oscEndPoint;
+    public Vector3 calibrationPositionGap;
+    public Quaternion calibrationRotationGap;
 
 
     public void Init(GameEngine gameEngine, int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, UserRole userRole)
@@ -95,7 +97,12 @@ public class UserData : MonoBehaviour
             leftHand.SetActive(false);
             rightHand.SetActive(false);*/
         }
-        
+
+
+        calibrationPositionGap = new Vector3();
+        calibrationRotationGap = new Quaternion();
+
+
     }
 
 
@@ -180,5 +187,14 @@ public class UserData : MonoBehaviour
         tmp1.transform.position = leftHand.transform.position;
         tmp2.transform.position = rightHand.transform.position;
     }
+
+
+    
+    /*public void CalibratePlayerTransform(Vector3 centeredPosition, GameObject sceneGameObjects)
+    {
+        sceneGameObjects.transform.position = this.transform.position;
+        calibrationPositionGap = centeredPosition - this.transform.position;
+        //calibrationRotationGap = this.transform.rotation.SetLookRotation(lookAt);
+    }*/
 
 }
