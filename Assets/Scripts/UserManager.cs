@@ -9,6 +9,7 @@ public class UserManager : MonoBehaviour
     public Dictionary<string, Vector3> pendingPositionsActualizations;
     public Dictionary<string, Quaternion> pendingRotationsActualizations;
     public GameObject playerPrefab, viewerPrefab, trackerPrefab, LongTrailsPrefab, ShortTrailsPrefab;
+
     
     [HideInInspector]
     public GameObject _userGameObject;

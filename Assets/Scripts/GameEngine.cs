@@ -113,6 +113,7 @@ public class GameEngine : MonoBehaviour
         string dataAsJson = www.downloadHandler.text;
         Debug.Log(dataAsJson);
         gameData = JsonUtility.FromJson<GameData>(dataAsJson);
+        gameData = uiHandler.AdjustBasicUIParameters(gameData, CheckIp());
 #endif
 
         userManager.keepNamesVisibleForPlayers = (gameData.keepNamesVisibleForPlayers == 1);

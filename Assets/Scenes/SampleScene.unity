@@ -3065,8 +3065,10 @@ MonoBehaviour:
     type: 3}
   trackerPrefab: {fileID: 6075620792603371976, guid: 14c6ae8e882b0974caa177b074ae4559,
     type: 3}
-  LongTrailsPrefab: {fileID: 0}
-  ShortTrailsPrefab: {fileID: 0}
+  LongTrailsPrefab: {fileID: 7632359022049117597, guid: ed64cc7f05f9d2246a2a89a14913f304,
+    type: 3}
+  ShortTrailsPrefab: {fileID: 7632359022049117597, guid: 35349948085509847b8d11f1ced88d3e,
+    type: 3}
   _userGameObject: {fileID: 0}
   keepNamesVisibleForPlayers: 0
 --- !u!1 &667967429
