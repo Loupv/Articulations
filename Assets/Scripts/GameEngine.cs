@@ -8,6 +8,8 @@ using UnityEngine.UI;
 using UnityEditor;
 using System.IO;
 using UnityEngine.Networking;
+using UnityEngine.XR;
+
 //using UnityEditor.SceneManagement;
 
 
@@ -79,7 +81,7 @@ public class GameEngine : MonoBehaviour
 
     private void Start()
     {
-        
+        XRSettings.enabled = false;
         Application.targetFrameRate = targetFrameRate;
         //InitApplication();
         StartCoroutine(InitApplication());
@@ -165,6 +167,7 @@ public class GameEngine : MonoBehaviour
             appState = AppState.WaitingForServer;
             networkManager.RegisterUSer(_user, _userRole);
             canvasHandler.ChangeCanvas("waitingCanvas");
+            if(useVRHeadset) XRSettings.enabled = true;
         }
 
 
