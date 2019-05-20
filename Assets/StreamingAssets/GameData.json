@@ -3,7 +3,7 @@
    "runInLocal":0,
    "DebugMode":0,
    "keepNamesVisibleForPlayers":0,
-   "OSC_ServerIP":"192.168.1.29",
+   "OSC_ServerIP":"192.168.1.107",
    "OSC_LocalIP":"",
    "OSC_SoundHandlerIP":"127.0.0.1",
    "OSC_SoundHandlerPort":8888,
