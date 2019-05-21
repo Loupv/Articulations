@@ -38,7 +38,7 @@ public class UserManager : MonoBehaviour
             gameEngine.uiHandler.viewerController.InitViewerController(isMe);
         }
         UserData user = _userGameObject.GetComponent<UserData>();
-        user.Init(gameEngine, ID, name, address, localPort, _userGameObject, isMe, userRole);
+        user.Init(gameEngine, usersPlaying.Count, ID, name, address, localPort, _userGameObject, isMe, userRole);
 
         if (userRole == UserRole.Player)
         {
@@ -69,7 +69,7 @@ public class UserManager : MonoBehaviour
 
         UserData p = go.GetComponent<UserData>();
 
-        p.Init(gameEngine, ID, name, address, port, go, false, role);
+        p.Init(gameEngine, usersPlaying.Count, ID, name, address, port, go, false, role);
         usersPlaying.Add(p);
 
         if (role == UserRole.Player) {
