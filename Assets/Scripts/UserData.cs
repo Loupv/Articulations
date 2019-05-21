@@ -23,15 +23,17 @@ public class UserData : MonoBehaviour
     public OSCEndPoint oscEndPoint;
     public Vector3 calibrationPositionGap;
     public Quaternion calibrationRotationGap;
+    public int _registeredRank;
 
 
-    public void Init(GameEngine gameEngine, int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, UserRole userRole)
+    public void Init(GameEngine gameEngine, int rank, int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, UserRole userRole)
     {
         
         _ID = ID;
 
         _userRole = userRole;
-        _playerName = playerName; 
+        _playerName = playerName;
+        _registeredRank = rank;
 
         oscEndPoint = new OSCEndPoint();
         oscEndPoint.ip = address;

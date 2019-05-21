@@ -8,13 +8,23 @@ public class scenarioEvents : MonoBehaviour
     public GameObject bubbles;
     public bool mirrorAct;
     public bool bubblesAct;
-
+    public GameObject[] particleSystems;
+    //public List<GameObject> particleList;
+    public GameObject userManager;
+    GameObject shortTrails;
+    GameObject longTrails;
     public Material[] skyboxes;
     int i;
+    int j;
     // Start is called before the first frame update
     void Start()
     {
         i = 1;
+        shortTrails = userManager.GetComponent<UserManager>().ShortTrailsPrefab;
+        longTrails = userManager.GetComponent<UserManager>().LongTrailsPrefab;
+        //particleList = new List<GameObject>();
+
+
     }
 
     // Update is called once per frame
@@ -51,6 +61,20 @@ public class scenarioEvents : MonoBehaviour
 
         if (i > skyboxes.Length-1)
             i = 0;
+
+
+            if (Input.GetKeyUp(KeyCode.P))
+            {
+
+                shortTrails = particleSystems[j];
+                longTrails = particleSystems[j+1];
+            j += 2;
+            Debug.Log(j);
+            }
+
+        if (j > particleSystems.Length - 1)
+            j = 0;
+
 
     }
 }

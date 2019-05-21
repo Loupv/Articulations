@@ -82,8 +82,8 @@ public class GameEngine : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(EnableDisableVRMode(false));
-
+        if(!useVRHeadset) StartCoroutine(EnableDisableVRMode(false));
+        else StartCoroutine(EnableDisableVRMode(true));
         //VRSettings.LoadDeviceByName("None");
         Application.targetFrameRate = targetFrameRate;
         //InitApplication();
@@ -170,7 +170,7 @@ public class GameEngine : MonoBehaviour
             appState = AppState.WaitingForServer;
             networkManager.RegisterUSer(_user, _userRole);
             canvasHandler.ChangeCanvas("waitingCanvas");
-            if (useVRHeadset) StartCoroutine(EnableDisableVRMode(true));
+            //if (useVRHeadset) StartCoroutine(EnableDisableVRMode(true));
             foreach(GameObject model in GameObject.FindGameObjectsWithTag("SteamModel"))
             {
                 model.SetActive(false);

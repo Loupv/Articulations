@@ -125,7 +125,6 @@ public class SendOSC : MonoBehaviour {
 
                 message = new OscMessage();
                 message.address =  "/AudioData";
-                message.values.Add(userData._ID);
 
                 if(i == 0){ 
                     pos = userData.head.transform.position;
@@ -140,6 +139,8 @@ public class SendOSC : MonoBehaviour {
                     rot = userData.rightHand.transform.rotation;
                 }
 
+                //message.values.Add(userData._ID);
+                message.values.Add(userData._registeredRank);
                 message.values.Add(i);
                 message.values.Add(pos.x);
                 message.values.Add(pos.y);
