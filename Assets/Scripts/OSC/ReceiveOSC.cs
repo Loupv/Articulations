@@ -195,9 +195,10 @@ public class ReceiveOSC : MonoBehaviour {
     void EnvironmentChangedByServer(OscMessage message)
     {
         if (gameEngine.debugMode) Debug.Log("Received : " + message);
+
         string envType = message.GetString(0);
 
-        if (envType == "mirror") gameEngine.mirror.SetActive(!gameEngine.mirror.activeSelf);
+        if (envType == "mirror") gameEngine.scenarioEvents.ToggleMirror();
         else if (envType == "sky") gameEngine.scenarioEvents.SetNextSkybox();
     }
  

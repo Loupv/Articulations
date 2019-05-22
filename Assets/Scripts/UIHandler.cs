@@ -96,6 +96,7 @@ public class UIHandler : MonoBehaviour
         }
     }
 
+    // server function
     public void EnvironmentChange(string env)
     {
         // change env to server

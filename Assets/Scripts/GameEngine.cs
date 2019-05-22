@@ -67,7 +67,7 @@ public class GameEngine : MonoBehaviour
     public GameObject sceneGameObjects;
     public List<GameObject> POVs;
 
-    public GameObject mirror;
+    //public GameObject mirror;
 
     public PerformanceRecorder performanceRecorder;
     public UserRole _userRole;

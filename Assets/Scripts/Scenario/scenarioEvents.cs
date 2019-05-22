@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class scenarioEvents : MonoBehaviour
 {
-    public GameObject [] mirror;
+    public GameObject [] mirrors;
     public GameObject bubbles;
     public bool mirrorAct;
     public bool bubblesAct;
@@ -33,12 +33,12 @@ public class scenarioEvents : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.M))
             mirrorAct = !mirrorAct;
         if (mirrorAct) { 
-            mirror[0].SetActive(true);
-            mirror[1].SetActive(true);
+            mirrors[0].SetActive(true);
+            mirrors[1].SetActive(true);
         }
         else { 
-            mirror[0].SetActive(false);
-            mirror[1].SetActive(false);
+            mirrors[0].SetActive(false);
+            mirrors[1].SetActive(false);
         }
 
         if (Input.GetKeyUp(KeyCode.B))
@@ -83,5 +83,23 @@ public class scenarioEvents : MonoBehaviour
         RenderSettings.skybox = skyboxes[i];
         i++;
         if (i > skyboxes.Length - 1) i = 0;
+    }
+
+
+    public void ToggleMirror()
+    {
+        //foreach (GameObject mirror in mirrors) mirror.SetActive(!mirror.activeSelf);
+
+        mirrorAct = !mirrorAct;
+        if (mirrorAct)
+        {
+            mirrors[0].SetActive(true);
+            mirrors[1].SetActive(true);
+        }
+        else
+        {
+            mirrors[0].SetActive(false);
+            mirrors[1].SetActive(false);
+        }
     }
 }

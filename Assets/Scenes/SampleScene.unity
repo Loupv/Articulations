@@ -3500,7 +3500,6 @@ MonoBehaviour:
   sceneGameObjects: {fileID: 1108977789}
   POVs:
   - {fileID: 1960842520}
-  mirror: {fileID: 948420167}
   performanceRecorder: {fileID: 1899021880}
   _userRole: 0
   appState: 0
@@ -5441,12 +5440,6 @@ Transform:
   m_Father: {fileID: 1108977790}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 4.2, y: 0, z: 0}
---- !u!1 &948420167 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2567116941096412024, guid: fdce18ecc9e292c4a932712c564d23f9,
-    type: 3}
-  m_PrefabInstance: {fileID: 2044756898}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &971417399
 GameObject:
   m_ObjectHideFlags: 0
@@ -6220,7 +6213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9adea9bcce8444844a587ac2782e561b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mirror:
+  mirrors:
   - {fileID: 2044756900}
   - {fileID: 2044756899}
   bubbles: {fileID: 224755575}
@@ -11156,7 +11149,7 @@ PrefabInstance:
     - target: {fileID: 2567116941096412024, guid: fdce18ecc9e292c4a932712c564d23f9,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3403384150052378280, guid: fdce18ecc9e292c4a932712c564d23f9,
         type: 3}
@@ -11211,6 +11204,16 @@ PrefabInstance:
     - target: {fileID: 3403384150052378280, guid: fdce18ecc9e292c4a932712c564d23f9,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1671509201743998423, guid: fdce18ecc9e292c4a932712c564d23f9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1671509202329457758, guid: fdce18ecc9e292c4a932712c564d23f9,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
