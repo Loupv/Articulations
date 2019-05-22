@@ -143,7 +143,11 @@ public class UserData : MonoBehaviour
 
 
     public void ChangeSkin(UserManager userManager, string skin){
-        if(skin == "noHands"){
+
+        leftHand.transform.position = new Vector3();
+        rightHand.transform.position = new Vector3();
+
+        if (skin == "noHands"){
             RemovePlayerHold();
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
             rightHand.GetComponent<MeshRenderer>().enabled = false;
@@ -154,6 +158,8 @@ public class UserData : MonoBehaviour
             RemovePlayerHold();
             leftHand.GetComponent<MeshRenderer>().enabled = true;            
             rightHand.GetComponent<MeshRenderer>().enabled = true;
+
+
             //leftHold.SetActive(false);
             //rightHold.SetActive(false);
         }
