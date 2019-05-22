@@ -115,7 +115,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 1.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -14106,7 +14106,7 @@ GameObject:
   - component: {fileID: 4927290694349139216}
   - component: {fileID: 7769535663698518852}
   m_Layer: 0
-  m_Name: Smoke_long
+  m_Name: Smoke_shorter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
