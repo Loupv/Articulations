@@ -33,7 +33,7 @@ public class UserManager : MonoBehaviour
         else if (userRole == UserRole.Tracker) _userGameObject = Instantiate(trackerPrefab);
         else if (userRole == UserRole.Viewer || userRole == UserRole.Server) _userGameObject = Instantiate(viewerPrefab);
 
-        if (userRole == UserRole.Viewer || userRole == UserRole.Tracker) {
+        if (userRole == UserRole.Viewer || userRole == UserRole.Tracker || userRole == UserRole.Server) {
             gameEngine.uiHandler.viewerController = _userGameObject.GetComponent<ViewerController>();
             gameEngine.uiHandler.viewerController.InitViewerController(isMe);
         }
