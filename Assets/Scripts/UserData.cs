@@ -165,12 +165,12 @@ public class UserData : MonoBehaviour
         else if(skin == "longTrails"){
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
             rightHand.GetComponent<MeshRenderer>().enabled = false;          
-            ReplacePlayerHold(userManager.LongTrailsPrefab);
+            ReplacePlayerHold(userManager.SparkParticlesPrefab);
         }
         else if(skin == "shortTrails"){
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
             rightHand.GetComponent<MeshRenderer>().enabled = false;
-            ReplacePlayerHold(userManager.ShortTrailsPrefab);            
+            ReplacePlayerHold(userManager.TrailRendererPrefab);            
         }
     }
 

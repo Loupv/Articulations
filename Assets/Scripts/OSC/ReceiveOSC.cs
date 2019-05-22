@@ -24,7 +24,8 @@ public class ReceiveOSC : MonoBehaviour {
             osc.SetAddressHandler("/VisualisationModeChange", VisualisationModeChange);
             osc.SetAddressHandler("/PlayerData", UpdatePartnerPosition);
             osc.SetAddressHandler("/TrailsParameterChange", UpdateTrailsVisualisation);
-            
+            osc.SetAddressHandler("/MirrorToggle", MirrorToggledByServer);
+
             //osc.SetAddressHandler("/AudioData", DebugTemp); // debugtest
 
         }
@@ -191,6 +192,10 @@ public class ReceiveOSC : MonoBehaviour {
         userManager.ChangeVisualisationMode(mode, gameEngine);
     }
 
+    void MirrorToggledByServer(OscMessage message)
+    {
+        gameEngine.mirror.SetActive(!gameEngine.mirror.activeSelf);
+    }
  
     // server has quit
     void GoInsane(OscMessage message)

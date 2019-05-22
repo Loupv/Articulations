@@ -226,11 +226,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mirror Plane (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 5710227360522308726, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5710227360522308727, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -291,15 +286,25 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 5710227360522308727, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
+    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
         type: 3}
-      propertyPath: m_LocalScale.z
+      propertyPath: m_canvasOriginWorldPosition.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
+        type: 3}
+      propertyPath: m_canvasOriginWorldPosition.y
+      value: 1.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
+        type: 3}
+      propertyPath: m_canvasOriginWorldPosition.z
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
         type: 3}
-      propertyPath: canvasOrigin
-      value: 
+      propertyPath: m_canvasOriginWorldRotation.y
+      value: 201.6364
       objectReference: {fileID: 0}
     - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
         type: 3}
@@ -333,21 +338,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
         type: 3}
-      propertyPath: m_canvasOriginWorldPosition.x
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
-        type: 3}
-      propertyPath: m_canvasOriginWorldPosition.y
-      value: 1.49
-      objectReference: {fileID: 0}
-    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
-        type: 3}
-      propertyPath: m_canvasOriginWorldPosition.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
-        type: 3}
       propertyPath: useScissor
       value: 0
       objectReference: {fileID: 0}
@@ -358,14 +348,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
         type: 3}
-      propertyPath: m_canvasOriginWorldRotation.y
-      value: 201.6364
-      objectReference: {fileID: 0}
+      propertyPath: stereoCameraHead
+      value: 
+      objectReference: {fileID: 1671509201876715260}
+    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
+        type: 3}
+      propertyPath: stereoCameraEye
+      value: 
+      objectReference: {fileID: 1671509202024849260}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91fdc1efac0a3f944b6fe6aad01064d5, type: 3}
 --- !u!4 &1671509201743998422 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5710227360522308727, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 6344632087032193441}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1671509201876715260 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5710227360657303389, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 6344632087032193441}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &1671509202024849260 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5710227361340178125, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
     type: 3}
   m_PrefabInstance: {fileID: 6344632087032193441}
   m_PrefabAsset: {fileID: 0}
@@ -380,11 +387,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mirror Plane
-      objectReference: {fileID: 0}
-    - target: {fileID: 5710227360522308726, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5710227360522308727, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
         type: 3}
@@ -448,8 +450,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
         type: 3}
-      propertyPath: canvasOrigin
-      value: 
+      propertyPath: m_canvasOriginWorldPosition.x
+      value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
+        type: 3}
+      propertyPath: m_canvasOriginWorldPosition.y
+      value: 1.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
+        type: 3}
+      propertyPath: m_canvasOriginWorldPosition.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
+        type: 3}
+      propertyPath: m_canvasOriginWorldRotation.y
+      value: 381.6364
       objectReference: {fileID: 0}
     - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
         type: 3}
@@ -483,21 +500,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
         type: 3}
-      propertyPath: m_canvasOriginWorldPosition.x
-      value: -0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
-        type: 3}
-      propertyPath: m_canvasOriginWorldPosition.y
-      value: 1.49
-      objectReference: {fileID: 0}
-    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
-        type: 3}
-      propertyPath: m_canvasOriginWorldPosition.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
-        type: 3}
       propertyPath: useScissor
       value: 0
       objectReference: {fileID: 0}
@@ -508,14 +510,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
         type: 3}
-      propertyPath: m_canvasOriginWorldRotation.y
-      value: 381.6364
-      objectReference: {fileID: 0}
+      propertyPath: stereoCameraHead
+      value: 
+      objectReference: {fileID: 1671509202464620405}
+    - target: {fileID: 5710227360522308723, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
+        type: 3}
+      propertyPath: stereoCameraEye
+      value: 
+      objectReference: {fileID: 1671509201503348453}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91fdc1efac0a3f944b6fe6aad01064d5, type: 3}
 --- !u!4 &1671509202329457759 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5710227360522308727, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 6344632087550810152}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1671509202464620405 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5710227360657303389, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 6344632087550810152}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &1671509201503348453 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5710227361340178125, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
     type: 3}
   m_PrefabInstance: {fileID: 6344632087550810152}
   m_PrefabAsset: {fileID: 0}

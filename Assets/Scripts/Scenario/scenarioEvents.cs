@@ -20,8 +20,8 @@ public class scenarioEvents : MonoBehaviour
     void Start()
     {
         i = 1;
-        shortTrails = userManager.GetComponent<UserManager>().ShortTrailsPrefab;
-        longTrails = userManager.GetComponent<UserManager>().LongTrailsPrefab;
+        shortTrails = userManager.GetComponent<UserManager>().TrailRendererPrefab;
+        longTrails = userManager.GetComponent<UserManager>().SparkParticlesPrefab;
         //particleList = new List<GameObject>();
 
 

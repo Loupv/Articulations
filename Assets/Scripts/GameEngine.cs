@@ -66,6 +66,8 @@ public class GameEngine : MonoBehaviour
     public GameObject sceneGameObjects;
     public List<GameObject> POVs;
 
+    public GameObject mirror;
+
     public PerformanceRecorder performanceRecorder;
     public UserRole _userRole;
     public AppState appState;
@@ -173,12 +175,14 @@ public class GameEngine : MonoBehaviour
         _user = userManager.InitLocalUser(this, ID, n, tmpIp, gameData.OSC_ServerPort, true, _userRole);
 
         networkManager.InitNetwork(_userRole, gameData, uiHandler.OSCServerAddressInput.text);
-        
+
+        uiHandler.ChangeVisualizationMode(1);
+
         if (_userRole == UserRole.Server)
         {
            appState = AppState.Running;
-           networkManager.ShowConnexionState();
-           canvasHandler.ChangeCanvas("serverCanvas");
+            //networkManager.ShowConnexionState();
+            canvasHandler.ChangeCanvas("serverCanvas");
         }
         else
         {
@@ -200,10 +204,10 @@ public class GameEngine : MonoBehaviour
     {
         if (_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker)
         {
-            userManager.ChangeVisualisationMode(visualisationMode, this);
+            //uiHandler.ChangeVisualizationMode(1);
             Debug.Log(playerID+"registered on port "+requestedPort);
             appState = AppState.Running;
-            networkManager.ShowConnexionState();
+            //networkManager.ShowConnexionState();
 
             if(_user._userRole == UserRole.Player) canvasHandler.ChangeCanvas("gameCanvas");
             else if(_user._userRole == UserRole.Viewer || _userRole == UserRole.Tracker) canvasHandler.ChangeCanvas("viewerCanvas");

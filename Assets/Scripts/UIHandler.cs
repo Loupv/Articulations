@@ -96,6 +96,11 @@ public class UIHandler : MonoBehaviour
         }
     }
 
+    public void ToggleMirrorFromButton()
+    {
+        //gameEngine.mirror.SetActive(!gameEngine.mirror.activeSelf);
+        gameEngine.networkManager.SendMirrorToggleOrder(userManager.usersPlaying);
+    }
 
 /* 
     public void SetPlayerRole(int i) // 0 for player, 1 for viewer
@@ -124,6 +129,10 @@ public class UIHandler : MonoBehaviour
 
     public void ChangeVisualizationMode(int i){
         gameEngine.osc.sender.SendVisualisationChange(i, userManager.usersPlaying);
+
+        if (i == 2) trailsDecaySlider.gameObject.SetActive(true);
+        else trailsDecaySlider.gameObject.SetActive(false);
+
         userManager.ChangeVisualisationMode(i, gameEngine);
     }
 

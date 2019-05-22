@@ -323,6 +323,20 @@ public class SendOSC : MonoBehaviour {
         }
     }
 
+    public void ToggleMirrorFromServer(UserData user)
+    {
+        if (osc.initialized)
+        {
+            message = new OscMessage();
+            message.address = "/MirrorToggle";
+            osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
+            osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
+            osc.Send(message);
+        }
+            
+    }
+
+
 /*
     -------------------------------------
     -------------BOTH FUNCTIONS----------

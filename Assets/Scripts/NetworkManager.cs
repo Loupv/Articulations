@@ -118,4 +118,10 @@ public class NetworkManager : MonoBehaviour
         // send absolute position 
     }
 
+    public void SendMirrorToggleOrder(List<UserData> usersPlaying)
+    {
+        foreach(UserData user in usersPlaying)
+            osc.sender.ToggleMirrorFromServer(user);
+    }
+
 }

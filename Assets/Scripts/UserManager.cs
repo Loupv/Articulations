@@ -8,7 +8,7 @@ public class UserManager : MonoBehaviour
     public List<UserData> usersPlaying;
     public Dictionary<string, Vector3> pendingPositionsActualizations;
     public Dictionary<string, Quaternion> pendingRotationsActualizations;
-    public GameObject playerPrefab, viewerPrefab, trackerPrefab, LongTrailsPrefab, ShortTrailsPrefab;
+    public GameObject playerPrefab, viewerPrefab, trackerPrefab, TrailRendererPrefab, SparkParticlesPrefab;
 
 
     [HideInInspector]
