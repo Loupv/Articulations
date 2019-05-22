@@ -45,7 +45,6 @@ public class UserData : MonoBehaviour
             rightHand = pGameObject.transform.Find("RightHand").gameObject;
         }
 
-        //pGameObject.transform.position += new Vector3(0, Random.Range(-2f, 1.5f), 0);
 
         // things that change depending on this instance's mode
         if((gameEngine._userRole == UserRole.Player && gameEngine.userManager.keepNamesVisibleForPlayers) // if we're a player and we decided to keep UI
@@ -83,20 +82,12 @@ public class UserData : MonoBehaviour
         {
             pGameObject.name = "Tracker" + _ID.ToString();
             PlaceUserPartsInScene(gameEngine, false, pGameObject, isMe);
-
-            /*head.SetActive(false);
-            leftHand.SetActive(false);
-            rightHand.SetActive(false);*/
         }
         
         // VIEWER //
         else{
             pGameObject.name = "Viewer" + _ID.ToString();
             PlaceUserPartsInScene(gameEngine, false, pGameObject, isMe);
-
-            /*head.SetActive(false);
-            leftHand.SetActive(false);
-            rightHand.SetActive(false);*/
         }
 
 
@@ -155,18 +146,12 @@ public class UserData : MonoBehaviour
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
             rightHand.GetComponent<MeshRenderer>().enabled = false;
             head.GetComponent<MeshRenderer>().enabled = true;
-            //leftHold.SetActive(false);
-            //rightHold.SetActive(false);
         }
         else if(skin == "justHands"){
             RemovePlayerHold();
             leftHand.GetComponent<MeshRenderer>().enabled = true;            
             rightHand.GetComponent<MeshRenderer>().enabled = true;
-            head.GetComponent<MeshRenderer>().enabled = false;
-
-
-            //leftHold.SetActive(false);
-            //rightHold.SetActive(false);
+            head.GetComponent<MeshRenderer>().enabled = true;
         }
         else if(skin == "longTrails"){
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
@@ -181,6 +166,22 @@ public class UserData : MonoBehaviour
             head.GetComponent<MeshRenderer>().enabled = false;
             ReplacePlayerHold(userManager.TrailRendererPrefab);            
         }
+        else if (skin == "onehand")
+        {
+            RemovePlayerHold();
+            if (_registeredRank % 2 == 1)
+            {
+                rightHand.GetComponent<MeshRenderer>().enabled = true;
+                leftHand.GetComponent<MeshRenderer>().enabled = false;
+            }
+            else if (_registeredRank % 2 == 0)
+            {
+                rightHand.GetComponent<MeshRenderer>().enabled = false;
+                leftHand.GetComponent<MeshRenderer>().enabled = true;
+            }
+            head.GetComponent<MeshRenderer>().enabled = true;
+        }
+
     }
 
 
@@ -191,7 +192,13 @@ public class UserData : MonoBehaviour
         foreach(Transform t in rightHand.transform){
             Destroy(t.gameObject);
         }
+        foreach (Transform t in head.transform)
+        {
+            Destroy(t.gameObject);
+        }
     }
+
+
     void ReplacePlayerHold(GameObject hold){
         
         RemovePlayerHold();

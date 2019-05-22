@@ -52,7 +52,7 @@ public class UserManager : MonoBehaviour
     }
 
 
-    public UserData AddNewUser(GameEngine gameEngine, int ID, string name, string address, int port, UserRole role)
+    public UserData AddNewUser(GameEngine gameEngine, int ID, string name, string address, int port, UserRole role, int rank)
     {
         GameObject go;
 
@@ -71,7 +71,7 @@ public class UserManager : MonoBehaviour
 
         UserData p = go.GetComponent<UserData>();
 
-        p.Init(gameEngine, usersPlaying.Count, ID, name, address, port, go, false, role, userCol);
+        p.Init(gameEngine, rank, ID, name, address, port, go, false, role, userCol);
         usersPlaying.Add(p);
 
         if (role == UserRole.Player) {
@@ -104,6 +104,22 @@ public class UserManager : MonoBehaviour
         else if (mode == 3) {
             foreach (UserData user in usersPlaying) {
                 user.ChangeSkin(this, "longTrails");
+            }
+        }
+        else if (mode == 4)
+        {
+            foreach (UserData user in usersPlaying)
+            {
+                if (user._ID == gameEngine._user._ID)
+                    user.ChangeSkin(this, "noHands");
+                else user.ChangeSkin(this, "shortTrails");
+            }
+        }
+        else if (mode == 5)
+        {
+            foreach (UserData user in usersPlaying)
+            {
+                user.ChangeSkin(this, "onehand");
             }
         }
         gameEngine.currentVisualisationMode = mode;

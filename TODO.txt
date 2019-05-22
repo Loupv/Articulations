@@ -1,5 +1,22 @@
 TODO :
 
+pour demain : 
+changer la tête pour les trails
+mettre le temps de trails minimum à 1sec
+
+rémi tracker 3 et 4
+asaf tracker 5 et 7
+
+
+- 1.5 secondes pour les trails
+- très intéressant les deux face au miroir / de chaque côté -> mettre tout le monde de la même couleur
+- mettre un bouton miroir on/off
+- couleur random mais la même pour les deux
+
+
+
+Tracker Righthand - °.15 / 0 / -0.05
+
 
 !!! Objectifs : !!!
 - que les gens intéragissent ensemble
@@ -25,39 +42,16 @@ Dionysis :
 
 Priorités :
 
+- garder les balles en 0 0 0 (lefthand/righthand) - des fois elles sautent vers une autre position - quand il y a une saute de tracking ? 
+- 
+- trailrenderer error quand pas présent -> faire une exception
+- viewer en server ? viewer en local + server + client ?
 - faire un exe server et un exe client
 - régler les cas de startcoroutine enable/disable
 - Miroir
 - Adaptateur wifi
 - Calibration bi-espace
-
-
-Notes 20/5
-- Pouvoir avoir plus de particules lorque mouvement rapide, puis pouvoir collider avec
-- Pourquoi pas d'ombres sur le viewer ? (param shadow différents)
-- Problème de debrancher/rebrancher le casque au démarrage
-- Avoir un display pour l'UI et un autre pour le casque
-- désactiver les objets "Model" automatiquement
-
-
-Julien :
-- Avoir un questionnaire - avez vous vu l'expérience avant ?
-- Quel sampling rate / possibilité d'upsampler ?
-
-Matthieu :
-- Très haut du corps dû à l'absence de jambes , avoir un repère bassin ?
-- Dessiner au sein d'une sphère qui dessine aussi autour de l'autre, ou que sur l'autre
--> dans la même idée, chacun est tout seul dans la scène, le dessin de l'autre se crée autour de moi, moi je dessine sur l'autre sans que je voie ce qu'il se passe
---> dessiner sur la sphère qui entoure l'autre -> dist(main - tête) * rayon
-- "si lui il a un truc au dessus de la tête, forcément moi je l'ai aussi" -> présupposé
-
-Klint :
-- Traces avec particules inheritées super fun , changer la représentation si mouvements synchros
-- Corps elastique, pouvoir avoir les balles bien plus loin avec les bras tendus
-- Pouvoir changer la couleur des balles
-
-Asaf :
-- trace sur la tête mais avec deux secondes de transparence
+- à quoi ressemble la tête quand on est avec les particules
 
 
 

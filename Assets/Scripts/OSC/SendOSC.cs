@@ -42,6 +42,7 @@ public class SendOSC : MonoBehaviour {
             message.values.Add(user._ID);
             message.values.Add(user.oscEndPoint.remotePort);
             message.values.Add(gameEngine.currentVisualisationMode);
+            message.values.Add(user._registeredRank);
             osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
             osc.Send(message);
@@ -165,11 +166,12 @@ public class SendOSC : MonoBehaviour {
             message = new OscMessage();
             message.address = "/AddPlayerToGame";
             message.values.Add(user._ID);
-            if(user._userRole == UserRole.Player) message.values.Add(1);
+            if (user._userRole == UserRole.Player) message.values.Add(1);
             else if (user._userRole == UserRole.Tracker) message.values.Add(2);
             else if (user._userRole == UserRole.Viewer) message.values.Add(0);
 
             message.values.Add(user._playerName);
+            message.values.Add(user._registeredRank);
             osc.OscPacketIO.RemoteHostName = userTarget.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = userTarget.oscEndPoint.remotePort;
             osc.Send(message);
@@ -179,7 +181,7 @@ public class SendOSC : MonoBehaviour {
     }
 
     // sent to all existing client when a new one is registering
-    public void AddNewPlayerToClientsGames(int playerID, string name, List<UserData> usersPlaying, int isPlayer){
+    public void AddNewPlayerToClientsGames(int playerID, string name, List<UserData> usersPlaying, int isPlayer, int rank){
         
         foreach(UserData user in usersPlaying)
         {
@@ -188,7 +190,9 @@ public class SendOSC : MonoBehaviour {
                 message.address = "/AddPlayerToGame";
                 message.values.Add(playerID);
                 message.values.Add(isPlayer);
-                message.values.Add(user._playerName);
+                message.values.Add(name);
+                message.values.Add(rank);
+
                 osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
                 osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
                 osc.Send(message);

@@ -201,7 +201,7 @@ public class GameEngine : MonoBehaviour
 
     // when server has agreed for client registration
     // player/tracker 
-    public void EndStartProcess(int playerID, int requestedPort, int visualisationMode)
+    public void EndStartProcess(int playerID, int requestedPort, int visualisationMode, int rank)
     {
         if (_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker)
         {
@@ -209,7 +209,7 @@ public class GameEngine : MonoBehaviour
             Debug.Log(playerID+"registered on port "+requestedPort);
             appState = AppState.Running;
             //networkManager.ShowConnexionState();
-
+            _user._registeredRank = rank;
             if(_user._userRole == UserRole.Player) canvasHandler.ChangeCanvas("gameCanvas");
             else if(_user._userRole == UserRole.Viewer || _userRole == UserRole.Tracker) canvasHandler.ChangeCanvas("viewerCanvas");
         }
@@ -296,6 +296,7 @@ public class GameEngine : MonoBehaviour
 
     public IEnumerator EnableDisableVRMode(bool bEnable)
     {
+        #if UNITY_64 || UNITY_EDITOR_64
         if (true == bEnable)
         {
             yield return new WaitForEndOfFrame();
@@ -317,6 +318,8 @@ public class GameEngine : MonoBehaviour
 
         Debug.Log("<color=yellow>UnityEngine.XR.XRSettings.enabled = " + UnityEngine.XR.XRSettings.enabled + "</color>");
         Debug.Log("<color=yellow>UnityEngine.XR.XRSettings.loadedDeviceName = " + UnityEngine.XR.XRSettings.loadedDeviceName + "</color>");
+        #endif
     }
+
 
 }

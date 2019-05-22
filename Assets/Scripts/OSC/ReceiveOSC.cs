@@ -74,8 +74,8 @@ public class ReceiveOSC : MonoBehaviour {
 
             if (portAvailable || gameEngine.gameData.runInLocal == 0)
             {
-                UserData user = userManager.AddNewUser(gameEngine, playerID, playerName, playerIP, requestedPort, role);
-                if(role == UserRole.Player) sender.AddNewPlayerToClientsGames(playerID, playerName, userManager.usersPlaying, isPlayer);
+                UserData user = userManager.AddNewUser(gameEngine, playerID, playerName, playerIP, requestedPort, role, userManager.usersPlaying.Count);
+                if(role == UserRole.Player) sender.AddNewPlayerToClientsGames(playerID, playerName, userManager.usersPlaying, isPlayer, userManager.usersPlaying.Count-1); // minus1 because server had already added user in list
                 sender.SendRegistrationConfirmation(user);
             }
             else sender.RefuseRegistration(playerIP, requestedPort);
@@ -128,7 +128,8 @@ public class ReceiveOSC : MonoBehaviour {
             int playerID = message.GetInt(0);
             int requestedPort = message.GetInt(1);
             int visualisationMode = message.GetInt(2);
-            gameEngine.EndStartProcess(playerID, requestedPort, visualisationMode);
+            int rank = message.GetInt(3);
+            gameEngine.EndStartProcess(playerID, requestedPort, visualisationMode, rank);
         }
     }
 
@@ -169,11 +170,12 @@ public class ReceiveOSC : MonoBehaviour {
         else userRole = UserRole.Viewer;
 
         string playerName = message.GetString(2);
+        int rank = message.GetInt(3);
         
         if ((gameEngine._userRole == UserRole.Player || gameEngine._userRole == UserRole.Viewer || gameEngine._userRole == UserRole.Tracker) && playerID != gameEngine._user._ID)
         {
             Debug.Log(playerID+" vs "+gameEngine._user._ID);
-            userManager.AddNewUser(gameEngine, playerID, playerName, "null", -1, userRole);
+            userManager.AddNewUser(gameEngine, playerID, playerName, "null", -1, userRole, rank);
         }
     }
 

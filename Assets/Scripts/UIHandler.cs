@@ -139,7 +139,7 @@ public class UIHandler : MonoBehaviour
         // for clients
         gameEngine.osc.sender.SendVisualisationChange(i, userManager.usersPlaying);
 
-        if (i == 2) trailsDecaySlider.gameObject.SetActive(true);
+        if (i == 2 || i == 4) trailsDecaySlider.gameObject.SetActive(true);
         else trailsDecaySlider.gameObject.SetActive(false);
 
         // for server
