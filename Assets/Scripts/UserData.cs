@@ -117,7 +117,11 @@ public class UserData : MonoBehaviour
             GameObject cam = parent.transform.Find(gameEngine.viveHeadName).gameObject;
             cam.tag = "MainCamera";
             Camera.main.gameObject.SetActive(false);
-
+            //
+            Camera camera = cam.GetComponent<Camera>();
+            camera.cullingMask = ~(1 << 9);
+         //   head.layer = 9;
+            //
             head.transform.parent = cam.transform;
             leftHand.transform.parent = parent.transform.Find(gameEngine.viveLeftHandName).gameObject.transform;
             rightHand.transform.parent = parent.transform.Find(gameEngine.viveRightHandName).gameObject.transform;
@@ -150,6 +154,7 @@ public class UserData : MonoBehaviour
             RemovePlayerHold();
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
             rightHand.GetComponent<MeshRenderer>().enabled = false;
+            head.GetComponent<MeshRenderer>().enabled = true;
             //leftHold.SetActive(false);
             //rightHold.SetActive(false);
         }
@@ -157,6 +162,7 @@ public class UserData : MonoBehaviour
             RemovePlayerHold();
             leftHand.GetComponent<MeshRenderer>().enabled = true;            
             rightHand.GetComponent<MeshRenderer>().enabled = true;
+            head.GetComponent<MeshRenderer>().enabled = false;
 
 
             //leftHold.SetActive(false);
@@ -164,12 +170,15 @@ public class UserData : MonoBehaviour
         }
         else if(skin == "longTrails"){
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
-            rightHand.GetComponent<MeshRenderer>().enabled = false;          
+            rightHand.GetComponent<MeshRenderer>().enabled = false;
+            head.GetComponent<MeshRenderer>().enabled = false;
             ReplacePlayerHold(userManager.SparkParticlesPrefab);
+         
         }
         else if(skin == "shortTrails"){
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
             rightHand.GetComponent<MeshRenderer>().enabled = false;
+            head.GetComponent<MeshRenderer>().enabled = false;
             ReplacePlayerHold(userManager.TrailRendererPrefab);            
         }
     }
@@ -189,10 +198,14 @@ public class UserData : MonoBehaviour
 
         GameObject tmp1 = Instantiate(hold);
         GameObject tmp2 = Instantiate(hold);
+        GameObject tmp3 = Instantiate(hold);
         tmp1.transform.parent = leftHand.transform;
-        tmp2.transform.parent = rightHand.transform;        
+        tmp2.transform.parent = rightHand.transform;
+        tmp3.transform.parent = head.transform;
         tmp1.transform.position = leftHand.transform.position;
         tmp2.transform.position = rightHand.transform.position;
+        tmp3.transform.position = head.transform.position;
+        tmp3.layer = 9;
     }
 
 
