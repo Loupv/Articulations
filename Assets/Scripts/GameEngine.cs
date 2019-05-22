@@ -60,6 +60,7 @@ public class GameEngine : MonoBehaviour
     private JSONLoader jSONLoader;
     public UIHandler uiHandler;
     public SoundHandler soundHandler;
+    public scenarioEvents scenarioEvents;
     public GameData gameData;
     
     public GameObject ViveSystemPrefab;

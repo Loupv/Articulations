@@ -77,4 +77,11 @@ public class scenarioEvents : MonoBehaviour
 
 
     }
+
+    public void SetNextSkybox()
+    {
+        RenderSettings.skybox = skyboxes[i];
+        i++;
+        if (i > skyboxes.Length - 1) i = 0;
+    }
 }

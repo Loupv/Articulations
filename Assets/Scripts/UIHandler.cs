@@ -96,11 +96,17 @@ public class UIHandler : MonoBehaviour
         }
     }
 
-    public void ToggleMirrorFromButton()
+    public void EnvironmentChange(string env)
     {
-        //gameEngine.mirror.SetActive(!gameEngine.mirror.activeSelf);
-        gameEngine.networkManager.SendMirrorToggleOrder(userManager.usersPlaying);
+        // change env to server
+        if (env == "sky") gameEngine.scenarioEvents.SetNextSkybox();
+        else if (env == "mirror") Debug.Log("todo");
+
+        // change env to clients
+        gameEngine.networkManager.EnvironmentChangeOrder(userManager.usersPlaying, env);
     }
+
+    
 
 /* 
     public void SetPlayerRole(int i) // 0 for player, 1 for viewer

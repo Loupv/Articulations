@@ -24,7 +24,7 @@ public class ReceiveOSC : MonoBehaviour {
             osc.SetAddressHandler("/VisualisationModeChange", VisualisationModeChange);
             osc.SetAddressHandler("/PlayerData", UpdatePartnerPosition);
             osc.SetAddressHandler("/TrailsParameterChange", UpdateTrailsVisualisation);
-            osc.SetAddressHandler("/MirrorToggle", MirrorToggledByServer);
+            osc.SetAddressHandler("/EnvironmentChange", EnvironmentChangedByServer);
 
             //osc.SetAddressHandler("/AudioData", DebugTemp); // debugtest
 
@@ -192,9 +192,13 @@ public class ReceiveOSC : MonoBehaviour {
         userManager.ChangeVisualisationMode(mode, gameEngine);
     }
 
-    void MirrorToggledByServer(OscMessage message)
+    void EnvironmentChangedByServer(OscMessage message)
     {
-        gameEngine.mirror.SetActive(!gameEngine.mirror.activeSelf);
+        if (gameEngine.debugMode) Debug.Log("Received : " + message);
+        string envType = message.GetString(0);
+
+        if (envType == "mirror") gameEngine.mirror.SetActive(!gameEngine.mirror.activeSelf);
+        else if (envType == "sky") gameEngine.scenarioEvents.SetNextSkybox();
     }
  
     // server has quit

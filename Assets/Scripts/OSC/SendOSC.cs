@@ -333,15 +333,29 @@ public class SendOSC : MonoBehaviour {
             osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
             osc.Send(message);
         }
-            
+
+    }
+
+    public void ChangeClientsEnvironment(UserData user, string newEnv)
+    {
+        if (osc.initialized)
+        {
+            message = new OscMessage();
+            message.address = "/EnvironmentChange";
+            message.values.Add(newEnv);
+            osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
+            osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
+            osc.Send(message);
+            if (gameEngine.debugMode) Debug.Log("Sending : " + message + ", " + gameEngine.osc.outIP);
+        }
     }
 
 
-/*
-    -------------------------------------
-    -------------BOTH FUNCTIONS----------
-    -------------------------------------
- */
+    /*
+        -------------------------------------
+        -------------BOTH FUNCTIONS----------
+        -------------------------------------
+     */
 
     public void SendQuitMessage(UserRole userRole)
     {

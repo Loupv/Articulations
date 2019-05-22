@@ -118,10 +118,16 @@ public class NetworkManager : MonoBehaviour
         // send absolute position 
     }
 
-    public void SendMirrorToggleOrder(List<UserData> usersPlaying)
+    public void EnvironmentChangeOrder(List<UserData> usersPlaying, string newEnv)
+    {
+        foreach (UserData user in usersPlaying)
+            osc.sender.ChangeClientsEnvironment(user, newEnv);
+    }
+
+    /*public void SendMirrorToggleOrder(List<UserData> usersPlaying)
     {
         foreach(UserData user in usersPlaying)
             osc.sender.ToggleMirrorFromServer(user);
-    }
+    }*/
 
 }
