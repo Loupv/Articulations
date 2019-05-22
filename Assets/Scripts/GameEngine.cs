@@ -23,6 +23,7 @@ public class GameData
     public string OSC_ServerIP, OSC_LocalIP = "";
     public int OSC_ServerPort, OSC_ClientPort;
     public string OSC_SoundHandlerIP ;
+    public int useVr;
     public int OSC_SoundHandlerPort ;
     public int DebugMode;
     public int keepNamesVisibleForPlayers;
@@ -69,8 +70,10 @@ public class GameEngine : MonoBehaviour
     public UserRole _userRole;
     public AppState appState;
     public int currentVisualisationMode = 1; // justHands
-    
-    public bool useVRHeadset, sendToAudioDevice;
+
+    [HideInInspector]
+    public bool useVRHeadset;
+    public bool sendToAudioDevice;
     public string viveSystemName = "[CameraRig]", 
         viveHeadName  = "Camera", 
         viveLeftHandName = "Controller (left)", 
@@ -82,13 +85,10 @@ public class GameEngine : MonoBehaviour
 
     private void Start()
     {
-        if(!useVRHeadset) StartCoroutine(EnableDisableVRMode(false));
-        else StartCoroutine(EnableDisableVRMode(true));
-        //VRSettings.LoadDeviceByName("None");
-        Application.targetFrameRate = targetFrameRate;
-        //InitApplication();
-        StartCoroutine(InitApplication());
-        InvokeRepeating("TimedUpdate", 0.5f, 1f / targetFrameRate);    
+        //if (!useVRHeadset) StartCoroutine(EnableDisableVRMode(false));
+        //else StartCoroutine(EnableDisableVRMode(true));
+
+        StartCoroutine(InitApplication());   
     }
 
 
@@ -99,7 +99,12 @@ public class GameEngine : MonoBehaviour
 
         Screen.fullScreen = false;
         appState = AppState.Initializing;
-        
+
+        //VRSettings.LoadDeviceByName("None");
+        Application.targetFrameRate = targetFrameRate;
+        //InitApplication();
+
+
         canvasHandler = GetComponent<CanvasHandler>();
         uiHandler = GetComponentInChildren<UIHandler>();
         canvasHandler.ChangeCanvas("initCanvas");
@@ -121,8 +126,13 @@ public class GameEngine : MonoBehaviour
         gameData = uiHandler.AdjustBasicUIParameters(gameData, CheckIp());
 #endif
 
-        userManager.keepNamesVisibleForPlayers = (gameData.keepNamesVisibleForPlayers == 1);
+        //         StartCoroutine(EnableDisableVRMode(gameData.useVr == 1));
 
+        useVRHeadset = (gameData.useVr ==1);
+        StartCoroutine(EnableDisableVRMode(useVRHeadset));
+
+
+        userManager.keepNamesVisibleForPlayers = (gameData.keepNamesVisibleForPlayers == 1);
         soundHandler.Init(gameData.OSC_SoundHandlerIP, gameData.OSC_SoundHandlerPort);
 
         // adjust user's parameters
@@ -136,13 +146,14 @@ public class GameEngine : MonoBehaviour
         }
         yield return new WaitForSeconds(1);
 
+        InvokeRepeating("TimedUpdate", 0.5f, 1f / targetFrameRate);
     }
 
 
     // Start the performance when button's pressed
     public void StartGame()
     {
-        int ID = UnityEngine.Random.Range(0, 10000); //TODO remplacer par le port
+        int ID = UnityEngine.Random.Range(0, 10000); 
 
         string tmpIp;
         if(gameData.runInLocal == 1) tmpIp = "127.0.0.1";
@@ -153,17 +164,21 @@ public class GameEngine : MonoBehaviour
 
         string n = uiHandler.PlayerName.text;
 
-        if (_userRole == UserRole.Server) useVRHeadset = false;
-
+        if (_userRole == UserRole.Server)
+        {
+            useVRHeadset = false;
+            StartCoroutine(EnableDisableVRMode(false));
+            //EnableDisableVRMode(useVRHeadset);
+        }
         _user = userManager.InitLocalUser(this, ID, n, tmpIp, gameData.OSC_ServerPort, true, _userRole);
 
         networkManager.InitNetwork(_userRole, gameData, uiHandler.OSCServerAddressInput.text);
         
         if (_userRole == UserRole.Server)
         {
-            appState = AppState.Running;
-            networkManager.ShowConnexionState();
-            canvasHandler.ChangeCanvas("serverCanvas");     
+           appState = AppState.Running;
+           networkManager.ShowConnexionState();
+           canvasHandler.ChangeCanvas("serverCanvas");
         }
         else
         {
@@ -176,12 +191,11 @@ public class GameEngine : MonoBehaviour
                 model.SetActive(false);
             }
         }
-
-
     }
 
 
     // when server has agreed for client registration
+    // player/tracker 
     public void EndStartProcess(int playerID, int requestedPort, int visualisationMode)
     {
         if (_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker)
@@ -255,7 +269,8 @@ public class GameEngine : MonoBehaviour
             if(performanceRecorder.isRecording) performanceRecorder.SaveTofile();
             osc.sender.SendQuitMessage(_userRole); // TODO adapt if server
         }
-        
+
+        StartCoroutine(EnableDisableVRMode(false));
 
         Debug.Log("Closing Game Engine...");
     }
@@ -282,6 +297,7 @@ public class GameEngine : MonoBehaviour
             UnityEngine.XR.XRSettings.LoadDeviceByName("OpenVR");
             yield return new WaitForEndOfFrame();
             UnityEngine.XR.XRSettings.enabled = true;
+            Debug.Log("VR switched On");
         }
         else
         {
@@ -289,6 +305,7 @@ public class GameEngine : MonoBehaviour
             UnityEngine.XR.XRSettings.LoadDeviceByName("None");
             yield return new WaitForEndOfFrame();
             UnityEngine.XR.XRSettings.enabled = false;
+            Debug.Log("VR switched Off");
         }
 
         yield return new WaitForEndOfFrame();
