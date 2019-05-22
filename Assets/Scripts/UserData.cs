@@ -26,7 +26,7 @@ public class UserData : MonoBehaviour
     public int _registeredRank;
 
 
-    public void Init(GameEngine gameEngine, int rank, int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, UserRole userRole)
+    public void Init(GameEngine gameEngine, int rank, int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, UserRole userRole, Color col)
     {
         
         _ID = ID;
@@ -74,7 +74,6 @@ public class UserData : MonoBehaviour
             pGameObject.name = "Player" + _ID.ToString();
             playerGameObject = pGameObject;
 
-            Color col = new Color(Random.Range(0f,1f),Random.Range(0f,1f),Random.Range(0f,1f));
             head.GetComponent<MeshRenderer>().materials[0].color = col;
             leftHand.GetComponent<MeshRenderer>().materials[0].color = col;
             rightHand.GetComponent<MeshRenderer>().materials[0].color = col;
@@ -144,8 +143,8 @@ public class UserData : MonoBehaviour
 
     public void ChangeSkin(UserManager userManager, string skin){
 
-        leftHand.transform.position = new Vector3();
-        rightHand.transform.position = new Vector3();
+        //leftHand.transform.position = new Vector3();
+        //rightHand.transform.position = new Vector3();
 
         if (skin == "noHands"){
             RemovePlayerHold();

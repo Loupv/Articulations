@@ -16,6 +16,7 @@ public class UserManager : MonoBehaviour
     public NetworkManager networkManager;
 
     public bool keepNamesVisibleForPlayers;
+    public Color userCol;
 
     // Start is called before the first frame update
 
@@ -24,6 +25,7 @@ public class UserManager : MonoBehaviour
     {
         pendingPositionsActualizations = new Dictionary<string, Vector3>();
         pendingRotationsActualizations = new Dictionary<string, Quaternion>();
+        userCol = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
     }
 
 
@@ -38,7 +40,7 @@ public class UserManager : MonoBehaviour
             gameEngine.uiHandler.viewerController.InitViewerController(isMe);
         }
         UserData user = _userGameObject.GetComponent<UserData>();
-        user.Init(gameEngine, usersPlaying.Count, ID, name, address, localPort, _userGameObject, isMe, userRole);
+        user.Init(gameEngine, usersPlaying.Count, ID, name, address, localPort, _userGameObject, isMe, userRole, userCol);
 
         if (userRole == UserRole.Player)
         {
@@ -69,7 +71,7 @@ public class UserManager : MonoBehaviour
 
         UserData p = go.GetComponent<UserData>();
 
-        p.Init(gameEngine, usersPlaying.Count, ID, name, address, port, go, false, role);
+        p.Init(gameEngine, usersPlaying.Count, ID, name, address, port, go, false, role, userCol);
         usersPlaying.Add(p);
 
         if (role == UserRole.Player) {
