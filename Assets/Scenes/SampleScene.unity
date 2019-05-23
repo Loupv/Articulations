@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.42898595, g: 0.46312857, b: 0.49313748, a: 1}
+  m_IndirectSpecularColor: {r: 0.42898604, g: 0.46312886, b: 0.49313778, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3521,6 +3521,10 @@ MonoBehaviour:
   TrailRendererPrefab: {fileID: 7632359022049117597, guid: 35349948085509847b8d11f1ced88d3e,
     type: 3}
   SparkParticlesPrefab: {fileID: 7632359022049117597, guid: ed64cc7f05f9d2246a2a89a14913f304,
+    type: 3}
+  particles3: {fileID: 5709766946544949416, guid: b2b1b2b0d67417942a69d09a9899a300,
+    type: 3}
+  particles4: {fileID: 5241654894757974298, guid: 98b92c6d0458e8f4da9aad7e2ee56ba6,
     type: 3}
   _userGameObject: {fileID: 0}
   networkManager: {fileID: 504376291}

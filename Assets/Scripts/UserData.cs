@@ -166,6 +166,18 @@ public class UserData : MonoBehaviour
             head.GetComponent<MeshRenderer>().enabled = false;
             ReplacePlayerHold(userManager.TrailRendererPrefab);            
         }
+        else if(skin == "particles3"){
+            leftHand.GetComponent<MeshRenderer>().enabled = false;            
+            rightHand.GetComponent<MeshRenderer>().enabled = false;
+            head.GetComponent<MeshRenderer>().enabled = false;
+            ReplacePlayerHold(userManager.particles3);            
+        }
+        else if(skin == "particles4"){
+            leftHand.GetComponent<MeshRenderer>().enabled = false;            
+            rightHand.GetComponent<MeshRenderer>().enabled = false;
+            head.GetComponent<MeshRenderer>().enabled = false;
+            ReplacePlayerHold(userManager.particles4);            
+        }
         else if (skin == "onehand")
         {
             RemovePlayerHold();

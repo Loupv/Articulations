@@ -8,7 +8,7 @@ public class UserManager : MonoBehaviour
     public List<UserData> usersPlaying;
     public Dictionary<string, Vector3> pendingPositionsActualizations;
     public Dictionary<string, Quaternion> pendingRotationsActualizations;
-    public GameObject playerPrefab, viewerPrefab, trackerPrefab, TrailRendererPrefab, SparkParticlesPrefab;
+    public GameObject playerPrefab, viewerPrefab, trackerPrefab, TrailRendererPrefab, SparkParticlesPrefab, particles3, particles4;
 
 
     [HideInInspector]
@@ -120,6 +120,20 @@ public class UserManager : MonoBehaviour
             foreach (UserData user in usersPlaying)
             {
                 user.ChangeSkin(this, "onehand");
+            }
+        }
+        else if (mode == 6)
+        {
+            foreach (UserData user in usersPlaying)
+            {
+                user.ChangeSkin(this, "particles3");
+            }
+        }
+        else if (mode == 7)
+        {
+            foreach (UserData user in usersPlaying)
+            {
+                user.ChangeSkin(this, "particles4");
             }
         }
         gameEngine.currentVisualisationMode = mode;
