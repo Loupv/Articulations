@@ -4,24 +4,27 @@ using UnityEngine;
 
 public class scenarioEvents : MonoBehaviour
 {
+    public GameEngine gameEngine;
     public GameObject [] mirrors;
-    public GameObject bubbles;
+    public GameObject bubbles, terrainCenter, calibrationTransform1, calibrationTransform2;
     public bool mirrorAct;
     public bool bubblesAct;
     public GameObject[] particleSystems;
     //public List<GameObject> particleList;
-    public GameObject userManager;
+    public UserManager userManager;
     GameObject shortTrails;
     GameObject longTrails;
     public Material[] skyboxes;
     int i;
     int j;
     // Start is called before the first frame update
+
+
     void Start()
     {
         i = 1;
-        shortTrails = userManager.GetComponent<UserManager>().TrailRendererPrefab;
-        longTrails = userManager.GetComponent<UserManager>().SparkParticlesPrefab;
+        shortTrails = userManager.TrailRendererPrefab;
+        longTrails = userManager.SparkParticlesPrefab;
         //particleList = new List<GameObject>();
 
 
@@ -31,15 +34,8 @@ public class scenarioEvents : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.M))
-            mirrorAct = !mirrorAct;
-        if (mirrorAct) { 
-            mirrors[0].SetActive(true);
-            mirrors[1].SetActive(true);
-        }
-        else { 
-            mirrors[0].SetActive(false);
-            mirrors[1].SetActive(false);
-        }
+            ToggleMirror();
+
 
         if (Input.GetKeyUp(KeyCode.B))
             bubblesAct = !bubblesAct;
@@ -55,28 +51,26 @@ public class scenarioEvents : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.S))
         {
-            RenderSettings.skybox = skyboxes[i];
-            i++;
+            SetNextSkybox();
         }
 
-        if (i > skyboxes.Length-1)
-            i = 0;
+        if (Input.GetKeyUp(KeyCode.P))
+        {
 
-
-            if (Input.GetKeyUp(KeyCode.P))
-            {
-
-                shortTrails = particleSystems[j];
-                longTrails = particleSystems[j+1];
+            shortTrails = particleSystems[j];
+            longTrails = particleSystems[j+1];
             j += 2;
             Debug.Log(j);
-            }
+        }
 
         if (j > particleSystems.Length - 1)
-            j = 0;
+        j = 0;
 
 
     }
+
+
+
 
     public void SetNextSkybox()
     {
@@ -101,5 +95,24 @@ public class scenarioEvents : MonoBehaviour
             mirrors[0].SetActive(false);
             mirrors[1].SetActive(false);
         }
+    }
+
+
+    public void CalibratePlayersPositions(){
+
+
+        if(userManager.usersPlaying.Count > 0){
+            Vector3 tmp2D = new Vector3(userManager.usersPlaying[0].head.transform.position.x,0,userManager.usersPlaying[0].head.transform.position.z);
+            userManager.usersPlaying[0].calibrationPositionGap = tmp2D - calibrationTransform1.transform.position;
+            //userManager.usersPlaying[0].calibrationRotationGap = userManager.usersPlaying[0].gameObject.transform.rotation - calibrationTransform1.transform.rotation;
+        }
+
+        if(userManager.usersPlaying.Count > 1){
+            Vector3 tmp2D = new Vector3(userManager.usersPlaying[1].head.transform.position.x,0,userManager.usersPlaying[1].head.transform.position.z);
+            userManager.usersPlaying[1].calibrationPositionGap = tmp2D - calibrationTransform2.transform.position;
+            //userManager.usersPlaying[1].transform.rotation = calibrationTransform2.transform.rotation;
+        }
+
+        userManager.SendCalibrationGaps();
     }
 }

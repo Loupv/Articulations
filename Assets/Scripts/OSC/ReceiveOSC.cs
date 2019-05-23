@@ -25,6 +25,8 @@ public class ReceiveOSC : MonoBehaviour {
             osc.SetAddressHandler("/PlayerData", UpdatePartnerPosition);
             osc.SetAddressHandler("/TrailsParameterChange", UpdateTrailsVisualisation);
             osc.SetAddressHandler("/EnvironmentChange", EnvironmentChangedByServer);
+            osc.SetAddressHandler("/CalibrationChange", CalibrationChange);
+            
 
             //osc.SetAddressHandler("/AudioData", DebugTemp); // debugtest
 
@@ -203,7 +205,19 @@ public class ReceiveOSC : MonoBehaviour {
         if (envType == "mirror") gameEngine.scenarioEvents.ToggleMirror();
         else if (envType == "sky") gameEngine.scenarioEvents.SetNextSkybox();
     }
- 
+
+    void CalibrationChange(OscMessage message){
+        int ID = message.GetInt(0);
+        Vector3 calibVec = new Vector3(message.GetFloat(1), message.GetFloat(2), message.GetFloat(3));
+        foreach(UserData user in userManager.usersPlaying){
+            if(user._ID == ID){ 
+                user.calibrationPositionGap = calibVec;
+                break;
+            }
+        }
+        
+    }
+
     // server has quit
     void GoInsane(OscMessage message)
     {
@@ -211,6 +225,7 @@ public class ReceiveOSC : MonoBehaviour {
         Debug.Log("HAAAAAAAAAAAAAAA");
         gameEngine.KillApp();
     }
+
 
 
     void UpdateTrailsVisualisation(OscMessage message){

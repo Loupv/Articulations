@@ -173,6 +173,7 @@ public class UserManager : MonoBehaviour
                 usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"] - usersPlaying[i].calibrationPositionGap;
                 usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"] - usersPlaying[i].calibrationPositionGap;
                 usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[user._ID + "RightHand"] - usersPlaying[i].calibrationPositionGap;
+
                 usersPlaying[i].head.transform.rotation = pendingRotationsActualizations[user._ID + "Head"];
                 usersPlaying[i].leftHand.transform.rotation = pendingRotationsActualizations[user._ID + "LeftHand"];
                 usersPlaying[i].rightHand.transform.rotation = pendingRotationsActualizations[user._ID + "RightHand"];
@@ -219,16 +220,19 @@ public class UserManager : MonoBehaviour
         }
     }
 
-    public void CalibratePlayerTransform()
+    public void SendCalibrationGaps()
     {
         foreach (UserData user in usersPlaying) // we take each actual player one by one
         {
             if (user._userRole == UserRole.Player)
             {
-                user.calibrationPositionGap = user.head.transform.position;
                 networkManager.SendClientPositionGap(user, usersPlaying); // we send for each of them the list of positiongaps
                 // upon reception, each user has to adapt its own position to be centered
             }
         }
     }
+
+
+
+
 }

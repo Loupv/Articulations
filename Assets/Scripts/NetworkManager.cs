@@ -113,9 +113,9 @@ public class NetworkManager : MonoBehaviour
     }
 
 
-    public void SendClientPositionGap(UserData user, List<UserData> usersPlaying)
+    public void SendClientPositionGap(UserData targetUser, List<UserData> usersPlaying)
     {
-        // send absolute position 
+            osc.sender.SendCalibrationInfo(targetUser, usersPlaying);
     }
 
     public void EnvironmentChangeOrder(List<UserData> usersPlaying, string newEnv)
@@ -129,5 +129,8 @@ public class NetworkManager : MonoBehaviour
         foreach(UserData user in usersPlaying)
             osc.sender.ToggleMirrorFromServer(user);
     }*/
+
+
+
 
 }

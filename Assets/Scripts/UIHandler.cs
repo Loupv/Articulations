@@ -8,6 +8,7 @@ public class UIHandler : MonoBehaviour
 
     public GameEngine gameEngine;
     public UserManager userManager;
+    public scenarioEvents scenarioEvents;
     public Button networkButtonChoice1, networkButtonChoice2, networkButtonChoice3, networkButtonChoice4;
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
     public ViewerController viewerController;
@@ -224,7 +225,8 @@ public class UIHandler : MonoBehaviour
     // centers all scenegameobjects between both players
 
     public void CalibratePlayersPosition(){
-           // userManager.CalibratePlayerTransform();
+        scenarioEvents.CalibratePlayersPositions();
+           //userManager.CalibratePlayerTransform();
     }
 
     public void quitApp()

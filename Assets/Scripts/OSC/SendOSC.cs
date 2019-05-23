@@ -92,6 +92,10 @@ public class SendOSC : MonoBehaviour {
                 rot = userData.rightHand.transform.rotation;
             }
 
+            if(gameEngine._userRole == UserRole.Server){
+                //pos -=  userData.calibrationPositionGap;
+            }
+
             message.values.Add(playerPart);
             message.values.Add(pos.x);
             message.values.Add(pos.y);
@@ -253,7 +257,25 @@ public class SendOSC : MonoBehaviour {
         }
     }
 
+    public void SendCalibrationInfo(UserData targetUser, List<UserData> usersPlaying){
 
+        foreach (UserData userToSend in usersPlaying)
+        {
+            if(userToSend._ID != targetUser._ID){
+                osc.OscPacketIO.RemoteHostName = targetUser.oscEndPoint.ip;
+                osc.OscPacketIO.RemotePort = targetUser.oscEndPoint.remotePort;
+                message = new OscMessage();
+                message.address = "/CalibrationChange";
+                message.values.Add(userToSend._ID);
+                message.values.Add(userToSend.calibrationPositionGap.x);
+                message.values.Add(userToSend.calibrationPositionGap.y);
+                message.values.Add(userToSend.calibrationPositionGap.z);
+                osc.Send(message);
+                Debug.Log("Sending : " + message);
+            }  
+        }
+
+    }
 
 
 /*

@@ -7,6 +7,7 @@ public class PerformanceRecorder : MonoBehaviour
 {
     public GameEngine gameEngine;
     //public string filePrefix = "";
+    [HideInInspector]
     public string filePath;
     public GameObject startButton, pauseButton;
     public UIHandler uiHandler;
@@ -22,7 +23,7 @@ public class PerformanceRecorder : MonoBehaviour
     public void StartRecording()
     {
         startTime = Time.time * 1000;
-        string fileName = gameEngine._user._ID+"_"+System.DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".csv";
+        string fileName = System.DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".csv";
         //Debug.Log(filePath+fileName);
 
         if (File.Exists(filePath+fileName))
@@ -63,6 +64,7 @@ public class PerformanceRecorder : MonoBehaviour
     // triggered by UI
     public void StopRecording(){
         isRecording = false;
+        isPaused = false;
         startButton.SetActive(true);
         uiHandler.ActualizeGizmos(isRecording, isPaused);
         SaveTofile();
