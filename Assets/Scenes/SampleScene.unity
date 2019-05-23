@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.42898604, g: 0.46312886, b: 0.49313778, a: 1}
+  m_IndirectSpecularColor: {r: 0.42898628, g: 0.46312916, b: 0.4931383, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -7216,7 +7216,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1108977789}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: -0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 921629307}
@@ -10651,6 +10651,75 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1768966549}
   m_CullTransparentMesh: 0
+--- !u!1001 &1794355809
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2567116941096412024, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_Name
+      value: Mirrors_horizontal
+      objectReference: {fileID: 0}
+    - target: {fileID: 3403384150052378280, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3403384150052378280, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3403384150052378280, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3403384150052378280, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3403384150052378280, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3403384150052378280, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3403384150052378280, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3403384150052378280, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3403384150052378280, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3403384150052378280, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3403384150052378280, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c75a5713b26b810488b2a06603513f68, type: 3}
 --- !u!1 &1830972328
 GameObject:
   m_ObjectHideFlags: 0
@@ -11982,11 +12051,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mirrors
       objectReference: {fileID: 0}
-    - target: {fileID: 2567116941096412024, guid: fdce18ecc9e292c4a932712c564d23f9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3403384150052378280, guid: fdce18ecc9e292c4a932712c564d23f9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12040,16 +12104,6 @@ PrefabInstance:
     - target: {fileID: 3403384150052378280, guid: fdce18ecc9e292c4a932712c564d23f9,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1671509201743998423, guid: fdce18ecc9e292c4a932712c564d23f9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1671509202329457758, guid: fdce18ecc9e292c4a932712c564d23f9,
-        type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -13009,6 +13063,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7335820485800272613, guid: 1bd9cec0cd4731c4b9ef93c4055a44d9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bd9cec0cd4731c4b9ef93c4055a44d9, type: 3}
