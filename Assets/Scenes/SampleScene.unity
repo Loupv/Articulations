@@ -7215,7 +7215,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1108977789}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: -0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 921629307}
@@ -10662,11 +10662,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mirrors_horizontal
       objectReference: {fileID: 0}
-    - target: {fileID: 2567116941096412024, guid: c75a5713b26b810488b2a06603513f68,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3403384150052378280, guid: c75a5713b26b810488b2a06603513f68,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10720,11 +10715,6 @@ PrefabInstance:
     - target: {fileID: 3403384150052378280, guid: c75a5713b26b810488b2a06603513f68,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1671509202329457758, guid: c75a5713b26b810488b2a06603513f68,
-        type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -11986,11 +11976,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mirrors
       objectReference: {fileID: 0}
-    - target: {fileID: 2567116941096412024, guid: fdce18ecc9e292c4a932712c564d23f9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3403384150052378280, guid: fdce18ecc9e292c4a932712c564d23f9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12044,16 +12029,6 @@ PrefabInstance:
     - target: {fileID: 3403384150052378280, guid: fdce18ecc9e292c4a932712c564d23f9,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1671509201743998423, guid: fdce18ecc9e292c4a932712c564d23f9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1671509202329457758, guid: fdce18ecc9e292c4a932712c564d23f9,
-        type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

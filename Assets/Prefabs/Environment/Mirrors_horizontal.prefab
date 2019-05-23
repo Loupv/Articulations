@@ -393,6 +393,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mirror Plane
       objectReference: {fileID: 0}
+    - target: {fileID: 5710227360522308726, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5710227360522308727, guid: 91fdc1efac0a3f944b6fe6aad01064d5,
         type: 3}
       propertyPath: m_LocalPosition.x
