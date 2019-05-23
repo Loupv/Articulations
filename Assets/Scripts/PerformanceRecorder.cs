@@ -16,7 +16,7 @@ public class PerformanceRecorder : MonoBehaviour
 
     void Start(){
        uiHandler.ActualizeGizmos(isRecording, isPaused);
-       filePath = Application.streamingAssetsPath+"/Recordings/";
+       filePath = Application.dataPath +"/StreamingAssets/Recordings/";
     }
 
     public void StartRecording()
@@ -60,6 +60,7 @@ public class PerformanceRecorder : MonoBehaviour
         uiHandler.ActualizeGizmos(isRecording, isPaused);
     }
 
+    // triggered by UI
     public void StopRecording(){
         isRecording = false;
         startButton.SetActive(true);
@@ -80,6 +81,7 @@ public class PerformanceRecorder : MonoBehaviour
 
     public void SaveTofile(){
         sr.Close();
+        Debug.Log("PerformanceRecordingFile saved !");
     }
 
 
