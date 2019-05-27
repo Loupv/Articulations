@@ -8,7 +8,7 @@ an invisible watcher that can control a camera around the scene to observe the p
 
 We're planning to write a wiki soon. But the basics for now :
 
-- Runs on Unity 2018.3.3f1
+- Runs on Unity 2018.3.3f1 and HTC Vive
 - Can run in unity editor and as executable (needs at least one executable to run two instances on the same computer)
 - There's a "gameData.json" file in "Assets/StreamingAssets" folder  where you'll need to write the server IP address to help clients to log on the network
 - First, launch the server, then the clients.
