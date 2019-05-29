@@ -80,15 +80,15 @@ public class SendOSC : MonoBehaviour {
             message.values.Add(userData._ID);
 
             if(playerPart == 0){ 
-                pos = userData.head.transform.position;
+                pos = userData.head.transform.position- userData.calibrationPositionGap;
                 rot = userData.head.transform.rotation;
             }
             if(playerPart == 1){ 
-                pos = userData.leftHand.transform.position;
+                pos = userData.leftHand.transform.position- userData.calibrationPositionGap;
                 rot = userData.leftHand.transform.rotation;
             }
             if(playerPart == 2){ 
-                pos = userData.rightHand.transform.position;
+                pos = userData.rightHand.transform.position- userData.calibrationPositionGap;
                 rot = userData.rightHand.transform.rotation;
             }
 
@@ -261,18 +261,18 @@ public class SendOSC : MonoBehaviour {
 
         foreach (UserData userToSend in usersPlaying)
         {
-            if(userToSend._ID != targetUser._ID){
-                osc.OscPacketIO.RemoteHostName = targetUser.oscEndPoint.ip;
-                osc.OscPacketIO.RemotePort = targetUser.oscEndPoint.remotePort;
-                message = new OscMessage();
-                message.address = "/CalibrationChange";
-                message.values.Add(userToSend._ID);
-                message.values.Add(userToSend.calibrationPositionGap.x);
-                message.values.Add(userToSend.calibrationPositionGap.y);
-                message.values.Add(userToSend.calibrationPositionGap.z);
-                osc.Send(message);
-                Debug.Log("Sending : " + message);
-            }  
+            //if(userToSend._ID != targetUser._ID){
+            osc.OscPacketIO.RemoteHostName = targetUser.oscEndPoint.ip;
+            osc.OscPacketIO.RemotePort = targetUser.oscEndPoint.remotePort;
+            message = new OscMessage();
+            message.address = "/CalibrationChange";
+            message.values.Add(userToSend._ID);
+            message.values.Add(userToSend.calibrationPositionGap.x);
+            //message.values.Add(userToSend.calibrationPositionGap.y);
+            message.values.Add(userToSend.calibrationPositionGap.z);
+            osc.Send(message);
+            Debug.Log("Sending : " + message);
+            //}  
         }
 
     }
@@ -320,15 +320,15 @@ public class SendOSC : MonoBehaviour {
             message.values.Add(userData._ID);
 
             if(playerPart == 0){ 
-                pos = userData.head.transform.position;
+                pos = userData.head.transform.position - userData.calibrationPositionGap; // send position without taking care of gap
                 rot = userData.head.transform.rotation;
             }
             if(playerPart == 1){ 
-                pos = userData.leftHand.transform.position;
+                pos = userData.leftHand.transform.position - userData.calibrationPositionGap;
                 rot = userData.leftHand.transform.rotation;
             }
             if(playerPart == 2){ 
-                pos = userData.rightHand.transform.position;
+                pos = userData.rightHand.transform.position - userData.calibrationPositionGap;
                 rot = userData.rightHand.transform.rotation;
             }
 

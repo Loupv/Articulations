@@ -1,9 +1,8 @@
 TODO :
 
-pour demain : 
-changer la tête pour les trails
-mettre le temps de trails minimum à 1sec
 
+pour demain : 
+*
 rémi tracker 3 et 4
 asaf tracker 5 et 7
 

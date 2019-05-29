@@ -138,12 +138,13 @@ public class ReceiveOSC : MonoBehaviour {
     // triggered for each osc position message received (3 per player)
     void UpdatePartnerPosition(OscMessage message)
     {
+        if(gameEngine.debugMode) Debug.Log("Received : "+message);
+        
         int playerID = message.GetInt(0);
         string playerPart="none";
         if(message.GetInt(1) == 0) playerPart = "Head";
         else if (message.GetInt(1) == 1) playerPart = "LeftHand";
         else if (message.GetInt(1) == 2) playerPart = "RightHand";
-        //Debug.Log("Received : "+message);
         float xPos = message.GetFloat(2);
         float yPos = message.GetFloat(3);
         float zPos = message.GetFloat(4);
@@ -152,9 +153,9 @@ public class ReceiveOSC : MonoBehaviour {
         float zRot = message.GetFloat(7);
         float wRot = message.GetFloat(8);
 
-        if (playerID != gameEngine._user._ID)
+        if (playerID != gameEngine._user._ID) // if is not me
         {
-            userManager.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos);
+            userManager.pendingPositionsActualizations[playerID + playerPart] = new Vector3(xPos, yPos, zPos) + userManager.GetCalibrationGap(playerID);
             userManager.pendingRotationsActualizations[playerID + playerPart] = new Quaternion(xRot, yRot, zRot, wRot);
         }
     }
@@ -207,15 +208,18 @@ public class ReceiveOSC : MonoBehaviour {
     }
 
     void CalibrationChange(OscMessage message){
+        Debug.Log(message);
         int ID = message.GetInt(0);
-        Vector3 calibVec = new Vector3(message.GetFloat(1), message.GetFloat(2), message.GetFloat(3));
         foreach(UserData user in userManager.usersPlaying){
             if(user._ID == ID){ 
+                Vector3 calibVec = new Vector3(message.GetFloat(1), 0, message.GetFloat(2));
                 user.calibrationPositionGap = calibVec;
+                if(user._ID == userManager.me._ID) // if we receive our own gap, we translate the parent and not the childs
+                    user.gameObject.transform.position += user.calibrationPositionGap;
+                
                 break;
             }
         }
-        
     }
 
     // server has quit

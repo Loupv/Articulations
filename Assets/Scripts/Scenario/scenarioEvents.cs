@@ -5,8 +5,8 @@ using UnityEngine;
 public class scenarioEvents : MonoBehaviour
 {
     public GameEngine gameEngine;
-    public GameObject [] mirrors;
-    public GameObject bubbles, terrainCenter, calibrationTransform1, calibrationTransform2;
+    public GameObject [] mirrors, calibrationTransforms;
+    public GameObject bubbles, terrainCenter;
     public bool mirrorAct;
     public bool bubblesAct;
     public GameObject[] particleSystems;
@@ -97,22 +97,19 @@ public class scenarioEvents : MonoBehaviour
         }
     }
 
-
+    // server side
     public void CalibratePlayersPositions(){
 
-
-        if(userManager.usersPlaying.Count > 0){
-            Vector3 tmp2D = new Vector3(userManager.usersPlaying[0].head.transform.position.x,0,userManager.usersPlaying[0].head.transform.position.z);
-            userManager.usersPlaying[0].calibrationPositionGap = tmp2D - calibrationTransform1.transform.position;
-            //userManager.usersPlaying[0].calibrationRotationGap = userManager.usersPlaying[0].gameObject.transform.rotation - calibrationTransform1.transform.rotation;
+        int i = 0;
+        // stores calib gaps into UserData to be sent later to clients and applied server side
+        while(userManager.usersPlaying.Count > i){
+            Vector3 tmp2D = new Vector3(userManager.usersPlaying[i].head.transform.position.x,0,userManager.usersPlaying[i].head.transform.position.z);
+            userManager.usersPlaying[i].calibrationPositionGap = -tmp2D + calibrationTransforms[i].transform.position;
+            userManager.usersPlaying[i].gameObject.transform.position += userManager.usersPlaying[i].calibrationPositionGap;
+            i++;
         }
 
-        if(userManager.usersPlaying.Count > 1){
-            Vector3 tmp2D = new Vector3(userManager.usersPlaying[1].head.transform.position.x,0,userManager.usersPlaying[1].head.transform.position.z);
-            userManager.usersPlaying[1].calibrationPositionGap = tmp2D - calibrationTransform2.transform.position;
-            //userManager.usersPlaying[1].transform.rotation = calibrationTransform2.transform.rotation;
-        }
-
-        userManager.SendCalibrationGaps();
+        // client side
+        gameEngine.networkManager.SendClientPositionGap();
     }
 }

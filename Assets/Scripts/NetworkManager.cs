@@ -113,9 +113,13 @@ public class NetworkManager : MonoBehaviour
     }
 
 
-    public void SendClientPositionGap(UserData targetUser, List<UserData> usersPlaying)
+    public void SendClientPositionGap()
     {
-            osc.sender.SendCalibrationInfo(targetUser, usersPlaying);
+        foreach (UserData targetUser in gameEngine.userManager.usersPlaying) // we take each actual player one by one
+        {
+            osc.sender.SendCalibrationInfo(targetUser, gameEngine.userManager.usersPlaying); // we send for each of them the list of positiongaps
+            // upon reception, each user has to adapt its own position to be centered
+        }
     }
 
     public void EnvironmentChangeOrder(List<UserData> usersPlaying, string newEnv)
@@ -123,14 +127,6 @@ public class NetworkManager : MonoBehaviour
         foreach (UserData user in usersPlaying)
             osc.sender.ChangeClientsEnvironment(user, newEnv);
     }
-
-    /*public void SendMirrorToggleOrder(List<UserData> usersPlaying)
-    {
-        foreach(UserData user in usersPlaying)
-            osc.sender.ToggleMirrorFromServer(user);
-    }*/
-
-
 
 
 }

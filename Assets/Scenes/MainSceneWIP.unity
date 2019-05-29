@@ -3939,6 +3939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usersPlaying: []
+  me: {fileID: 0}
   playerPrefab: {fileID: 6075620792603371976, guid: 10484b8557ffb4a049780c44fa624de4,
     type: 3}
   viewerPrefab: {fileID: 6075620792603371976, guid: c5732bc9e74ce8e4d9894a361334bf4b,
@@ -7273,14 +7274,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9adea9bcce8444844a587ac2782e561b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameEngine: {fileID: 0}
+  gameEngine: {fileID: 667967430}
   mirrors:
   - {fileID: 2044756900}
   - {fileID: 2044756899}
+  calibrationTransforms:
+  - {fileID: 213720885}
+  - {fileID: 1895186955}
   bubbles: {fileID: 224755575}
   terrainCenter: {fileID: 1131772036}
-  calibrationTransform1: {fileID: 213720885}
-  calibrationTransform2: {fileID: 1895186955}
   mirrorAct: 0
   bubblesAct: 0
   particleSystems:
@@ -7305,7 +7307,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1039167017}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.500534, y: -2.338498, z: 3.5411868}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 667967431}

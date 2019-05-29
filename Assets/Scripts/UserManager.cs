@@ -6,6 +6,7 @@ public class UserManager : MonoBehaviour
 {
 
     public List<UserData> usersPlaying;
+    public UserData me;
     public Dictionary<string, Vector3> pendingPositionsActualizations;
     public Dictionary<string, Quaternion> pendingRotationsActualizations;
     public GameObject playerPrefab, viewerPrefab, trackerPrefab, TrailRendererPrefab, SparkParticlesPrefab, particles3, particles4;
@@ -47,6 +48,8 @@ public class UserManager : MonoBehaviour
             usersPlaying.Add(user);
             StoreUserParts(user);
         }
+
+        me = user;
 
         return user;
     }
@@ -170,10 +173,16 @@ public class UserManager : MonoBehaviour
         {
             if (user._ID != me._ID && user._userRole == UserRole.Player) // if it's not actual instance's player
             {
-                usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"] - usersPlaying[i].calibrationPositionGap;
-                usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"] - usersPlaying[i].calibrationPositionGap;
-                usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[user._ID + "RightHand"] - usersPlaying[i].calibrationPositionGap;
-
+                if(me._userRole == UserRole.Server){
+                    usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"]  + usersPlaying[i].calibrationPositionGap;
+                    usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"]  + usersPlaying[i].calibrationPositionGap ;
+                    usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[user._ID + "RightHand"]  + usersPlaying[i].calibrationPositionGap ;
+                }
+                else {
+                    usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"];
+                    usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"];
+                    usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[user._ID + "RightHand"];
+                }
                 usersPlaying[i].head.transform.rotation = pendingRotationsActualizations[user._ID + "Head"];
                 usersPlaying[i].leftHand.transform.rotation = pendingRotationsActualizations[user._ID + "LeftHand"];
                 usersPlaying[i].rightHand.transform.rotation = pendingRotationsActualizations[user._ID + "RightHand"];
@@ -220,19 +229,18 @@ public class UserManager : MonoBehaviour
         }
     }
 
-    public void SendCalibrationGaps()
-    {
-        foreach (UserData user in usersPlaying) // we take each actual player one by one
-        {
-            if (user._userRole == UserRole.Player)
-            {
-                networkManager.SendClientPositionGap(user, usersPlaying); // we send for each of them the list of positiongaps
-                // upon reception, each user has to adapt its own position to be centered
-            }
-        }
+
+    public void TranslateUser(){
+        me.gameObject.transform.position += me.calibrationPositionGap;
     }
 
 
+    public Vector3 GetCalibrationGap(int playerID){
+        foreach(UserData user in usersPlaying){
+            if(user._ID== playerID) return user.calibrationPositionGap;
+        }
+        return new Vector3();
+    }
 
 
 }

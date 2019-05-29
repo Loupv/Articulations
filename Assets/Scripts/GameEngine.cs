@@ -261,7 +261,7 @@ public class GameEngine : MonoBehaviour
     {
         Application.Quit();
 #if UnityEditor
-            if(Application.isEditor) EditorApplication.ExecuteMenuItem("Edit/Play");
+        EditorApplication.ExecuteMenuItem("Edit/Play");
 #endif
     }
 
