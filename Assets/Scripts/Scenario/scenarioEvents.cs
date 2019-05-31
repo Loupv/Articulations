@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class scenarioEvents : MonoBehaviour
+public class ScenarioEvents : MonoBehaviour
 {
     public GameEngine gameEngine;
     public GameObject [] mirrors, calibrationTransforms;
@@ -104,6 +104,7 @@ public class scenarioEvents : MonoBehaviour
         // stores calib gaps into UserData to be sent later to clients and applied server side
         while(userManager.usersPlaying.Count > i){
             Vector3 tmp2D = new Vector3(userManager.usersPlaying[i].head.transform.position.x,0,userManager.usersPlaying[i].head.transform.position.z);
+            
             userManager.usersPlaying[i].calibrationPositionGap = -tmp2D + calibrationTransforms[i].transform.position;
             userManager.usersPlaying[i].gameObject.transform.position += userManager.usersPlaying[i].calibrationPositionGap;
             i++;

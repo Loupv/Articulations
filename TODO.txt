@@ -1,5 +1,5 @@
 TODO :
-
+finir le pb de connexion failed lors de l'enregistrement en coroutine
 
 pour demain : 
 *

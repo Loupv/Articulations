@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PerformanceRecorder : MonoBehaviour
 {
@@ -9,39 +10,65 @@ public class PerformanceRecorder : MonoBehaviour
     //public string filePrefix = "";
     [HideInInspector]
     public string filePath;
+    
+    //[HideInInspector]
+    public float saveRate = 1;
     public GameObject startButton, pauseButton;
     public UIHandler uiHandler;
     StreamWriter sr;
+    [HideInInspector]
     public double startTime;
+    public float lastFrameTime;//, timeAtFrameStart;
     public bool isRecording, isPaused;
+    public string fileName;
+    string line;
 
     void Start(){
        uiHandler.ActualizeGizmos(isRecording, isPaused);
        filePath = Application.dataPath +"/StreamingAssets/Recordings/";
+       if(!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
     }
 
     public void StartRecording()
     {
         startTime = Time.time * 1000;
-        string fileName = System.DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".csv";
-        //Debug.Log(filePath+fileName);
+        saveRate = 1/(float)gameEngine.gameData.saveFileFrequency;
+        fileName = System.DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".csv";
 
         if (File.Exists(filePath+fileName))
         {
             Debug.Log(fileName+" already exists.");
             return;
         }
-        sr = File.CreateText(filePath+fileName);
-        sr.WriteLine ("ID;Time;Viz;x;y;z;rotx;roty;rotz;lhx;lhy;lhz;lhrotx;lhroty;lhrotz;rhx;rhy;rhz;rhrotx;rhroty;rhrotz");
-        isRecording = true;
-        uiHandler.ActualizeGizmos(isRecording, isPaused);
-        startButton.SetActive(false);
+        else{
+            sr = File.CreateText(filePath+fileName);
+            sr.WriteLine ("ID;TS_Unix;Time;Viz;x;y;z;rotx;roty;rotz;lhx;lhy;lhz;lhrotx;lhroty;lhrotz;rhx;rhy;rhz;rhrotx;rhroty;rhrotz");
+            isRecording = true;
+            uiHandler.ActualizeGizmos(isRecording, isPaused);
+            startButton.SetActive(false);
+            
+            #if UNITY_EDITOR
+                UnityEditor.AssetDatabase.Refresh();
+            #endif
+
+            InvokeRepeating("SaveData",0f, saveRate);
+        }
     }
 
-    public void SaveData(List<UserData> usersPlaying){
+ /*   public void Update() {
+        float delta = Time.time - lastFrameTime;
+        if (lastFrameTime == 0 || delta >= 0.016f) {
+            lastFrameTime = Time.time;
+            Debug.Log("Update===== " + delta);
+        }
+    }*/
 
-        foreach(UserData user in usersPlaying){
-            if(user._userRole == UserRole.Player) AddLine(user._ID, user.head.transform, user.leftHand.transform, user.rightHand.transform, gameEngine.currentVisualisationMode);
+    public void SaveData(){
+ 
+        if(isRecording && !isPaused){
+            foreach(UserData user in gameEngine.userManager.usersPlaying){
+                if(user._userRole == UserRole.Player) AddLine(user._ID, user.head.transform, user.leftHand.transform, user.rightHand.transform, gameEngine.currentVisualisationMode);
+            }
         }
     }
 
@@ -67,16 +94,20 @@ public class PerformanceRecorder : MonoBehaviour
         isPaused = false;
         startButton.SetActive(true);
         uiHandler.ActualizeGizmos(isRecording, isPaused);
+        CancelInvoke("SaveData");
         SaveTofile();
     }
 
     public void AddLine(int ID, Transform headTransform, Transform leftHandTransform, Transform rightHandTransform, int vizMode){
-        sr.WriteLine (ID+";"+(Time.time*1000 - startTime).ToString("N3")+";"+vizMode.ToString()+";"+headTransform.position.x+";"+headTransform.position.y+";"+headTransform.position.z+
+        double ts = (System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        line = ID+";"+ts+";"+((int)(Time.time*1000 - startTime))+";"+vizMode.ToString()+";"+headTransform.position.x+";"+headTransform.position.y+";"+headTransform.position.z+
         ";"+headTransform.rotation.x+";"+headTransform.rotation.y+";"+headTransform.rotation.z+
         ";"+leftHandTransform.position.x+";"+leftHandTransform.position.y+";"+leftHandTransform.position.z+
         ";"+leftHandTransform.rotation.x+";"+leftHandTransform.rotation.y+";"+leftHandTransform.rotation.z+
         ";"+rightHandTransform.position.x+";"+rightHandTransform.position.y+";"+rightHandTransform.position.z+
-        ";"+rightHandTransform.rotation.x+";"+rightHandTransform.rotation.y+";"+rightHandTransform.rotation.z);
+        ";"+rightHandTransform.rotation.x+";"+rightHandTransform.rotation.y+";"+rightHandTransform.rotation.z;
+        line = line.Replace(",",".");
+        sr.WriteLine (line);
     }
 
 

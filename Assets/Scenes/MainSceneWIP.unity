@@ -4004,6 +4004,7 @@ MonoBehaviour:
     OSC_ClientPort: 0
     OSC_SoundHandlerIP: 
     useVr: 0
+    saveFileFrequency: 0
     OSC_SoundHandlerPort: 0
     DebugMode: 0
     keepNamesVisibleForPlayers: 0
@@ -11902,12 +11903,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameEngine: {fileID: 667967430}
   filePath: C:\Users\l.vuarnesson\Documents\Articulations_DataFiles
+  saveRate: 1
   startButton: {fileID: 305427021}
   pauseButton: {fileID: 1502089131}
   uiHandler: {fileID: 2107918503}
   startTime: 0
+  lastFrameTime: 0
   isRecording: 0
   isPaused: 0
+  fileName: 
 --- !u!4 &1899021881
 Transform:
   m_ObjectHideFlags: 0

@@ -24,6 +24,7 @@ public class GameData
     public int OSC_ServerPort, OSC_ClientPort;
     public string OSC_SoundHandlerIP ;
     public int useVr;
+    public int saveFileFrequency;
     public int OSC_SoundHandlerPort ;
     public int DebugMode;
     public int keepNamesVisibleForPlayers;
@@ -60,7 +61,7 @@ public class GameEngine : MonoBehaviour
     private JSONLoader jSONLoader;
     public UIHandler uiHandler;
     public SoundHandler soundHandler;
-    public scenarioEvents scenarioEvents;
+    public ScenarioEvents scenarioEvents;
     public GameData gameData;
     
     public GameObject ViveSystemPrefab;
@@ -103,10 +104,7 @@ public class GameEngine : MonoBehaviour
         Screen.fullScreen = false;
         appState = AppState.Initializing;
 
-        //VRSettings.LoadDeviceByName("None");
         Application.targetFrameRate = targetFrameRate;
-        //InitApplication();
-
 
         canvasHandler = GetComponent<CanvasHandler>();
         uiHandler = GetComponentInChildren<UIHandler>();
@@ -128,8 +126,6 @@ public class GameEngine : MonoBehaviour
         gameData = JsonUtility.FromJson<GameData>(dataAsJson);
         gameData = uiHandler.AdjustBasicUIParameters(gameData, CheckIp());
 #endif
-
-        //         StartCoroutine(EnableDisableVRMode(gameData.useVr == 1));
 
         useVRHeadset = (gameData.useVr ==1);
         StartCoroutine(EnableDisableVRMode(useVRHeadset));
@@ -251,7 +247,7 @@ public class GameEngine : MonoBehaviour
             if(sendToAudioDevice) networkManager.SendAllPositionsToAudioSystem(userManager.usersPlaying, soundHandler);
         }
 
-        if(performanceRecorder.isRecording && !performanceRecorder.isPaused) performanceRecorder.SaveData(userManager.usersPlaying);
+        
         
         userManager.ActualizePlayersPositions(_user); 
     }

@@ -8,7 +8,7 @@ public class UIHandler : MonoBehaviour
 
     public GameEngine gameEngine;
     public UserManager userManager;
-    public scenarioEvents scenarioEvents;
+    public ScenarioEvents scenarioEvents;
     public Button networkButtonChoice1, networkButtonChoice2, networkButtonChoice3, networkButtonChoice4;
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
     public ViewerController viewerController;
@@ -102,7 +102,7 @@ public class UIHandler : MonoBehaviour
     {
         // change env to server
         if (env == "sky") gameEngine.scenarioEvents.SetNextSkybox();
-        else if (env == "mirror") Debug.Log("todo");
+        else if (env == "mirror") Debug.Log("todo"); // what happens to the server ?
 
         // change env to clients
         gameEngine.networkManager.EnvironmentChangeOrder(userManager.usersPlaying, env);
@@ -140,7 +140,10 @@ public class UIHandler : MonoBehaviour
         // for clients
         gameEngine.osc.sender.SendVisualisationChange(i, userManager.usersPlaying);
 
-        if (i == 2 || i == 4) trailsDecaySlider.gameObject.SetActive(true);
+        if (i == 2 || i == 4){
+            trailsDecaySlider.gameObject.SetActive(true);
+            //trailsDecaySlider.value = 
+        }
         else trailsDecaySlider.gameObject.SetActive(false);
 
         // for server
@@ -220,9 +223,10 @@ public class UIHandler : MonoBehaviour
     }
 
 
-    // this method has to do several things :
-    // store each player position and substract it permanentely to place them at the center of the scene
-    // centers all scenegameobjects between both players
+    // this method stores in each user data a gap vector that centers him back to the markers at the center of the field
+    // for a client's instance it translates its own parent and leaves head and hands at 0 (to be used with vive locally)
+    // for a client's other instance, it add the gap to each of the sphere
+    // for the server it adds the gap during the update function (taking data from the pending position dictionnary) 
 
     public void CalibratePlayersPosition(){
         scenarioEvents.CalibratePlayersPositions();
