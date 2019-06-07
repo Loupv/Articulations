@@ -116,6 +116,8 @@ public class GameEngine : MonoBehaviour
         gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
         gameData = uiHandler.AdjustBasicUIParameters(gameData, CheckIp()); // change UI and gameData depending on actual conditions
 
+        scenarioEvents.scenarios = jSONLoader.LoadScenarioList("/StreamingAssets/Scenarios.json").scenarios;
+
 #if UNITY_ANDROID
         Debug.Log("tablet initializing");
         string filePath = Path.Combine(Application.streamingAssetsPath, "GameData.json");

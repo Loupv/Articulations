@@ -2,38 +2,55 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class Scenario{
+    public int scenarioId;
+    public int[] conditions;
+    public int[] durations;
+}
+[System.Serializable]
+public class ScenarioList{
+    public Scenario[] scenarios;
+}
+
+
+
+
 public class ScenarioEvents : MonoBehaviour
 {
     public GameEngine gameEngine;
     public GameObject [] mirrors, calibrationTransforms;
     public GameObject bubbles, terrainCenter;
+    public PerformanceRecorder performanceRecorder;
     public bool mirrorAct;
     public bool bubblesAct;
     public GameObject[] particleSystems;
+    public Scenario[] scenarios;
+    public int currentScenario;
+    public int currentCondition;
     //public List<GameObject> particleList;
     public UserManager userManager;
     GameObject shortTrails;
     GameObject longTrails;
     public Material[] skyboxes;
-    int i;
+    public bool timerPaused, scenarioIsRunning;
+    int skyboxID, timeRemaining;
     int j;
     // Start is called before the first frame update
 
 
     void Start()
     {
-        i = 1;
+        skyboxID = 1;
         shortTrails = userManager.TrailRendererPrefab;
         longTrails = userManager.SparkParticlesPrefab;
         //particleList = new List<GameObject>();
-
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.M))
+        /*/if (Input.GetKeyUp(KeyCode.M))
             ToggleMirror();
 
 
@@ -66,17 +83,75 @@ public class ScenarioEvents : MonoBehaviour
         if (j > particleSystems.Length - 1)
         j = 0;
 
+        */
 
     }
 
 
+    public void StartScenario(){
+
+        currentCondition = 0;
+        currentScenario = gameEngine.uiHandler.scenarioDropDown.value;
+        //timeRemaining = scenarios[currentScenario].durations[currentCondition];
+
+        Debug.Log("lets "+currentScenario);
+        if(gameEngine.uiHandler.autoRecordPerformance.isOn) performanceRecorder.StartRecording();
+        scenarioIsRunning = true;
+        timerPaused = false;
+        gameEngine.uiHandler.ToggleScenarioButton(1);
+        InvokeRepeating("RunCondition", 0f, 1f);
+    }
+
+    public void PauseScenario(){
+        if(gameEngine.uiHandler.autoRecordPerformance.isOn) performanceRecorder.PauseRecording();
+        timerPaused = !timerPaused;
+        gameEngine.uiHandler.ToggleScenarioButton(2);
+    }
+
+    public void StopScenario(){
+
+        Debug.Log("Scenario "+currentScenario+" done !");
+        if(gameEngine.uiHandler.autoRecordPerformance.isOn) performanceRecorder.StopRecording();
+        userManager.ChangeVisualisationMode(1, gameEngine);
+        gameEngine.uiHandler.ToggleScenarioButton(0);
+        CancelInvoke("RunCondition");
+        //userManager.ChangeVisualisationMode(scenarioId, gameEngine);
+
+    }
+
+    public void RunCondition(){
+        
+        if(!timerPaused){
+            // if we reached the end of time for this condition
+            if(timeRemaining <= 0){
+                if(currentCondition < scenarios[currentScenario].conditions.Length){
+                    // remove previous condition parameters
+                    if(mirrorAct) ToggleMirror();
+                    // change visualisation
+                    userManager.ChangeVisualisationMode(scenarios[currentScenario].conditions[currentCondition], gameEngine);
+                    timeRemaining = scenarios[currentScenario].durations[currentCondition];
+                    currentCondition += 1;
+                }  
+                else{
+                    StopScenario();
+                }
+            }
+
+            timeRemaining--;
+        }
+    }
 
 
     public void SetNextSkybox()
     {
-        RenderSettings.skybox = skyboxes[i];
-        i++;
-        if (i > skyboxes.Length - 1) i = 0;
+        RenderSettings.skybox = skyboxes[skyboxID];
+        skyboxID++;
+        if (skyboxID > skyboxes.Length - 1) skyboxID = 0;
+    }
+
+    public void SetSkybox(int id){
+        skyboxID = id;
+        RenderSettings.skybox = skyboxes[skyboxID];
     }
 
 

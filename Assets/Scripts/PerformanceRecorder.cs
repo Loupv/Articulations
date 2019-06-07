@@ -100,6 +100,8 @@ public class PerformanceRecorder : MonoBehaviour
 
     public void AddLine(int ID, Transform headTransform, Transform leftHandTransform, Transform rightHandTransform, int vizMode){
         double ts = (System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        ts *= 1000;
+        ts = Math.Floor(ts);
         line = ID+";"+ts+";"+((int)(Time.time*1000 - startTime))+";"+vizMode.ToString()+";"+headTransform.position.x+";"+headTransform.position.y+";"+headTransform.position.z+
         ";"+headTransform.rotation.x+";"+headTransform.rotation.y+";"+headTransform.rotation.z+
         ";"+leftHandTransform.position.x+";"+leftHandTransform.position.y+";"+leftHandTransform.position.z+

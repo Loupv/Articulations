@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class UIHandler : MonoBehaviour
 {
@@ -9,24 +10,28 @@ public class UIHandler : MonoBehaviour
     public GameEngine gameEngine;
     public UserManager userManager;
     public ScenarioEvents scenarioEvents;
-    public Button networkButtonChoice1, networkButtonChoice2, networkButtonChoice3, networkButtonChoice4;
+    public Button networkButtonChoice1, networkButtonChoice2, networkButtonChoice3, networkButtonChoice4, 
+        autoMode, manualMode, launchScenario, pauseScenario;
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
     public ViewerController viewerController;
     public InputField OSCServerAddressInput, PlayerName;
+    public GameObject serverManualModeParent, serverAutoModeParent;
     public GameObject serverIPTextBox, playerNameTextBox;
     public GameObject recordGizmo, pauseGizmo;
+    public Dropdown scenarioDropDown;
     public int OSCServerPort, OSCClientPort;
     public Sprite selectedButtonSprite, normalButtonSprite;
-    public Toggle sendToAudioDeviceToggle;
+    public Toggle sendToAudioDeviceToggle, autoRecordPerformance;
     public Slider trailsDecaySlider;
     public Text trailTime;
+    private string scenarioMode;
 
 
     void Start(){
 
         if(sendToAudioDeviceToggle.isOn) gameEngine.sendToAudioDevice = true;
         else gameEngine.sendToAudioDevice = false;
-
+        ScenarioModeSwitch(1);
     }
 
     public GameData AdjustBasicUIParameters(GameData gameData, string tmpIp){
@@ -109,6 +114,44 @@ public class UIHandler : MonoBehaviour
     }
 
     
+    public void ScenarioDropDownChanged(int value){
+        gameEngine.scenarioEvents.currentScenario = value;
+    }
+
+
+    // switch server UI between automated and manual mode
+    public void ScenarioModeSwitch(int value){
+        if(value == 1){
+            scenarioMode = "Auto";
+            serverAutoModeParent.SetActive(true);
+            serverManualModeParent.SetActive(false);
+            manualMode.image.sprite = normalButtonSprite;
+            autoMode.image.sprite = selectedButtonSprite;
+        }
+        else if(value == 2){
+            scenarioMode = "Manual";
+            serverAutoModeParent.SetActive(false);
+            serverManualModeParent.SetActive(true);
+            manualMode.image.sprite = selectedButtonSprite;
+            autoMode.image.sprite = normalButtonSprite;
+        }
+    }
+
+    public void ToggleScenarioButton(int value){
+        if(value == 1){ // start
+            launchScenario.gameObject.SetActive(false);
+            pauseScenario.gameObject.SetActive(true);
+        }
+        else if(value == 2){ // pause
+            if(scenarioEvents.timerPaused) pauseScenario.image.sprite = normalButtonSprite;
+            else pauseScenario.image.sprite = selectedButtonSprite;
+        }
+        else if(value == 0){ // stop
+            launchScenario.gameObject.SetActive(true);
+            pauseScenario.gameObject.SetActive(false);
+        }
+
+    }
 
 /* 
     public void SetPlayerRole(int i) // 0 for player, 1 for viewer
@@ -136,9 +179,6 @@ public class UIHandler : MonoBehaviour
 
 
     public void ChangeVisualizationMode(int i){
-
-        // for clients
-        gameEngine.osc.sender.SendVisualisationChange(i, userManager.usersPlaying);
 
         if (i == 2 || i == 4){
             trailsDecaySlider.gameObject.SetActive(true);

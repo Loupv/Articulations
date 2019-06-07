@@ -87,29 +87,37 @@ public class UserManager : MonoBehaviour
 
     public void ChangeVisualisationMode(int mode, GameEngine gameEngine) {
 
-        if (mode == 0) {
+
+         // for clients
+        if(me._userRole == UserRole.Server)
+            gameEngine.osc.sender.SendVisualisationChange(mode, usersPlaying);
+
+
+        if (mode == 0) { // other's hand visible, mine are not
             foreach (UserData user in usersPlaying) {
                 if (user._ID == gameEngine._user._ID)
                     user.ChangeSkin(this, "noHands");
                 else user.ChangeSkin(this, "justHands");
             }
+            gameEngine.scenarioEvents.SetSkybox(0);
         }
-        else if (mode == 1) {
+        else if (mode == 1) { // basic condition, every spheres visible
             foreach (UserData user in usersPlaying) {
                 user.ChangeSkin(this, "justHands");
             }
+            gameEngine.scenarioEvents.SetSkybox(0);
         }
-        else if (mode == 2) {
+        else if (mode == 2) { // trails mode1
             foreach (UserData user in usersPlaying) {
                 user.ChangeSkin(this, "shortTrails");
             }
         }
-        else if (mode == 3) {
+        else if (mode == 3) { // trails mode2
             foreach (UserData user in usersPlaying) {
                 user.ChangeSkin(this, "longTrails");
             }
         }
-        else if (mode == 4)
+        else if (mode == 4) // trails mode3
         {
             foreach (UserData user in usersPlaying)
             {
@@ -118,27 +126,40 @@ public class UserManager : MonoBehaviour
                 else user.ChangeSkin(this, "shortTrails");
             }
         }
-        else if (mode == 5)
+        else if (mode == 5) // one player has left hand visible, other player has right hand visible
         {
             foreach (UserData user in usersPlaying)
             {
                 user.ChangeSkin(this, "onehand");
             }
         }
-        else if (mode == 6)
+        else if (mode == 6) // trails mode4
         {
             foreach (UserData user in usersPlaying)
             {
                 user.ChangeSkin(this, "particles3");
             }
         }
-        else if (mode == 7)
+        else if (mode == 7) // trails mode5
         {
             foreach (UserData user in usersPlaying)
             {
                 user.ChangeSkin(this, "particles4");
             }
         }
+        else if (mode == 8) // trails mode5
+        {
+            gameEngine.scenarioEvents.ToggleMirror();
+            gameEngine.scenarioEvents.SetSkybox(3);
+        }
+        else if (mode == 9) // trails mode5
+        {
+            foreach (UserData user in usersPlaying)
+            {
+                user.ChangeSkin(this, "particles4");
+            }
+        }
+        
         gameEngine.currentVisualisationMode = mode;
     }
 
