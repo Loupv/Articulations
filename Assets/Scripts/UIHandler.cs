@@ -178,9 +178,9 @@ public class UIHandler : MonoBehaviour
     }
 
 
-    public void ChangeVisualizationMode(int i){
+    public void ChangeVisualizationMode(string i){
 
-        if (i == 2 || i == 4){
+        if (i == "2" || i == "4"){
             trailsDecaySlider.gameObject.SetActive(true);
             //trailsDecaySlider.value = 
         }

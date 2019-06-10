@@ -17,7 +17,7 @@ public class UserManager : MonoBehaviour
     public NetworkManager networkManager;
 
     public bool keepNamesVisibleForPlayers;
-    public Color userCol;
+    public Color userCol, whiteColor, cyanColor;
 
     // Start is called before the first frame update
 
@@ -27,6 +27,9 @@ public class UserManager : MonoBehaviour
         pendingPositionsActualizations = new Dictionary<string, Vector3>();
         pendingRotationsActualizations = new Dictionary<string, Quaternion>();
         userCol = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+
+        whiteColor = Color.white;
+        cyanColor = Color.cyan;
     }
 
 
@@ -41,7 +44,7 @@ public class UserManager : MonoBehaviour
             gameEngine.uiHandler.viewerController.InitViewerController(isMe);
         }
         UserData user = _userGameObject.GetComponent<UserData>();
-        user.Init(gameEngine, usersPlaying.Count, ID, name, address, localPort, _userGameObject, isMe, userRole, userCol);
+        user.Init(gameEngine, usersPlaying.Count, ID, name, address, localPort, _userGameObject, isMe, userRole);
 
         if (userRole == UserRole.Player)
         {
@@ -74,7 +77,8 @@ public class UserManager : MonoBehaviour
 
         UserData p = go.GetComponent<UserData>();
 
-        p.Init(gameEngine, rank, ID, name, address, port, go, false, role, userCol);
+        p.Init(gameEngine, rank, ID, name, address, port, go, false, role);
+        ChangePlayerColor(p, whiteColor);
         usersPlaying.Add(p);
 
         if (role == UserRole.Player) {
@@ -85,7 +89,7 @@ public class UserManager : MonoBehaviour
 
 
 
-    public void ChangeVisualisationMode(int mode, GameEngine gameEngine) {
+    public void ChangeVisualisationMode(string mode, GameEngine gameEngine) {
 
 
          // for clients
@@ -93,31 +97,114 @@ public class UserManager : MonoBehaviour
             gameEngine.osc.sender.SendVisualisationChange(mode, usersPlaying);
 
 
-        if (mode == 0) { // other's hand visible, mine are not
+        if(mode != "2B" && mode !="2C") 
+            if (gameEngine.scenarioEvents.mirrorAct) gameEngine.scenarioEvents.ToggleMirror();
+        if (mode != "2C")
+            foreach (UserData user in usersPlaying)
+            {
+                ChangePlayerColor(user, whiteColor);
+            }
+
+
+        if (mode == "0")  // basic condition
+        {
             foreach (UserData user in usersPlaying) {
+                if (user._ID == gameEngine._user._ID)
+                    user.ChangeSkin(this, "justHands");
+                else if(me._userRole != UserRole.Server) user.ChangeSkin(this, "nothing");
+            }
+        }
+
+        else if (mode == "1A") // every spheres visible
+        { 
+            foreach (UserData user in usersPlaying)
+            {
+                user.ChangeSkin(this, "justHands");
+            }
+        }
+        else if (mode == "1B") // other's hand visible, mine are not
+        { 
+            foreach (UserData user in usersPlaying)
+            {
                 if (user._ID == gameEngine._user._ID)
                     user.ChangeSkin(this, "noHands");
                 else user.ChangeSkin(this, "justHands");
             }
-            gameEngine.scenarioEvents.SetSkybox(0);
         }
-        else if (mode == 1) { // basic condition, every spheres visible
-            foreach (UserData user in usersPlaying) {
+        else if (mode == "1C") // change arms length
+        { 
+        }
+
+
+        else if (mode == "2A") { // every sphere visible
+            foreach (UserData user in usersPlaying)
+            {
                 user.ChangeSkin(this, "justHands");
             }
-            gameEngine.scenarioEvents.SetSkybox(0);
         }
-        else if (mode == 2) { // trails mode1
-            foreach (UserData user in usersPlaying) {
-                user.ChangeSkin(this, "shortTrails");
+        else if (mode == "2B") // mirror mode , side to side, same color
+        { 
+            foreach (UserData user in usersPlaying)
+            {
+                user.ChangeSkin(this, "justHands");
+            }
+            if (!gameEngine.scenarioEvents.mirrorAct) gameEngine.scenarioEvents.ToggleMirror();
+        }
+        else if (mode == "2C") // mirror mode, different color
+        {
+            foreach (UserData user in usersPlaying)
+            {
+                user.ChangeSkin(this, "justHands");
+                if (user._ID == gameEngine._user._ID)
+                    ChangePlayerColor(user, whiteColor);
+                else ChangePlayerColor(user, cyanColor);
+                // different color
+            }
+            if (!gameEngine.scenarioEvents.mirrorAct) gameEngine.scenarioEvents.ToggleMirror();
+        }
+
+
+        else if (mode == "3A") // trails individual
+        {
+            foreach (UserData user in usersPlaying)
+            {
+                if (me._userRole == UserRole.Server)
+                    user.ChangeSkin(this, "trails");
+                else
+                {
+                    if (user._ID == gameEngine._user._ID)
+                        user.ChangeSkin(this, "trails");
+                    else user.ChangeSkin(this, "nothing");
+                }
+            }
+            gameEngine.sendToAudioDevice = false; // check that
+        }
+        else if (mode == "3B") // trails individual + sound
+        { // trails mode2
+            foreach (UserData user in usersPlaying)
+            {
+                if (me._userRole == UserRole.Server)
+                    user.ChangeSkin(this, "trails");
+                else
+                {
+                    if (user._ID == gameEngine._user._ID)
+                        user.ChangeSkin(this, "trails");
+                    else user.ChangeSkin(this, "nothing");
+                }
+            }
+            gameEngine.sendToAudioDevice = true; // check that
+        }
+        else if (mode == "3C") // intersubject
+        { // trails mode2
+            foreach (UserData user in usersPlaying)
+            {
+                user.ChangeSkin(this, "trails");
             }
         }
-        else if (mode == 3) { // trails mode2
-            foreach (UserData user in usersPlaying) {
-                user.ChangeSkin(this, "longTrails");
-            }
-        }
-        else if (mode == 4) // trails mode3
+
+
+        // other modes
+        else if (mode == "4A") // trails mode3
         {
             foreach (UserData user in usersPlaying)
             {
@@ -126,42 +213,19 @@ public class UserManager : MonoBehaviour
                 else user.ChangeSkin(this, "shortTrails");
             }
         }
-        else if (mode == 5) // one player has left hand visible, other player has right hand visible
+        else if (mode == "5A") // one player has left hand visible, other player has right hand visible
         {
             foreach (UserData user in usersPlaying)
             {
                 user.ChangeSkin(this, "onehand");
             }
         }
-        else if (mode == 6) // trails mode4
-        {
-            foreach (UserData user in usersPlaying)
-            {
-                user.ChangeSkin(this, "particles3");
-            }
-        }
-        else if (mode == 7) // trails mode5
-        {
-            foreach (UserData user in usersPlaying)
-            {
-                user.ChangeSkin(this, "particles4");
-            }
-        }
-        else if (mode == 8) // trails mode5
-        {
-            gameEngine.scenarioEvents.ToggleMirror();
-            gameEngine.scenarioEvents.SetSkybox(3);
-        }
-        else if (mode == 9) // trails mode5
-        {
-            foreach (UserData user in usersPlaying)
-            {
-                user.ChangeSkin(this, "particles4");
-            }
-        }
+
         
         gameEngine.currentVisualisationMode = mode;
     }
+
+
 
     public void ChangeVisualisationParameter(int valueId, float value) {
 
@@ -170,6 +234,14 @@ public class UserManager : MonoBehaviour
                 hand.GetComponent<TrailRenderer>().time = value;
             }
         }
+    }
+
+
+    public void ChangePlayerColor(UserData user, Color col)
+    {
+        user.head.GetComponent<MeshRenderer>().materials[0].color = col;
+        user.leftHand.GetComponent<MeshRenderer>().materials[0].color = col;
+        user.rightHand.GetComponent<MeshRenderer>().materials[0].color = col;
     }
 
 

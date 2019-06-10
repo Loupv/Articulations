@@ -223,7 +223,7 @@ public class SendOSC : MonoBehaviour {
         }
     }
 
-    public void SendVisualisationChange(int mode, List<UserData> usersPlaying){
+    public void SendVisualisationChange(string mode, List<UserData> usersPlaying){
 
         foreach (UserData user in usersPlaying)
         {

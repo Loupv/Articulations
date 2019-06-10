@@ -77,7 +77,11 @@ public class ReceiveOSC : MonoBehaviour {
             if (portAvailable || gameEngine.gameData.runInLocal == 0)
             {
                 UserData user = userManager.AddNewUser(gameEngine, playerID, playerName, playerIP, requestedPort, role, userManager.usersPlaying.Count);
-                if(role == UserRole.Player) sender.AddNewPlayerToClientsGames(playerID, playerName, userManager.usersPlaying, isPlayer, userManager.usersPlaying.Count-1); // minus1 because server had already added user in list
+                if (role == UserRole.Player)
+                {
+                    sender.AddNewPlayerToClientsGames(playerID, playerName, userManager.usersPlaying, isPlayer, userManager.usersPlaying.Count - 1); // minus1 because server had already added user in list
+                    sender.SendCalibrationInfo(user, userManager.usersPlaying);
+                }
                 sender.SendRegistrationConfirmation(user);
             }
             else sender.RefuseRegistration(playerIP, requestedPort);
@@ -192,7 +196,7 @@ public class ReceiveOSC : MonoBehaviour {
 
     void VisualisationModeChange(OscMessage message){
         Debug.Log("Received : " + message);
-        int mode = message.GetInt(0);
+        string mode = message.GetString(0);
 
         userManager.ChangeVisualisationMode(mode, gameEngine);
     }

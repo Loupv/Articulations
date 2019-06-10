@@ -26,7 +26,7 @@ public class UserData : MonoBehaviour
     public int _registeredRank;
 
 
-    public void Init(GameEngine gameEngine, int rank, int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, UserRole userRole, Color col)
+    public void Init(GameEngine gameEngine, int rank, int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, UserRole userRole)
     {
         
         _ID = ID;
@@ -72,10 +72,6 @@ public class UserData : MonoBehaviour
             
             pGameObject.name = "Player" + _ID.ToString();
             playerGameObject = pGameObject;
-
-            head.GetComponent<MeshRenderer>().materials[0].color = col;
-            leftHand.GetComponent<MeshRenderer>().materials[0].color = col;
-            rightHand.GetComponent<MeshRenderer>().materials[0].color = col;
         }
         // TRACKER //
         else if (_userRole == UserRole.Tracker)
@@ -160,7 +156,7 @@ public class UserData : MonoBehaviour
             ReplacePlayerHold(userManager.SparkParticlesPrefab);
          
         }
-        else if(skin == "shortTrails"){
+        else if(skin == "trails"){
             leftHand.GetComponent<MeshRenderer>().enabled = false;            
             rightHand.GetComponent<MeshRenderer>().enabled = false;
             head.GetComponent<MeshRenderer>().enabled = false;
@@ -183,18 +179,26 @@ public class UserData : MonoBehaviour
             RemovePlayerHold();
             if (_registeredRank % 2 == 1)
             {
-                rightHand.GetComponent<MeshRenderer>().enabled = true;
                 leftHand.GetComponent<MeshRenderer>().enabled = false;
+                rightHand.GetComponent<MeshRenderer>().enabled = true;
             }
             else if (_registeredRank % 2 == 0)
             {
-                rightHand.GetComponent<MeshRenderer>().enabled = false;
                 leftHand.GetComponent<MeshRenderer>().enabled = true;
+                rightHand.GetComponent<MeshRenderer>().enabled = false;
             }
             head.GetComponent<MeshRenderer>().enabled = true;
         }
+        else if (skin == "nothing")
+        {
+            RemovePlayerHold();
+            head.GetComponent<MeshRenderer>().enabled = false;
+            leftHand.GetComponent<MeshRenderer>().enabled = false;
+            rightHand.GetComponent<MeshRenderer>().enabled = false;
+        }
 
     }
+
 
 
     void RemovePlayerHold(){

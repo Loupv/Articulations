@@ -73,7 +73,7 @@ public class GameEngine : MonoBehaviour
     public PerformanceRecorder performanceRecorder;
     public UserRole _userRole;
     public AppState appState;
-    public int currentVisualisationMode = 1; // justHands
+    public string currentVisualisationMode = "1"; // justHands
 
     [HideInInspector]
     public bool useVRHeadset;
@@ -175,7 +175,7 @@ public class GameEngine : MonoBehaviour
 
         networkManager.InitNetwork(_userRole, gameData, uiHandler.OSCServerAddressInput.text);
 
-        uiHandler.ChangeVisualizationMode(1);
+        uiHandler.ChangeVisualizationMode("1");
 
         if (_userRole == UserRole.Server)
         {

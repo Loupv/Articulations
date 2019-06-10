@@ -72,7 +72,7 @@ public class PerformanceRecorder : MonoBehaviour
                 if(user._userRole == UserRole.Player) AddLine(user._ID, user.head.transform, user.leftHand.transform, user.rightHand.transform, gameEngine.currentVisualisationMode);
             }*/
             AddLine2(gameEngine.userManager.usersPlaying, gameEngine.currentVisualisationMode);
-        } //// change that to take only the list and make a loop that append new string
+        } 
     }
 
     // mettre dans un autre doc ? préciser que c'est un timemark dans le fichier
@@ -117,12 +117,12 @@ public class PerformanceRecorder : MonoBehaviour
     }
 
     // both user on same line
-    public void AddLine2(List<UserData> usersPlaying, int vizMode)
+    public void AddLine2(List<UserData> usersPlaying, string vizMode)
     {
         double ts = (System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         ts *= 1000;
         ts = Math.Floor(ts);
-        line = ts + ";" + ((int)(Time.time * 1000 - startTime)) + ";" + vizMode.ToString();
+        line = ts + ";" + ((int)(Time.time * 1000 - startTime)) + ";" + vizMode;
 
         foreach (UserData user in gameEngine.userManager.usersPlaying)
         {

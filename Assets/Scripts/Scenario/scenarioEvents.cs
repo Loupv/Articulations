@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Scenario{
     public int scenarioId;
-    public int[] conditions;
+    public string[] conditions;
     public int[] durations;
 }
 [System.Serializable]
@@ -111,7 +111,7 @@ public class ScenarioEvents : MonoBehaviour
 
         Debug.Log("Scenario "+currentScenario+" done !");
         if(gameEngine.uiHandler.autoRecordPerformance.isOn) performanceRecorder.StopRecording();
-        userManager.ChangeVisualisationMode(1, gameEngine);
+        userManager.ChangeVisualisationMode("0", gameEngine);
         gameEngine.uiHandler.ToggleScenarioButton(0);
         CancelInvoke("RunCondition");
         //userManager.ChangeVisualisationMode(scenarioId, gameEngine);
@@ -158,18 +158,21 @@ public class ScenarioEvents : MonoBehaviour
     public void ToggleMirror()
     {
         //foreach (GameObject mirror in mirrors) mirror.SetActive(!mirror.activeSelf);
-
-        mirrorAct = !mirrorAct;
-        if (mirrorAct)
+        if (gameEngine.gameData.useVr == 1) // quick fix
         {
-            mirrors[0].SetActive(true);
-            mirrors[1].SetActive(true);
+            mirrorAct = !mirrorAct;
+            if (mirrorAct)
+            {
+                mirrors[0].SetActive(true);
+                mirrors[1].SetActive(true);
+            }
+            else
+            {
+                mirrors[0].SetActive(false);
+                mirrors[1].SetActive(false);
+            }
         }
-        else
-        {
-            mirrors[0].SetActive(false);
-            mirrors[1].SetActive(false);
-        }
+        Debug.Log("Mirror Toggled");
     }
 
     // server side
