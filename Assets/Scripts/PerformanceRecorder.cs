@@ -42,7 +42,9 @@ public class PerformanceRecorder : MonoBehaviour
         }
         else{
             sr = File.CreateText(filePath+fileName);
-            sr.WriteLine ("ID;TS_Unix;Time;Viz;x;y;z;rotx;roty;rotz;lhx;lhy;lhz;lhrotx;lhroty;lhrotz;rhx;rhy;rhz;rhrotx;rhroty;rhrotz");
+            sr.WriteLine ("TS_Unix;Time;Viz;" +
+            	"ID1;x1;y1;z1;rotx1;roty1;rotz1;lhx1;lhy1;lhz1;lhrotx1;lhroty1;lhrotz1;rhx1;rhy1;rhz1;rhrotx1;rhroty1;rhrotz1;" +
+                "ID2;x2;y2;z2;rotx2;roty2;rotz2;lhx2;lhy2;lhz2;lhrotx2;lhroty2;lhrotz2;rhx2;rhy2;rhz2;rhrotx2;rhroty2;rhrotz2");
             isRecording = true;
             uiHandler.ActualizeGizmos(isRecording, isPaused);
             startButton.SetActive(false);
@@ -66,10 +68,11 @@ public class PerformanceRecorder : MonoBehaviour
     public void SaveData(){
  
         if(isRecording && !isPaused){
-            foreach(UserData user in gameEngine.userManager.usersPlaying){
+            /*foreach(UserData user in gameEngine.userManager.usersPlaying){
                 if(user._userRole == UserRole.Player) AddLine(user._ID, user.head.transform, user.leftHand.transform, user.rightHand.transform, gameEngine.currentVisualisationMode);
-            }
-        }
+            }*/
+            AddLine2(gameEngine.userManager.usersPlaying, gameEngine.currentVisualisationMode);
+        } //// change that to take only the list and make a loop that append new string
     }
 
     // mettre dans un autre doc ? préciser que c'est un timemark dans le fichier
@@ -98,6 +101,7 @@ public class PerformanceRecorder : MonoBehaviour
         SaveTofile();
     }
 
+    // every line a user 
     public void AddLine(int ID, Transform headTransform, Transform leftHandTransform, Transform rightHandTransform, int vizMode){
         double ts = (System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         ts *= 1000;
@@ -112,6 +116,28 @@ public class PerformanceRecorder : MonoBehaviour
         sr.WriteLine (line);
     }
 
+    // both user on same line
+    public void AddLine2(List<UserData> usersPlaying, int vizMode)
+    {
+        double ts = (System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        ts *= 1000;
+        ts = Math.Floor(ts);
+        line = ts + ";" + ((int)(Time.time * 1000 - startTime)) + ";" + vizMode.ToString();
+
+        foreach (UserData user in gameEngine.userManager.usersPlaying)
+        {
+            if (user._userRole == UserRole.Player) 
+                line += ";" + user._ID + 
+                ";" + user.head.transform.position.x + ";" + user.head.transform.position.y + ";" + user.head.transform.position.z +
+                ";" + user.head.transform.rotation.x + ";" + user.head.transform.rotation.y + ";" + user.head.transform.rotation.z +
+                ";" + user.leftHand.transform.position.x + ";" + user.leftHand.transform.position.y + ";" + user.leftHand.transform.position.z +
+                ";" + user.leftHand.transform.rotation.x + ";" + user.leftHand.transform.rotation.y + ";" + user.leftHand.transform.rotation.z +
+                ";" + user.rightHand.transform.position.x + ";" + user.rightHand.transform.position.y + ";" + user.rightHand.transform.position.z +
+                ";" + user.rightHand.transform.rotation.x + ";" + user.rightHand.transform.rotation.y + ";" + user.rightHand.transform.rotation.z; 
+        }
+        line = line.Replace(",", ".");
+        sr.WriteLine(line);
+    }
 
 
     public void SaveTofile(){

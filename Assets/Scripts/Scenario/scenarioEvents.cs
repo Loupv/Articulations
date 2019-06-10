@@ -95,7 +95,6 @@ public class ScenarioEvents : MonoBehaviour
         //timeRemaining = scenarios[currentScenario].durations[currentCondition];
 
         Debug.Log("lets "+currentScenario);
-        if(gameEngine.uiHandler.autoRecordPerformance.isOn) performanceRecorder.StartRecording();
         scenarioIsRunning = true;
         timerPaused = false;
         gameEngine.uiHandler.ToggleScenarioButton(1);
@@ -120,7 +119,7 @@ public class ScenarioEvents : MonoBehaviour
     }
 
     public void RunCondition(){
-        
+
         if(!timerPaused){
             // if we reached the end of time for this condition
             if(timeRemaining <= 0){
@@ -130,8 +129,9 @@ public class ScenarioEvents : MonoBehaviour
                     // change visualisation
                     userManager.ChangeVisualisationMode(scenarios[currentScenario].conditions[currentCondition], gameEngine);
                     timeRemaining = scenarios[currentScenario].durations[currentCondition];
+                    if(gameEngine.uiHandler.autoRecordPerformance.isOn && !performanceRecorder.isRecording) performanceRecorder.StartRecording();
                     currentCondition += 1;
-                }  
+                }
                 else{
                     StopScenario();
                 }
