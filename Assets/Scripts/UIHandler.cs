@@ -180,14 +180,14 @@ public class UIHandler : MonoBehaviour
 
     public void ChangeVisualizationMode(string i){
 
-        if (i == "2" || i == "4"){
+        if (i == "3A" || i == "3B" || i == "3C"){
             trailsDecaySlider.gameObject.SetActive(true);
             //trailsDecaySlider.value = 
         }
         else trailsDecaySlider.gameObject.SetActive(false);
 
         // for server
-        userManager.ChangeVisualisationMode(i, gameEngine);
+        userManager.ChangeVisualisationMode(i, gameEngine, gameEngine.weFade);
     }
 
     

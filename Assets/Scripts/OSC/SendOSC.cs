@@ -234,7 +234,7 @@ public class SendOSC : MonoBehaviour {
                 message.address = "/VisualisationModeChange";
                 message.values.Add(mode);
                 osc.Send(message);
-                Debug.Log("Sending : " + message);
+                Debug.Log("Sending : " + message +" to "+user._ID);
             }  
         }
 

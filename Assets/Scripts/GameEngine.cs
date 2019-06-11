@@ -73,7 +73,7 @@ public class GameEngine : MonoBehaviour
     public PerformanceRecorder performanceRecorder;
     public UserRole _userRole;
     public AppState appState;
-    public string currentVisualisationMode = "1"; // justHands
+    public string currentVisualisationMode = "1A", pendingVisualisationMode = "none";
 
     [HideInInspector]
     public bool useVRHeadset;
@@ -83,7 +83,7 @@ public class GameEngine : MonoBehaviour
         viveLeftHandName = "Controller (left)", 
         viveRightHandName = "Controller (right)";
     
-    public bool debugMode = false;
+    public bool debugMode = false, weFade = false;
     public GameObject debugPrefab;
     public int targetFrameRate = 60;
 
@@ -175,17 +175,18 @@ public class GameEngine : MonoBehaviour
 
         networkManager.InitNetwork(_userRole, gameData, uiHandler.OSCServerAddressInput.text);
 
-        uiHandler.ChangeVisualizationMode("1");
+        uiHandler.ChangeVisualizationMode("1A");
 
         if (_userRole == UserRole.Server)
         {
-           appState = AppState.Running;
+            appState = AppState.Running;
             //networkManager.ShowConnexionState();
             canvasHandler.ChangeCanvas("serverCanvas");
         }
         else
         {
             appState = AppState.WaitingForServer;
+            weFade = true;
             networkManager.RegisterUSer(_user, _userRole);
             canvasHandler.ChangeCanvas("waitingCanvas");
             //if (useVRHeadset) StartCoroutine(EnableDisableVRMode(true));
@@ -199,11 +200,11 @@ public class GameEngine : MonoBehaviour
 
     // when server has agreed for client registration
     // player/tracker 
-    public void EndStartProcess(int playerID, int requestedPort, int visualisationMode, int rank)
+    public void EndStartProcess(int playerID, int requestedPort, string visualisationMode, int rank)
     {
         if (_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker)
         {
-            //uiHandler.ChangeVisualizationMode(1);
+            uiHandler.ChangeVisualizationMode(visualisationMode);
             Debug.Log(playerID+"registered on port "+requestedPort);
             appState = AppState.Running;
             //networkManager.ShowConnexionState();

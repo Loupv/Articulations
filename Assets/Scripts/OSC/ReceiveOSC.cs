@@ -133,7 +133,7 @@ public class ReceiveOSC : MonoBehaviour {
             if(gameEngine.debugMode) Debug.Log("Received : " + message);
             int playerID = message.GetInt(0);
             int requestedPort = message.GetInt(1);
-            int visualisationMode = message.GetInt(2);
+            string visualisationMode = message.GetString(2);
             int rank = message.GetInt(3);
             gameEngine.EndStartProcess(playerID, requestedPort, visualisationMode, rank);
         }
@@ -198,7 +198,7 @@ public class ReceiveOSC : MonoBehaviour {
         Debug.Log("Received : " + message);
         string mode = message.GetString(0);
 
-        userManager.ChangeVisualisationMode(mode, gameEngine);
+        userManager.ChangeVisualisationMode(mode, gameEngine, gameEngine.weFade);
     }
 
     void EnvironmentChangedByServer(OscMessage message)

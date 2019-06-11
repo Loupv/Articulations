@@ -94,7 +94,6 @@ public class ScenarioEvents : MonoBehaviour
         currentScenario = gameEngine.uiHandler.scenarioDropDown.value;
         //timeRemaining = scenarios[currentScenario].durations[currentCondition];
 
-        Debug.Log("lets "+currentScenario);
         scenarioIsRunning = true;
         timerPaused = false;
         gameEngine.uiHandler.ToggleScenarioButton(1);
@@ -111,7 +110,7 @@ public class ScenarioEvents : MonoBehaviour
 
         Debug.Log("Scenario "+currentScenario+" done !");
         if(gameEngine.uiHandler.autoRecordPerformance.isOn) performanceRecorder.StopRecording();
-        userManager.ChangeVisualisationMode("0", gameEngine);
+        userManager.ChangeVisualisationMode("0", gameEngine,gameEngine.weFade);
         gameEngine.uiHandler.ToggleScenarioButton(0);
         CancelInvoke("RunCondition");
         //userManager.ChangeVisualisationMode(scenarioId, gameEngine);
@@ -127,7 +126,7 @@ public class ScenarioEvents : MonoBehaviour
                     // remove previous condition parameters
                     if(mirrorAct) ToggleMirror();
                     // change visualisation
-                    userManager.ChangeVisualisationMode(scenarios[currentScenario].conditions[currentCondition], gameEngine);
+                    userManager.ChangeVisualisationMode(scenarios[currentScenario].conditions[currentCondition], gameEngine, gameEngine.weFade);
                     timeRemaining = scenarios[currentScenario].durations[currentCondition];
                     if(gameEngine.uiHandler.autoRecordPerformance.isOn && !performanceRecorder.isRecording) performanceRecorder.StartRecording();
                     currentCondition += 1;
@@ -191,4 +190,7 @@ public class ScenarioEvents : MonoBehaviour
         // client side
         gameEngine.networkManager.SendClientPositionGap();
     }
+
+
+
 }

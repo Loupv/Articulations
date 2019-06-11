@@ -89,140 +89,149 @@ public class UserManager : MonoBehaviour
 
 
 
-    public void ChangeVisualisationMode(string mode, GameEngine gameEngine) {
+    public void ChangeVisualisationMode(string mode, GameEngine gameEngine, bool fade) {
+
+        if(!fade){
+            // for clients
+            if(me._userRole == UserRole.Server)
+                gameEngine.osc.sender.SendVisualisationChange(mode, usersPlaying);
 
 
-         // for clients
-        if(me._userRole == UserRole.Server)
-            gameEngine.osc.sender.SendVisualisationChange(mode, usersPlaying);
-
-
-        if(mode != "2B" && mode !="2C") 
-            if (gameEngine.scenarioEvents.mirrorAct) gameEngine.scenarioEvents.ToggleMirror();
-        if (mode != "2C")
-            foreach (UserData user in usersPlaying)
-            {
-                ChangePlayerColor(user, whiteColor);
-            }
-
-
-        if (mode == "0")  // basic condition
-        {
-            foreach (UserData user in usersPlaying) {
-                if (user._ID == gameEngine._user._ID)
-                    user.ChangeSkin(this, "justHands");
-                else if(me._userRole != UserRole.Server) user.ChangeSkin(this, "nothing");
-            }
-        }
-
-        else if (mode == "1A") // every spheres visible
-        { 
-            foreach (UserData user in usersPlaying)
-            {
-                user.ChangeSkin(this, "justHands");
-            }
-        }
-        else if (mode == "1B") // other's hand visible, mine are not
-        { 
-            foreach (UserData user in usersPlaying)
-            {
-                if (user._ID == gameEngine._user._ID)
-                    user.ChangeSkin(this, "noHands");
-                else user.ChangeSkin(this, "justHands");
-            }
-        }
-        else if (mode == "1C") // change arms length
-        { 
-        }
-
-
-        else if (mode == "2A") { // every sphere visible
-            foreach (UserData user in usersPlaying)
-            {
-                user.ChangeSkin(this, "justHands");
-            }
-        }
-        else if (mode == "2B") // mirror mode , side to side, same color
-        { 
-            foreach (UserData user in usersPlaying)
-            {
-                user.ChangeSkin(this, "justHands");
-            }
-            if (!gameEngine.scenarioEvents.mirrorAct) gameEngine.scenarioEvents.ToggleMirror();
-        }
-        else if (mode == "2C") // mirror mode, different color
-        {
-            foreach (UserData user in usersPlaying)
-            {
-                user.ChangeSkin(this, "justHands");
-                if (user._ID == gameEngine._user._ID)
+            if(mode != "2B" && mode !="2C") 
+                if (gameEngine.scenarioEvents.mirrorAct) gameEngine.scenarioEvents.ToggleMirror();
+            if (mode != "2C")
+                foreach (UserData user in usersPlaying)
+                {
                     ChangePlayerColor(user, whiteColor);
-                else ChangePlayerColor(user, cyanColor);
-                // different color
-            }
-            if (!gameEngine.scenarioEvents.mirrorAct) gameEngine.scenarioEvents.ToggleMirror();
-        }
+                }
+            if(mode != "3B" && mode != "3C") gameEngine.sendToAudioDevice = false;
 
 
-        else if (mode == "3A") // trails individual
-        {
-            foreach (UserData user in usersPlaying)
+            if (mode == "0")  // basic condition
             {
-                if (me._userRole == UserRole.Server)
-                    user.ChangeSkin(this, "trails");
-                else
-                {
+                foreach (UserData user in usersPlaying) {
                     if (user._ID == gameEngine._user._ID)
-                        user.ChangeSkin(this, "trails");
-                    else user.ChangeSkin(this, "nothing");
+                        user.ChangeSkin(this, "justHands");
+                    else if(me._userRole != UserRole.Server) user.ChangeSkin(this, "nothing");
                 }
             }
-            gameEngine.sendToAudioDevice = false; // check that
-        }
-        else if (mode == "3B") // trails individual + sound
-        { // trails mode2
-            foreach (UserData user in usersPlaying)
-            {
-                if (me._userRole == UserRole.Server)
-                    user.ChangeSkin(this, "trails");
-                else
+
+            else if (mode == "1A") // every spheres visible
+            { 
+                foreach (UserData user in usersPlaying)
                 {
-                    if (user._ID == gameEngine._user._ID)
-                        user.ChangeSkin(this, "trails");
-                    else user.ChangeSkin(this, "nothing");
+                    user.ChangeSkin(this, "justHands");
                 }
             }
-            gameEngine.sendToAudioDevice = true; // check that
-        }
-        else if (mode == "3C") // intersubject
-        { // trails mode2
-            foreach (UserData user in usersPlaying)
-            {
-                user.ChangeSkin(this, "trails");
+            else if (mode == "1B") // other's hand visible, mine are not
+            { 
+                foreach (UserData user in usersPlaying)
+                {
+                    if (user._ID == gameEngine._user._ID)
+                        user.ChangeSkin(this, "noHands");
+                    else user.ChangeSkin(this, "justHands");
+                }
             }
-        }
+            else if (mode == "1C") // change arms length
+            { 
+            }
 
 
-        // other modes
-        else if (mode == "4A") // trails mode3
-        {
-            foreach (UserData user in usersPlaying)
-            {
-                if (user._ID == gameEngine._user._ID)
-                    user.ChangeSkin(this, "noHands");
-                else user.ChangeSkin(this, "shortTrails");
+            else if (mode == "2A") { // every sphere visible
+                foreach (UserData user in usersPlaying)
+                {
+                    user.ChangeSkin(this, "justHands");
+                }
             }
-        }
-        else if (mode == "5A") // one player has left hand visible, other player has right hand visible
-        {
-            foreach (UserData user in usersPlaying)
-            {
-                user.ChangeSkin(this, "onehand");
+            else if (mode == "2B") // mirror mode , side to side, same color
+            { 
+                foreach (UserData user in usersPlaying)
+                {
+                    user.ChangeSkin(this, "justHands");
+                }
+                if (!gameEngine.scenarioEvents.mirrorAct) gameEngine.scenarioEvents.ToggleMirror();
             }
-        }
+            else if (mode == "2C") // mirror mode, different color
+            {
+                foreach (UserData user in usersPlaying)
+                {
+                    user.ChangeSkin(this, "justHands");
+                    if (user._ID == gameEngine._user._ID)
+                        ChangePlayerColor(user, whiteColor);
+                    else ChangePlayerColor(user, cyanColor);
+                    // different color
+                }
+                if (!gameEngine.scenarioEvents.mirrorAct) gameEngine.scenarioEvents.ToggleMirror();
+            }
 
-        
-        gameEngine.currentVisualisationMode = mode;
+
+            else if (mode == "3A") // trails individual
+            {
+                foreach (UserData user in usersPlaying)
+                {
+                    if (me._userRole == UserRole.Server)
+                        user.ChangeSkin(this, "trails");
+                    else
+                    {
+                        if (user._ID == gameEngine._user._ID)
+                            user.ChangeSkin(this, "trails");
+                        else user.ChangeSkin(this, "nothing");
+                    }
+                }
+            }
+            else if (mode == "3B") // trails individual + sound
+            { // trails mode2
+                foreach (UserData user in usersPlaying)
+                {
+                    if (me._userRole == UserRole.Server)
+                        user.ChangeSkin(this, "trails");
+                    else
+                    {
+                        if (user._ID == gameEngine._user._ID)
+                            user.ChangeSkin(this, "trails");
+                        else user.ChangeSkin(this, "nothing");
+                    }
+                }
+                gameEngine.sendToAudioDevice = true; // check that
+            }
+            else if (mode == "3C") // intersubject
+            { // trails mode2
+                foreach (UserData user in usersPlaying)
+                {
+                    user.ChangeSkin(this, "trails");
+                }
+                gameEngine.sendToAudioDevice = true; // check that
+            }
+
+
+            // other modes
+            else if (mode == "4A") // trails mode3
+            {
+                foreach (UserData user in usersPlaying)
+                {
+                    if (user._ID == gameEngine._user._ID)
+                        user.ChangeSkin(this, "noHands");
+                    else user.ChangeSkin(this, "shortTrails");
+                }
+            }
+            else if (mode == "5A") // one player has left hand visible, other player has right hand visible
+            {
+                foreach (UserData user in usersPlaying)
+                {
+                    user.ChangeSkin(this, "onehand");
+                }
+            }
+            else{
+                Debug.Log("%% Wrong VisualisationMode Request ! %%");
+            }
+
+            
+            gameEngine.currentVisualisationMode = mode;
+        }
+        else{
+            gameEngine.pendingVisualisationMode = mode;
+            Camera.main.GetComponent<CameraFade>().FadeOut();
+        }
     }
 
 

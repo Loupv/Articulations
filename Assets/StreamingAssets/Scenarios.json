@@ -5,22 +5,33 @@
 			"scenarioId" : 1,
 			"conditions" : 
 			[
-				2,8,1,4
+				"1A","1B","1C"
 			],
 			"durations"  : 
 			[
-				1,3,10,10
+				2,2,2
 			]
 		},
 		{
 			"scenarioId" : 2,
 			"conditions" : 
 			[
-				1,2,3,4
+				"2A","2B","2C"
 			],
 			"durations"  : 
 			[
-				10,10,10,10
+				2,2,2
+			]
+		},
+		{
+			"scenarioId" : 3,
+			"conditions" : 
+			[
+				"3A","3B","3C"
+			],
+			"durations"  : 
+			[
+				2,2,2
 			]
 		}
 	]
