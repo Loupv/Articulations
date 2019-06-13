@@ -53,6 +53,7 @@ public class CameraFade : MonoBehaviour
 		m_PostProcessVolume.profile.TryGetSettings(out chromaticAberration);
 
 		if(fadingMode == FadingMode.Image) m_FadeImage.enabled = true;
+        gameEngine = GameObject.FindWithTag("GameEngine").GetComponent<GameEngine>();
 	}
 
 

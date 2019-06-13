@@ -180,8 +180,9 @@ public class ScenarioEvents : MonoBehaviour
         // stores calib gaps into UserData to be sent later to clients and applied server side
         while(userManager.usersPlaying.Count > i){
             if(userManager.usersPlaying[i]._userRole == UserRole.Player){
-                Vector3 tmp2D = new Vector3(userManager.usersPlaying[i].head.transform.position.x,0,userManager.usersPlaying[i].head.transform.position.z);
-                
+                Vector3 tmp2D = new Vector3(userManager.usersPlaying[i].head.transform.position.x - userManager.usersPlaying[i].calibrationPositionGap.x, 0,
+                    userManager.usersPlaying[i].head.transform.position.z - userManager.usersPlaying[i].calibrationPositionGap.z);
+
                 userManager.usersPlaying[i].calibrationPositionGap = -tmp2D + calibrationTransforms[j].transform.position;
                 userManager.usersPlaying[i].gameObject.transform.position += userManager.usersPlaying[i].calibrationPositionGap;
                 j+=1;

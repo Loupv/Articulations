@@ -269,7 +269,14 @@ public class UserManager : MonoBehaviour
         {
             if (user._ID != me._ID && user._userRole == UserRole.Player) // if it's not actual instance's player
             {
-                if(me._userRole == UserRole.Server){
+
+                usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"];
+                usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"];
+                usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[user._ID + "RightHand"];
+
+                // in order to make calibration work for non vrUser, we need to differenciate between user with VR and user without
+                /*
+                if (me._userRole == UserRole.Server && vrUser){ 
                     usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"]  + usersPlaying[i].calibrationPositionGap;
                     usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"]  + usersPlaying[i].calibrationPositionGap ;
                     usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[user._ID + "RightHand"]  + usersPlaying[i].calibrationPositionGap ;
@@ -278,7 +285,8 @@ public class UserManager : MonoBehaviour
                     usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"];
                     usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"];
                     usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[user._ID + "RightHand"];
-                }
+                }*/
+
                 usersPlaying[i].head.transform.rotation = pendingRotationsActualizations[user._ID + "Head"];
                 usersPlaying[i].leftHand.transform.rotation = pendingRotationsActualizations[user._ID + "LeftHand"];
                 usersPlaying[i].rightHand.transform.rotation = pendingRotationsActualizations[user._ID + "RightHand"];

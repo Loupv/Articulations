@@ -215,13 +215,22 @@ public class ReceiveOSC : MonoBehaviour {
         Debug.Log(message);
         int ID = message.GetInt(0);
         foreach(UserData user in userManager.usersPlaying){
-            if(user._ID == ID){ 
+            if (user._ID == ID)
+            {
                 Vector3 calibVec = new Vector3(message.GetFloat(1), 0, message.GetFloat(2));
-                user.calibrationPositionGap = calibVec;
-                if(user._ID == userManager.me._ID) // if we receive our own gap, we translate the parent and not the childs
-                    user.gameObject.transform.position += user.calibrationPositionGap;
-                
-                break;
+
+                if (userManager.me._ID == user._ID && gameEngine.useVRHeadset && calibVec != Vector3.zero)
+                { // if me with headset
+                    GameObject viveParent = GameObject.Find(gameEngine.viveSystemName);
+                    GameObject camera = viveParent.transform.Find("Camera").gameObject;
+                    viveParent.transform.position += user.calibrationPositionGap - new Vector3(camera.transform.position.x, 0, camera.transform.position.z) 
+                        + gameEngine.scenarioEvents.calibrationTransforms[user._registeredRank].transform.position;
+                }
+                else
+                { // if me without headset or not me
+                    user.calibrationPositionGap = calibVec;
+                }
+                //break;
             }
         }
     }
