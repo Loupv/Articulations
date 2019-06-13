@@ -143,7 +143,7 @@ public class UserData : MonoBehaviour
             rightHand.GetComponent<MeshRenderer>().enabled = false;
             head.GetComponent<MeshRenderer>().enabled = true;
         }
-        else if(skin == "justHands"){
+        else if(skin == "all"){
             RemovePlayerHold();
             leftHand.GetComponent<MeshRenderer>().enabled = true;            
             rightHand.GetComponent<MeshRenderer>().enabled = true;

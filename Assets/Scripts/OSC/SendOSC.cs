@@ -167,19 +167,21 @@ public class SendOSC : MonoBehaviour {
     {
         foreach (UserData user in usersPlaying)
         {
-            message = new OscMessage();
-            message.address = "/AddPlayerToGame";
-            message.values.Add(user._ID);
-            if (user._userRole == UserRole.Player) message.values.Add(1);
-            else if (user._userRole == UserRole.Tracker) message.values.Add(2);
-            else if (user._userRole == UserRole.Viewer) message.values.Add(0);
+            if(user._userRole == UserRole.Player){
+                message = new OscMessage();
+                message.address = "/AddPlayerToGame";
+                message.values.Add(user._ID);
+                if (user._userRole == UserRole.Player) message.values.Add(1);
+                else if (user._userRole == UserRole.Tracker) message.values.Add(2);
+                else if (user._userRole == UserRole.Viewer) message.values.Add(0);
 
-            message.values.Add(user._playerName);
-            message.values.Add(user._registeredRank);
-            osc.OscPacketIO.RemoteHostName = userTarget.oscEndPoint.ip;
-            osc.OscPacketIO.RemotePort = userTarget.oscEndPoint.remotePort;
-            osc.Send(message);
-            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
+                message.values.Add(user._playerName);
+                message.values.Add(user._registeredRank);
+                osc.OscPacketIO.RemoteHostName = userTarget.oscEndPoint.ip;
+                osc.OscPacketIO.RemotePort = userTarget.oscEndPoint.remotePort;
+                osc.Send(message);
+                if(gameEngine.debugMode) Debug.Log("Sending : " + message);
+            }
         }
           
     }
@@ -261,7 +263,7 @@ public class SendOSC : MonoBehaviour {
 
         foreach (UserData userToSend in usersPlaying)
         {
-            //if(userToSend._ID != targetUser._ID){
+            
             osc.OscPacketIO.RemoteHostName = targetUser.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = targetUser.oscEndPoint.remotePort;
             message = new OscMessage();
@@ -271,8 +273,7 @@ public class SendOSC : MonoBehaviour {
             //message.values.Add(userToSend.calibrationPositionGap.y);
             message.values.Add(userToSend.calibrationPositionGap.z);
             osc.Send(message);
-            Debug.Log("Sending : " + message);
-            //}  
+            Debug.Log("Sending : " + message);  
         }
 
     }

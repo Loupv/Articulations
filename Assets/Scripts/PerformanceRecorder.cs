@@ -128,12 +128,12 @@ public class PerformanceRecorder : MonoBehaviour
         {
             if (user._userRole == UserRole.Player) 
                 line += ";" + user._ID + 
-                ";" + user.head.transform.position.x + ";" + user.head.transform.position.y + ";" + user.head.transform.position.z +
-                ";" + user.head.transform.rotation.x + ";" + user.head.transform.rotation.y + ";" + user.head.transform.rotation.z +
-                ";" + user.leftHand.transform.position.x + ";" + user.leftHand.transform.position.y + ";" + user.leftHand.transform.position.z +
-                ";" + user.leftHand.transform.rotation.x + ";" + user.leftHand.transform.rotation.y + ";" + user.leftHand.transform.rotation.z +
-                ";" + user.rightHand.transform.position.x + ";" + user.rightHand.transform.position.y + ";" + user.rightHand.transform.position.z +
-                ";" + user.rightHand.transform.rotation.x + ";" + user.rightHand.transform.rotation.y + ";" + user.rightHand.transform.rotation.z; 
+                ";" + Math.Round(user.head.transform.position.x,3) + ";" + Math.Round(user.head.transform.position.y,3) + ";" + Math.Round(user.head.transform.position.z,3) +
+                ";" + Math.Round(user.head.transform.rotation.x,3) + ";" + Math.Round(user.head.transform.rotation.y,3) + ";" + Math.Round(user.head.transform.rotation.z,3) +
+                ";" + Math.Round(user.leftHand.transform.position.x,3) + ";" + Math.Round(user.leftHand.transform.position.y,3) + ";" + Math.Round(user.leftHand.transform.position.z,3) +
+                ";" + Math.Round(user.leftHand.transform.rotation.x,3) + ";" + Math.Round(user.leftHand.transform.rotation.y,3) + ";" + Math.Round(user.leftHand.transform.rotation.z,3) +
+                ";" + Math.Round(user.rightHand.transform.position.x,3) + ";" + Math.Round(user.rightHand.transform.position.y,3) + ";" + Math.Round(user.rightHand.transform.position.z,3) +
+                ";" + Math.Round(user.rightHand.transform.rotation.x,3) + ";" + Math.Round(user.rightHand.transform.rotation.y,3) + ";" + Math.Round(user.rightHand.transform.rotation.z,3); 
         }
         line = line.Replace(",", ".");
         sr.WriteLine(line);

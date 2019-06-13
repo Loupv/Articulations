@@ -157,8 +157,8 @@ public class ScenarioEvents : MonoBehaviour
     public void ToggleMirror()
     {
         //foreach (GameObject mirror in mirrors) mirror.SetActive(!mirror.activeSelf);
-        if (gameEngine.gameData.useVr == 1) // quick fix
-        {
+        //if (gameEngine.gameData.useVr == 1) // quick fix
+        //{
             mirrorAct = !mirrorAct;
             if (mirrorAct)
             {
@@ -170,20 +170,23 @@ public class ScenarioEvents : MonoBehaviour
                 mirrors[0].SetActive(false);
                 mirrors[1].SetActive(false);
             }
-        }
+        //}
         Debug.Log("Mirror Toggled");
     }
 
     // server side
     public void CalibratePlayersPositions(){
 
-        int i = 0;
+        int i = 0, j= 0;
         // stores calib gaps into UserData to be sent later to clients and applied server side
         while(userManager.usersPlaying.Count > i){
-            Vector3 tmp2D = new Vector3(userManager.usersPlaying[i].head.transform.position.x,0,userManager.usersPlaying[i].head.transform.position.z);
-            
-            userManager.usersPlaying[i].calibrationPositionGap = -tmp2D + calibrationTransforms[i].transform.position;
-            userManager.usersPlaying[i].gameObject.transform.position += userManager.usersPlaying[i].calibrationPositionGap;
+            if(userManager.usersPlaying[i]._userRole == UserRole.Player){
+                Vector3 tmp2D = new Vector3(userManager.usersPlaying[i].head.transform.position.x,0,userManager.usersPlaying[i].head.transform.position.z);
+                
+                userManager.usersPlaying[i].calibrationPositionGap = -tmp2D + calibrationTransforms[j].transform.position;
+                userManager.usersPlaying[i].gameObject.transform.position += userManager.usersPlaying[i].calibrationPositionGap;
+                j+=1;
+            }
             i++;
         }
 

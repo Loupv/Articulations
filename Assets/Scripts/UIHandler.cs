@@ -107,7 +107,7 @@ public class UIHandler : MonoBehaviour
     {
         // change env to server
         if (env == "sky") gameEngine.scenarioEvents.SetNextSkybox();
-        else if (env == "mirror") Debug.Log("todo"); // what happens to the server ?
+        else if (env == "mirror") gameEngine.scenarioEvents.ToggleMirror();
 
         // change env to clients
         gameEngine.networkManager.EnvironmentChangeOrder(userManager.usersPlaying, env);
