@@ -14,8 +14,6 @@ public class UserManager : MonoBehaviour
 
     [HideInInspector]
     public GameObject _userGameObject;
-    public NetworkManager networkManager;
-
     public bool keepNamesVisibleForPlayers;
     public Color userCol, whiteColor, cyanColor;
 

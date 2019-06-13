@@ -19,7 +19,6 @@ public class UIHandler : MonoBehaviour
     public GameObject serverIPTextBox, playerNameTextBox;
     public GameObject recordGizmo, pauseGizmo;
     public Dropdown scenarioDropDown;
-    public int OSCServerPort, OSCClientPort;
     public Sprite selectedButtonSprite, normalButtonSprite;
     public Toggle sendToAudioDeviceToggle, autoRecordPerformance;
     public Slider trailsDecaySlider;

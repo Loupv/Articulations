@@ -18,7 +18,6 @@ public class PerformanceRecorder : MonoBehaviour
     StreamWriter sr;
     [HideInInspector]
     public double startTime;
-    public float lastFrameTime;//, timeAtFrameStart;
     public bool isRecording, isPaused;
     public string fileName;
     string line;

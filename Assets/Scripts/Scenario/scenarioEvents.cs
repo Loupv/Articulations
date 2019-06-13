@@ -24,7 +24,7 @@ public class ScenarioEvents : MonoBehaviour
     public PerformanceRecorder performanceRecorder;
     public bool mirrorAct;
     public bool bubblesAct;
-    public GameObject[] particleSystems;
+    //public GameObject[] particleSystems;
     public Scenario[] scenarios;
     public int currentScenario;
     public int currentCondition;
@@ -35,7 +35,6 @@ public class ScenarioEvents : MonoBehaviour
     public Material[] skyboxes;
     public bool timerPaused, scenarioIsRunning;
     int skyboxID, timeRemaining;
-    int j;
     // Start is called before the first frame update
 
 

@@ -65,7 +65,7 @@ public class GameEngine : MonoBehaviour
     public GameData gameData;
     
     public GameObject ViveSystemPrefab;
-    public GameObject sceneGameObjects;
+    //public GameObject sceneGameObjects;
     public List<GameObject> POVs;
 
     //public GameObject mirror;
