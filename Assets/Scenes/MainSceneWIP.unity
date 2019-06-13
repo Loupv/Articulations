@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.437
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.29308647, g: 0.32032403, b: 0.34878978, a: 0.437}
+  m_IndirectSpecularColor: {r: 0.2930869, g: 0.3203242, b: 0.34879014, a: 0.437}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5125,7 +5125,6 @@ MonoBehaviour:
   particles4: {fileID: 5241654894757974298, guid: 98b92c6d0458e8f4da9aad7e2ee56ba6,
     type: 3}
   _userGameObject: {fileID: 0}
-  networkManager: {fileID: 504376291}
   keepNamesVisibleForPlayers: 0
   userCol: {r: 0, g: 0, b: 0, a: 0}
   whiteColor: {r: 0, g: 0, b: 0, a: 0}
@@ -5255,7 +5254,6 @@ MonoBehaviour:
     DebugMode: 0
     keepNamesVisibleForPlayers: 0
   ViveSystemPrefab: {fileID: 146900, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
-  sceneGameObjects: {fileID: 1108977789}
   POVs:
   - {fileID: 1960842520}
   performanceRecorder: {fileID: 1899021880}
@@ -8797,7 +8795,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1039167017}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9adea9bcce8444844a587ac2782e561b, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f3e722e0676b96408d4e7d9dd1e6059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameEngine: {fileID: 667967430}
@@ -8812,13 +8810,6 @@ MonoBehaviour:
   performanceRecorder: {fileID: 1899021880}
   mirrorAct: 0
   bubblesAct: 0
-  particleSystems:
-  - {fileID: 4071923053233047380, guid: d6108e8bd56ae4148926888f2c282964, type: 3}
-  - {fileID: 5709766946544949416, guid: b2b1b2b0d67417942a69d09a9899a300, type: 3}
-  - {fileID: 5241654894757974298, guid: 98b92c6d0458e8f4da9aad7e2ee56ba6, type: 3}
-  - {fileID: 5241654894757974298, guid: e3a412619926bfa47b8f0e7701d12119, type: 3}
-  - {fileID: 7632359022049117597, guid: ed64cc7f05f9d2246a2a89a14913f304, type: 3}
-  - {fileID: 7632359022049117597, guid: 35349948085509847b8d11f1ced88d3e, type: 3}
   scenarios: []
   currentScenario: 0
   currentCondition: 0
@@ -15123,7 +15114,6 @@ MonoBehaviour:
   pauseButton: {fileID: 1502089131}
   uiHandler: {fileID: 2107918503}
   startTime: 0
-  lastFrameTime: 0
   isRecording: 0
   isPaused: 0
   fileName: 
@@ -16848,8 +16838,6 @@ MonoBehaviour:
   recordGizmo: {fileID: 775172754}
   pauseGizmo: {fileID: 211391146}
   scenarioDropDown: {fileID: 246854320}
-  OSCServerPort: 0
-  OSCClientPort: 0
   selectedButtonSprite: {fileID: 21300000, guid: 6c9b7cd0d25afa64e8571f5cce274839,
     type: 3}
   normalButtonSprite: {fileID: 21300000, guid: b183381bd4fb6c6488485e268758bb2c, type: 3}
