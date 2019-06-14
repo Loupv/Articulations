@@ -16,7 +16,7 @@ public class UIHandler : MonoBehaviour
     public ViewerController viewerController;
     public InputField OSCServerAddressInput, PlayerName;
     public GameObject serverManualModeParent, serverAutoModeParent;
-    public GameObject serverIPTextBox, playerNameTextBox;
+    public GameObject serverIPTextBox, playerNameTextBox, sessionIDInputBox;
     public GameObject recordGizmo, pauseGizmo;
     public Dropdown scenarioDropDown;
     public Sprite selectedButtonSprite, normalButtonSprite;
@@ -61,6 +61,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice4.image.sprite = normalButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
             serverIPTextBox.gameObject.SetActive(false);
+            sessionIDInputBox.gameObject.SetActive(true);
 
         }
         else if (i == 1) // client
@@ -74,6 +75,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice4.image.sprite = normalButtonSprite;
             playerNameTextBox.gameObject.SetActive(true);
             serverIPTextBox.gameObject.SetActive(true);
+            sessionIDInputBox.gameObject.SetActive(false);
         }
         else if (i == 2) // viewer
         {
@@ -86,6 +88,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice4.image.sprite = normalButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
             serverIPTextBox.gameObject.SetActive(true);
+            sessionIDInputBox.gameObject.SetActive(false);
         }
         else if (i == 3) // tracker
         {
@@ -98,6 +101,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice4.image.sprite = selectedButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
             serverIPTextBox.gameObject.SetActive(true);
+            sessionIDInputBox.gameObject.SetActive(false);
         }
     }
 
@@ -173,7 +177,8 @@ public class UIHandler : MonoBehaviour
 
     public void StartButtonPressed()
     {
-        gameEngine.StartGame();
+        if(!(gameEngine._userRole == UserRole.Server && sessionIDInputBox.GetComponent<InputField>().text == "")) gameEngine.StartGame();
+        else Debug.Log("Please enter session ID");
     }
 
 

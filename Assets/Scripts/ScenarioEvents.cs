@@ -195,5 +195,19 @@ public class ScenarioEvents : MonoBehaviour
     }
 
 
+    public string GetScenarioConditionsPattern(){
+
+        string returnStr = "";
+        int i = 1;
+
+        foreach(string str in  scenarios[currentScenario].conditions){
+            returnStr += str;
+            if(i < scenarios[currentScenario].conditions.Length) returnStr += "-";
+            i++;
+        }
+        return returnStr;
+    }
+
+
 
 }

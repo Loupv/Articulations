@@ -59,6 +59,7 @@ public class GameEngine : MonoBehaviour
     //private ReceiveOSC receiver;
 
     private JSONLoader jSONLoader;
+    
     public UIHandler uiHandler;
     public SoundHandler soundHandler;
     public ScenarioEvents scenarioEvents;
@@ -167,6 +168,7 @@ public class GameEngine : MonoBehaviour
 
         if (_userRole == UserRole.Server)
         {
+            performanceRecorder.sessionID = int.Parse(uiHandler.sessionIDInputBox.GetComponent<InputField>().text);
             useVRHeadset = false;
             StartCoroutine(EnableDisableVRMode(false));
             //EnableDisableVRMode(useVRHeadset);
