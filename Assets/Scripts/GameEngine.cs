@@ -84,7 +84,7 @@ public class GameEngine : MonoBehaviour
         viveLeftHandName = "Controller (left)", 
         viveRightHandName = "Controller (right)";
     
-    public bool debugMode = false, weFade = false;
+    public bool debugMode = false;//, weFade = false;
     public GameObject debugPrefab;
     public int targetFrameRate = 60;
 
@@ -188,7 +188,6 @@ public class GameEngine : MonoBehaviour
         else
         {
             appState = AppState.WaitingForServer;
-            weFade = true;
             networkManager.RegisterUSer(_user, _userRole);
             canvasHandler.ChangeCanvas("waitingCanvas");
             //if (useVRHeadset) StartCoroutine(EnableDisableVRMode(true));

@@ -197,8 +197,8 @@ public class ReceiveOSC : MonoBehaviour {
     void VisualisationModeChange(OscMessage message){
         Debug.Log("Received : " + message);
         string mode = message.GetString(0);
-
-        userManager.ChangeVisualisationMode(mode, gameEngine, gameEngine.weFade);
+        int toFade = message.GetInt(1);
+        userManager.ChangeVisualisationMode(mode, gameEngine, toFade == 1);
     }
 
     void EnvironmentChangedByServer(OscMessage message)

@@ -219,6 +219,8 @@ public class UserManager : MonoBehaviour
                 else{
                     Debug.Log("%% Wrong VisualisationMode Request ! %%");
                 }
+
+                Debug.Log("Visualisation changed : "+mode);
             }
             
         }

@@ -3,6 +3,7 @@
 	[
 		{
 			"scenarioId" : 1,
+			"toFade" : 1,
 			"conditions" : 
 			[
 				"1A","1B","1C"
@@ -14,6 +15,7 @@
 		},
 		{
 			"scenarioId" : 2,
+			"toFade" : 1,
 			"conditions" : 
 			[
 				"2A","2B","2C"
@@ -25,6 +27,7 @@
 		},
 		{
 			"scenarioId" : 3,
+			"toFade" : 0,
 			"conditions" : 
 			[
 				"3A","3B","3C"

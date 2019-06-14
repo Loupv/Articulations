@@ -235,8 +235,9 @@ public class SendOSC : MonoBehaviour {
                 message = new OscMessage();
                 message.address = "/VisualisationModeChange";
                 message.values.Add(mode);
+                message.values.Add(gameEngine.scenarioEvents.scenarios[gameEngine.scenarioEvents.currentScenario].toFade);
                 osc.Send(message);
-                Debug.Log("Sending : " + message +" to "+user._ID);
+                if(gameEngine.debugMode) Debug.Log("Sending : " + message +" to "+user._ID);
             }  
         }
 

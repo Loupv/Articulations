@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Scenario{
     public int scenarioId;
+    public int toFade;
     public string[] conditions;
     public int[] durations;
 }
@@ -109,7 +110,7 @@ public class ScenarioEvents : MonoBehaviour
 
         Debug.Log("Scenario "+currentScenario+" done !");
         if(gameEngine.uiHandler.autoRecordPerformance.isOn) performanceRecorder.StopRecording();
-        userManager.ChangeVisualisationMode("0", gameEngine,gameEngine.weFade);
+        userManager.ChangeVisualisationMode("0", gameEngine, scenarios[currentScenario].toFade == 1);
         gameEngine.uiHandler.ToggleScenarioButton(0);
         CancelInvoke("RunCondition");
         //userManager.ChangeVisualisationMode(scenarioId, gameEngine);
@@ -125,7 +126,7 @@ public class ScenarioEvents : MonoBehaviour
                     // remove previous condition parameters
                     if(mirrorAct) ToggleMirror();
                     // change visualisation
-                    userManager.ChangeVisualisationMode(scenarios[currentScenario].conditions[currentCondition], gameEngine, gameEngine.weFade);
+                    userManager.ChangeVisualisationMode(scenarios[currentScenario].conditions[currentCondition], gameEngine, scenarios[currentScenario].toFade == 1);
                     timeRemaining = scenarios[currentScenario].durations[currentCondition];
                     if(gameEngine.uiHandler.autoRecordPerformance.isOn && !performanceRecorder.isRecording) performanceRecorder.StartRecording();
                     currentCondition += 1;
