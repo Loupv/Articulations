@@ -124,103 +124,104 @@ public class UserManager : MonoBehaviour
             // per user parameters
             foreach (UserData user in usersPlaying) {
                 
-                if(user._userRole == UserRole.Player) 
+                if(user._userRole == UserRole.Player) {
 
-                if (mode == "0")  // basic condition
-                {
-                    if (me._userRole == UserRole.Server || me._userRole == UserRole.Viewer){
+                    if (mode == "0")  // basic condition
+                    {
+                        if (me._userRole == UserRole.Server || me._userRole == UserRole.Viewer){
+                            user.ChangeSkin(this, "all");
+                        }
+                        else{
+                            if (user._ID == me._ID)
+                                user.ChangeSkin(this, "all");
+                            else user.ChangeSkin(this, "nothing");     
+                        }
+                    }
+
+                    else if (mode == "1A") // every spheres visible
+                    { 
+                        user.ChangeSkin(this, "all");  
+                    }
+
+                    else if (mode == "1B") // other's hand visible, mine are not
+                    { 
+                        if (user._ID == me._ID)
+                            user.ChangeSkin(this, "noHands");
+                        else user.ChangeSkin(this, "all");
+                        
+                    }
+                    else if (mode == "1C") // change arms length
+                    { 
+                    }
+
+
+                    else if (mode == "2A") { // every sphere visible
                         user.ChangeSkin(this, "all");
                     }
+                    else if (mode == "2B") // mirror mode , side to side, same color
+                    { 
+                        user.ChangeSkin(this, "all");   
+                    }
+                    else if (mode == "2C") // mirror mode, different color
+                    {
+                        user.ChangeSkin(this, "all");
+                        if (user._ID == me._ID)
+                            ChangePlayerColor(user, whiteColor);
+                        else ChangePlayerColor(user, cyanColor);
+                        // different color
+                    }
+
+
+                    else if (mode == "3A") // trails individual
+                    {
+                        
+                        if (me._userRole == UserRole.Server || me._userRole == UserRole.Viewer)
+                            user.ChangeSkin(this, "trails");
+                        else
+                        {
+                            if (user._ID == me._ID)
+                                user.ChangeSkin(this, "trails");
+                            else user.ChangeSkin(this, "nothing");
+                        }
+                        
+                    }
+
+                    else if (mode == "3B") // trails individual + sound
+                    { // trails mode2
+                        if (me._userRole == UserRole.Server || me._userRole == UserRole.Viewer)
+                            user.ChangeSkin(this, "trails");
+                        else
+                        {
+                            if (user._ID == me._ID)
+                                user.ChangeSkin(this, "trails");
+                            else user.ChangeSkin(this, "nothing");
+                        }  
+                    }
+
+                    else if (mode == "3C") // intersubject
+                    { // trails mode2
+                        
+                        user.ChangeSkin(this, "trails");
+                    }
+
+
+                    // other modes
+                    else if (mode == "4A") // trails mode3
+                    {
+                        if (user._ID == me._ID)
+                            user.ChangeSkin(this, "noHands");
+                        else user.ChangeSkin(this, "shortTrails");                    
+                    }
+                    else if (mode == "5A") // one player has left hand visible, other player has right hand visible
+                    {
+                        user.ChangeSkin(this, "onehand");   
+                    }
                     else{
-                        if (user._ID == me._ID)
-                            user.ChangeSkin(this, "all");
-                        else user.ChangeSkin(this, "nothing");     
+                        Debug.Log("%% Wrong VisualisationMode Request ! %%");
                     }
-                }
 
-                else if (mode == "1A") // every spheres visible
-                { 
-                    user.ChangeSkin(this, "all");  
+                    Debug.Log("Visualisation changed : "+mode);
                 }
-
-                else if (mode == "1B") // other's hand visible, mine are not
-                { 
-                    if (user._ID == me._ID)
-                        user.ChangeSkin(this, "noHands");
-                    else user.ChangeSkin(this, "all");
-                     
-                }
-                else if (mode == "1C") // change arms length
-                { 
-                }
-
-
-                else if (mode == "2A") { // every sphere visible
-                    user.ChangeSkin(this, "all");
-                }
-                else if (mode == "2B") // mirror mode , side to side, same color
-                { 
-                    user.ChangeSkin(this, "all");   
-                }
-                else if (mode == "2C") // mirror mode, different color
-                {
-                    user.ChangeSkin(this, "all");
-                    if (user._ID == me._ID)
-                        ChangePlayerColor(user, whiteColor);
-                    else ChangePlayerColor(user, cyanColor);
-                    // different color
-                }
-
-
-                else if (mode == "3A") // trails individual
-                {
-                    
-                    if (me._userRole == UserRole.Server || me._userRole == UserRole.Viewer)
-                        user.ChangeSkin(this, "trails");
-                    else
-                    {
-                        if (user._ID == me._ID)
-                            user.ChangeSkin(this, "trails");
-                        else user.ChangeSkin(this, "nothing");
-                    }
-                    
-                }
-
-                else if (mode == "3B") // trails individual + sound
-                { // trails mode2
-                    if (me._userRole == UserRole.Server || me._userRole == UserRole.Viewer)
-                        user.ChangeSkin(this, "trails");
-                    else
-                    {
-                        if (user._ID == me._ID)
-                            user.ChangeSkin(this, "trails");
-                        else user.ChangeSkin(this, "nothing");
-                    }  
-                }
-
-                else if (mode == "3C") // intersubject
-                { // trails mode2
-                    
-                    user.ChangeSkin(this, "trails");
-                }
-
-
-                // other modes
-                else if (mode == "4A") // trails mode3
-                {
-                    if (user._ID == me._ID)
-                        user.ChangeSkin(this, "noHands");
-                    else user.ChangeSkin(this, "shortTrails");                    
-                }
-                else if (mode == "5A") // one player has left hand visible, other player has right hand visible
-                {
-                    user.ChangeSkin(this, "onehand");   
-                }
-                else{
-                    Debug.Log("%% Wrong VisualisationMode Request ! %%");
-                }
-
-                Debug.Log("Visualisation changed : "+mode);
             }
             
         }

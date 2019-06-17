@@ -191,7 +191,7 @@ public class UIHandler : MonoBehaviour
         else trailsDecaySlider.gameObject.SetActive(false);
 
         // for server
-        userManager.ChangeVisualisationMode(i, gameEngine, gameEngine.scenarioEvents.scenarios[gameEngine.scenarioEvents.currentScenario].toFade == 1);
+        userManager.ChangeVisualisationMode(i, gameEngine, false);
     }
 
     

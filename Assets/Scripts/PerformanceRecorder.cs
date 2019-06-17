@@ -36,7 +36,7 @@ public class PerformanceRecorder : MonoBehaviour
     {
         startTime = Time.time * 1000;
         saveRate = 1/(float)gameEngine.gameData.saveFileFrequency;
-        fileName = System.DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".csv";
+        fileName = "S"+uiHandler.sessionIDInputBox.GetComponent<InputField>().text+"_"+System.DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".csv";
         conditionPattern = gameEngine.scenarioEvents.GetScenarioConditionsPattern();
 
         if (File.Exists(filePath+fileName))

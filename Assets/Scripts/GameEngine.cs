@@ -177,7 +177,7 @@ public class GameEngine : MonoBehaviour
 
         networkManager.InitNetwork(_userRole, gameData, uiHandler.OSCServerAddressInput.text);
 
-        uiHandler.ChangeVisualizationMode("1A");
+        uiHandler.ChangeVisualizationMode("0");
 
         if (_userRole == UserRole.Server)
         {

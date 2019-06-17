@@ -20,7 +20,8 @@ public class ScenarioList{
 public class ScenarioEvents : MonoBehaviour
 {
     public GameEngine gameEngine;
-    public GameObject [] mirrors, calibrationTransforms;
+    public GameObject [] calibrationTransforms;
+    public List<GameObject> mirrors, mirrorsNoVR;
     public GameObject bubbles, terrainCenter;
     public PerformanceRecorder performanceRecorder;
     public bool mirrorAct;
@@ -108,7 +109,7 @@ public class ScenarioEvents : MonoBehaviour
 
     public void StopScenario(){
 
-        Debug.Log("Scenario "+currentScenario+" done !");
+        Debug.Log("Scenario "+(currentScenario+1)+" done !");
         if(gameEngine.uiHandler.autoRecordPerformance.isOn) performanceRecorder.StopRecording();
         userManager.ChangeVisualisationMode("0", gameEngine, scenarios[currentScenario].toFade == 1);
         gameEngine.uiHandler.ToggleScenarioButton(0);
@@ -126,9 +127,9 @@ public class ScenarioEvents : MonoBehaviour
                     // remove previous condition parameters
                     if(mirrorAct) ToggleMirror();
                     // change visualisation
+                    if(gameEngine.uiHandler.autoRecordPerformance.isOn && !performanceRecorder.isRecording) performanceRecorder.StartRecording();
                     userManager.ChangeVisualisationMode(scenarios[currentScenario].conditions[currentCondition], gameEngine, scenarios[currentScenario].toFade == 1);
                     timeRemaining = scenarios[currentScenario].durations[currentCondition];
-                    if(gameEngine.uiHandler.autoRecordPerformance.isOn && !performanceRecorder.isRecording) performanceRecorder.StartRecording();
                     currentCondition += 1;
                 }
                 else{
@@ -162,15 +163,23 @@ public class ScenarioEvents : MonoBehaviour
             mirrorAct = !mirrorAct;
             if (mirrorAct)
             {
-                mirrors[0].SetActive(true);
-                mirrors[1].SetActive(true);
+                if(gameEngine.useVRHeadset){ 
+                    foreach(GameObject mirror in mirrors) mirror.SetActive(true);
+                }
+                else{
+                    foreach(GameObject mirror in mirrorsNoVR) mirror.SetActive(true);
+                }
             }
             else
             {
-                mirrors[0].SetActive(false);
-                mirrors[1].SetActive(false);
+                if(gameEngine.useVRHeadset){ 
+                    foreach(GameObject mirror in mirrors) mirror.SetActive(false);
+                }
+                else{
+                    foreach(GameObject mirror in mirrorsNoVR) mirror.SetActive(false);
+                }
             }
-        //}
+            
         Debug.Log("Mirror Toggled");
     }
 
