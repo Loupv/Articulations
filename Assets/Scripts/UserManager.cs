@@ -114,7 +114,7 @@ public class UserManager : MonoBehaviour
                 {
                     if(user._userRole == UserRole.Player) ChangePlayerColor(user, whiteColor);
                 }
-            if(mode != "3B" && mode != "3C") gameEngine.sendToAudioDevice = false;
+            if(mode != "3B" && mode != "3Ca" && mode != "3Cb" && mode != "3Cc") gameEngine.sendToAudioDevice = false;
             else gameEngine.sendToAudioDevice = true;
             gameEngine.uiHandler.sendToAudioDeviceToggle.isOn = gameEngine.sendToAudioDevice;
 
@@ -150,8 +150,9 @@ public class UserManager : MonoBehaviour
                         else user.ChangeSkin(this, "all");
                         
                     }
-                    else if (mode == "1C") // change arms length
+                    else if (mode == "1Ca" || mode == "1Cb" || mode == "1Cc") // change arms length
                     { 
+                        Debug.Log("TODO");
                     }
 
 
@@ -198,9 +199,9 @@ public class UserManager : MonoBehaviour
                         }  
                     }
 
-                    else if (mode == "3C") // intersubject
+                    else if (mode == "3Ca" || mode == "3Cb" || mode == "3Cc") // intersubject
                     { // trails mode2
-                        
+                        Debug.Log("TO DO (sound)");
                         user.ChangeSkin(this, "trails");
                     }
 
@@ -220,9 +221,9 @@ public class UserManager : MonoBehaviour
                         Debug.Log("%% Wrong VisualisationMode Request ! %%");
                     }
 
-                    Debug.Log("Visualisation changed : "+mode);
                 }
             }
+            Debug.Log("Visualisation changed : "+mode);
             
         }
         else{

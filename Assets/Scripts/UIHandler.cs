@@ -277,6 +277,19 @@ public class UIHandler : MonoBehaviour
            //userManager.CalibratePlayerTransform();
     }
 
+
+    public void PopulateScenariosDropdown(Scenario[] scenarios){
+        scenarioDropDown.ClearOptions();
+
+        foreach(Scenario scenario in scenarios){
+            string cond = "";
+            foreach(string s in scenario.conditions) cond += s;
+            //scenarioDropDown.options.Add(new Dropdown.OptionData("Scenario"+scenario.scenarioId));
+            scenarioDropDown.options.Add(new Dropdown.OptionData("Scenario-"+cond));
+        }
+    }
+
+
     public void quitApp()
     {
         Application.Quit();

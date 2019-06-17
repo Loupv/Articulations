@@ -23,6 +23,7 @@ public class PerformanceRecorder : MonoBehaviour
     public string fileName;
     public int sessionID = 0;
     string line, conditionPattern;
+    //double newTs, oldTs, newTime, oldTime;
 
     void Start(){
        uiHandler.ActualizeGizmos(isRecording, isPaused);
@@ -61,20 +62,9 @@ public class PerformanceRecorder : MonoBehaviour
         }
     }
 
- /*   public void Update() {
-        float delta = Time.time - lastFrameTime;
-        if (lastFrameTime == 0 || delta >= 0.016f) {
-            lastFrameTime = Time.time;
-            Debug.Log("Update===== " + delta);
-        }
-    }*/
-
     public void SaveData(){
  
         if(isRecording && !isPaused){
-            /*foreach(UserData user in gameEngine.userManager.usersPlaying){
-                if(user._userRole == UserRole.Player) AddLine(user._ID, user.head.transform, user.leftHand.transform, user.rightHand.transform, gameEngine.currentVisualisationMode);
-            }*/
             AddLine2(gameEngine.userManager.usersPlaying, gameEngine.currentVisualisationMode);
         } 
     }
@@ -95,6 +85,17 @@ public class PerformanceRecorder : MonoBehaviour
         uiHandler.ActualizeGizmos(isRecording, isPaused);
     }
 
+    /*void Update(){
+        
+        newTs = (System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        newTime = Time.time * 1000;
+
+        Debug.Log(Math.Round((newTs - oldTs)*1000,3) +", "+ Math.Round((newTime - oldTime),3)+", sub : "+(Math.Round((newTs - oldTs)*1000,3) - Math.Round((newTime - oldTime),3)));
+
+        oldTime = newTime;
+        oldTs = newTs;
+    }*/
+
     // triggered by UI
     public void StopRecording(){
         isRecording = false;
@@ -110,7 +111,7 @@ public class PerformanceRecorder : MonoBehaviour
         double ts = (System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         ts *= 1000;
         ts = Math.Floor(ts);
-        line = ID+";"+ts+";"+((int)(Time.time*1000 - startTime))+";"+vizMode.ToString()+";"+headTransform.position.x+";"+headTransform.position.y+";"+headTransform.position.z+
+        line = ID+";"+ts+";"+(Time.time*1000 - startTime)+";"+vizMode.ToString()+";"+headTransform.position.x+";"+headTransform.position.y+";"+headTransform.position.z+
         ";"+headTransform.rotation.x+";"+headTransform.rotation.y+";"+headTransform.rotation.z+
         ";"+leftHandTransform.position.x+";"+leftHandTransform.position.y+";"+leftHandTransform.position.z+
         ";"+leftHandTransform.rotation.x+";"+leftHandTransform.rotation.y+";"+leftHandTransform.rotation.z+

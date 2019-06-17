@@ -112,23 +112,38 @@ public class GameEngine : MonoBehaviour
         canvasHandler.ChangeCanvas("initCanvas");
         _userRole = UserRole.Server; // base setting
         
-        // load preferences file
-        jSONLoader = new JSONLoader();
-        gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
-        gameData = uiHandler.AdjustBasicUIParameters(gameData, CheckIp()); // change UI and gameData depending on actual conditions
-
-        scenarioEvents.scenarios = jSONLoader.LoadScenarioList("/StreamingAssets/Scenarios.json").scenarios;
+        
+        
 
 #if UNITY_ANDROID
         Debug.Log("tablet initializing");
+
+        // game data json
         string filePath = Path.Combine(Application.streamingAssetsPath, "GameData.json");
         UnityWebRequest www = UnityWebRequest.Get(filePath);
         yield return www.SendWebRequest();
         string dataAsJson = www.downloadHandler.text;
         Debug.Log(dataAsJson);
         gameData = JsonUtility.FromJson<GameData>(dataAsJson);
-        gameData = uiHandler.AdjustBasicUIParameters(gameData, CheckIp());
+
+        // scenario json
+        filePath = Path.Combine(Application.streamingAssetsPath, "Scenarios.json");
+        UnityWebRequest www = UnityWebRequest.Get(filePath);
+        yield return www.SendWebRequest();
+        dataAsJson = www.downloadHandler.text;
+        scenarioEvents.scenarios = JsonUtility.FromJson<Scenario[]>(dataAsJson);
+#else
+
+        // load preferences file
+        jSONLoader = new JSONLoader();
+        gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
+        scenarioEvents.scenarios = jSONLoader.LoadScenarioList("/StreamingAssets/Scenarios.json").scenarios;
+
 #endif
+
+
+        gameData = uiHandler.AdjustBasicUIParameters(gameData, CheckIp()); // change UI and gameData depending on actual conditions
+        uiHandler.PopulateScenariosDropdown(scenarioEvents.scenarios);
 
         useVRHeadset = (gameData.useVr ==1);
         StartCoroutine(EnableDisableVRMode(useVRHeadset));
