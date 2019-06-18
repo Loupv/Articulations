@@ -105,6 +105,10 @@ public class UserManager : MonoBehaviour
 
             // main parameters
 
+            if(mode == "0") gameEngine.scenarioEvents.SetTimeOfDay(6);            
+            else gameEngine.scenarioEvents.SetTimeOfDay(8);
+
+
             if((mode != "2B" && mode !="2C" && gameEngine.scenarioEvents.mirrorAct) || 
             ((mode == "2B" || mode =="2C") && !gameEngine.scenarioEvents.mirrorAct)) 
                 gameEngine.scenarioEvents.ToggleMirror();
@@ -225,6 +229,7 @@ public class UserManager : MonoBehaviour
             }
             Debug.Log("Visualisation changed : "+mode);
             
+
         }
         else{
             gameEngine.pendingVisualisationMode = mode;

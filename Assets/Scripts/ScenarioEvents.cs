@@ -36,7 +36,8 @@ public class ScenarioEvents : MonoBehaviour
     GameObject longTrails;
     public Material[] skyboxes;
     public bool timerPaused, scenarioIsRunning;
-    int skyboxID, timeRemaining;
+    int skyboxID, timeRemaining, hourOfDay;
+    public float lerpSunSpeed = 0.1f;
     // Start is called before the first frame update
 
 
@@ -152,6 +153,23 @@ public class ScenarioEvents : MonoBehaviour
     public void SetSkybox(int id){
         skyboxID = id;
         RenderSettings.skybox = skyboxes[skyboxID];
+    }
+
+    // 0h is -90°, 6h is 0°, 12h is 90°, 18h is 180°
+    public void SetTimeOfDay(int h){
+        hourOfDay = h;
+        InvokeRepeating("LerpHourOfDay",0f,0.1f);
+        Debug.Log("lerping");
+    }
+
+    void LerpHourOfDay(){
+        GameObject sun = UnityEngine.GameObject.FindGameObjectWithTag("Sun");
+
+        sun.transform.rotation = Quaternion.RotateTowards(sun.transform.rotation, Quaternion.Euler(new Vector3(hourOfDay*360/24-90, sun.transform.rotation.y,sun.transform.rotation.z)), lerpSunSpeed * Time.deltaTime);
+        if(Mathf.Abs(sun.transform.rotation.eulerAngles.x - (hourOfDay*360/24-90)) < 0.1) {
+            CancelInvoke("LerpHourOfDay");
+            Debug.Log("Sun lerping ended");
+        }
     }
 
 

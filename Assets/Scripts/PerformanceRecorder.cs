@@ -18,11 +18,12 @@ public class PerformanceRecorder : MonoBehaviour
     public UIHandler uiHandler;
     StreamWriter sr;
     [HideInInspector]
-    public double startTime;
+    //public double startTime;
     public bool isRecording, isPaused;
     public string fileName;
     public int sessionID = 0;
     string line, conditionPattern;
+    double ts, oldTs;
     //double newTs, oldTs, newTime, oldTime;
 
     void Start(){
@@ -35,7 +36,7 @@ public class PerformanceRecorder : MonoBehaviour
 
     public void StartRecording()
     {
-        startTime = Time.time * 1000;
+        //startTime = Time.time * 1000;
         saveRate = 1/(float)gameEngine.gameData.saveFileFrequency;
         fileName = "S"+uiHandler.sessionIDInputBox.GetComponent<InputField>().text+"_"+System.DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".csv";
         conditionPattern = gameEngine.scenarioEvents.GetScenarioConditionsPattern();
@@ -58,6 +59,10 @@ public class PerformanceRecorder : MonoBehaviour
                 UnityEditor.AssetDatabase.Refresh();
             #endif
 
+            ts = Math.Round(System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000,2);
+            oldTs = ts;
+
+            saveRate = (float)Math.Round(saveRate,3);
             InvokeRepeating("SaveData",0f, saveRate);
         }
     }
@@ -85,16 +90,19 @@ public class PerformanceRecorder : MonoBehaviour
         uiHandler.ActualizeGizmos(isRecording, isPaused);
     }
 
-    /*void Update(){
+    void Update(){
         
-        newTs = (System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        /*newTs = (System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         newTime = Time.time * 1000;
 
         Debug.Log(Math.Round((newTs - oldTs)*1000,3) +", "+ Math.Round((newTime - oldTime),3)+", sub : "+(Math.Round((newTs - oldTs)*1000,3) - Math.Round((newTime - oldTime),3)));
 
         oldTime = newTime;
-        oldTs = newTs;
-    }*/
+        oldTs = newTs;*/
+
+        //Debug.Log(Math.Round((System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds*1000 - ts),2) +" ----  "+Time.time * 1000);
+
+    }
 
     // triggered by UI
     public void StopRecording(){
@@ -107,7 +115,7 @@ public class PerformanceRecorder : MonoBehaviour
     }
 
     // every line a user 
-    public void AddLine(int ID, Transform headTransform, Transform leftHandTransform, Transform rightHandTransform, int vizMode){
+    /*public void AddLine(int ID, Transform headTransform, Transform leftHandTransform, Transform rightHandTransform, int vizMode){
         double ts = (System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         ts *= 1000;
         ts = Math.Floor(ts);
@@ -119,15 +127,16 @@ public class PerformanceRecorder : MonoBehaviour
         ";"+rightHandTransform.rotation.x+";"+rightHandTransform.rotation.y+";"+rightHandTransform.rotation.z;
         line = line.Replace(",",".");
         sr.WriteLine (line);
-    }
+    }*/
 
     // both user on same line
     public void AddLine2(List<UserData> usersPlaying, string vizMode)
     {
-        double ts = (System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-        ts *= 1000;
+        ts = Math.Round(System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000,2);
         ts = Math.Floor(ts);
-        line = sessionID+ ";" + ts + ";" + ((int)(Time.time * 1000 - startTime)) + ";" + conditionPattern + ";" + vizMode;
+        //line = sessionID+ ";" + ts + ";" + Math.Round(Time.time * 1000 - startTime) + ";" + conditionPattern + ";" + vizMode;
+        
+        line = sessionID+ ";" + ts + ";" + Math.Round(ts-oldTs,0) + ";" + conditionPattern + ";" + vizMode;
 
         foreach (UserData user in gameEngine.userManager.usersPlaying)
         {
