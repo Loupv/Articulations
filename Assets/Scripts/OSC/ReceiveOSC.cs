@@ -209,6 +209,7 @@ public class ReceiveOSC : MonoBehaviour {
         {
             Debug.Log(playerID+" vs "+gameEngine._user._ID);
             userManager.AddNewUser(gameEngine, playerID, playerName, "null", -1, userRole, rank);
+            gameEngine.userManager.ChangeVisualisationMode(gameEngine.currentVisualisationMode, gameEngine, false); // trigger the change mode again, to actualize to new players
         }
     }
 

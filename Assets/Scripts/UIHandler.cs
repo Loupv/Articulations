@@ -304,7 +304,7 @@ public class UIHandler : MonoBehaviour
     void TimerUI(){
         recordingTimeRemaining.text = "Record Time Remaining : "+tmpTimer;
         tmpTimer--;
-        if(tmpTimer < 0) CancelInvoke("TimerUI");
+        if(tmpTimer < 0) CancelRecordTime();
     }
 
 

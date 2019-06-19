@@ -109,27 +109,7 @@ public class ScenarioEvents : MonoBehaviour
         gameEngine.uiHandler.ToggleScenarioButton(2);
     }
 
-    public void StopScenario(int interrupted){
 
-        if(gameEngine.uiHandler.autoRecordPerformance.isOn) performanceRecorder.StopRecording();
-        userManager.ChangeVisualisationMode("0", gameEngine, scenarios[currentScenario].toFade == 1);
-        gameEngine.uiHandler.ToggleScenarioButton(0);
-        
-        if(interrupted == 0){ // if scenario had ended well 
-            Debug.Log("Scenario "+(currentScenario+1)+" done !");
-            if(gameEngine.audioRecordManager.recordPostScenarioAudio){
-                gameEngine.osc.sender.StartAudioRecording(gameEngine.audioRecordManager.postScenarioRecordingLenght, gameEngine.userManager.usersPlaying);
-            }
-        }
-        else Debug.Log("Scenario "+(currentScenario+1)+" Interrupted !");
-        timeRemaining = 0;
-        gameEngine.uiHandler.conditionTimeRemaining.text = "Time Remaining : "+timeRemaining;
-        gameEngine.uiHandler.conditionTimeRemaining.gameObject.SetActive(false);
-
-        CancelInvoke("RunCondition");
-        //userManager.ChangeVisualisationMode(scenarioId, gameEngine);
-
-    }
 
     public void RunCondition(){
 
@@ -155,6 +135,29 @@ public class ScenarioEvents : MonoBehaviour
         }
     }
 
+    public void StopScenario(int interrupted){
+
+        if(gameEngine.uiHandler.autoRecordPerformance.isOn) performanceRecorder.StopRecording();
+        userManager.ChangeVisualisationMode("0", gameEngine, scenarios[currentScenario].toFade == 1);
+        gameEngine.uiHandler.ToggleScenarioButton(0);
+        
+        if(interrupted == 0){ // if scenario had ended well 
+            Debug.Log("Scenario "+(currentScenario+1)+" done !");
+            if(gameEngine.audioRecordManager.recordPostScenarioAudio){
+                gameEngine.osc.sender.StartAudioRecording(gameEngine.audioRecordManager.postScenarioRecordingLenght, gameEngine.userManager.usersPlaying);
+            }
+        }
+        else Debug.Log("Scenario "+(currentScenario+1)+" Interrupted !");
+        timeRemaining = 0;
+        gameEngine.uiHandler.conditionTimeRemaining.text = "Time Remaining : "+timeRemaining;
+        gameEngine.uiHandler.conditionTimeRemaining.gameObject.SetActive(false);
+
+        CancelInvoke("RunCondition");
+        //userManager.ChangeVisualisationMode(scenarioId, gameEngine);
+
+    }
+
+
 
     public void SetNextSkybox()
     {
@@ -170,9 +173,11 @@ public class ScenarioEvents : MonoBehaviour
 
     // 0h is -90°, 6h is 0°, 12h is 90°, 18h is 180°
     public void SetTimeOfDay(int h){
-        hourOfDay = h;
-        InvokeRepeating("LerpHourOfDay",0f,0.1f);
-        Debug.Log("lerping");
+        if(hourOfDay != h){
+            hourOfDay = h;
+            InvokeRepeating("LerpHourOfDay",0f,0.1f);
+            Debug.Log("Lerping Hour of Day");
+        }
     }
 
     void LerpHourOfDay(){

@@ -128,7 +128,7 @@ public class UserManager : MonoBehaviour
             // per user parameters
             foreach (UserData user in usersPlaying) {
                 
-                if(user._userRole == UserRole.Player) {
+                if(user._userRole == UserRole.Player ){
 
                     if (mode == "0")  // basic condition
                     {
