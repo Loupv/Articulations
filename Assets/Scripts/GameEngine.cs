@@ -26,6 +26,7 @@ public class GameData
     public int useVr;
     public int saveFileFrequency;
     public int OSC_SoundHandlerPort ;
+    public int audioRecordLength; // no use in client mode, chosen length is sent by server
     public int DebugMode;
     public int keepNamesVisibleForPlayers;
 }
@@ -63,6 +64,7 @@ public class GameEngine : MonoBehaviour
     public UIHandler uiHandler;
     public SoundHandler soundHandler;
     public ScenarioEvents scenarioEvents;
+    public AudioRecordManager audioRecordManager;
     public GameData gameData;
     
     public GameObject ViveSystemPrefab;
@@ -183,7 +185,7 @@ public class GameEngine : MonoBehaviour
 
         if (_userRole == UserRole.Server)
         {
-            performanceRecorder.sessionID = int.Parse(uiHandler.sessionIDInputBox.GetComponent<InputField>().text);
+            performanceRecorder.sessionID = int.Parse(uiHandler.sessionIDInputBox.text);
             useVRHeadset = false;
             StartCoroutine(EnableDisableVRMode(false));
             //EnableDisableVRMode(useVRHeadset);
@@ -199,6 +201,8 @@ public class GameEngine : MonoBehaviour
             appState = AppState.Running;
             //networkManager.ShowConnexionState();
             canvasHandler.ChangeCanvas("serverCanvas");
+            audioRecordManager.recordPostScenarioAudio = uiHandler.recordAudioAfterScenario.isOn;
+            audioRecordManager.postScenarioRecordingLenght = gameData.audioRecordLength;
         }
         else
         {
@@ -216,7 +220,7 @@ public class GameEngine : MonoBehaviour
 
     // when server has agreed for client registration
     // player/tracker 
-    public void EndStartProcess(int playerID, int requestedPort, string visualisationMode, int rank)
+    public void EndStartProcess(int sessionID, int playerID, int requestedPort, string visualisationMode, int rank, int recordAudio, int recordLength)
     {
         if (_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker)
         {
@@ -225,6 +229,13 @@ public class GameEngine : MonoBehaviour
             appState = AppState.Running;
             //networkManager.ShowConnexionState();
             _user._registeredRank = rank;
+            performanceRecorder.sessionID = sessionID;
+
+            audioRecordManager.recordPostScenarioAudio = (recordAudio == 1);
+    
+            if(audioRecordManager.recordPostScenarioAudio)  
+                audioRecordManager.InitAudioRecorder(performanceRecorder.sessionID, recordLength);
+
             if(_user._userRole == UserRole.Player) canvasHandler.ChangeCanvas("gameCanvas");
             else if(_user._userRole == UserRole.Viewer || _userRole == UserRole.Tracker) canvasHandler.ChangeCanvas("viewerCanvas");
         }

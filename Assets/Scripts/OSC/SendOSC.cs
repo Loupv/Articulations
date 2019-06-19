@@ -39,10 +39,18 @@ public class SendOSC : MonoBehaviour {
         {
             message = new OscMessage();
             message.address = "/RegistrationConfirmed";
+            message.values.Add(gameEngine.performanceRecorder.sessionID);
+            
             message.values.Add(user._ID);
             message.values.Add(user.oscEndPoint.remotePort);
             message.values.Add(gameEngine.currentVisualisationMode);
             message.values.Add(user._registeredRank);
+            
+            if(gameEngine.audioRecordManager.recordPostScenarioAudio) message.values.Add(1);
+            else message.values.Add(0);
+            
+            message.values.Add(gameEngine.gameData.audioRecordLength);
+
             osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
             osc.Send(message);
@@ -264,7 +272,6 @@ public class SendOSC : MonoBehaviour {
 
         foreach (UserData userToSend in usersPlaying)
         {
-            
             osc.OscPacketIO.RemoteHostName = targetUser.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = targetUser.oscEndPoint.remotePort;
             message = new OscMessage();
@@ -279,6 +286,22 @@ public class SendOSC : MonoBehaviour {
 
     }
 
+
+    public void StartAudioRecording(int postScenarioRecordingLenght, List<UserData> usersPlaying){
+
+        foreach (UserData targetUser in usersPlaying)
+        {
+            
+            osc.OscPacketIO.RemoteHostName = targetUser.oscEndPoint.ip;
+            osc.OscPacketIO.RemotePort = targetUser.oscEndPoint.remotePort;
+            message = new OscMessage();
+            message.address = "/StartAudioRecording";
+            message.values.Add(postScenarioRecordingLenght);
+            osc.Send(message);
+            Debug.Log("Sending : " + message);  
+        }
+
+    }
 
 /*
     -------------------------------------
@@ -373,6 +396,31 @@ public class SendOSC : MonoBehaviour {
             message.values.Add(newEnv);
             osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
+            osc.Send(message);
+            if (gameEngine.debugMode) Debug.Log("Sending : " + message + ", " + gameEngine.osc.outIP);
+        }
+    }
+
+
+    public void RecordAudioConfirmation(){
+        if (osc.initialized)
+        {
+            message = new OscMessage();
+            message.address = "/AudioRecordingConfirmation";
+            osc.OscPacketIO.RemoteHostName = gameEngine.osc.outIP;
+            osc.OscPacketIO.RemotePort = gameEngine.osc.outPort;
+            osc.Send(message);
+            if (gameEngine.debugMode) Debug.Log("Sending : " + message + ", " + gameEngine.osc.outIP);
+        }
+    }
+
+    public void AudioRecordHasStopped(){
+        if (osc.initialized)
+        {
+            message = new OscMessage();
+            message.address = "/AudioRecordingStopped";
+            osc.OscPacketIO.RemoteHostName = gameEngine.osc.outIP;
+            osc.OscPacketIO.RemotePort = gameEngine.osc.outPort;
             osc.Send(message);
             if (gameEngine.debugMode) Debug.Log("Sending : " + message + ", " + gameEngine.osc.outIP);
         }

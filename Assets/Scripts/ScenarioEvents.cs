@@ -99,6 +99,7 @@ public class ScenarioEvents : MonoBehaviour
         scenarioIsRunning = true;
         timerPaused = false;
         gameEngine.uiHandler.ToggleScenarioButton(1);
+        gameEngine.uiHandler.conditionTimeRemaining.gameObject.SetActive(true);
         InvokeRepeating("RunCondition", 0f, 1f);
     }
 
@@ -108,12 +109,23 @@ public class ScenarioEvents : MonoBehaviour
         gameEngine.uiHandler.ToggleScenarioButton(2);
     }
 
-    public void StopScenario(){
+    public void StopScenario(int interrupted){
 
-        Debug.Log("Scenario "+(currentScenario+1)+" done !");
         if(gameEngine.uiHandler.autoRecordPerformance.isOn) performanceRecorder.StopRecording();
         userManager.ChangeVisualisationMode("0", gameEngine, scenarios[currentScenario].toFade == 1);
         gameEngine.uiHandler.ToggleScenarioButton(0);
+        
+        if(interrupted == 0){ // if scenario had ended well 
+            Debug.Log("Scenario "+(currentScenario+1)+" done !");
+            if(gameEngine.audioRecordManager.recordPostScenarioAudio){
+                gameEngine.osc.sender.StartAudioRecording(gameEngine.audioRecordManager.postScenarioRecordingLenght, gameEngine.userManager.usersPlaying);
+            }
+        }
+        else Debug.Log("Scenario "+(currentScenario+1)+" Interrupted !");
+        timeRemaining = 0;
+        gameEngine.uiHandler.conditionTimeRemaining.text = "Time Remaining : "+timeRemaining;
+        gameEngine.uiHandler.conditionTimeRemaining.gameObject.SetActive(false);
+
         CancelInvoke("RunCondition");
         //userManager.ChangeVisualisationMode(scenarioId, gameEngine);
 
@@ -134,11 +146,12 @@ public class ScenarioEvents : MonoBehaviour
                     currentCondition += 1;
                 }
                 else{
-                    StopScenario();
+                    StopScenario(0);
                 }
             }
 
             timeRemaining--;
+            if(timeRemaining >= 0) gameEngine.uiHandler.conditionTimeRemaining.text = "Time Remaining : "+timeRemaining;
         }
     }
 

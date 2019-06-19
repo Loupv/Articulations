@@ -10,6 +10,7 @@ public class ReceiveOSC : MonoBehaviour {
     public SendOSC sender;
     public OSC osc;
     public UserRole userRole;
+    int clientAnswersPending;
 
     // Use this for initialization
     public void StartListening()
@@ -26,7 +27,7 @@ public class ReceiveOSC : MonoBehaviour {
             osc.SetAddressHandler("/TrailsParameterChange", UpdateTrailsVisualisation);
             osc.SetAddressHandler("/EnvironmentChange", EnvironmentChangedByServer);
             osc.SetAddressHandler("/CalibrationChange", CalibrationChange);
-            
+            osc.SetAddressHandler("/StartAudioRecording", StartAudioRecording);
 
             //osc.SetAddressHandler("/AudioData", DebugTemp); // debugtest
 
@@ -36,6 +37,8 @@ public class ReceiveOSC : MonoBehaviour {
             osc.SetAddressHandler("/PlayerRegistrationRequest", RegistationRequestedFromPlayer);
             osc.SetAddressHandler("/ClientHasLeft", ErasePlayerRequest);
             osc.SetAddressHandler("/ClientPlayerData", UpdateClientPosition);
+            osc.SetAddressHandler("/AudioRecordingConfirmation", AudioRecordingConfirmed);
+            osc.SetAddressHandler("/AudioRecordingStopped", AudioRecordingStopped);
         }
 
     }
@@ -120,6 +123,25 @@ public class ReceiveOSC : MonoBehaviour {
         osc.sender.RemovePlayerInClientsGame(playerID, userManager.usersPlaying);
     }
 
+    void AudioRecordingConfirmed(OscMessage message){
+        if(gameEngine.debugMode) Debug.Log("Received : " + message);
+        clientAnswersPending ++;
+        if(clientAnswersPending == gameEngine.userManager.CountPlayers()){
+            Debug.Log("Everyone is recording");
+            gameEngine.uiHandler.CountRecordTimeRemaining();
+            clientAnswersPending = 0;
+        }
+    }
+
+    void AudioRecordingStopped(OscMessage message){
+        if(gameEngine.debugMode) Debug.Log("Received : " + message);
+        clientAnswersPending ++;
+        if(clientAnswersPending == gameEngine.userManager.CountPlayers()){
+            Debug.Log("All recordings are stopped");
+            gameEngine.uiHandler.CancelRecordTime();
+            clientAnswersPending = 0;
+        }
+    }
 
 /*
     -------------------------------------
@@ -129,13 +151,17 @@ public class ReceiveOSC : MonoBehaviour {
 
     void RegistrationConfirmed(OscMessage message)
     {
-        if(message.GetInt(0) == gameEngine._user._ID && gameEngine.appState == AppState.WaitingForServer){
+        int playerID = message.GetInt(1);
+
+        if(playerID == gameEngine._user._ID && gameEngine.appState == AppState.WaitingForServer){
             if(gameEngine.debugMode) Debug.Log("Received : " + message);
-            int playerID = message.GetInt(0);
-            int requestedPort = message.GetInt(1);
-            string visualisationMode = message.GetString(2);
-            int rank = message.GetInt(3);
-            gameEngine.EndStartProcess(playerID, requestedPort, visualisationMode, rank);
+            int sessionID = message.GetInt(0);
+            int requestedPort = message.GetInt(2);
+            string visualisationMode = message.GetString(3);
+            int rank = message.GetInt(4);
+            int recordAudio = message.GetInt(5);
+            int recordLength = message.GetInt(6);
+            gameEngine.EndStartProcess(sessionID, playerID, requestedPort, visualisationMode, rank, recordAudio, recordLength);
         }
     }
 
@@ -186,7 +212,7 @@ public class ReceiveOSC : MonoBehaviour {
         }
     }
 
-    // client side
+
     void RemovePlayerFromGame(OscMessage message)
     {
         if(gameEngine.debugMode) Debug.Log("Received : " + message);
@@ -233,6 +259,12 @@ public class ReceiveOSC : MonoBehaviour {
                 //break;
             }
         }
+    }
+
+    public void StartAudioRecording(OscMessage message){
+        Debug.Log(message);
+        int audioLenght = message.GetInt(0);
+        if(userManager.me._userRole == UserRole.Player) gameEngine.audioRecordManager.Launch(audioLenght);
     }
 
     // server has quit
