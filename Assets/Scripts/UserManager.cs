@@ -17,6 +17,18 @@ public class UserManager : MonoBehaviour
     public bool keepNamesVisibleForPlayers;
     public Color userCol, whiteColor, cyanColor;
 
+
+    // Arm Extension variables
+    private float lerpDuration;
+    private float distanceToMove;
+    private bool _isLerping;
+    private Vector3 _startPosition;
+    private Vector3 _endPosition;
+    private float _timeStartedLerping;
+    // end of arm extension variables
+
+
+
     // Start is called before the first frame update
 
 
@@ -155,7 +167,24 @@ public class UserManager : MonoBehaviour
                         
                     }
                     else if (mode == "1Ca" || mode == "1Cb" || mode == "1Cc") // change arms length
-                    { 
+                    {
+                        if (mode == "1Ca"){
+                            if (_isLerping)
+                            {
+
+                                float timeSinceStarted = Time.time - _timeStartedLerping;
+                                float t = timeSinceStarted / lerpDuration;
+                                float percentageComplete = t * t * t * (t * (6f * t - 15f) + 10f);  // smoother curve, ease in and ease out 
+
+
+                                transform.localPosition = Vector3.Lerp(_startPosition, _endPosition, percentageComplete);
+
+                                if (percentageComplete >= 1.0f)
+                                {
+                                    _isLerping = false;
+                                }
+                            }
+                        }
                         Debug.Log("TODO");
                     }
 
@@ -355,5 +384,25 @@ public class UserManager : MonoBehaviour
         return new Vector3();
     }
 
+    // arm extension functions
 
+    void StartLerping()
+    {
+        distanceToMove = 3f;
+        lerpDuration = 3f;
+        _isLerping = true;
+        _timeStartedLerping = Time.time;
+
+        _startPosition = transform.localPosition;
+        _endPosition = transform.localPosition + Vector3.up * distanceToMove;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+
+            StartLerping();
+        }
+    }
 }
