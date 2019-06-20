@@ -22,8 +22,8 @@ public class UserManager : MonoBehaviour
     private float lerpDuration;
     private float distanceToMove;
     private bool _isLerping;
-    private Vector3 _startPosition;
-    private Vector3 _endPosition;
+    private Vector3 [] _startPosition = new Vector3[8];
+    private Vector3 [] _endPosition = new Vector3[8];
     private float _timeStartedLerping;
     // end of arm extension variables
 
@@ -166,24 +166,25 @@ public class UserManager : MonoBehaviour
                         else user.ChangeSkin(this, "all");
                         
                     }
-                    else if (mode == "1Ca" || mode == "1Cb" || mode == "1Cc") // change arms length
+                    else if (mode == "1C" || mode == "1Ca" || mode == "1Cb" || mode == "1Cc") // change arms length
                     {
-                        if (mode == "1Ca"){
-                            if (_isLerping)
-                            {
-
-                                float timeSinceStarted = Time.time - _timeStartedLerping;
-                                float t = timeSinceStarted / lerpDuration;
-                                float percentageComplete = t * t * t * (t * (6f * t - 15f) + 10f);  // smoother curve, ease in and ease out 
-
-
-                                transform.localPosition = Vector3.Lerp(_startPosition, _endPosition, percentageComplete);
-
-                                if (percentageComplete >= 1.0f)
-                                {
-                                    _isLerping = false;
-                                }
-                            }
+                        if (mode == "1C"){
+                            Debug.Log("move arms");
+                            distanceToMove = -0.3f;
+                            lerpDuration = 3f;
+                            StartLerping();
+                        }
+                        else if (mode == "1Cb")
+                        {
+                            distanceToMove = 1f;
+                            lerpDuration = 3f;
+                          //  StartLerping();
+                        }
+                        else if (mode == "1Cc")
+                        {
+                            distanceToMove = 3f;
+                            lerpDuration = 5f;
+                           // StartLerping();
                         }
                         Debug.Log("TODO");
                     }
@@ -388,21 +389,43 @@ public class UserManager : MonoBehaviour
 
     void StartLerping()
     {
-        distanceToMove = 3f;
-        lerpDuration = 3f;
-        _isLerping = true;
-        _timeStartedLerping = Time.time;
+        
+            _isLerping = true;
+            _timeStartedLerping = Time.time;
+        int i = 0;
+        foreach (UserData user in usersPlaying)
+        {
+            _startPosition[i] = usersPlaying[i].rightHand.transform.localPosition;
+            _endPosition[i] = usersPlaying[i].rightHand.transform.localPosition + Vector3.up * distanceToMove;
+            i++;
+        }
 
-        _startPosition = transform.localPosition;
-        _endPosition = transform.localPosition + Vector3.up * distanceToMove;
+
     }
 
-    void Update()
+
+    void FixedUpdate()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (_isLerping)
         {
 
-            StartLerping();
+            float timeSinceStarted = Time.time - _timeStartedLerping;
+            float t = timeSinceStarted / lerpDuration;
+            float percentageComplete = t * t * t * (t * (6f * t - 15f) + 10f);  // smoother curve, ease in and ease out 
+
+            int i = 0;
+            foreach (UserData user in usersPlaying)
+            {
+                usersPlaying[i].rightHand.transform.localPosition = Vector3.Lerp(_startPosition[i], _endPosition[i], percentageComplete);
+                i++;
+            }
+
+            if (percentageComplete >= 1.0f)
+            {
+                _isLerping = false;
+            }
         }
     }
+
+    // end of arm extension functions
 }
