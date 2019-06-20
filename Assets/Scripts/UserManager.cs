@@ -27,6 +27,8 @@ public class UserManager : MonoBehaviour
     private Vector3[] _initialPositionRightHand, _initialPositionLeftHand;
     private float _timeStartedLerping;
     // end of arm extension variables
+    public string trailsCondition;
+    public float dist;
 
 
 
@@ -41,6 +43,8 @@ public class UserManager : MonoBehaviour
 
         whiteColor = Color.white;
         cyanColor = Color.cyan;
+
+        trailsCondition = null;
     }
 
 
@@ -174,7 +178,7 @@ public class UserManager : MonoBehaviour
                         if (mode == "1Ca"){
                             Debug.Log("move arms");
                             distanceToMove = -0.3f;
-                            lerpDuration = 3f;
+                            lerpDuration = 4f;
                             StartLerping();
                         }
                         else if (mode == "1Cb")
@@ -185,8 +189,8 @@ public class UserManager : MonoBehaviour
                         }
                         else if (mode == "1Cc")
                         {
-                            distanceToMove = 3f;
-                            lerpDuration = 5f;
+                            distanceToMove = 4f;
+                            lerpDuration = 6f;
                             StartLerping();
                         }
                     }
@@ -220,7 +224,7 @@ public class UserManager : MonoBehaviour
                                 user.ChangeSkin(this, "trails");
                             else user.ChangeSkin(this, "nothing");
                         }
-                        
+                        trailsCondition = "solo";
                     }
 
                     else if (mode == "3B") // trails individual + sound
@@ -232,13 +236,15 @@ public class UserManager : MonoBehaviour
                             if (user._ID == me._ID)
                                 user.ChangeSkin(this, "trails");
                             else user.ChangeSkin(this, "nothing");
-                        }  
+                        }
+                        trailsCondition = "solo";
                     }
 
                     else if (mode == "3Ca" || mode == "3Cb" || mode == "3Cc") // intersubject
                     { // trails mode2
                         Debug.Log("TO DO (sound)");
                         user.ChangeSkin(this, "trails");
+                        trailsCondition = "relation";
                     }
 
 
@@ -471,7 +477,25 @@ public class UserManager : MonoBehaviour
                 _isLerping = false;
             }
         }
+
+        // trails proximity
+        if (trailsCondition == "relation")
+        {
+            int i = 0;
+            foreach (UserData user in usersPlaying)
+            {
+                if (usersPlaying.Count > 1){
+                    if (user._userRole == UserRole.Player)
+                    {
+                        dist = Vector3.Distance(usersPlaying[i].head.transform.position, usersPlaying[i + 1].head.transform.position);
+                    }
+                }
+            }
+        }
     }
 
     // end of arm extension functions
+
+
+
 }
