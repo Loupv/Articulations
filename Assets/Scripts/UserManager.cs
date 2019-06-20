@@ -398,9 +398,12 @@ public class UserManager : MonoBehaviour
             _initialPositionLeftHand = new Vector3[8];
             foreach (UserData user in usersPlaying) // store initial local position 
             {
-                _initialPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition;
-                _initialPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition;
-                i++;
+                if (user._userRole == UserRole.Player)
+                {
+                    _initialPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition;
+                    _initialPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition;
+                    i++;
+                }
             }
         }
 
@@ -409,11 +412,14 @@ public class UserManager : MonoBehaviour
         _timeStartedLerping = Time.time;
         foreach (UserData user in usersPlaying)
         {
-            _startPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition;
-            _endPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition + Vector3.up * distanceToMove;
-            _startPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition;
-            _endPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition + Vector3.up * distanceToMove;
-            i++;
+            if (user._userRole == UserRole.Player)
+            {
+                _startPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition;
+                _endPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition + Vector3.up * distanceToMove;
+                _startPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition;
+                _endPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition + Vector3.up * distanceToMove;
+                i++;
+            }
         }
         _hasLerped = true;
     }
@@ -426,11 +432,14 @@ public class UserManager : MonoBehaviour
         int i = 0;
         foreach (UserData user in usersPlaying)
         {
-            _startPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition;
-            _endPositionRightHand[i] = _initialPositionRightHand[i];
-            _startPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition;
-            _endPositionLeftHand[i] = _initialPositionLeftHand[i];
-            i++;
+            if (user._userRole == UserRole.Player)
+            {
+                _startPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition;
+                _endPositionRightHand[i] = _initialPositionRightHand[i];
+                _startPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition;
+                _endPositionLeftHand[i] = _initialPositionLeftHand[i];
+                i++;
+            }
         }
         _hasLerped = false;
 
@@ -449,9 +458,12 @@ public class UserManager : MonoBehaviour
             int i = 0;
             foreach (UserData user in usersPlaying)
             {
-                usersPlaying[i].rightHand.transform.localPosition = Vector3.Lerp(_startPositionRightHand[i], _endPositionRightHand[i], percentageComplete);
-                usersPlaying[i].leftHand.transform.localPosition = Vector3.Lerp(_startPositionLeftHand[i], _endPositionLeftHand[i], percentageComplete);
-                i++;
+                if (user._userRole == UserRole.Player)
+                {
+                    usersPlaying[i].rightHand.transform.localPosition = Vector3.Lerp(_startPositionRightHand[i], _endPositionRightHand[i], percentageComplete);
+                    usersPlaying[i].leftHand.transform.localPosition = Vector3.Lerp(_startPositionLeftHand[i], _endPositionLeftHand[i], percentageComplete);
+                    i++;
+                }
             }
 
             if (percentageComplete >= 1.0f)

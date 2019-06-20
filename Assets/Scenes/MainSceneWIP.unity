@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.437
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.29308647, g: 0.32032403, b: 0.34878978, a: 0.437}
+  m_IndirectSpecularColor: {r: 0.2930869, g: 0.3203242, b: 0.34879014, a: 0.437}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5491,7 +5491,7 @@ MonoBehaviour:
     type: 3}
   trackerPrefab: {fileID: 6075620792603371976, guid: 14c6ae8e882b0974caa177b074ae4559,
     type: 3}
-  TrailRendererPrefab: {fileID: 7632359022049117597, guid: 35349948085509847b8d11f1ced88d3e,
+  TrailRendererPrefab: {fileID: 4071923053233047380, guid: d6108e8bd56ae4148926888f2c282964,
     type: 3}
   SparkParticlesPrefab: {fileID: 7632359022049117597, guid: ed64cc7f05f9d2246a2a89a14913f304,
     type: 3}
