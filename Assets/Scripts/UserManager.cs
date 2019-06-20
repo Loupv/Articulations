@@ -21,9 +21,10 @@ public class UserManager : MonoBehaviour
     // Arm Extension variables
     private float lerpDuration;
     private float distanceToMove;
-    private bool _isLerping;
-    private Vector3 [] _startPosition = new Vector3[8];
-    private Vector3 [] _endPosition = new Vector3[8];
+    private bool _isLerping, _hasLerped;
+    private Vector3 [] _startPositionRightHand = new Vector3[8], _startPositionLeftHand = new Vector3[8];
+    private Vector3 [] _endPositionRightHand = new Vector3[8], _endPositionLeftHand = new Vector3[8];
+    private Vector3[] _initialPositionRightHand, _initialPositionLeftHand;
     private float _timeStartedLerping;
     // end of arm extension variables
 
@@ -120,6 +121,8 @@ public class UserManager : MonoBehaviour
             if(mode == "0") gameEngine.scenarioEvents.SetTimeOfDay(6);            
             else gameEngine.scenarioEvents.SetTimeOfDay(8);
 
+            if(_hasLerped && (mode != "1Ca" || mode != "1Cb" || mode != "1Cc")) RevertLerping();
+
 
             if((mode != "2B" && mode !="2C" && gameEngine.scenarioEvents.mirrorAct) || 
             ((mode == "2B" || mode =="2C") && !gameEngine.scenarioEvents.mirrorAct)) 
@@ -168,7 +171,7 @@ public class UserManager : MonoBehaviour
                     }
                     else if (mode == "1C" || mode == "1Ca" || mode == "1Cb" || mode == "1Cc") // change arms length
                     {
-                        if (mode == "1C"){
+                        if (mode == "1Ca"){
                             Debug.Log("move arms");
                             distanceToMove = -0.3f;
                             lerpDuration = 3f;
@@ -178,15 +181,14 @@ public class UserManager : MonoBehaviour
                         {
                             distanceToMove = 1f;
                             lerpDuration = 3f;
-                          //  StartLerping();
+                            StartLerping();
                         }
                         else if (mode == "1Cc")
                         {
                             distanceToMove = 3f;
                             lerpDuration = 5f;
-                           // StartLerping();
+                            StartLerping();
                         }
-                        Debug.Log("TODO");
                     }
 
 
@@ -390,16 +392,47 @@ public class UserManager : MonoBehaviour
     void StartLerping()
     {
         
-            _isLerping = true;
-            _timeStartedLerping = Time.time;
+        int i = 0;
+        if( _initialPositionRightHand == null || _initialPositionLeftHand == null){
+            _initialPositionRightHand = new Vector3[8];
+            _initialPositionLeftHand = new Vector3[8];
+            foreach (UserData user in usersPlaying) // store initial local position 
+            {
+                _initialPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition;
+                _initialPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition;
+                i++;
+            }
+        }
+
+        i = 0;
+        _isLerping = true;
+        _timeStartedLerping = Time.time;
+        foreach (UserData user in usersPlaying)
+        {
+            _startPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition;
+            _endPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition + Vector3.up * distanceToMove;
+            _startPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition;
+            _endPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition + Vector3.up * distanceToMove;
+            i++;
+        }
+        _hasLerped = true;
+    }
+
+
+    void RevertLerping(){
+
+        _isLerping = true;
+        _timeStartedLerping = Time.time;
         int i = 0;
         foreach (UserData user in usersPlaying)
         {
-            _startPosition[i] = usersPlaying[i].rightHand.transform.localPosition;
-            _endPosition[i] = usersPlaying[i].rightHand.transform.localPosition + Vector3.up * distanceToMove;
+            _startPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition;
+            _endPositionRightHand[i] = _initialPositionRightHand[i];
+            _startPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition;
+            _endPositionLeftHand[i] = _initialPositionLeftHand[i];
             i++;
         }
-
+        _hasLerped = false;
 
     }
 
@@ -416,7 +449,8 @@ public class UserManager : MonoBehaviour
             int i = 0;
             foreach (UserData user in usersPlaying)
             {
-                usersPlaying[i].rightHand.transform.localPosition = Vector3.Lerp(_startPosition[i], _endPosition[i], percentageComplete);
+                usersPlaying[i].rightHand.transform.localPosition = Vector3.Lerp(_startPositionRightHand[i], _endPositionRightHand[i], percentageComplete);
+                usersPlaying[i].leftHand.transform.localPosition = Vector3.Lerp(_startPositionLeftHand[i], _endPositionLeftHand[i], percentageComplete);
                 i++;
             }
 
