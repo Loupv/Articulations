@@ -163,6 +163,7 @@ public class ScenarioEvents : MonoBehaviour
     {
         RenderSettings.skybox = skyboxes[skyboxID];
         skyboxID++;
+        //if (skyboxID == 4)
         if (skyboxID > skyboxes.Length - 1) skyboxID = 0;
     }
 

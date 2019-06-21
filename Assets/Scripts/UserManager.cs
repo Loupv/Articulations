@@ -29,6 +29,11 @@ public class UserManager : MonoBehaviour
     // end of arm extension variables
     public string trailsCondition;
     public float dist;
+    bool trailsRelated;
+    bool _areFar;
+    bool _areClose;
+    ParticleSystem[] trailSystemsR = new ParticleSystem[4];
+    ParticleSystem[] trailSystemsL = new ParticleSystem[4];
 
 
 
@@ -45,6 +50,7 @@ public class UserManager : MonoBehaviour
         cyanColor = Color.cyan;
 
         trailsCondition = null;
+        trailsRelated = false;
     }
 
 
@@ -136,7 +142,12 @@ public class UserManager : MonoBehaviour
                 {
                     if(user._userRole == UserRole.Player) ChangePlayerColor(user, whiteColor);
                 }
-            if(mode != "3B" && mode != "3Ca" && mode != "3Cb" && mode != "3Cc") gameEngine.sendToAudioDevice = false;
+            if (mode != "3B" && mode != "3Ca" && mode != "3Cb" && mode != "3Cc")
+            {
+                gameEngine.sendToAudioDevice = false;
+                trailsCondition = null;
+                trailsRelated = false;
+            }
             else gameEngine.sendToAudioDevice = true;
             gameEngine.uiHandler.sendToAudioDeviceToggle.isOn = gameEngine.sendToAudioDevice;
 
@@ -224,7 +235,10 @@ public class UserManager : MonoBehaviour
                                 user.ChangeSkin(this, "trails");
                             else user.ChangeSkin(this, "nothing");
                         }
-                        trailsCondition = "solo";
+                        trailsRelated = true;
+                        GetAllParticleSystems();
+                        DeActivateParticleVelocity();
+                        trailsCondition = null;
                     }
 
                     else if (mode == "3B") // trails individual + sound
@@ -237,7 +251,10 @@ public class UserManager : MonoBehaviour
                                 user.ChangeSkin(this, "trails");
                             else user.ChangeSkin(this, "nothing");
                         }
-                        trailsCondition = "solo";
+                        trailsRelated = true;
+                        GetAllParticleSystems();
+                        DeActivateParticleVelocity();
+                        trailsCondition = "soloR";
                     }
 
                     else if (mode == "3Ca" || mode == "3Cb" || mode == "3Cc") // intersubject
@@ -245,6 +262,10 @@ public class UserManager : MonoBehaviour
                         Debug.Log("TO DO (sound)");
                         user.ChangeSkin(this, "trails");
                         trailsCondition = "relation";
+                        trailsRelated = true;
+                        GetAllParticleSystems();
+                        _areFar = true;
+                        _areClose = true;
                     }
 
 
@@ -393,7 +414,7 @@ public class UserManager : MonoBehaviour
         return new Vector3();
     }
 
-    // arm extension functions
+    // arm extension and particle trail functions
 
     void StartLerping()
     {
@@ -484,17 +505,98 @@ public class UserManager : MonoBehaviour
             int i = 0;
             foreach (UserData user in usersPlaying)
             {
-                if (usersPlaying.Count > 1){
-                    if (user._userRole == UserRole.Player)
+                if (user._userRole == UserRole.Player)
+                {
+                    if  (usersPlaying.Count > 1)
                     {
                         dist = Vector3.Distance(usersPlaying[i].head.transform.position, usersPlaying[i + 1].head.transform.position);
+                        if (dist > 1)
+                        {
+                            if (_areClose == true)
+                            {
+                                _areFar = false;
+                                _areClose = false;
+                            }
+                            if (_areFar == false)
+                            {
+                                ActivateParticleVelocity();
+                                _areFar = true;
+                            }
+                        }
+                        else if (dist < 1)
+                        {
+
+                            if (_areClose == false)
+                            {
+                                DeActivateParticleVelocity();
+                                _areClose = true;
+                            }
+                            float lfTime = dist.Remap(1, 0, 3, 12);
+                            SetParticleLifetime(lfTime);
+                        }
                     }
                 }
             }
         }
     }
 
-    // end of arm extension functions
+
+    void GetAllParticleSystems()
+    {
+            if (trailsRelated == true)
+            {
+                int i = 0;
+                foreach (UserData user in usersPlaying)
+                {
+                    if (user._userRole == UserRole.Player)
+                    {
+                        trailSystemsR[i] = usersPlaying[i].rightHand.GetComponentInChildren<ParticleSystem>();
+                        trailSystemsL[i] = usersPlaying[i].leftHand.GetComponentInChildren<ParticleSystem>();
+                        i++;
+                    }
+                }
+                 trailsRelated = false;
+            }                
+    }
+
+    void ActivateParticleVelocity()
+    {
+        int i = 0;
+        foreach (ParticleSystem p in trailSystemsR)
+        {
+            var veloModuleR = trailSystemsR[i].inheritVelocity;
+            veloModuleR.enabled = true;
+            var veloModuleL = trailSystemsL[i].inheritVelocity;
+            veloModuleL.enabled = true;
+            i++;
+        }
+    }
+
+    void DeActivateParticleVelocity()
+    {
+        int i = 0;
+        foreach (ParticleSystem p in trailSystemsR)
+        {
+            var veloModuleR = trailSystemsR[i].inheritVelocity;
+            veloModuleR.enabled = false;
+            var veloModuleL = trailSystemsL[i].inheritVelocity;
+            veloModuleL.enabled = false;
+            i++;
+        }
+    }
+
+    void SetParticleLifetime(float lf)
+    {
+        int i = 0;
+        foreach (ParticleSystem p in trailSystemsR)
+        {
+            trailSystemsR[i].startLifetime = lf;
+            trailSystemsL[i].startLifetime = lf;
+            i++;
+        }
+    }
+
+    // end of arm extension and particle trail functions
 
 
 
