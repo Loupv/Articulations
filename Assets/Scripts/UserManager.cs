@@ -121,12 +121,11 @@ public class UserManager : MonoBehaviour
 
 
             // main parameters
-
+            // TODO CLEAN THIS PART
             if(mode == "0") gameEngine.scenarioEvents.SetTimeOfDay(6);            
             else gameEngine.scenarioEvents.SetTimeOfDay(8);
 
             if(_hasLerped && (mode != "1Ca" || mode != "1Cb" || mode != "1Cc")) RevertLerping();
-
 
             if((mode != "2B" && mode !="2C" && gameEngine.scenarioEvents.mirrorAct) || 
             ((mode == "2B" || mode =="2C") && !gameEngine.scenarioEvents.mirrorAct)) 
@@ -175,6 +174,7 @@ public class UserManager : MonoBehaviour
                     }
                     else if (mode == "1C" || mode == "1Ca" || mode == "1Cb" || mode == "1Cc") // change arms length
                     {
+                        user.ChangeSkin(this, "all");
                         if (mode == "1Ca"){
                             Debug.Log("move arms");
                             distanceToMove = -0.3f;

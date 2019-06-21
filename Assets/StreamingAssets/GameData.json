@@ -4,7 +4,7 @@
    "DebugMode":0,
    "keepNamesVisibleForPlayers":0,
    "useVr":0,
-   "audioRecordLength":5,
+   "audioRecordLength":30,
    "saveFileFrequency":60,
    "OSC_ServerIP":"172.30.41.60",
    "OSC_LocalIP":"",
