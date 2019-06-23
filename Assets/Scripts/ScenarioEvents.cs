@@ -123,6 +123,7 @@ public class ScenarioEvents : MonoBehaviour
                     if(gameEngine.uiHandler.autoRecordPerformance.isOn && !performanceRecorder.isRecording) performanceRecorder.StartRecording();
                     userManager.ChangeVisualisationMode(scenarios[currentScenario].conditions[currentCondition], gameEngine, scenarios[currentScenario].toFade == 1);
                     timeRemaining = scenarios[currentScenario].durations[currentCondition];
+                    gameEngine.uiHandler.currentConditionText.text = "CurrentCondition : " + scenarios[currentScenario].conditions[currentCondition];
                     currentCondition += 1;
                 }
                 else{
@@ -144,6 +145,7 @@ public class ScenarioEvents : MonoBehaviour
         if(interrupted == 0){ // if scenario had ended well 
             Debug.Log("Scenario "+(currentScenario+1)+" done !");
             if(gameEngine.audioRecordManager.recordPostScenarioAudio){
+                gameEngine.instructionPlayer.PlayInstructions(0);
                 gameEngine.osc.sender.StartAudioRecording(gameEngine.audioRecordManager.postScenarioRecordingLenght, gameEngine.userManager.usersPlaying);
             }
         }

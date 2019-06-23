@@ -233,11 +233,11 @@ public class UserManager : MonoBehaviour
                         {
                             if (user._ID == me._ID)
                                 user.ChangeSkin(this, "trails");
-                            else user.ChangeSkin(this, "nothing");
+                            else user.ChangeSkin(this, "trails");
                         }
                         trailsRelated = true;
                         GetAllParticleSystems();
-                        DeActivateParticleVelocity();
+                       // DeActivateParticleVelocity();
                         trailsCondition = null;
                     }
 
@@ -249,11 +249,11 @@ public class UserManager : MonoBehaviour
                         {
                             if (user._ID == me._ID)
                                 user.ChangeSkin(this, "trails");
-                            else user.ChangeSkin(this, "nothing");
+                            else user.ChangeSkin(this, "trails");
                         }
                         trailsRelated = true;
                         GetAllParticleSystems();
-                        DeActivateParticleVelocity();
+                       // DeActivateParticleVelocity();
                         trailsCondition = "soloR";
                     }
 
@@ -510,7 +510,8 @@ public class UserManager : MonoBehaviour
                     if  (usersPlaying.Count > 1)
                     {
                         dist = Vector3.Distance(usersPlaying[i].head.transform.position, usersPlaying[i + 1].head.transform.position);
-                        if (dist > 1)
+                        /*
+                        if (dist > 0.5f)
                         {
                             if (_areClose == true)
                             {
@@ -519,21 +520,22 @@ public class UserManager : MonoBehaviour
                             }
                             if (_areFar == false)
                             {
-                                ActivateParticleVelocity();
+                                //ActivateParticleVelocity();
                                 _areFar = true;
                             }
                         }
-                        else if (dist < 1)
+                        else if (dist < 0.5f)
                         {
 
                             if (_areClose == false)
                             {
-                                DeActivateParticleVelocity();
+                               // DeActivateParticleVelocity();
                                 _areClose = true;
                             }
-                            float lfTime = dist.Remap(1, 0, 3, 12);
+                            float lfTime = dist.Remap(0.5f, 0f, 3f, 12f);
                             SetParticleLifetime(lfTime);
                         }
+                        */
                     }
                 }
             }
@@ -555,6 +557,7 @@ public class UserManager : MonoBehaviour
                         i++;
                     }
                 }
+            Debug.Log("got that many particle systems: " + trailSystemsR.Length);
                  trailsRelated = false;
             }                
     }

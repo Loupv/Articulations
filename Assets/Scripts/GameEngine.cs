@@ -65,6 +65,7 @@ public class GameEngine : MonoBehaviour
     public SoundHandler soundHandler;
     public ScenarioEvents scenarioEvents;
     public AudioRecordManager audioRecordManager;
+    public SoundInstructionPlayer instructionPlayer;
     public GameData gameData;
     
     public GameObject ViveSystemPrefab;

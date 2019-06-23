@@ -76,6 +76,7 @@ public class AudioRecordManager : MonoBehaviour
         SavWav.Save (audioDirPath, fileName, audioSource.clip);
         gameEngine.osc.sender.AudioRecordHasStopped();
         Microphone.End (null);
+        gameEngine.instructionPlayer.PlayInstructions(1);
         Debug.Log("Audio Recording Stopped !");  
 	}
 }

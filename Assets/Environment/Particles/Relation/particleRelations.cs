@@ -10,10 +10,12 @@ public class particleRelations : MonoBehaviour
     public float moveRatio = 0f;
     private Vector3 lastPosition;
     ParticleSystem myparticles;
-    //public GameObject _manager;
-    //string condition;
-    //float dist;
-    //bool moduleEnabled;
+    public GameObject _manager;
+    string condition;
+    float dist;
+    bool moduleEnabled;
+    bool _areClose;
+    bool _areFar;
 
     void Start()
     {
@@ -21,6 +23,8 @@ public class particleRelations : MonoBehaviour
         myparticles = GetComponentInChildren<ParticleSystem>();
         //_manager = GameObject.FindGameObjectWithTag("UserManager");
         //moduleEnabled = false;
+        _areClose = true;
+        _areFar = true;
 
     }
 
@@ -38,13 +42,14 @@ public class particleRelations : MonoBehaviour
         //Debug.Log(Mathf.Clamp(acceleration, 0f, 3f));
 
         // all this has been transfered to user manager
-        /*
+        
         if (_manager != null)
         {
             condition = _manager.GetComponent<UserManager>().trailsCondition;
             if (condition == "relation")
             {
                 dist = _manager.GetComponent<UserManager>().dist;
+                /*
                 if (dist > 1f)
                 {
                     //moduleEnabled = myparticles.inheritVelocity.enabled;
@@ -59,11 +64,39 @@ public class particleRelations : MonoBehaviour
                     myparticles.startLifetime = lfTime;
 
                 }
+                */
+
+                if (dist > 1.5f)
+                {
+                    if (_areClose == true)
+                    {
+                        _areFar = false;
+                        _areClose = false;
+                    }
+                    if (_areFar == false)
+                    {
+                        var veloModule = myparticles.inheritVelocity;
+                        veloModule.enabled = true;
+                        _areFar = true;
+                    }
+                }
+                else if (dist < 1.5f)
+                {
+
+                    if (_areClose == false)
+                    {
+                        var veloModule = myparticles.inheritVelocity;
+                        veloModule.enabled = false;
+                        _areClose = true;
+                    }
+                    float lfTime = dist.Remap(1.5f, 0f, 3f, 12f);
+                    myparticles.startLifetime = lfTime;
+                }
 
 
             }
         }
-        */
+        
         //all this has been transfered to user manager
 
 
