@@ -502,13 +502,14 @@ public class UserManager : MonoBehaviour
         // trails proximity
         if (trailsCondition == "relation")
         {
+
             int i = 0;
             foreach (UserData user in usersPlaying)
             {
                 if (user._userRole == UserRole.Player)
                 {
                     if  (usersPlaying.Count > 1)
-                    {
+                    {                        
                         dist = Vector3.Distance(usersPlaying[i].head.transform.position, usersPlaying[i + 1].head.transform.position);
                         /*
                         if (dist > 0.5f)

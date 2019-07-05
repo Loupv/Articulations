@@ -12,7 +12,7 @@ public class particleRelations : MonoBehaviour
     ParticleSystem myparticles;
     public GameObject _manager;
     string condition;
-    float dist;
+    public float dist;
     bool moduleEnabled;
     bool _areClose;
     bool _areFar;
@@ -21,7 +21,7 @@ public class particleRelations : MonoBehaviour
     {
         lastPosition = transform.position;
         myparticles = GetComponentInChildren<ParticleSystem>();
-        //_manager = GameObject.FindGameObjectWithTag("UserManager");
+        _manager = GameObject.FindGameObjectWithTag("UserManager");
         //moduleEnabled = false;
         _areClose = true;
         _areFar = true;
@@ -77,6 +77,8 @@ public class particleRelations : MonoBehaviour
                     {
                         var veloModule = myparticles.inheritVelocity;
                         veloModule.enabled = true;
+                        var veloModulee = myparticles.noise;
+                        veloModulee.enabled = true;
                         _areFar = true;
                     }
                 }
@@ -87,6 +89,8 @@ public class particleRelations : MonoBehaviour
                     {
                         var veloModule = myparticles.inheritVelocity;
                         veloModule.enabled = false;
+                        var veloModulee = myparticles.noise;
+                        veloModulee.enabled = false;
                         _areClose = true;
                     }
                     float lfTime = dist.Remap(1.5f, 0f, 3f, 12f);
