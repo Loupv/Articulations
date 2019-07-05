@@ -80,7 +80,7 @@ public class particleRelations : MonoBehaviour
                         _areFar = true;
                     }
                 }
-                else if (dist < 1.5f)
+                else if (dist <= 1.5f)
                 {
 
                     if (_areClose == false)
