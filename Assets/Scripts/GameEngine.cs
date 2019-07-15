@@ -33,7 +33,7 @@ public class GameData
 
 public enum UserRole
 {
-    Server, Player, Viewer, Tracker
+    Server, Player, Viewer, Tracker, Playback
 }
 
 public enum AppState
@@ -46,35 +46,27 @@ public enum AppState
 public class GameEngine : MonoBehaviour
 {
 
-    public CanvasHandler canvasHandler;
-    public NetworkManager networkManager;
+    [HideInInspector] public UserData _user;
+    [HideInInspector] public UserManager userManager;
+    [HideInInspector] public ScenarioEvents scenarioEvents;
+    [HideInInspector] public FileInOut fileInOut;
+    [HideInInspector] public OSC osc;
+    [HideInInspector] public NetworkManager networkManager;
+    [HideInInspector] public CanvasHandler canvasHandler;
+    [HideInInspector] public UIHandler uiHandler;
+    [HideInInspector] public SoundHandler soundHandler;
+    [HideInInspector] public SoundInstructionPlayer instructionPlayer;
+    [HideInInspector] public AudioRecordManager audioRecordManager;
+    [HideInInspector] public PerformanceRecorder performanceRecorder;
+    [HideInInspector] public PlaybackManager playbackManager;
 
-    public UserManager userManager;
-
-    
-    [HideInInspector]
-    public UserData _user;
-
-    public OSC osc;
-    //private SendOSC sender;
-    //private ReceiveOSC receiver;
-
-    private JSONLoader jSONLoader;
-    
-    public UIHandler uiHandler;
-    public SoundHandler soundHandler;
-    public ScenarioEvents scenarioEvents;
-    public AudioRecordManager audioRecordManager;
-    public SoundInstructionPlayer instructionPlayer;
-    public GameData gameData;
-    
+    public GameData gameData;    
     public GameObject ViveSystemPrefab;
     //public GameObject sceneGameObjects;
     public List<GameObject> POVs;
 
     //public GameObject mirror;
 
-    public PerformanceRecorder performanceRecorder;
     public UserRole _userRole;
     public AppState appState;
     public string currentVisualisationMode = "1A", pendingVisualisationMode = "none";
@@ -91,71 +83,51 @@ public class GameEngine : MonoBehaviour
     public GameObject debugPrefab;
     public int targetFrameRate = 60;
 
+
     private void Start()
     {
-        //if (!useVRHeadset) StartCoroutine(EnableDisableVRMode(false));
-        //else StartCoroutine(EnableDisableVRMode(true));
-
         StartCoroutine(InitApplication());   
     }
 
 
     // The very start of the program
-   // public void InitApplication()
     public IEnumerator InitApplication()
     {
-
+        // basic initialization
         Screen.fullScreen = false;
         appState = AppState.Initializing;
-
         Application.targetFrameRate = targetFrameRate;
 
-        canvasHandler = GetComponent<CanvasHandler>();
-        uiHandler = GetComponentInChildren<UIHandler>();
+
+        canvasHandler =         GetComponent<CanvasHandler>();
+        networkManager =        GetComponentInChildren<NetworkManager>();
+        userManager =           GetComponentInChildren<UserManager>();
+        osc =                   GetComponentInChildren<OSC>();
+        uiHandler =             GetComponentInChildren<UIHandler>();
+        soundHandler =          GetComponentInChildren<SoundHandler>();
+        scenarioEvents =        GetComponentInChildren<ScenarioEvents>();
+        audioRecordManager =    GetComponentInChildren<AudioRecordManager>();
+        instructionPlayer =     GetComponentInChildren<SoundInstructionPlayer>();
+
+
         canvasHandler.ChangeCanvas("initCanvas");
         _userRole = UserRole.Server; // base setting
         
-        
-        
+        // load jsons
+        fileInOut = new FileInOut();
+        fileInOut.LoadPreferencesFiles(this);
 
-#if UNITY_ANDROID
-        Debug.Log("tablet initializing");
-
-        // game data json
-        string filePath = Path.Combine(Application.streamingAssetsPath, "GameData.json");
-        UnityWebRequest www = UnityWebRequest.Get(filePath);
-        yield return www.SendWebRequest();
-        string dataAsJson = www.downloadHandler.text;
-        Debug.Log(dataAsJson);
-        gameData = JsonUtility.FromJson<GameData>(dataAsJson);
-
-        // scenario json
-        filePath = Path.Combine(Application.streamingAssetsPath, "Scenarios.json");
-        UnityWebRequest www = UnityWebRequest.Get(filePath);
-        yield return www.SendWebRequest();
-        dataAsJson = www.downloadHandler.text;
-        scenarioEvents.scenarios = JsonUtility.FromJson<Scenario[]>(dataAsJson);
-#else
-
-        // load preferences file
-        jSONLoader = new JSONLoader();
-        gameData = jSONLoader.LoadGameData("/StreamingAssets/GameData.json");
-        scenarioEvents.scenarios = jSONLoader.LoadScenarioList("/StreamingAssets/Scenarios.json").scenarios;
-
-#endif
-
-
-        gameData = uiHandler.AdjustBasicUIParameters(gameData, CheckIp()); // change UI and gameData depending on actual conditions
-        uiHandler.PopulateScenariosDropdown(scenarioEvents.scenarios);
-
-        useVRHeadset = (gameData.useVr ==1);
-        StartCoroutine(EnableDisableVRMode(useVRHeadset));
-
+        // change UI and gameData depending on actual conditions
+        gameData = uiHandler.AdjustBasicUIParameters(gameData, CheckIp()); 
 
         userManager.keepNamesVisibleForPlayers = (gameData.keepNamesVisibleForPlayers == 1);
+
+        // sonification
         soundHandler.Init(gameData.OSC_SoundHandlerIP, gameData.OSC_SoundHandlerPort);
 
         // adjust user's parameters
+        useVRHeadset = (gameData.useVr ==1);
+        StartCoroutine(EnableDisableVRMode(useVRHeadset));
         if(useVRHeadset) uiHandler.SetPlayerNetworkType(1);
         else uiHandler.SetPlayerNetworkType(0);
         
@@ -199,12 +171,20 @@ public class GameEngine : MonoBehaviour
 
         if (_userRole == UserRole.Server)
         {
+            // load every scenario stored in scenario json
+            uiHandler.PopulateScenariosDropdown(scenarioEvents.scenarios);
             appState = AppState.Running;
             //networkManager.ShowConnexionState();
             canvasHandler.ChangeCanvas("serverCanvas");
             audioRecordManager.recordPostScenarioAudio = uiHandler.recordAudioAfterScenario.isOn;
             audioRecordManager.postScenarioRecordingLenght = gameData.audioRecordLength;
         }
+        else if(_userRole == UserRole.Playback){
+            playbackManager.performanceFile = fileInOut.LoadPerformance("S1_22-06-2019_02-24-54.csv");
+            canvasHandler.ChangeCanvas("playbackCanvas");
+            playbackManager.StartPlayback();
+        }
+
         else
         {
             appState = AppState.WaitingForServer;
@@ -278,8 +258,6 @@ public class GameEngine : MonoBehaviour
             if(sendToAudioDevice) networkManager.SendAllPositionsToAudioSystem(userManager.usersPlaying, soundHandler);
         }
 
-        
-        
         userManager.ActualizePlayersPositions(_user); 
     }
 
