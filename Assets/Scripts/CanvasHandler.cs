@@ -5,7 +5,7 @@ using UnityEngine;
 public class CanvasHandler : MonoBehaviour
 {
 
-    public GameObject initCanvas, gameCanvas, waitingCanvas, serverCanvas, viewerCanvas;
+    public GameObject initCanvas, gameCanvas, waitingCanvas, serverCanvas, viewerCanvas,playbackCanvas;
 
     public void ChangeCanvas(string canvasName)
     {
@@ -16,6 +16,7 @@ public class CanvasHandler : MonoBehaviour
             viewerCanvas.SetActive(false);
             waitingCanvas.SetActive(false);
             serverCanvas.SetActive(false);
+            playbackCanvas.SetActive(false);
         }
         else if (canvasName == "gameCanvas")
         {
@@ -24,6 +25,7 @@ public class CanvasHandler : MonoBehaviour
             viewerCanvas.SetActive(false);
             waitingCanvas.SetActive(false);
             serverCanvas.SetActive(false);
+            playbackCanvas.SetActive(false);
         }
         else if (canvasName == "viewerCanvas")
         {
@@ -32,6 +34,7 @@ public class CanvasHandler : MonoBehaviour
             viewerCanvas.SetActive(true);
             waitingCanvas.SetActive(false);
             serverCanvas.SetActive(false);
+            playbackCanvas.SetActive(false);
         }
         else if (canvasName == "waitingCanvas")
         {
@@ -40,6 +43,7 @@ public class CanvasHandler : MonoBehaviour
             viewerCanvas.SetActive(false);
             waitingCanvas.SetActive(true);
             serverCanvas.SetActive(false);
+            playbackCanvas.SetActive(false);
         }
         else if(canvasName == "serverCanvas"){
             initCanvas.SetActive(false);
@@ -47,6 +51,15 @@ public class CanvasHandler : MonoBehaviour
             viewerCanvas.SetActive(false);
             waitingCanvas.SetActive(false);
             serverCanvas.SetActive(true);
+            playbackCanvas.SetActive(false);
+        }
+        else if(canvasName == "serverCanvas"){
+            initCanvas.SetActive(false);
+            gameCanvas.SetActive(true);
+            viewerCanvas.SetActive(false);
+            waitingCanvas.SetActive(false);
+            serverCanvas.SetActive(false);
+            playbackCanvas.SetActive(true);
         }
         else Debug.Log("Wrong Canvas Name !");
     }

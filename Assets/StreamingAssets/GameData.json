@@ -3,7 +3,7 @@
    "runInLocal":0,
    "DebugMode":0,
    "keepNamesVisibleForPlayers":0,
-   "useVr":1,
+   "useVr":0,
    "audioRecordLength":60,
    "saveFileFrequency":60,
    "OSC_ServerIP":"172.30.41.65",
