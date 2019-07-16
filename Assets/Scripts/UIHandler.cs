@@ -196,14 +196,7 @@ public class UIHandler : MonoBehaviour
     }
 
 
-    public void ChangeVisualizationMode(string i){
-
-        if (i == "3A" || i == "3B" || i == "3C"){
-            trailsDecaySlider.gameObject.SetActive(true);
-            //trailsDecaySlider.value = 
-        }
-        else trailsDecaySlider.gameObject.SetActive(false);
-
+    public void ChangeVisualisationMode(string i){
         // for server
         userManager.ChangeVisualisationMode(i, gameEngine, false);
     }

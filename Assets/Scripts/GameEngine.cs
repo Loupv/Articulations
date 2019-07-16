@@ -104,17 +104,17 @@ public class GameEngine : MonoBehaviour
         userManager =           GetComponentInChildren<UserManager>();
         osc =                   GetComponentInChildren<OSC>();
         uiHandler =             GetComponentInChildren<UIHandler>();
+        fileInOut =             GetComponentInChildren<FileInOut>();
         soundHandler =          GetComponentInChildren<SoundHandler>();
         scenarioEvents =        GetComponentInChildren<ScenarioEvents>();
         audioRecordManager =    GetComponentInChildren<AudioRecordManager>();
         instructionPlayer =     GetComponentInChildren<SoundInstructionPlayer>();
-
+        playbackManager =       GetComponentInChildren<PlaybackManager>();
 
         canvasHandler.ChangeCanvas("initCanvas");
         _userRole = UserRole.Server; // base setting
         
         // load jsons
-        fileInOut = new FileInOut();
         fileInOut.LoadPreferencesFiles(this);
 
         // change UI and gameData depending on actual conditions
@@ -156,33 +156,37 @@ public class GameEngine : MonoBehaviour
 
         string n = uiHandler.PlayerName.text;
 
-        if (_userRole == UserRole.Server)
+        if (_userRole == UserRole.Server || _userRole == UserRole.Playback)
         {
-            performanceRecorder.sessionID = int.Parse(uiHandler.sessionIDInputBox.text);
             useVRHeadset = false;
             StartCoroutine(EnableDisableVRMode(false));
-            //EnableDisableVRMode(useVRHeadset);
         }
+
         _user = userManager.InitLocalUser(this, ID, n, tmpIp, gameData.OSC_ServerPort, true, _userRole);
 
         networkManager.InitNetwork(_userRole, gameData, uiHandler.OSCServerAddressInput.text);
 
-        uiHandler.ChangeVisualizationMode("0"); // TODO get this out of ui handler
+        userManager.ChangeVisualisationMode("0", this, false);
+
+
 
         if (_userRole == UserRole.Server)
         {
             // load every scenario stored in scenario json
+            performanceRecorder.sessionID = int.Parse(uiHandler.sessionIDInputBox.text);
             uiHandler.PopulateScenariosDropdown(scenarioEvents.scenarios);
             appState = AppState.Running;
-            //networkManager.ShowConnexionState();
+            
             canvasHandler.ChangeCanvas("serverCanvas");
             audioRecordManager.recordPostScenarioAudio = uiHandler.recordAudioAfterScenario.isOn;
             audioRecordManager.postScenarioRecordingLenght = gameData.audioRecordLength;
         }
+
         else if(_userRole == UserRole.Playback){
-            playbackManager.performanceFile = fileInOut.LoadPerformance("S1_22-06-2019_02-24-54.csv");
+            fileInOut.LoadPerformance("06-23-2019_04-04-16.csv", playbackManager);
+            appState = AppState.Running;
             canvasHandler.ChangeCanvas("playbackCanvas");
-            playbackManager.StartPlayback();
+            playbackManager.StartPlayback(this);
         }
 
         else
@@ -205,7 +209,7 @@ public class GameEngine : MonoBehaviour
     {
         if (_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker)
         {
-            uiHandler.ChangeVisualizationMode(visualisationMode);
+            userManager.ChangeVisualisationMode(visualisationMode, this, false);
             Debug.Log(playerID+"registered on port "+requestedPort);
             appState = AppState.Running;
             //networkManager.ShowConnexionState();

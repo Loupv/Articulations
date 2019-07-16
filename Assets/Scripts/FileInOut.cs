@@ -5,7 +5,7 @@ using System.IO;
 using CsvHelper;
 using System.Globalization;
 
-[SerializeField]
+
 public class PerformanceFile
 {
     public List<PerformanceLine> lines;
@@ -15,15 +15,22 @@ public class PerformanceFile
 public class PerformanceLine{
     public int SessionID { get; set; }
     public double Time { get; set; }
-    public Vector3 position { get; set; } 
+    public Vector3 p1HeadPosition { get; set; } 
+    public Vector3 p1LeftHandPosition { get; set; } 
+    public Vector3 p1RightHandPosition { get; set; } 
+    public Vector3 p2HeadPosition { get; set; } 
+    public Vector3 p2LeftHandPosition { get; set; } 
+    public Vector3 p2RightHandPosition { get; set; } 
 }
 
 
 
-public class FileInOut {
+public class FileInOut : MonoBehaviour {
 
     [HideInInspector]
     public bool jsonDataInitialized = false;
+    string performanceFilePath;
+    PlaybackManager playbackManager;
 
 
     public GameData LoadGameData(string jsonName)
@@ -98,19 +105,28 @@ public class FileInOut {
     }
 
 
-    public PerformanceFile LoadPerformance(string fileName){
+    public void LoadPerformance(string fileName, PlaybackManager pm){
         
         if(Application.platform == RuntimePlatform.OSXPlayer) fileName = "/Resources/Data/"+fileName;
-        string filePath = Application.dataPath +"/StreamingAssets/Recordings/"+ fileName;
+        performanceFilePath = Application.dataPath +"/StreamingAssets/Recordings/"+ fileName;
 
-        Debug.Log("Loading Performance File at "+filePath);
+        playbackManager = pm;
 
-        using(var reader = new StreamReader(filePath))
-        using(var csv = new CsvReader(reader))
+        Invoke("LoadPerfData",0f);
+
+    }
+
+
+    void LoadPerfData(){
+
+        Debug.Log("Loading Performance File at "+performanceFilePath);
+        StreamReader reader = new StreamReader(performanceFilePath);
+
+        using(CsvReader csv = new CsvReader(reader))
         {
 
-            var records = new PerformanceFile();
-            records.lines = new List<PerformanceLine>();
+            playbackManager.performanceFile = new PerformanceFile();
+            playbackManager.performanceFile.lines = new List<PerformanceLine>();
 
             csv.Read();
             csv.ReadHeader();
@@ -123,19 +139,32 @@ public class FileInOut {
                 PerformanceLine record = new PerformanceLine(){
                     SessionID = csv.GetField<int>(0),
                     Time = csv.GetField<double>(2),
-                    position = new Vector3(float.Parse(csv.GetField(5), cul), 
+                    p1HeadPosition = new Vector3(float.Parse(csv.GetField(5), cul), 
                     float.Parse(csv.GetField(6), cul),
-                    float.Parse(csv.GetField(7), cul))
+                    float.Parse(csv.GetField(7), cul)),
+                    p1LeftHandPosition = new Vector3(float.Parse(csv.GetField(11), cul), 
+                    float.Parse(csv.GetField(12), cul),
+                    float.Parse(csv.GetField(13), cul)),
+                    p1RightHandPosition = new Vector3(float.Parse(csv.GetField(17), cul), 
+                    float.Parse(csv.GetField(18), cul),
+                    float.Parse(csv.GetField(19), cul)),
+                    p2HeadPosition = new Vector3(float.Parse(csv.GetField(23), cul), 
+                    float.Parse(csv.GetField(24), cul),
+                    float.Parse(csv.GetField(25), cul)),
+                    p2LeftHandPosition = new Vector3(float.Parse(csv.GetField(29), cul), 
+                    float.Parse(csv.GetField(30), cul),
+                    float.Parse(csv.GetField(31), cul)),
+                    p2RightHandPosition = new Vector3(float.Parse(csv.GetField(35), cul), 
+                    float.Parse(csv.GetField(36), cul),
+                    float.Parse(csv.GetField(37), cul))
                 };
-                Debug.Log(record.SessionID+", "+record.Time+", "+record.position);
-                records.lines.Add(record);
+                if(record != null){
+                    //Debug.Log(record.SessionID+", "+record.Time+", "+record.p1HeadPosition);
+                    playbackManager.performanceFile.lines.Add(record);
+                }
 
             }
-            return(records);
         }
-
     }
-
-
 
 }

@@ -53,7 +53,7 @@ public class CanvasHandler : MonoBehaviour
             serverCanvas.SetActive(true);
             playbackCanvas.SetActive(false);
         }
-        else if(canvasName == "serverCanvas"){
+        else if(canvasName == "playbackCanvas"){
             initCanvas.SetActive(false);
             gameCanvas.SetActive(true);
             viewerCanvas.SetActive(false);

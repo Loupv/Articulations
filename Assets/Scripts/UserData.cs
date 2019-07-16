@@ -113,9 +113,8 @@ public class UserData : MonoBehaviour
             leftHand.transform.parent = parent.transform.Find(gameEngine.viveLeftHandName).gameObject.transform;
             rightHand.transform.parent = parent.transform.Find(gameEngine.viveRightHandName).gameObject.transform;
         
-            head.transform.position = Vector3.zero;
-            leftHand.transform.position = Vector3.zero;
-            rightHand.transform.position = Vector3.zero;
+            SetPlayerPosition(Vector3.zero,Vector3.zero,Vector3.zero);
+
             pGameObject.transform.parent = parent.transform;
 
         }
@@ -231,6 +230,12 @@ public class UserData : MonoBehaviour
         tmp3.layer = 9;
     }
 
+
+    public void SetPlayerPosition(Vector3 headPosition, Vector3 leftHandPosition, Vector3 rightHandPosition){
+        head.transform.position = headPosition;
+        leftHand.transform.position = leftHandPosition;
+        rightHand.transform.position = rightHandPosition;
+    }
 
     
     /*public void CalibratePlayerTransform(Vector3 centeredPosition, GameObject sceneGameObjects)

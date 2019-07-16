@@ -126,7 +126,6 @@ public class UserManager : MonoBehaviour
             if(me._userRole == UserRole.Server)
                 gameEngine.osc.sender.SendVisualisationChange(mode, usersPlaying);
 
-
             // main parameters
             // TODO CLEAN THIS PART
             if(mode == "0") gameEngine.scenarioEvents.SetTimeOfDay(6);            
@@ -151,6 +150,12 @@ public class UserManager : MonoBehaviour
             }
             else gameEngine.sendToAudioDevice = true;
             gameEngine.uiHandler.sendToAudioDeviceToggle.isOn = gameEngine.sendToAudioDevice;
+
+            if (mode == "3A" || mode == "3B" || mode == "3Ca" || mode == "3Cb" || mode == "3Cc") 
+                gameEngine.uiHandler.trailsDecaySlider.gameObject.SetActive(true);
+            else 
+                gameEngine.uiHandler.trailsDecaySlider.gameObject.SetActive(false);
+
 
             gameEngine.currentVisualisationMode = mode;
 
@@ -339,9 +344,9 @@ public class UserManager : MonoBehaviour
             if (user._ID != me._ID && user._userRole == UserRole.Player) // if it's not actual instance's player
             {
 
-                usersPlaying[i].head.transform.position = pendingPositionsActualizations[user._ID + "Head"];
-                usersPlaying[i].leftHand.transform.position = pendingPositionsActualizations[user._ID + "LeftHand"];
-                usersPlaying[i].rightHand.transform.position = pendingPositionsActualizations[user._ID + "RightHand"];
+                usersPlaying[i].SetPlayerPosition(pendingPositionsActualizations[user._ID + "Head"],
+                    pendingPositionsActualizations[user._ID + "LeftHand"],
+                    pendingPositionsActualizations[user._ID + "RightHand"]);
 
                 // in order to make calibration work for non vrUser, we need to differenciate between user with VR and user without
                 /*
