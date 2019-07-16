@@ -17,8 +17,6 @@ public class NetworkManager : MonoBehaviour
 
     public void InitNetwork(UserRole userRole, GameData gameData, string uiServerIP){
 
-        SetUserRole(userRole);
-        
         serverEndpoint.ip = gameData.OSC_ServerIP;
         serverEndpoint.remotePort = gameData.OSC_ClientPort;
 
@@ -108,9 +106,9 @@ public class NetworkManager : MonoBehaviour
     public void RegisterUSer(UserData _user, UserRole _userRole){
         osc.sender.RequestUserRegistation(_user, _userRole);
     }
-    public void SetUserRole(UserRole userRole){
+    /* public void SetUserRole(UserRole userRole){
         osc.receiver.userRole = userRole;
-    }
+    }*/
 
 
     public void SendClientPositionGap()

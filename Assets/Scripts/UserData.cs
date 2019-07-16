@@ -39,7 +39,7 @@ public class UserData : MonoBehaviour
         oscEndPoint.ip = address;
         oscEndPoint.remotePort = localPort;
 
-        if(userRole == UserRole.Player){
+        if(userRole == UserRole.Player || userRole == UserRole.Playback){
             head = pGameObject.transform.Find("Head").gameObject;
             leftHand = pGameObject.transform.Find("LeftHand").gameObject;
             rightHand = pGameObject.transform.Find("RightHand").gameObject;
@@ -79,12 +79,19 @@ public class UserData : MonoBehaviour
             pGameObject.name = "Tracker" + _ID.ToString();
             PlaceUserPartsInScene(gameEngine, false, pGameObject, isMe);
         }
-        
+        // PLAYBACK //
+        else if (userRole == UserRole.Playback)
+        {            
+            PlaceUserPartsInScene(gameEngine, gameEngine.useVRHeadset, pGameObject, isMe); 
+            pGameObject.name = "Player" + _ID.ToString();
+            playerGameObject = pGameObject;
+        }
         // VIEWER //
         else{
             pGameObject.name = "Viewer" + _ID.ToString();
             PlaceUserPartsInScene(gameEngine, false, pGameObject, isMe);
         }
+
 
 
         calibrationPositionGap = new Vector3();

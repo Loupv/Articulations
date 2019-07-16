@@ -102,9 +102,6 @@ public class GameEngine : MonoBehaviour
         scenarioEvents =        GetComponentInChildren<ScenarioEvents>();
 
         networkManager =        (NetworkManager)FindObjectOfType(typeof(NetworkManager));
-        Debug.Log(networkManager);
-        Debug.Log(networkManager.osc);
-        
         osc =                   networkManager.osc;
         
         uiHandler =             (UIHandler)FindObjectOfType(typeof(UIHandler));
@@ -189,9 +186,18 @@ public class GameEngine : MonoBehaviour
 
         else if(_userRole == UserRole.Playback){
             fileInOut.LoadPerformance("06-23-2019_04-04-16.csv", playbackManager);
-            appState = AppState.Running;
-            canvasHandler.ChangeCanvas("playbackCanvas");
-            playbackManager.StartPlayback(this);
+
+            if(playbackManager.mode == 0) // online
+            {
+                appState = AppState.WaitingForServer;
+                networkManager.RegisterUSer(_user, _userRole);
+                canvasHandler.ChangeCanvas("waitingCanvas");
+            }
+            else if(playbackManager.mode == 1){ // offline
+                appState = AppState.Running;
+                canvasHandler.ChangeCanvas("playbackCanvas");
+                playbackManager.StartPlayback(this);
+            }
         }
 
         else
@@ -199,11 +205,6 @@ public class GameEngine : MonoBehaviour
             appState = AppState.WaitingForServer;
             networkManager.RegisterUSer(_user, _userRole);
             canvasHandler.ChangeCanvas("waitingCanvas");
-            //if (useVRHeadset) StartCoroutine(EnableDisableVRMode(true));
-            foreach(GameObject model in GameObject.FindGameObjectsWithTag("SteamModel"))
-            {
-                model.SetActive(false);
-            }
         }
     }
 
@@ -212,7 +213,7 @@ public class GameEngine : MonoBehaviour
     // player/tracker 
     public void EndStartProcess(int sessionID, int playerID, int requestedPort, string visualisationMode, int rank, int recordAudio, int recordLength)
     {
-        if (_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker)
+        if (_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker || _userRole == UserRole.Playback)
         {
             userManager.ChangeVisualisationMode(visualisationMode, this, false);
             Debug.Log(playerID+"registered on port "+requestedPort);
@@ -228,6 +229,10 @@ public class GameEngine : MonoBehaviour
 
             if(_user._userRole == UserRole.Player) canvasHandler.ChangeCanvas("gameCanvas");
             else if(_user._userRole == UserRole.Viewer || _userRole == UserRole.Tracker) canvasHandler.ChangeCanvas("viewerCanvas");
+            else if(_user._userRole == UserRole.Playback){
+                canvasHandler.ChangeCanvas("playbackCanvas");
+                playbackManager.StartPlayback(this);
+            } 
         }
     }
 
@@ -259,7 +264,7 @@ public class GameEngine : MonoBehaviour
     public void UpdateGame()
     {
         
-        if(_userRole == UserRole.Player){
+        if(_userRole == UserRole.Player || (_userRole == UserRole.Playback && playbackManager.mode == 0)){
             networkManager.SendOwnPosition(_user, networkManager.serverEndpoint); // don't send if you're viewer
         }
         else if(_userRole == UserRole.Server){
@@ -282,7 +287,7 @@ public class GameEngine : MonoBehaviour
 
     public void OnApplicationQuit()
     {
-        if ((_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker) && osc.initialized)
+        if ((_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker || _userRole == UserRole.Playback) && osc.initialized)
             osc.sender.SendQuitMessage(_userRole);
         else if (_userRole == UserRole.Server && osc.initialized){
             if(scenarioEvents.performanceRecorder.isRecording) scenarioEvents.performanceRecorder.SaveTofile();

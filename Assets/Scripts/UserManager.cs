@@ -72,6 +72,10 @@ public class UserManager : MonoBehaviour
         {
             usersPlaying.Add(user);
             if(userRole == UserRole.Player) StoreUserParts(user);
+            foreach(GameObject model in GameObject.FindGameObjectsWithTag("SteamModel"))
+            {
+                model.SetActive(false);
+            }
         }
 
         me = user;
@@ -84,7 +88,7 @@ public class UserManager : MonoBehaviour
     {
         GameObject go;
 
-        if (role == UserRole.Player) go = Instantiate(playerPrefab);
+        if (role == UserRole.Player || role == UserRole.Playback) go = Instantiate(playerPrefab);
         else if (role == UserRole.Tracker)
         {
             go = Instantiate(trackerPrefab);

@@ -10,7 +10,7 @@ public class PlaybackManager : MonoBehaviour
     public int currentRecordLine = 0;
     double lastTime;
     PerformanceLine currentLine;
-    public int playerNumber;
+    public int playerNumber, mode;
     
     public void StartPlayback(GameEngine ge){
         gameEngine = ge;
@@ -22,7 +22,7 @@ public class PlaybackManager : MonoBehaviour
     {
         if(play){
             currentLine = performanceFile.lines[currentRecordLine];
-            if(playerNumber == 1)
+            if(playerNumber == 0)
                 gameEngine.userManager.me.SetPlayerPosition(currentLine.p1HeadPosition,currentLine.p1LeftHandPosition,currentLine.p1RightHandPosition);
             else 
                 gameEngine.userManager.me.SetPlayerPosition(currentLine.p2HeadPosition,currentLine.p2LeftHandPosition,currentLine.p2RightHandPosition);
@@ -36,7 +36,12 @@ public class PlaybackManager : MonoBehaviour
 
     
     public void ChangePlayerTracked(UnityEngine.UI.Dropdown dropdown){
-        if(dropdown.value == 0) playerNumber = 1;
-        else if(dropdown.value == 1) playerNumber = 2;
+        playerNumber = dropdown.value;
     }
+
+    public void ChangePlaybackMode(UnityEngine.UI.Dropdown dropdown){
+        mode = dropdown.value;
+    }
+
+    
 }

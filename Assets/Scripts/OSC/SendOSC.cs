@@ -312,7 +312,7 @@ public class SendOSC : MonoBehaviour {
     public void RequestUserRegistation(UserData userData, UserRole userRole)
     {
         int isPlayer = 0; // 0 is always viewer
-        if(userRole == UserRole.Player) isPlayer = 1;
+        if(userRole == UserRole.Player || userRole == UserRole.Playback) isPlayer = 1;
         if (userRole == UserRole.Tracker) isPlayer = 2;
 
         if (osc.initialized)
@@ -435,7 +435,7 @@ public class SendOSC : MonoBehaviour {
 
     public void SendQuitMessage(UserRole userRole)
     {
-        if (userRole == UserRole.Player || userRole == UserRole.Viewer || userRole == UserRole.Tracker)
+        if (userRole == UserRole.Player || userRole == UserRole.Viewer || userRole == UserRole.Tracker || userRole == UserRole.Playback)
         {
             osc.OscPacketIO.RemoteHostName = gameEngine.osc.outIP;
             osc.OscPacketIO.RemotePort = gameEngine.osc.outPort;

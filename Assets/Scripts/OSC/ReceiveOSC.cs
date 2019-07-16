@@ -9,14 +9,13 @@ public class ReceiveOSC : MonoBehaviour {
     public UserManager userManager;
     public SendOSC sender;
     public OSC osc;
-    public UserRole userRole;
     int clientAnswersPending;
 
     // Use this for initialization
     public void StartListening()
     {
 
-        if (gameEngine._userRole == UserRole.Player || gameEngine._userRole == UserRole.Viewer || userRole == UserRole.Tracker)
+        if (gameEngine._userRole == UserRole.Player || gameEngine._userRole == UserRole.Viewer || gameEngine._userRole == UserRole.Playback || gameEngine._userRole == UserRole.Tracker)
         {
             osc.SetAddressHandler("/RegistrationConfirmed", RegistrationConfirmed);
             osc.SetAddressHandler("/ServerShutDown", GoInsane);
@@ -32,7 +31,7 @@ public class ReceiveOSC : MonoBehaviour {
             //osc.SetAddressHandler("/AudioData", DebugTemp); // debugtest
 
         }
-        if (userRole == UserRole.Server)
+        if (gameEngine._userRole == UserRole.Server)
         {
             osc.SetAddressHandler("/PlayerRegistrationRequest", RegistationRequestedFromPlayer);
             osc.SetAddressHandler("/ClientHasLeft", ErasePlayerRequest);
