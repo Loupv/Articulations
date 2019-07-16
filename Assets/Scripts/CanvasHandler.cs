@@ -5,7 +5,7 @@ using UnityEngine;
 public class CanvasHandler : MonoBehaviour
 {
 
-    public GameObject initCanvas, gameCanvas, waitingCanvas, serverCanvas, viewerCanvas,playbackCanvas;
+    public GameObject initCanvas, waitingCanvas, gameCanvas, serverCanvas, viewerCanvas,playbackCanvas;
 
     public void ChangeCanvas(string canvasName)
     {

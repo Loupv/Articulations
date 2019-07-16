@@ -39,7 +39,7 @@ public class SendOSC : MonoBehaviour {
         {
             message = new OscMessage();
             message.address = "/RegistrationConfirmed";
-            message.values.Add(gameEngine.performanceRecorder.sessionID);
+            message.values.Add(gameEngine.scenarioEvents.performanceRecorder.sessionID);
             
             message.values.Add(user._ID);
             message.values.Add(user.oscEndPoint.remotePort);

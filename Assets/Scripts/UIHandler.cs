@@ -14,7 +14,7 @@ public class UIHandler : MonoBehaviour
         autoMode, manualMode, launchScenario, pauseScenario;
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
     public ViewerController viewerController;
-    public InputField OSCServerAddressInput, PlayerName, sessionIDInputBox;
+    public InputField OSCServerAddressInput, sessionIDInputBox;
     public GameObject serverManualModeParent, serverAutoModeParent;
     public GameObject clientGOParent, playerNameTextBox, serverGOParent, playbackGOParent;
     public GameObject recordGizmo, pauseGizmo;
@@ -60,6 +60,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice4.image.sprite = normalButtonSprite;
             networkButtonChoice5.image.sprite = normalButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
+            OSCServerAddressInput.gameObject.SetActive(false);
             clientGOParent.gameObject.SetActive(false);
             serverGOParent.gameObject.SetActive(true);
             playbackGOParent.gameObject.SetActive(false);
@@ -74,6 +75,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice4.image.sprite = normalButtonSprite;
             networkButtonChoice5.image.sprite = normalButtonSprite;
             playerNameTextBox.gameObject.SetActive(true);
+            OSCServerAddressInput.gameObject.SetActive(true);
             clientGOParent.gameObject.SetActive(true);
             serverGOParent.gameObject.SetActive(false);
             playbackGOParent.gameObject.SetActive(false);
@@ -87,6 +89,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice4.image.sprite = normalButtonSprite;
             networkButtonChoice5.image.sprite = normalButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
+            OSCServerAddressInput.gameObject.SetActive(true);
             clientGOParent.gameObject.SetActive(true);
             serverGOParent.gameObject.SetActive(false);
             playbackGOParent.gameObject.SetActive(false);
@@ -100,6 +103,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice4.image.sprite = selectedButtonSprite;
             networkButtonChoice5.image.sprite = normalButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
+            OSCServerAddressInput.gameObject.SetActive(true);
             clientGOParent.gameObject.SetActive(true);
             serverGOParent.gameObject.SetActive(false);
             playbackGOParent.gameObject.SetActive(false);
@@ -113,6 +117,7 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice4.image.sprite = normalButtonSprite;
             networkButtonChoice5.image.sprite = selectedButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
+            OSCServerAddressInput.gameObject.SetActive(true);
             clientGOParent.gameObject.SetActive(false);
             serverGOParent.gameObject.SetActive(false);
             playbackGOParent.gameObject.SetActive(true);

@@ -57,7 +57,6 @@ public class GameEngine : MonoBehaviour
     [HideInInspector] public SoundHandler soundHandler;
     [HideInInspector] public SoundInstructionPlayer instructionPlayer;
     [HideInInspector] public AudioRecordManager audioRecordManager;
-    [HideInInspector] public PerformanceRecorder performanceRecorder;
     [HideInInspector] public PlaybackManager playbackManager;
 
     public GameData gameData;    
@@ -98,18 +97,24 @@ public class GameEngine : MonoBehaviour
         appState = AppState.Initializing;
         Application.targetFrameRate = targetFrameRate;
 
-
-        canvasHandler =         GetComponent<CanvasHandler>();
-        networkManager =        GetComponentInChildren<NetworkManager>();
         userManager =           GetComponentInChildren<UserManager>();
-        osc =                   GetComponentInChildren<OSC>();
-        uiHandler =             GetComponentInChildren<UIHandler>();
-        fileInOut =             GetComponentInChildren<FileInOut>();
-        soundHandler =          GetComponentInChildren<SoundHandler>();
-        scenarioEvents =        GetComponentInChildren<ScenarioEvents>();
-        audioRecordManager =    GetComponentInChildren<AudioRecordManager>();
-        instructionPlayer =     GetComponentInChildren<SoundInstructionPlayer>();
         playbackManager =       GetComponentInChildren<PlaybackManager>();
+        scenarioEvents =        GetComponentInChildren<ScenarioEvents>();
+
+        networkManager =        (NetworkManager)FindObjectOfType(typeof(NetworkManager));
+        Debug.Log(networkManager);
+        Debug.Log(networkManager.osc);
+        
+        osc =                   networkManager.osc;
+        
+        uiHandler =             (UIHandler)FindObjectOfType(typeof(UIHandler));
+        canvasHandler =         uiHandler.GetComponentInChildren<CanvasHandler>();
+        
+        fileInOut =             (FileInOut)FindObjectOfType(typeof(FileInOut));
+        soundHandler =          (SoundHandler)FindObjectOfType(typeof(SoundHandler));
+        audioRecordManager =    soundHandler.gameObject.GetComponentInChildren<AudioRecordManager>();
+        instructionPlayer =     soundHandler.gameObject.GetComponentInChildren<SoundInstructionPlayer>();
+        
 
         canvasHandler.ChangeCanvas("initCanvas");
         _userRole = UserRole.Server; // base setting
@@ -154,7 +159,7 @@ public class GameEngine : MonoBehaviour
             gameData.OSC_ServerIP = tmpIp;
         }
 
-        string n = uiHandler.PlayerName.text;
+        string n = uiHandler.playerNameTextBox.GetComponentInChildren<UnityEngine.UI.InputField>().text;
 
         if (_userRole == UserRole.Server || _userRole == UserRole.Playback)
         {
@@ -173,7 +178,7 @@ public class GameEngine : MonoBehaviour
         if (_userRole == UserRole.Server)
         {
             // load every scenario stored in scenario json
-            performanceRecorder.sessionID = int.Parse(uiHandler.sessionIDInputBox.text);
+            scenarioEvents.performanceRecorder.sessionID = int.Parse(uiHandler.sessionIDInputBox.text);
             uiHandler.PopulateScenariosDropdown(scenarioEvents.scenarios);
             appState = AppState.Running;
             
@@ -214,12 +219,12 @@ public class GameEngine : MonoBehaviour
             appState = AppState.Running;
             //networkManager.ShowConnexionState();
             _user._registeredRank = rank;
-            performanceRecorder.sessionID = sessionID;
+            scenarioEvents.performanceRecorder.sessionID = sessionID;
 
             audioRecordManager.recordPostScenarioAudio = (recordAudio == 1);
     
             if(audioRecordManager.recordPostScenarioAudio)  
-                audioRecordManager.InitAudioRecorder(performanceRecorder.sessionID, recordLength);
+                audioRecordManager.InitAudioRecorder(scenarioEvents.performanceRecorder.sessionID, recordLength);
 
             if(_user._userRole == UserRole.Player) canvasHandler.ChangeCanvas("gameCanvas");
             else if(_user._userRole == UserRole.Viewer || _userRole == UserRole.Tracker) canvasHandler.ChangeCanvas("viewerCanvas");
@@ -280,7 +285,7 @@ public class GameEngine : MonoBehaviour
         if ((_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker) && osc.initialized)
             osc.sender.SendQuitMessage(_userRole);
         else if (_userRole == UserRole.Server && osc.initialized){
-            if(performanceRecorder.isRecording) performanceRecorder.SaveTofile();
+            if(scenarioEvents.performanceRecorder.isRecording) scenarioEvents.performanceRecorder.SaveTofile();
             osc.sender.SendQuitMessage(_userRole); // TODO adapt if server
         }
 
