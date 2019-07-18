@@ -481,7 +481,7 @@ public class OSC : MonoBehaviour
         UnityEditor.EditorApplication.playModeStateChanged += HandleOnPlayModeChanged;  //FIX FOR UNITY POST 2017
 #endif
 
-        receiver.StartListening();
+        if(receiver != null) receiver.StartListening();
         //sender.Init();
         
         initialized = true; // Loup

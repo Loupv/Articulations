@@ -15,7 +15,7 @@ public class UserManager : MonoBehaviour
     [HideInInspector]
     public GameObject _userGameObject;
     public bool keepNamesVisibleForPlayers;
-    public Color userCol, whiteColor, cyanColor;
+    public Color userCol, whiteColor, cyanColor, playbackColor1, playbackColor2;
 
 
     // Arm Extension variables
@@ -48,6 +48,9 @@ public class UserManager : MonoBehaviour
 
         whiteColor = Color.white;
         cyanColor = Color.cyan;
+
+        playbackColor1 = new Color(0.8f,0.8f,0.8f);
+        playbackColor2 = new Color(0.6f,0.6f,0.6f);
 
         trailsCondition = null;
         trailsRelated = false;
@@ -104,7 +107,7 @@ public class UserManager : MonoBehaviour
         UserData p = go.GetComponent<UserData>();
 
         p.Init(gameEngine, CountPlayers(), ID, name, address, port, go, false, role);
-
+        
         if (role == UserRole.Player) {
             ChangePlayerColor(p, whiteColor);
             StoreUserParts(p);
@@ -141,11 +144,15 @@ public class UserManager : MonoBehaviour
             ((mode == "2B" || mode =="2C") && !gameEngine.scenarioEvents.mirrorAct)) 
                 gameEngine.scenarioEvents.ToggleMirror();
 
-            if (mode != "2C")
+            if (mode != "2C"  && !(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == 1)) // if we're in playback offline mode, we keep different colors
                 foreach (UserData user in usersPlaying)
                 {
                     if(user._userRole == UserRole.Player) ChangePlayerColor(user, whiteColor);
                 }
+            else if(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == 1){
+                if(usersPlaying.Count>0) ChangePlayerColor(usersPlaying[0], playbackColor1);
+                if(usersPlaying.Count>1) ChangePlayerColor(usersPlaying[1], playbackColor2);
+            }
             if (mode != "3B" && mode != "3Ca" && mode != "3Cb" && mode != "3Cc")
             {
                 gameEngine.sendToAudioDevice = false;

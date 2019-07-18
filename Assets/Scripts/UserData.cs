@@ -48,7 +48,9 @@ public class UserData : MonoBehaviour
 
         // things that change depending on this instance's mode
         if((gameEngine._userRole == UserRole.Player && gameEngine.userManager.keepNamesVisibleForPlayers) // if we're a player and we decided to keep UI
-        || ((gameEngine._userRole == UserRole.Viewer || gameEngine._userRole == UserRole.Server || gameEngine._userRole == UserRole.Tracker) && _userRole == UserRole.Player)) // if we're a viewer and we instantiate a plyer
+        || ((gameEngine._userRole == UserRole.Viewer || gameEngine._userRole == UserRole.Server 
+        || gameEngine._userRole == UserRole.Tracker || gameEngine._userRole == UserRole.Playback) 
+            && _userRole == UserRole.Player)) // if we're a viewer and we instantiate a plyer
         {
             headText = head.transform.Find("Canvas").Find("Text").GetComponent<UnityEngine.UI.Text>();
             headText.text = _playerName;
@@ -242,6 +244,11 @@ public class UserData : MonoBehaviour
         head.transform.position = headPosition;
         leftHand.transform.position = leftHandPosition;
         rightHand.transform.position = rightHandPosition;
+    }
+    public void SetPlayerRotation(Quaternion headRotation, Quaternion leftHandRotation, Quaternion rightHandRotation){
+        head.transform.rotation = headRotation;
+        leftHand.transform.rotation = leftHandRotation;
+        rightHand.transform.rotation = rightHandRotation;
     }
 
     

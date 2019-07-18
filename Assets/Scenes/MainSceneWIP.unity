@@ -6630,6 +6630,8 @@ MonoBehaviour:
   userCol: {r: 0, g: 0, b: 0, a: 0}
   whiteColor: {r: 0, g: 0, b: 0, a: 0}
   cyanColor: {r: 0, g: 0, b: 0, a: 0}
+  playbackColor1: {r: 0, g: 0, b: 0, a: 0}
+  playbackColor2: {r: 0, g: 0, b: 0, a: 0}
   trailsCondition: 
   dist: 0
 --- !u!1 &659425909
@@ -21919,6 +21921,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameEngine: {fileID: 667967430}
   play: 0
+  addGestureAnalyser: 1
+  gestureAnalyserPrefab: {fileID: 8773243578296310775, guid: e02730cfb8547e34da537c8d3dbf1d37,
+    type: 3}
   currentRecordLine: 0
   playerNumber: 0
   mode: 0

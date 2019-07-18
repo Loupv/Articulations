@@ -49,8 +49,8 @@ public class PerformanceRecorder : MonoBehaviour
         else{
             sr = File.CreateText(filePath+fileName);
             sr.WriteLine ("SessionID;TS_Unix;Time;Scenario;Condition;" +
-            	"x1;y1;z1;rotx1;roty1;rotz1;lhx1;lhy1;lhz1;lhrotx1;lhroty1;lhrotz1;rhx1;rhy1;rhz1;rhrotx1;rhroty1;rhrotz1;" +
-                "x2;y2;z2;rotx2;roty2;rotz2;lhx2;lhy2;lhz2;lhrotx2;lhroty2;lhrotz2;rhx2;rhy2;rhz2;rhrotx2;rhroty2;rhrotz2");
+            	"x1;y1;z1;rotx1;roty1;rotz1;rotw1;lhx1;lhy1;lhz1;lhrotx1;lhroty1;lhrotz1;lhrotw1;rhx1;rhy1;rhz1;rhrotx1;rhroty1;rhrotz1;rhrotw1;" +
+                "x2;y2;z2;rotx2;roty2;rotz2;rotw2;lhx2;lhy2;lhz2;lhrotx2;lhroty2;lhrotz2;lhrotw2;rhx2;rhy2;rhz2;rhrotx2;rhroty2;rhrotz2;rhrotw2");
             isRecording = true;
             uiHandler.ActualizeGizmos(isRecording, isPaused);
             startButton.SetActive(false);
@@ -142,11 +142,11 @@ public class PerformanceRecorder : MonoBehaviour
         {
             if (user._userRole == UserRole.Player) 
                 line += ";" + Math.Round(user.head.transform.position.x,3) + ";" + Math.Round(user.head.transform.position.y,3) + ";" + Math.Round(user.head.transform.position.z,3) +
-                ";" + Math.Round(user.head.transform.rotation.x,3) + ";" + Math.Round(user.head.transform.rotation.y,3) + ";" + Math.Round(user.head.transform.rotation.z,3) +
+                ";" + Math.Round(user.head.transform.rotation.x,3) + ";" + Math.Round(user.head.transform.rotation.y,3) + ";" + Math.Round(user.head.transform.rotation.z,3) + ";" + Math.Round(user.head.transform.rotation.w,3) +
                 ";" + Math.Round(user.leftHand.transform.position.x,3) + ";" + Math.Round(user.leftHand.transform.position.y,3) + ";" + Math.Round(user.leftHand.transform.position.z,3) +
-                ";" + Math.Round(user.leftHand.transform.rotation.x,3) + ";" + Math.Round(user.leftHand.transform.rotation.y,3) + ";" + Math.Round(user.leftHand.transform.rotation.z,3) +
+                ";" + Math.Round(user.leftHand.transform.rotation.x,3) + ";" + Math.Round(user.leftHand.transform.rotation.y,3) + ";" + Math.Round(user.leftHand.transform.rotation.z,3) + ";" + Math.Round(user.leftHand.transform.rotation.w,3) +
                 ";" + Math.Round(user.rightHand.transform.position.x,3) + ";" + Math.Round(user.rightHand.transform.position.y,3) + ";" + Math.Round(user.rightHand.transform.position.z,3) +
-                ";" + Math.Round(user.rightHand.transform.rotation.x,3) + ";" + Math.Round(user.rightHand.transform.rotation.y,3) + ";" + Math.Round(user.rightHand.transform.rotation.z,3); 
+                ";" + Math.Round(user.rightHand.transform.rotation.x,3) + ";" + Math.Round(user.rightHand.transform.rotation.y,3) + ";" + Math.Round(user.rightHand.transform.rotation.z,3) + ";" + Math.Round(user.rightHand.transform.rotation.w,3); 
         }
         line = line.Replace(",", ".");
         sr.WriteLine(line);
