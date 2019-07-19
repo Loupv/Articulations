@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DrawShape : MonoBehaviour
 {
-    public float baseContractionVolume = 10000, baseVolume = 10000, maxVolume = 0;
+    public float volume, baseVolume = 10000, maxVolume = 0;
     public float contractionIndex;
     Mesh mesh;
     Material mat;
@@ -161,14 +161,14 @@ public class DrawShape : MonoBehaviour
         //CreatePrism();
         CreateRegularPrism(s1,s2,s3);
         //CalculateCubeVolume();
-        float volume = CalculatePrismVolume(s1,s2,s3);
+        volume = CalculatePrismVolume(s1,s2,s3);
 
         if(baseVolume > volume) baseVolume = volume;
         if(maxVolume < volume) maxVolume = volume;
 
-        if(baseContractionVolume > volume) baseContractionVolume = volume;
+        if(baseVolume > volume) baseVolume = volume;
 
-        contractionIndex = volume/baseContractionVolume;
+        contractionIndex = volume/baseVolume;
         t = (volume-baseVolume)/(maxVolume-baseVolume);
         mat.color = Color.Lerp(startCol, endCol, t);
 

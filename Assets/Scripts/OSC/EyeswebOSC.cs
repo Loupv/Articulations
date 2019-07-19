@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class EyeswebOSC : MonoBehaviour
 {
     public OSC osc;
 	public GestureVisualiser gestureVisualiser;
     public bool initialized;
+    double oldTs;
 
 	// Use this for initialization
 	public void Init (GameObject[] p1ObjectsToTrack, GameObject[] p2ObjectsToTrack) {
         osc.Init();
 		
-        osc.SetAddressHandler( "/P1_LeftSpeed" , GetFloatFromOsc);
+        /*osc.SetAddressHandler( "/P1_LeftSpeed" , GetFloatFromOsc);
 		osc.SetAddressHandler("/P1_RightSpeed", GetFloatFromOsc);
 		osc.SetAddressHandler( "/P1_LeftAcc" , GetFloatFromOsc);
 		osc.SetAddressHandler("/P1_RightAcc", GetFloatFromOsc);
@@ -32,9 +34,12 @@ public class EyeswebOSC : MonoBehaviour
 		osc.SetAddressHandler( "/P2_LeftCurvature" , GetFloatFromOsc);
 		osc.SetAddressHandler("/P2_RightCurvature", GetFloatFromOsc);
 		osc.SetAddressHandler( "/P2_LeftSmoothness" , GetFloatFromOsc);
-		osc.SetAddressHandler("/P2_RightSmoothness", GetFloatFromOsc);
+		osc.SetAddressHandler("/P2_RightSmoothness", GetFloatFromOsc);*/
 
+        osc.SetAddressHandler("/MovementData", GetFloatFromOsc);
         initialized = true;
+        oldTs = Math.Floor(Math.Round(System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000,2));
+        
     }
 	
 
@@ -44,17 +49,23 @@ public class EyeswebOSC : MonoBehaviour
         //osc.outIP = "127.0.0.1";
         //osc.outPort = 6161;
         if(initialized){
+
+            double ts = Math.Round(System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000,2);
+            ts = Math.Floor(ts) - oldTs;
+            
+            OscMessage message = new OscMessage();
+            
             foreach(GameObject objectToTrack in gestureVisualiser.p1ObjectsToTrack){
-                OscMessage message = new OscMessage();
+                message = new OscMessage();
                 message.address = "/P1_"+objectToTrack.name+"_PositionXYZ";
                 message.values.Add(objectToTrack.transform.position.x);
                 message.values.Add(objectToTrack.transform.position.y);
                 message.values.Add(objectToTrack.transform.position.z);
                 osc.Send(message);
-                //Debug.Log (message);
+                Debug.Log (message);
             }
             foreach(GameObject objectToTrack in gestureVisualiser.p2ObjectsToTrack){
-                OscMessage message = new OscMessage();
+                message = new OscMessage();
                 message.address = "/P2_"+objectToTrack.name+"_PositionXYZ";
                 message.values.Add(objectToTrack.transform.position.x);
                 message.values.Add(objectToTrack.transform.position.y);
@@ -62,6 +73,11 @@ public class EyeswebOSC : MonoBehaviour
                 osc.Send(message);
                 //Debug.Log (message);
             }
+
+            message = new OscMessage();
+            message.address = "/TimeStamp";
+            message.values.Add(ts.ToString());
+            osc.Send(message);
         }
     }
 
