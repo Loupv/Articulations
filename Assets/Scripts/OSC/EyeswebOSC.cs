@@ -14,28 +14,6 @@ public class EyeswebOSC : MonoBehaviour
 	public void Init (GameObject[] p1ObjectsToTrack, GameObject[] p2ObjectsToTrack) {
         osc.Init();
 		
-        /*osc.SetAddressHandler( "/P1_LeftSpeed" , GetFloatFromOsc);
-		osc.SetAddressHandler("/P1_RightSpeed", GetFloatFromOsc);
-		osc.SetAddressHandler( "/P1_LeftAcc" , GetFloatFromOsc);
-		osc.SetAddressHandler("/P1_RightAcc", GetFloatFromOsc);
-		osc.SetAddressHandler( "/P1_LeftJerk" , GetFloatFromOsc);
-		osc.SetAddressHandler("/P1_RightJerk", GetFloatFromOsc);
-		osc.SetAddressHandler( "/P1_LeftCurvature" , GetFloatFromOsc);
-		osc.SetAddressHandler("/P1_RightCurvature", GetFloatFromOsc);
-		osc.SetAddressHandler( "/P1_LeftSmoothness" , GetFloatFromOsc);
-		osc.SetAddressHandler("/P1_RightSmoothness", GetFloatFromOsc);
-        
-        osc.SetAddressHandler( "/P2_LeftSpeed" , GetFloatFromOsc);
-		osc.SetAddressHandler("/P2_RightSpeed", GetFloatFromOsc);
-		osc.SetAddressHandler( "/P2_LeftAcc" , GetFloatFromOsc);
-		osc.SetAddressHandler("/P2_RightAcc", GetFloatFromOsc);
-		osc.SetAddressHandler( "/P2_LeftJerk" , GetFloatFromOsc);
-		osc.SetAddressHandler("/P2_RightJerk", GetFloatFromOsc);
-		osc.SetAddressHandler( "/P2_LeftCurvature" , GetFloatFromOsc);
-		osc.SetAddressHandler("/P2_RightCurvature", GetFloatFromOsc);
-		osc.SetAddressHandler( "/P2_LeftSmoothness" , GetFloatFromOsc);
-		osc.SetAddressHandler("/P2_RightSmoothness", GetFloatFromOsc);*/
-
         osc.SetAddressHandler("/MovementData", GetFloatFromOsc);
         initialized = true;
         oldTs = Math.Floor(Math.Round(System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000,2));
@@ -86,22 +64,25 @@ public class EyeswebOSC : MonoBehaviour
 
         int playerID = message.GetInt(0);
         int handedness = message.GetInt(1);
-        int type = message.GetInt(3);
-        float f = message.GetFloat(2);
+        float f1 = message.GetFloat(2);
+        float f2 = message.GetFloat(3);
+        float f3 = message.GetFloat(4);
+        float f4 = message.GetFloat(5);
+        float f5 = message.GetFloat(6);
 
         if(handedness == 1){
-            if(type == 1) gestureVisualiser.usersPerformanceData[playerID-1].leftHand.speed = f;
-            else if(type == 2) gestureVisualiser.usersPerformanceData[playerID-1].leftHand.acceleration = f;
-            else if(type == 3) gestureVisualiser.usersPerformanceData[playerID-1].leftHand.jerk = f;
-            else if(type == 4) gestureVisualiser.usersPerformanceData[playerID-1].leftHand.curvature = f;
-            else if(type == 5) gestureVisualiser.usersPerformanceData[playerID-1].leftHand.smoothness = f;
+            gestureVisualiser.usersPerformanceData[playerID-1].leftHand.speed = f1;
+            gestureVisualiser.usersPerformanceData[playerID-1].leftHand.acceleration = f2;
+            gestureVisualiser.usersPerformanceData[playerID-1].leftHand.jerk = f3;
+            gestureVisualiser.usersPerformanceData[playerID-1].leftHand.curvature = f4;
+            gestureVisualiser.usersPerformanceData[playerID-1].leftHand.smoothness = f5;
         } 
         else if(handedness == 2){
-            if(type == 1) gestureVisualiser.usersPerformanceData[playerID-1].rightHand.speed = f;
-            else if(type == 2) gestureVisualiser.usersPerformanceData[playerID-1].rightHand.acceleration = f;
-            else if(type == 3) gestureVisualiser.usersPerformanceData[playerID-1].rightHand.jerk = f;
-            else if(type == 4) gestureVisualiser.usersPerformanceData[playerID-1].rightHand.curvature = f;
-            else if(type == 5) gestureVisualiser.usersPerformanceData[playerID-1].rightHand.smoothness = f;
+            gestureVisualiser.usersPerformanceData[playerID-1].rightHand.speed = f1;
+            gestureVisualiser.usersPerformanceData[playerID-1].rightHand.acceleration = f2;
+            gestureVisualiser.usersPerformanceData[playerID-1].rightHand.jerk = f3;
+            gestureVisualiser.usersPerformanceData[playerID-1].rightHand.curvature = f4;
+            gestureVisualiser.usersPerformanceData[playerID-1].rightHand.smoothness = f5;
         } 
 
     }
