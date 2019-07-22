@@ -58,6 +58,7 @@ public class GameEngine : MonoBehaviour
     [HideInInspector] public SoundInstructionPlayer instructionPlayer;
     [HideInInspector] public AudioRecordManager audioRecordManager;
     [HideInInspector] public PlaybackManager playbackManager;
+    [HideInInspector] public Clock clock;
 
     public GameData gameData;    
     public GameObject ViveSystemPrefab;
@@ -111,7 +112,7 @@ public class GameEngine : MonoBehaviour
         soundHandler =          (SoundHandler)FindObjectOfType(typeof(SoundHandler));
         audioRecordManager =    soundHandler.gameObject.GetComponentInChildren<AudioRecordManager>();
         instructionPlayer =     soundHandler.gameObject.GetComponentInChildren<SoundInstructionPlayer>();
-        
+        clock =                 (Clock)FindObjectOfType(typeof(Clock));
 
         canvasHandler.ChangeCanvas("initCanvas");
         _userRole = UserRole.Server; // base setting
@@ -148,6 +149,7 @@ public class GameEngine : MonoBehaviour
     public void StartGame()
     {
         int ID = UnityEngine.Random.Range(0, 10000); 
+        clock.SetSceneStartTs();
 
         string tmpIp;
         if(gameData.runInLocal == 1) tmpIp = "127.0.0.1";
@@ -169,7 +171,6 @@ public class GameEngine : MonoBehaviour
         networkManager.InitNetwork(_userRole, gameData, uiHandler.OSCServerAddressInput.text);
 
         userManager.ChangeVisualisationMode("0", this, false);
-
 
 
         if (_userRole == UserRole.Server)

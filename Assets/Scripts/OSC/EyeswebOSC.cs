@@ -6,9 +6,11 @@ using System;
 public class EyeswebOSC : MonoBehaviour
 {
     public OSC osc;
+    public GameEngine gameEngine;
 	public GestureVisualiser gestureVisualiser;
+    private DrawShape drawer1, drawer2;
     public bool initialized;
-    double oldTs;
+    double ts, oldTs;
 
 	// Use this for initialization
 	public void Init (GameObject[] p1ObjectsToTrack, GameObject[] p2ObjectsToTrack) {
@@ -16,8 +18,12 @@ public class EyeswebOSC : MonoBehaviour
 		
         osc.SetAddressHandler("/MovementData", GetFloatFromOsc);
         initialized = true;
-        oldTs = Math.Floor(Math.Round(System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000,2));
+
+        gameEngine = FindObjectOfType<GameEngine>();
         
+        drawer1 = gestureVisualiser.transform.Find("Mesh1").GetComponent<DrawShape>();
+        drawer2 = gestureVisualiser.transform.Find("Mesh2").GetComponent<DrawShape>();
+        oldTs = Math.Round(System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000,2);
     }
 	
 
@@ -28,8 +34,6 @@ public class EyeswebOSC : MonoBehaviour
         //osc.outPort = 6161;
         if(initialized){
 
-            double ts = Math.Round(System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000,2);
-            ts = Math.Floor(ts) - oldTs;
             
             OscMessage message = new OscMessage();
             
@@ -40,7 +44,7 @@ public class EyeswebOSC : MonoBehaviour
                 message.values.Add(objectToTrack.transform.position.y);
                 message.values.Add(objectToTrack.transform.position.z);
                 osc.Send(message);
-                Debug.Log (message);
+                //Debug.Log (message);
             }
             foreach(GameObject objectToTrack in gestureVisualiser.p2ObjectsToTrack){
                 message = new OscMessage();
@@ -51,6 +55,20 @@ public class EyeswebOSC : MonoBehaviour
                 osc.Send(message);
                 //Debug.Log (message);
             }
+
+            message = new OscMessage();
+            message.address = "/P1_HighLevelFeatures";
+            message.values.Add(drawer1.contractionIndex);
+            osc.Send(message);
+            
+            message = new OscMessage();
+            message.address = "/P2_HighLevelFeatures";
+            message.values.Add(drawer2.contractionIndex);
+            osc.Send(message);
+
+
+            ts = gameEngine.clock.GetTimeSinceSceneStart();
+            //Debug.Log(ts+", "+(Math.Round(System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000,2)-oldTs));
 
             message = new OscMessage();
             message.address = "/TimeStamp";

@@ -106,8 +106,19 @@ public class DrawShape : MonoBehaviour
         float d2 = new Vector3(s2.position.x - s3.position.x,0, s2.position.z - s3.position.z).magnitude;
         float d3 = new Vector3(s3.position.x - s1.position.x,0, s3.position.z - s1.position.z).magnitude;
         
+
         float demiperimeter = (d1 + d2 + d3) / 2;
-        float prismVolume = Mathf.Sqrt(demiperimeter*(demiperimeter-d1)*(demiperimeter-d2)*(demiperimeter-d3)) * Mathf.Max(s1.position.y, s2.position.y, s3.position.y);
+		float alpha1 = Mathf.Abs(demiperimeter-d1);
+		float alpha2 = Mathf.Abs(demiperimeter-d2);
+		float alpha3 = Mathf.Abs(demiperimeter-d3);
+
+		// here we do max(0.1f, diff) to avoid when diff = 0 => volume = 0 and contracton is inf
+        float prismVolume = Mathf.Sqrt(demiperimeter*Mathf.Max(0.1f,alpha1)*Mathf.Max(0.1f,alpha2)*Mathf.Max(0.1f,alpha3)) * Mathf.Max(s1.position.y, s2.position.y, s3.position.y);
+		
+		if(prismVolume == 0){ 
+			Debug.Log(d1+", "+d2+", "+d3+", "+demiperimeter);
+			UnityEditor.EditorApplication.ExecuteMenuItem("Edit/Pause");
+		}
         return prismVolume;
     }
 
