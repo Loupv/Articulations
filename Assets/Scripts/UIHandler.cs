@@ -18,11 +18,11 @@ public class UIHandler : MonoBehaviour
     public GameObject serverManualModeParent, serverAutoModeParent;
     public GameObject clientGOParent, playerNameTextBox, serverGOParent, playbackGOParent;
     public GameObject recordGizmo, pauseGizmo;
-    public Dropdown scenarioDropDown;
+    public Dropdown scenarioDropDown, onlineOfflinePlaybackMode, switchPerformanceDataFile, switchPlaybackPlayer;
     public Sprite selectedButtonSprite, normalButtonSprite;
     public Toggle sendToAudioDeviceToggle, autoRecordPerformance, recordAudioAfterScenario;
     public Slider trailsDecaySlider;
-    public Text trailTime, conditionTimeRemaining, recordingTimeRemaining, currentConditionText;
+    public Text trailTime, conditionTimeRemaining, recordingTimeRemaining, currentConditionText, playbackTime;
     private string scenarioMode;
     int tmpTimer;
 
@@ -31,6 +31,8 @@ public class UIHandler : MonoBehaviour
 
         if(sendToAudioDeviceToggle.isOn) gameEngine.sendToAudioDevice = true;
         else gameEngine.sendToAudioDevice = false;
+
+        gameEngine.fileInOut.PopulatePlaybackDataFileDropdown(switchPerformanceDataFile);
         ScenarioModeSwitch(1);
     }
 
@@ -117,7 +119,8 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice4.image.sprite = normalButtonSprite;
             networkButtonChoice5.image.sprite = selectedButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
-            OSCServerAddressInput.gameObject.SetActive(true);
+            if(gameEngine.playbackManager.mode == 0) OSCServerAddressInput.gameObject.SetActive(true);
+            else if(gameEngine.playbackManager.mode == 1) OSCServerAddressInput.gameObject.SetActive(false);
             clientGOParent.gameObject.SetActive(false);
             serverGOParent.gameObject.SetActive(false);
             playbackGOParent.gameObject.SetActive(true);

@@ -5,7 +5,7 @@ using UnityEngine;
 public class CanvasHandler : MonoBehaviour
 {
 
-    public GameObject initCanvas, waitingCanvas, gameCanvas, serverCanvas, viewerCanvas,playbackCanvas;
+    public GameObject initCanvas, waitingCanvas, gameCanvas, serverCanvas, viewerCanvas,playbackCanvasOn, playbackCanvasOff;
 
     public void ChangeCanvas(string canvasName)
     {
@@ -16,7 +16,8 @@ public class CanvasHandler : MonoBehaviour
             viewerCanvas.SetActive(false);
             waitingCanvas.SetActive(false);
             serverCanvas.SetActive(false);
-            playbackCanvas.SetActive(false);
+            playbackCanvasOn.SetActive(false);
+            playbackCanvasOff.SetActive(false);
         }
         else if (canvasName == "gameCanvas")
         {
@@ -25,7 +26,8 @@ public class CanvasHandler : MonoBehaviour
             viewerCanvas.SetActive(false);
             waitingCanvas.SetActive(false);
             serverCanvas.SetActive(false);
-            playbackCanvas.SetActive(false);
+            playbackCanvasOn.SetActive(false);
+            playbackCanvasOff.SetActive(false);
         }
         else if (canvasName == "viewerCanvas")
         {
@@ -34,7 +36,8 @@ public class CanvasHandler : MonoBehaviour
             viewerCanvas.SetActive(true);
             waitingCanvas.SetActive(false);
             serverCanvas.SetActive(false);
-            playbackCanvas.SetActive(false);
+           playbackCanvasOn.SetActive(false);
+            playbackCanvasOff.SetActive(false);
         }
         else if (canvasName == "waitingCanvas")
         {
@@ -43,7 +46,8 @@ public class CanvasHandler : MonoBehaviour
             viewerCanvas.SetActive(false);
             waitingCanvas.SetActive(true);
             serverCanvas.SetActive(false);
-            playbackCanvas.SetActive(false);
+            playbackCanvasOn.SetActive(false);
+            playbackCanvasOff.SetActive(false);
         }
         else if(canvasName == "serverCanvas"){
             initCanvas.SetActive(false);
@@ -51,15 +55,26 @@ public class CanvasHandler : MonoBehaviour
             viewerCanvas.SetActive(false);
             waitingCanvas.SetActive(false);
             serverCanvas.SetActive(true);
-            playbackCanvas.SetActive(false);
+            playbackCanvasOn.SetActive(false);
+            playbackCanvasOff.SetActive(false);
         }
-        else if(canvasName == "playbackCanvas"){
+        else if(canvasName == "playbackCanvasOff"){
             initCanvas.SetActive(false);
             gameCanvas.SetActive(true);
             viewerCanvas.SetActive(false);
             waitingCanvas.SetActive(false);
             serverCanvas.SetActive(false);
-            playbackCanvas.SetActive(true);
+            playbackCanvasOn.SetActive(false);
+            playbackCanvasOff.SetActive(true);
+        }
+        else if(canvasName == "playbackCanvasOn"){
+            initCanvas.SetActive(false);
+            gameCanvas.SetActive(true);
+            viewerCanvas.SetActive(false);
+            waitingCanvas.SetActive(false);
+            serverCanvas.SetActive(false);
+            playbackCanvasOn.SetActive(true);
+            playbackCanvasOff.SetActive(false);
         }
         else Debug.Log("Wrong Canvas Name !");
     }

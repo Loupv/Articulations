@@ -50,7 +50,7 @@ MonoBehaviour:
   maxVolume: 0
   contractionIndex: 0
   startCol: {r: 0.41960788, g: 0.95294124, b: 0.32941177, a: 0}
-  endCol: {r: 0.9529412, g: 0.5899629, b: 0.32941175, a: 1}
+  endCol: {r: 1, g: 0.033018887, b: 0.04972888, a: 1}
   t: 0
 --- !u!33 &833245953121544646
 MeshFilter:
@@ -623,7 +623,7 @@ MonoBehaviour:
   maxVolume: 0
   contractionIndex: 0
   startCol: {r: 0.41960788, g: 0.95294124, b: 0.32941177, a: 0}
-  endCol: {r: 0.9529412, g: 0.5899629, b: 0.32941175, a: 1}
+  endCol: {r: 1, g: 0.033018887, b: 0.04972888, a: 1}
   t: 0
 --- !u!33 &2750888275060130362
 MeshFilter:
@@ -1640,6 +1640,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   osc: {fileID: 8773243578785238651}
+  gameEngine: {fileID: 0}
   gestureVisualiser: {fileID: 8773243578296310780}
   initialized: 0
 --- !u!1 &8773243578851032956

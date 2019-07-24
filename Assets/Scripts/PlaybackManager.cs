@@ -12,8 +12,15 @@ public class PlaybackManager : MonoBehaviour
     double lastTime;
     PerformanceLine currentLine;
     public int playerNumber, mode;
+    public float performanceMaxTime;
     string currentViz;
+    [HideInInspector]
     
+
+    void Start(){
+        //ChangePlaybackMode();
+    }
+
     public void StartPlayback(GameEngine ge){
         gameEngine = ge;
         play = true;
@@ -47,6 +54,9 @@ public class PlaybackManager : MonoBehaviour
                 gameEngine.userManager.usersPlaying[1].SetPlayerPosition(currentLine.p2HeadPosition,currentLine.p2LeftHandPosition,currentLine.p2RightHandPosition);
                 gameEngine.userManager.usersPlaying[1].SetPlayerRotation(currentLine.p2HeadRotation,currentLine.p2LeftHandRotation,currentLine.p2RightHandRotation);
             } 
+
+            gameEngine.uiHandler.playbackTime.text = "Playback Time : "+(currentLine.Time/1000).ToString()+" / "+performanceMaxTime;
+
             float timeToWait = (float)(currentLine.Time - lastTime)/1000;
             lastTime = currentLine.Time;
             currentRecordLine += 1 ;
@@ -60,9 +70,16 @@ public class PlaybackManager : MonoBehaviour
         playerNumber = dropdown.value;
     }
 
-    public void ChangePlaybackMode(UnityEngine.UI.Dropdown dropdown){
-        mode = dropdown.value;
+    public void ChangePlaybackMode(){
+        mode = gameEngine.uiHandler.onlineOfflinePlaybackMode.value;
+        if(mode == 0) {
+            gameEngine.uiHandler.switchPlaybackPlayer.gameObject.SetActive(true);
+            gameEngine.uiHandler.OSCServerAddressInput.gameObject.SetActive(true);
+        }
+        else if(mode == 1){ 
+            gameEngine.uiHandler.switchPlaybackPlayer.gameObject.SetActive(false);
+            gameEngine.uiHandler.OSCServerAddressInput.gameObject.SetActive(false);
+        }
     }
-
     
 }

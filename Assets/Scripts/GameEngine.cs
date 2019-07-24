@@ -186,7 +186,7 @@ public class GameEngine : MonoBehaviour
         }
 
         else if(_userRole == UserRole.Playback){
-            fileInOut.LoadPerformance("06-23-2019_04-04-16.csv", playbackManager);
+            fileInOut.LoadPerformance(fileInOut.performanceDataFiles[uiHandler.switchPerformanceDataFile.value], playbackManager);
 
             if(playbackManager.mode == 0) // online
             {
@@ -196,7 +196,7 @@ public class GameEngine : MonoBehaviour
             }
             else if(playbackManager.mode == 1){ // offline
                 appState = AppState.Running;
-                canvasHandler.ChangeCanvas("gameCanvas");
+                canvasHandler.ChangeCanvas("playbackCanvasOff");
                 userManager.AddNewUser(this, 777, "ghost2", osc.outIP, osc.outPort, UserRole.Playback, 2);
                 playbackManager.StartPlayback(this);
             }
@@ -229,10 +229,12 @@ public class GameEngine : MonoBehaviour
             if(audioRecordManager.recordPostScenarioAudio)  
                 audioRecordManager.InitAudioRecorder(scenarioEvents.performanceRecorder.sessionID, recordLength);
 
-            if(_user._userRole == UserRole.Player) canvasHandler.ChangeCanvas("gameCanvas");
-            else if(_user._userRole == UserRole.Viewer || _userRole == UserRole.Tracker) canvasHandler.ChangeCanvas("viewerCanvas");
+            if(_user._userRole == UserRole.Player) 
+                canvasHandler.ChangeCanvas("gameCanvas");
+            else if(_user._userRole == UserRole.Viewer || _userRole == UserRole.Tracker) 
+                canvasHandler.ChangeCanvas("viewerCanvas");
             else if(_user._userRole == UserRole.Playback){
-                canvasHandler.ChangeCanvas("playbackCanvas");
+                canvasHandler.ChangeCanvas("playbackCanvasOn");
                 playbackManager.StartPlayback(this);
             } 
         }

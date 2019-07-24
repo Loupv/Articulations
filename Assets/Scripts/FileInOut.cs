@@ -37,7 +37,9 @@ public class FileInOut : MonoBehaviour {
     [HideInInspector]
     public bool jsonDataInitialized = false;
     string performanceFilePath;
+    GameEngine gameEngine;
     PlaybackManager playbackManager;
+    public List<string> performanceDataFiles;
 
 
     public GameData LoadGameData(string jsonName)
@@ -111,16 +113,30 @@ public class FileInOut : MonoBehaviour {
 
     }
 
+    public void PopulatePlaybackDataFileDropdown(UnityEngine.UI.Dropdown dropdown){
+        
+        dropdown.ClearOptions();
+
+        string[] files = Directory.GetFiles(Application.dataPath +"/StreamingAssets/Recordings/");
+
+        foreach(string file in files){
+            if(!file.Contains(".meta")){
+                dropdown.options.Add(new UnityEngine.UI.Dropdown.OptionData(file.Replace(Application.dataPath +"/StreamingAssets/Recordings/", "")));
+                performanceDataFiles.Add(file);
+            }
+        }
+        
+    }
+
 
     public void LoadPerformance(string fileName, PlaybackManager pm){
         
-        if(Application.platform == RuntimePlatform.OSXPlayer) fileName = "/Resources/Data/"+fileName;
-        performanceFilePath = Application.dataPath +"/StreamingAssets/Recordings/"+ fileName;
+        //if(Application.platform == RuntimePlatform.OSXPlayer) fileName = "/Resources/Data/"+fileName;
+        performanceFilePath = fileName;
 
         playbackManager = pm;
 
         Invoke("LoadPerfData",0f);
-
     }
 
 
@@ -198,6 +214,7 @@ public class FileInOut : MonoBehaviour {
 
             }
         }
+        playbackManager.performanceMaxTime = (float)(playbackManager.performanceFile.lines[playbackManager.performanceFile.lines.Count-1].Time/1000);
     }
 
 }
