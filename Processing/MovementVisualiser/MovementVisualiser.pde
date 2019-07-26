@@ -11,7 +11,7 @@ ArrayList<SummarySample> dataListP1, dataListP2;
 
 MyLock myLock;
 
-float plottedMs = 10000.0;
+float plottedMs = 20000.0;
 
 void setup() {
   size(1200, 1000);
@@ -36,49 +36,25 @@ void draw() {
 
   colorMode(HSB, 100);
 
-  int tSize = 32;
+  int tSize = 22;
 
-  // dancer 1
+  // header text
   textSize(tSize);
-  fill(85, 100, 100);
-  text("p1speedLeft", 10, (height * 0.05) + tSize);
   fill(50, 100, 100);
-  text("p1accLeft", 10, (height * 0) + tSize);
+  text("p1speedLeft", 10, (height * 0) + tSize);
+  text("p2speedLeft", 10 +  width/2, (height * 0) + tSize);
+  text("p1speedRight", 10, (height * 0.02) + tSize);
+  text("p2speedRight", 10 +  width/2, (height * 0.02) + tSize);
+  fill(85, 100, 100);
+  text("p1accLeft", 10, (height * 0.04) + tSize);
+  text("p2accLeft", 10 +  width/2, (height * 0.04) + tSize);
+  text("p1accRight", 10, (height * 0.06) + tSize);
+  text("p2accRight", 10 +  width/2, (height * 0.06) + tSize);
+  fill(95, 100, 100);
+  text("p1contractionLeft", 10, (height * 0.1) + tSize);
+  text("p2contractionLeft", 10+  width/2, (height * 0.1) + tSize);
 
-  // dancer 2
-  fill(100, 100, 100);
-  text("p2speedLeft", 10 +  width/2, (height * 0.05) + tSize);
-  fill(60, 100, 100);
-  text("p2accLeft", 10 +  width/2, (height * 0) + tSize);
-
-
-
-
-
-  // Finding the max timestamp
-
-
-
-  /*for (int i = dataList.size()-1; i >= 0; i--)
-   {
-   if (dataList.get(i).timeStamp < maxTime - 10000 ) // remove if data is 10s old
-   {
-   for(int j = dataList.size() - i; j >0; j--)
-   dataList.remove(j);
-   }
-   }
-   */
-
-  // Plotting the data
-
-  // To change the colors you should define here a variable that depends on the listInd. Basically, listInd 0 means data from one harness, 
-  // and listInd 1 is from another. 
-  // If you then give your variable as the first value to the stroke methods below, you will change the hues of the graphs.
-
-  int colorGap = 0;
-  //float timeFrame = 10000;
-
-
+  
 
 
   if (dataListP1.size() > 1)
@@ -104,32 +80,40 @@ void draw() {
         //println(sum0.timeStamp+", "+sum0.f1);
 
         // speed Left
-        stroke(50 + colorGap, 100, 100);     
+        stroke(50, 100, 100);     
         line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2 +width/2), 
-          (sum0.f1 * -1000.0) + (height * 0.25), 
+          (sum0.f1 * -1000.0) + (height * 0.12), 
           width - ((xStart - sum1.timeStamp)  / plottedMs * width/2 +width/2), 
-          (sum1.f1 * -1000.0) + (height * 0.25));
+          (sum1.f1 * -1000.0) + (height * 0.12));
 
         // acc Left
-        stroke(85 + 2*colorGap, 100, 100);      
+        stroke(85, 100, 100);      
         line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2 +width/2), 
-          (sum0.f2 * -10000.0) + (height * 0.50), 
+          (sum0.f2 * -10000.0) + (height * 0.25), 
           width - ((xStart - sum1.timeStamp) / plottedMs * width/2 +width/2), 
-          (sum1.f2 * -10000.0) + (height * 0.50));
+          (sum1.f2 * -10000.0) + (height * 0.25));
 
         // speed Right
-        stroke(50 + colorGap, 100, 100);     
+        stroke(50, 100, 100);     
         line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2 +width/2), 
-          (sum0.f6 * -1000.0) + (height * 0.75), 
+          (sum0.f6 * -1000.0) + (height * 0.37), 
           width - ((xStart - sum1.timeStamp)  / plottedMs * width/2 +width/2), 
-          (sum1.f6 * -1000.0) + (height * 0.75));
+          (sum1.f6 * -1000.0) + (height * 0.37));
 
         // acc Right
-        stroke(85 + 2*colorGap, 100, 100);      
+        stroke(85, 100, 100);      
         line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2 +width/2), 
-          (sum0.f7 * -10000.0) + (height * 0.99), 
+          (sum0.f7 * -10000.0) + (height * 0.49), 
           width - ((xStart - sum1.timeStamp) / plottedMs * width/2 +width/2), 
-          (sum1.f7 * -10000.0) + (height * 0.99));
+          (sum1.f7 * -10000.0) + (height * 0.49));
+          
+          
+          // contraction
+          stroke(95, 100, 100);      
+           line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2+width/2), 
+           (sum0.h1 * -5.0) + (height * 0.62), 
+           width - ((xStart - sum1.timeStamp) / plottedMs * width/2+width/2), 
+           (sum1.h1 * -5.0) + (height * 0.62));
       }
     }
   }
@@ -142,7 +126,6 @@ void draw() {
   {
 
     float lastTimeStamp = dataListP2.get(dataListP2.size()-1).timeStamp;
-  float firstTimeStamp = dataListP2.get(0).timeStamp;
 
     for (int i = 1; i < dataListP2.size(); i++)
     {
@@ -150,9 +133,8 @@ void draw() {
     }
 
     // dernier temps arrondi à la seconde + nombre de secondes à afficher 
-    float xStart = lastTimeStamp - (lastTimeStamp % 10000) + plottedMs;
+    float xStart = lastTimeStamp - (lastTimeStamp % 10000) + 10000;
 
-    println(dataListP2.size());
     for (int i = 1; i < dataListP2.size(); i++)
     {
       SummarySample sum0 = dataListP2.get(i-1);
@@ -162,44 +144,48 @@ void draw() {
 
         // (lastTimeStamp - (lastTimeStamp % 10000) + plottedM - sum0.timestamp) / plottedMs
         // (lastTimeStamp - (lastTimeStamp % 10000) - sum0.timestamp) / plottedMs + 1
-        
+
         // temps max en sec - temps actuel / plottedMs
-        
+
         // speed Left
-        stroke(50 + colorGap+20, 100, 100);     
-        line(width - ((lastTimeStamp - sum0.timeStamp - firstTimeStamp) / (lastTimeStamp-firstTimeStamp) * width/2), 
-          (sum0.f1 * -1000.0) + (height * 0.25), 
-          width - ((lastTimeStamp - sum0.timeStamp - firstTimeStamp) / (lastTimeStamp-firstTimeStamp) * width/2), 
-          (sum1.f1 * -1000.0) + (height * 0.25));
+        
+        if ((xStart - sum0.timeStamp) / plottedMs <1) {
+          stroke(50, 100, 100);     
+          line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2), 
+            (sum0.f1 * -1000.0) + (height * 0.12), 
+            width - ((xStart - sum1.timeStamp) / plottedMs * width/2), 
+            (sum1.f1 * -1000.0) + (height * 0.12));
 
-        // acc Left
-        stroke(85 + 2*colorGap, 100, 100);      
-        line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2), 
-          (sum0.f2 * -10000.0) + (height * 0.49), 
-          width - ((xStart - sum1.timeStamp) / plottedMs * width/2), 
-          (sum1.f2 * -10000.0) + (height * 0.49));
+          // acc Left
+          stroke(85, 100, 100); 
+          line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2), 
+            (sum0.f2 * -10000.0) + (height * 0.25), 
+            width - ((xStart - sum1.timeStamp) / plottedMs * width/2), 
+            (sum1.f2 * -10000.0) + (height * 0.25));
 
-        // contraction
-        /*stroke(85 + 2*colorGap, 100, 100);      
-         line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2), 
-         (sum0.h1 * -10000.0) + (height * 0.49), 
-         width - ((xStart - sum1.timeStamp) / plottedMs * width/2), 
-         (sum1.h1 * -10000.0) + (height * 0.49));
-         */
+          // speed Right
+          stroke(50, 100, 100);     
+          line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2), 
+            (sum0.f6 * -1000.0) + (height * 0.37), 
+            width - ((xStart - sum1.timeStamp)  / plottedMs * width/2), 
+            (sum1.f6 * -1000.0) + (height * 0.37));
 
-        // speed Right
-        stroke(50 + colorGap, 100, 100);     
-        line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2), 
-          (sum0.f6 * -1000.0) + (height * 0.75), 
-          width - ((xStart - sum1.timeStamp)  / plottedMs * width/2), 
-          (sum1.f6 * -1000.0) + (height * 0.75));
-
-        // acc Right
-        stroke(85 + 2*colorGap, 100, 100);      
-        line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2), 
-          (sum0.f7 * -10000.0) + (height * 0.99), 
-          width - ((xStart - sum1.timeStamp) / plottedMs * width/2), 
-          (sum1.f7 * -10000.0) + (height * 0.99));
+          // acc Right
+          stroke(85, 100, 100);      
+          line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2), 
+            (sum0.f7 * -10000.0) + (height * 0.49), 
+            width - ((xStart - sum1.timeStamp) / plottedMs * width/2), 
+            (sum1.f7 * -10000.0) + (height * 0.49));
+            
+            
+          // contraction
+          stroke(95, 100, 100);      
+           line(width - ((xStart - sum0.timeStamp) / plottedMs * width/2), 
+           (sum0.h1 * -5.0) + (height * 0.62), 
+           width - ((xStart - sum1.timeStamp) / plottedMs * width/2), 
+           (sum1.h1 * -5.0) + (height * 0.62));
+           
+        }
       }
     }
   }
@@ -223,7 +209,7 @@ void oscEvent(OscMessage message)
     float f9 = message.get(8).floatValue();
     float f10 = message.get(9).floatValue();
     String timeStamp = message.get(10).stringValue();
-    float h1 = 0;//message.get(11).floatValue();
+    float h1 = message.get(11).floatValue();
 
     dataListP1.add(new SummarySample(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, timeStamp, h1));
   } else if (message.checkAddrPattern("/P2") == true)
@@ -240,7 +226,7 @@ void oscEvent(OscMessage message)
     float f9 = message.get(8).floatValue();
     float f10 = message.get(9).floatValue();
     String timeStamp = message.get(10).stringValue();
-    float h1 = 0;//message.get(11).floatValue();
+    float h1 = message.get(11).floatValue();
 
 
     dataListP2.add(new SummarySample(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, timeStamp, h1));

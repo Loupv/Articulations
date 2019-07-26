@@ -17,7 +17,7 @@
         <Properties>
           <PropertySet name="gui-mdi">
             <Property name="Appearance.Pos">510;770</Property>
-            <Property name="Private.ZOrder">166</Property>
+            <Property name="Private.ZOrder">165</Property>
             <Property name="Private.ObjID">1</Property>
             <Property name="Appearance.Size">64;64</Property>
             <Property name="Appearance.Orientation">1</Property>
@@ -102,8 +102,8 @@
       <Block active="1" catalog="system" class-id="string_display" id="471" label="StringDisplay_2" log_info="2" run_level="1" sync-in_mode="1" window_docked="1" window_fit_mode="1" window_full_screen="0" window_full_screen_monitor_index="0" window_horizontal_scroll_pos="0" window_keep_aspect_ratio="1" window_rect_height="0" window_rect_width="0" window_rect_x="0" window_rect_y="0" window_refresh_rate_max_frequency="25" window_refresh_rate_min_interval="400000" window_refresh_rate_mode="0" window_title="StringDisplay" window_title_bar_visible="1" window_vertical_scroll_pos="0" window_zoom="1">
         <Properties>
           <PropertySet name="gui-mdi">
-            <Property name="Appearance.Pos">520;540</Property>
-            <Property name="Private.ZOrder">165</Property>
+            <Property name="Appearance.Pos">580;520</Property>
+            <Property name="Private.ZOrder">164</Property>
             <Property name="Private.ObjID">2</Property>
             <Property name="Appearance.Size">216;64</Property>
             <Property name="Appearance.Orientation">1</Property>
@@ -165,7 +165,7 @@
         <Properties>
           <PropertySet name="gui-mdi">
             <Property name="Appearance.Pos">520;1370</Property>
-            <Property name="Private.ZOrder">164</Property>
+            <Property name="Private.ZOrder">163</Property>
             <Property name="Private.ObjID">3</Property>
             <Property name="Appearance.Size">64;64</Property>
             <Property name="Appearance.Orientation">1</Property>
@@ -247,78 +247,16 @@
         </Outputs>
         <PrivateData/>
       </Block>
-      <Block active="1" catalog="system" class-id="string_display" id="694" label="StringDisplay_3" log_info="2" run_level="1" sync-in_mode="1" window_docked="1" window_fit_mode="1" window_full_screen="0" window_full_screen_monitor_index="0" window_horizontal_scroll_pos="0" window_keep_aspect_ratio="1" window_rect_height="0" window_rect_width="0" window_rect_x="0" window_rect_y="0" window_refresh_rate_max_frequency="25" window_refresh_rate_min_interval="400000" window_refresh_rate_mode="0" window_title="StringDisplay" window_title_bar_visible="1" window_vertical_scroll_pos="0" window_zoom="1">
-        <Properties>
-          <PropertySet name="gui-mdi">
-            <Property name="Appearance.Pos">520;620</Property>
-            <Property name="Private.ZOrder">163</Property>
-            <Property name="Private.ObjID">4</Property>
-            <Property name="Appearance.Size">216;64</Property>
-            <Property name="Appearance.Orientation">1</Property>
-            <Property name="Private.ExportedParams"></Property>
-            <Property name="Private.Selected">0</Property>
-            <Property name="Private.ParamsOrder">kernel::active_status;kernel::active_trigger;kernel::run_level;kernel::sync_in_mode;kernel::log_level;font;color;background_color;number_of_lines;number_of_columns;aligment;kernel::window_title;kernel::window_rect_x;kernel::window_rect_y;kernel::window_rect_width;kernel::window_rect_height;kernel::window_docked;kernel::window_full_screen;kernel::window_full_screen_monitor_index;kernel::window_zoom;kernel::window_keep_aspect_ratio;kernel::window_horizontal_scroll_pos;kernel::window_vertical_scroll_pos;kernel::window_title_visible;kernel::window_refresh_rate_mode;kernel::window_refresh_rate_min_interval;kernel::window_refresh_rate_max_frequency;kernel::fit_mode</Property>
-            <Property name="Private.FullPath">String.Output.StringDisplay</Property>
-            <Property name="DisplaySyncInVisible">0</Property>
-            <Property name="DisplaySyncOutVisible">0</Property>
-          </PropertySet>
-        </Properties>
-        <Parameters>
-          <Parameter catalog="kernel" class-id="font" description="The font used to display the input string." design-time="1" enabled="1" group_index="0" id="font" name="Font" run-time="1">
-            <Value>Times new Roman;20;10;0;1</Value>
-            <Domain/>
-            <Layout/>
-            <InitInfo/>
-          </Parameter>
-          <Parameter catalog="kernel" class-id="rgbcolor" description="Font color (RGB model space)" design-time="1" enabled="1" group_index="0" id="color" name="Color" run-time="1">
-            <Value>rgb: 0;0;0</Value>
-            <Domain/>
-            <Layout/>
-            <InitInfo/>
-          </Parameter>
-          <Parameter catalog="kernel" class-id="rgbcolor" description="Color of the text background (RGB model space)" design-time="1" enabled="1" group_index="0" id="background_color" name="Background color (RGB model space)" run-time="1">
-            <Value>rgb: 1;1;1</Value>
-            <Domain/>
-            <Layout/>
-            <InitInfo/>
-          </Parameter>
-          <Parameter catalog="kernel" class-id="int" description="The number of lines which compose the document on which the text is written" design-time="1" enabled="1" group_index="0" id="number_of_lines" name="Number of lines" run-time="1">
-            <Value>1</Value>
-            <Domain catalog="kernel" class-id="int-domain">1;1;0;0</Domain>
-            <Layout/>
-            <InitInfo/>
-          </Parameter>
-          <Parameter catalog="kernel" class-id="int" description="The number of columns which compose the document on which the text is written" design-time="1" enabled="1" group_index="0" id="number_of_columns" name="Number of columns" run-time="1">
-            <Value>20</Value>
-            <Domain catalog="kernel" class-id="int-domain">1;1;0;0</Domain>
-            <Layout/>
-            <InitInfo/>
-          </Parameter>
-          <Parameter catalog="kernel" class-id="int" description="Background color (RGB model space)" design-time="1" enabled="1" group_index="0" id="aligment" name="Horizontal alignment" run-time="1">
-            <Value>1</Value>
-            <Domain catalog="kernel" class-id="int-domain">0;1;3;2</Domain>
-            <Layout catalog="kernel" class-id="combo">Near (left);Center;Far (right)</Layout>
-            <InitInfo/>
-          </Parameter>
-        </Parameters>
-        <Inputs>
-          <Input catalog="kernel" class-id="string" description="Input string to display." group_index="0" id="string" name="Input string" read-write="0" required_for_execution="1" required_for_initialization="1">
-            <RequiredInterfaces/>
-          </Input>
-        </Inputs>
-        <Outputs/>
-        <PrivateData/>
-      </Block>
       <Block active="1" catalog="EywGP" class-id="GetAverageCurvatue" id="792" label="Curvature3D_1" log_info="2" run_level="1" sync-in_mode="1">
         <Properties>
           <PropertySet name="gui-mdi">
-            <Property name="Appearance.Pos">520;690</Property>
+            <Property name="Appearance.Pos">540;690</Property>
             <Property name="Private.ZOrder">162</Property>
             <Property name="Private.ObjID">5</Property>
             <Property name="Appearance.Size">64;64</Property>
             <Property name="Appearance.Orientation">1</Property>
             <Property name="Private.ExportedParams"></Property>
-            <Property name="Private.Selected">0</Property>
+            <Property name="Private.Selected">1</Property>
             <Property name="Private.ParamsOrder">kernel::active_status;kernel::active_trigger;kernel::run_level;kernel::sync_in_mode;kernel::log_level;Radius;NaNFrac;NaNValue;ShowVtkDebugWindow;OutputType</Property>
             <Property name="Private.FullPath">ExpressivityAnalysis.Fluidity.Curvature3D</Property>
             <Property name="DisplaySyncInVisible">0</Property>
@@ -471,19 +409,19 @@
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="X coordinates of point" design-time="1" enabled="1" group_index="0" id="x_parameter" name="XCoordinate" run-time="1">
-            <Value>-0.31400001049041748</Value>
+            <Value>-1.0110000371932983</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="Y coordinates of point" design-time="1" enabled="1" group_index="0" id="y_parameter" name="YCoordinate" run-time="1">
-            <Value>1.2000000476837158</Value>
+            <Value>0.94300001859664917</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="Z coordinates of point" design-time="1" enabled="1" group_index="0" id="z_parameter" name="ZCoordinate" run-time="1">
-            <Value>0.68900001049041748</Value>
+            <Value>-0.11100000143051147</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
@@ -519,19 +457,19 @@
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="X coordinates of point" design-time="1" enabled="1" group_index="0" id="x_parameter" name="XCoordinate" run-time="1">
-            <Value>-0.28299999237060547</Value>
+            <Value>-1.1890000104904175</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="Y coordinates of point" design-time="1" enabled="1" group_index="0" id="y_parameter" name="YCoordinate" run-time="1">
-            <Value>0.9779999852180481</Value>
+            <Value>1.8819999694824219</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="Z coordinates of point" design-time="1" enabled="1" group_index="0" id="z_parameter" name="ZCoordinate" run-time="1">
-            <Value>-0.26600000262260437</Value>
+            <Value>-0.86599999666213989</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
@@ -983,19 +921,19 @@
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="X coordinates of point" design-time="1" enabled="1" group_index="0" id="x_parameter" name="XCoordinate" run-time="1">
-            <Value>-0.028000000864267349</Value>
+            <Value>-1.0130000114440918</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="Y coordinates of point" design-time="1" enabled="1" group_index="0" id="y_parameter" name="YCoordinate" run-time="1">
-            <Value>1.593999981880188</Value>
+            <Value>1.6690000295639038</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="Z coordinates of point" design-time="1" enabled="1" group_index="0" id="z_parameter" name="ZCoordinate" run-time="1">
-            <Value>0.016000000759959221</Value>
+            <Value>-0.43999999761581421</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
@@ -1044,7 +982,7 @@
       <Block active="1" catalog="EywGP" class-id="TrajectoryFromPoints" id="1556" label="PointsToTrajectory_1" log_info="2" run_level="1" sync-in_mode="1">
         <Properties>
           <PropertySet name="gui-mdi">
-            <Property name="Appearance.Pos">730;960</Property>
+            <Property name="Appearance.Pos">750;970</Property>
             <Property name="Private.ZOrder">134</Property>
             <Property name="Private.ObjID">16</Property>
             <Property name="Appearance.Size">64;64</Property>
@@ -1371,19 +1309,19 @@
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="X coordinates of point" design-time="1" enabled="1" group_index="0" id="x_parameter" name="XCoordinate" run-time="1">
-            <Value>-0.090999998152256012</Value>
+            <Value>0.61100000143051147</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="Y coordinates of point" design-time="1" enabled="1" group_index="0" id="y_parameter" name="YCoordinate" run-time="1">
-            <Value>1.7170000076293945</Value>
+            <Value>1.6160000562667847</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="Z coordinates of point" design-time="1" enabled="1" group_index="0" id="z_parameter" name="ZCoordinate" run-time="1">
-            <Value>-0.26199999451637268</Value>
+            <Value>0.40099999308586121</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
@@ -1835,19 +1773,19 @@
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="X coordinates of point" design-time="1" enabled="1" group_index="0" id="x_parameter" name="XCoordinate" run-time="1">
-            <Value>-0.041000001132488251</Value>
+            <Value>0.62199997901916504</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="Y coordinates of point" design-time="1" enabled="1" group_index="0" id="y_parameter" name="YCoordinate" run-time="1">
-            <Value>1.371999979019165</Value>
+            <Value>1.3810000419616699</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="Z coordinates of point" design-time="1" enabled="1" group_index="0" id="z_parameter" name="ZCoordinate" run-time="1">
-            <Value>-0.13600000739097595</Value>
+            <Value>0.29600000381469727</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
@@ -2377,19 +2315,19 @@
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="X coordinates of point" design-time="1" enabled="1" group_index="0" id="x_parameter" name="XCoordinate" run-time="1">
-            <Value>0.21799999475479126</Value>
+            <Value>0.61500000953674316</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="Y coordinates of point" design-time="1" enabled="1" group_index="0" id="y_parameter" name="YCoordinate" run-time="1">
-            <Value>1.8380000591278076</Value>
+            <Value>1.8730000257492065</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="Z coordinates of point" design-time="1" enabled="1" group_index="0" id="z_parameter" name="ZCoordinate" run-time="1">
-            <Value>-0.36100000143051147</Value>
+            <Value>0.068000003695487976</Value>
             <Domain/>
             <Layout/>
             <InitInfo/>
@@ -3900,7 +3838,7 @@
         <Properties>
           <PropertySet name="gui-mdi">
             <Property name="Appearance.Pos">1750;1100</Property>
-            <Property name="Private.ZOrder">37</Property>
+            <Property name="Private.ZOrder">38</Property>
             <Property name="Private.ObjID">54</Property>
             <Property name="Appearance.Size">64;185</Property>
             <Property name="Appearance.Orientation">1</Property>
@@ -4061,7 +3999,7 @@
         <Properties>
           <PropertySet name="gui-mdi">
             <Property name="Appearance.Pos">810;1870</Property>
-            <Property name="Private.ZOrder">15</Property>
+            <Property name="Private.ZOrder">16</Property>
             <Property name="Private.ObjID">159</Property>
             <Property name="Appearance.Size">64;64</Property>
             <Property name="Appearance.Orientation">1</Property>
@@ -4133,7 +4071,7 @@
         <Properties>
           <PropertySet name="gui-mdi">
             <Property name="Appearance.Pos">1520;1860</Property>
-            <Property name="Private.ZOrder">13</Property>
+            <Property name="Private.ZOrder">14</Property>
             <Property name="Private.ObjID">160</Property>
             <Property name="Appearance.Size">64;64</Property>
             <Property name="Appearance.Orientation">1</Property>
@@ -4205,7 +4143,7 @@
         <Properties>
           <PropertySet name="gui-mdi">
             <Property name="Appearance.Pos">910;1990</Property>
-            <Property name="Private.ZOrder">12</Property>
+            <Property name="Private.ZOrder">13</Property>
             <Property name="Private.ObjID">165</Property>
             <Property name="Appearance.Size">216;64</Property>
             <Property name="Appearance.Orientation">1</Property>
@@ -4263,117 +4201,11 @@
         <Outputs/>
         <PrivateData/>
       </Block>
-      <Block active="1" catalog="SEC" class-id="ActivityDetector" id="10254" label="Activity Detector_1" log_info="2" run_level="1" sync-in_mode="1">
-        <Properties>
-          <PropertySet name="gui-mdi">
-            <Property name="Appearance.Pos">540;930</Property>
-            <Property name="Private.ZOrder">6</Property>
-            <Property name="Private.ObjID">182</Property>
-            <Property name="Appearance.Size">64;64</Property>
-            <Property name="Appearance.Orientation">1</Property>
-            <Property name="Private.ExportedParams"></Property>
-            <Property name="Private.Selected">0</Property>
-            <Property name="Private.ParamsOrder">kernel::active_status;kernel::active_trigger;kernel::run_level;kernel::sync_in_mode;kernel::log_level;Buffer Size;Minimum Search Time;Search Threshold</Property>
-            <Property name="Private.FullPath">ExpressivityAnalysis.Activity.Activity Detector</Property>
-            <Property name="DisplaySyncInVisible">0</Property>
-            <Property name="DisplaySyncOutVisible">0</Property>
-          </PropertySet>
-        </Properties>
-        <Parameters>
-          <Parameter catalog="kernel" class-id="int" description="Set the size of the internal search buffer, the bigger the buffer the more accurate the search but the longer the delay" design-time="1" enabled="1" group_index="0" id="Buffer Size" name="Buffer Size" run-time="1">
-            <Value>10</Value>
-            <Domain catalog="kernel" class-id="int-domain">1;1;10000;1</Domain>
-            <Layout/>
-            <InitInfo/>
-          </Parameter>
-          <Parameter catalog="kernel" class-id="int" description="Set the minimum number of samples that need to be under the search threshold for a period of low activity to be classified.The lower the number, the more sensitive the classification detection." design-time="1" enabled="1" group_index="0" id="Minimum Search Time" name="Minimum Search Time" run-time="1">
-            <Value>5</Value>
-            <Domain catalog="kernel" class-id="int-domain">1;1;10000;1</Domain>
-            <Layout/>
-            <InitInfo/>
-          </Parameter>
-          <Parameter catalog="kernel" class-id="double" description="Set the low activity threshold value" design-time="1" enabled="1" group_index="0" id="Search Threshold" name="Search Threshold" run-time="1">
-            <Value>1</Value>
-            <Domain catalog="kernel" class-id="double-domain">0;1;10000;1</Domain>
-            <Layout/>
-            <InitInfo/>
-          </Parameter>
-        </Parameters>
-        <Inputs>
-          <Input catalog="kernel" class-id="double" description="The input signal to be analysed" group_index="0" id="Signal Input" name="Signal Input" read-write="0" required_for_execution="1" required_for_initialization="1">
-            <RequiredInterfaces/>
-          </Input>
-        </Inputs>
-        <Outputs>
-          <Output catalog="kernel" class-id="bool" description="This pin indicates the activity status.  True indicates low activity, False indicates high activity" group_index="0" id="Activity Status" inherited-id="" inplace-id="" name="Activity Status"/>
-        </Outputs>
-        <PrivateData/>
-      </Block>
-      <Block active="1" catalog="EywGP" class-id="GetAverageCurvatue" id="10543" label="Curvature3D_3" log_info="2" run_level="1" sync-in_mode="1">
-        <Properties>
-          <PropertySet name="gui-mdi">
-            <Property name="Appearance.Pos">390;950</Property>
-            <Property name="Private.ZOrder">5</Property>
-            <Property name="Private.ObjID">200</Property>
-            <Property name="Appearance.Size">64;64</Property>
-            <Property name="Appearance.Orientation">1</Property>
-            <Property name="Private.ExportedParams"></Property>
-            <Property name="Private.Selected">0</Property>
-            <Property name="Private.ParamsOrder">kernel::active_status;kernel::active_trigger;kernel::run_level;kernel::sync_in_mode;kernel::log_level;Radius;NaNFrac;NaNValue;ShowVtkDebugWindow;OutputType</Property>
-            <Property name="Private.FullPath">ExpressivityAnalysis.Fluidity.Curvature3D</Property>
-            <Property name="DisplaySyncInVisible">0</Property>
-            <Property name="DisplaySyncOutVisible">0</Property>
-          </PropertySet>
-        </Properties>
-        <Parameters>
-          <Parameter catalog="kernel" class-id="double" description="The radius determining the area where points are looked for." design-time="1" enabled="1" group_index="0" id="Radius" name="Radius" run-time="1">
-            <Value>100</Value>
-            <Domain catalog="kernel" class-id="double-domain">0;2;0;0</Domain>
-            <Layout/>
-            <InitInfo/>
-          </Parameter>
-          <Parameter catalog="kernel" class-id="double" description="The proportion of invalid values over which the computed curvature is considered as invalid." design-time="1" enabled="1" group_index="0" id="NaNFrac" name="NaN fraction" run-time="1">
-            <Value>0.5</Value>
-            <Domain catalog="kernel" class-id="double-domain">0;1;1;1</Domain>
-            <Layout/>
-            <InitInfo/>
-          </Parameter>
-          <Parameter catalog="kernel" class-id="double" description="The value the block returns in case of invalid curvature." design-time="1" enabled="1" group_index="0" id="NaNValue" name="NaN value" run-time="1">
-            <Value>999</Value>
-            <Domain/>
-            <Layout/>
-            <InitInfo/>
-          </Parameter>
-          <Parameter catalog="kernel" class-id="bool" description="If set to yes it shows the Vtk Debug Window when Vtk warnings are generated." design-time="1" enabled="1" group_index="0" id="ShowVtkDebugWindow" name="Show the Vtk Debug Window" run-time="0">
-            <Value>0</Value>
-            <Domain/>
-            <Layout/>
-            <InitInfo/>
-          </Parameter>
-          <Parameter catalog="kernel" class-id="int" description="The block can compute either trajectory curvature radius R or curvature value K, where K=1/R and R=1/k." design-time="1" enabled="1" group_index="0" id="OutputType" name="Output Type" run-time="1">
-            <Value>0</Value>
-            <Domain catalog="kernel" class-id="int-domain">0;1;2;2</Domain>
-            <Layout catalog="kernel" class-id="combo">Curvature Radius;Curvature Value</Layout>
-            <InitInfo/>
-          </Parameter>
-        </Parameters>
-        <Inputs>
-          <Input catalog="kernel" class-id="generic_datatype" description="The input trajectory on which average curvature is computed." group_index="0" id="InputTrajectory" name="Input trajectory" read-write="0" required_for_execution="1" required_for_initialization="1">
-            <RequiredInterfaces>
-              <RequiredInterface catalog="EywGP" class-id="TrajectoryFeatures"/>
-            </RequiredInterfaces>
-          </Input>
-        </Inputs>
-        <Outputs>
-          <Output catalog="kernel" class-id="double" description="The computed curvature." group_index="0" id="OutputCurvature" inherited-id="" inplace-id="" name="Curvature"/>
-        </Outputs>
-        <PrivateData/>
-      </Block>
       <Block active="1" catalog="EywGP" class-id="GetTrajectoryFeatures" id="10587" label="TrajectoryBasicFeatures_2" log_info="2" run_level="1" sync-in_mode="1">
         <Properties>
           <PropertySet name="gui-mdi">
-            <Property name="Appearance.Pos">420;860</Property>
-            <Property name="Private.ZOrder">4</Property>
+            <Property name="Appearance.Pos">470;620</Property>
+            <Property name="Private.ZOrder">7</Property>
             <Property name="Private.ObjID">203</Property>
             <Property name="Appearance.Size">64;64</Property>
             <Property name="Appearance.Orientation">1</Property>
@@ -4406,8 +4238,8 @@
       <Block active="1" catalog="EywGP" class-id="TrajectoryFromPoints" id="10831" label="PointsToTrajectory_2" log_info="2" run_level="1" sync-in_mode="1">
         <Properties>
           <PropertySet name="gui-mdi">
-            <Property name="Appearance.Pos">390;690</Property>
-            <Property name="Private.ZOrder">2</Property>
+            <Property name="Appearance.Pos">330;670</Property>
+            <Property name="Private.ZOrder">5</Property>
             <Property name="Private.ObjID">207</Property>
             <Property name="Appearance.Size">64;64</Property>
             <Property name="Appearance.Orientation">1</Property>
@@ -4433,7 +4265,7 @@
             <InitInfo/>
           </Parameter>
           <Parameter catalog="kernel" class-id="double" description="The sampling rate in Hz at which the input points are sampled." design-time="1" enabled="1" group_index="0" id="SamplingRate" name="Sampling rate" run-time="1">
-            <Value>25</Value>
+            <Value>75</Value>
             <Domain catalog="kernel" class-id="double-domain">0;2;0;0</Domain>
             <Layout/>
             <InitInfo/>
@@ -4482,6 +4314,89 @@
         </Inputs>
         <Outputs>
           <Output catalog="EywGP" class-id="DoubleGeometricTrajectory3D" description="The generated 2D trajectory" group_index="0" id="OutputTrajectory" inherited-id="" inplace-id="" name="Output 2D trajectory"/>
+        </Outputs>
+        <PrivateData/>
+      </Block>
+      <Block active="1" catalog="EywGP" class-id="Impulsivity" id="17858" label="Impulsivity_1" log_info="2" run_level="1" sync-in_mode="1">
+        <Properties>
+          <PropertySet name="gui-mdi">
+            <Property name="Appearance.Pos">400;560</Property>
+            <Property name="Private.ZOrder">2</Property>
+            <Property name="Private.ObjID">213</Property>
+            <Property name="Appearance.Size">64;64</Property>
+            <Property name="Appearance.Orientation">1</Property>
+            <Property name="Private.ExportedParams"></Property>
+            <Property name="Private.Selected">0</Property>
+            <Property name="Private.ParamsOrder">kernel::active_status;kernel::active_trigger;kernel::run_level;kernel::sync_in_mode;kernel::log_level;GesDur;Threshold;Frames</Property>
+            <Property name="Private.FullPath">ExpressivityAnalysis.Impulsivity.Impulsivity</Property>
+            <Property name="DisplaySyncInVisible">0</Property>
+            <Property name="DisplaySyncOutVisible">0</Property>
+          </PropertySet>
+        </Properties>
+        <Parameters>
+          <Parameter catalog="kernel" class-id="double" description="Gesture duration Threshold" design-time="1" enabled="1" group_index="0" id="GesDur" name="GesDur" run-time="1">
+            <Value>25</Value>
+            <Domain/>
+            <Layout/>
+            <InitInfo/>
+          </Parameter>
+          <Parameter catalog="kernel" class-id="double" description="SQoM threshold" design-time="1" enabled="1" group_index="0" id="Threshold" name="Threshold" run-time="1">
+            <Value>0.02</Value>
+            <Domain catalog="kernel" class-id="double-domain">0;1;1;1</Domain>
+            <Layout/>
+            <InitInfo/>
+          </Parameter>
+          <Parameter catalog="kernel" class-id="double" description="Frame rate" design-time="1" enabled="1" group_index="0" id="Frames" name="Frames" run-time="1">
+            <Value>25</Value>
+            <Domain/>
+            <Layout/>
+            <InitInfo/>
+          </Parameter>
+        </Parameters>
+        <Inputs>
+          <Input catalog="kernel" class-id="double" description="Segmented gesture Quantity of Motion" group_index="0" id="Sqom" name="Segmentened Quantity of Motion" read-write="0" required_for_execution="1" required_for_initialization="1">
+            <RequiredInterfaces/>
+          </Input>
+          <Input catalog="kernel" class-id="double" description="Contraction Index" group_index="0" id="CI" name="Contraction Index" read-write="0" required_for_execution="1" required_for_initialization="1">
+            <RequiredInterfaces/>
+          </Input>
+        </Inputs>
+        <Outputs>
+          <Output catalog="kernel" class-id="double" description="Impulsivity_Index" group_index="0" id="II" inherited-id="" inplace-id="" name="II"/>
+          <Output catalog="kernel" class-id="double" description="Maxtime" group_index="0" id="Maxtime" inherited-id="" inplace-id="" name="Maxtime"/>
+        </Outputs>
+        <PrivateData/>
+      </Block>
+      <Block active="1" catalog="EywGP" class-id="trianglesymmetryindex" id="17954" label="SymmetryTriangle3D_1" log_info="2" run_level="1" sync-in_mode="1">
+        <Properties>
+          <PropertySet name="gui-mdi">
+            <Property name="Appearance.Pos">640;880</Property>
+            <Property name="Private.ZOrder">1</Property>
+            <Property name="Private.ObjID">218</Property>
+            <Property name="Appearance.Size">64;64</Property>
+            <Property name="Appearance.Orientation">1</Property>
+            <Property name="Private.ExportedParams"></Property>
+            <Property name="Private.Selected">0</Property>
+            <Property name="Private.ParamsOrder">kernel::active_status;kernel::active_trigger;kernel::run_level;kernel::sync_in_mode;kernel::log_level</Property>
+            <Property name="Private.FullPath">ExpressivityAnalysis.Symmetry.SymmetryTriangle3D</Property>
+            <Property name="DisplaySyncInVisible">0</Property>
+            <Property name="DisplaySyncOutVisible">0</Property>
+          </PropertySet>
+        </Properties>
+        <Parameters/>
+        <Inputs>
+          <Input catalog="base" class-id="point_2d_double" description="This is the upper vertex of the triangle on which we compute the symmetry index." group_index="0" id="trianglesymmetryindexinput1" name="Triangle_Upper_Vertex" read-write="0" required_for_execution="1" required_for_initialization="1">
+            <RequiredInterfaces/>
+          </Input>
+          <Input catalog="base" class-id="point_2d_double" description="This is the upper vertex of the triangle on which we compute the symmetry index." group_index="0" id="trianglesymmetryindexinput2" name="Triangle_Left_Vertex" read-write="0" required_for_execution="1" required_for_initialization="1">
+            <RequiredInterfaces/>
+          </Input>
+          <Input catalog="base" class-id="point_2d_double" description="This is the right vertex of the triangle on which we compute the symmetry index." group_index="0" id="trianglesymmetryindexinput3" name="Triangle_Right_Vertex" read-write="0" required_for_execution="1" required_for_initialization="1">
+            <RequiredInterfaces/>
+          </Input>
+        </Inputs>
+        <Outputs>
+          <Output catalog="kernel" class-id="double" description="This is the symmetry index of the input triangle." group_index="0" id="trianglesymmetryoutput" inherited-id="" inplace-id="" name="Triangle_Symmetry_Index"/>
         </Outputs>
         <PrivateData/>
       </Block>
@@ -4607,7 +4522,7 @@ Specificités techniques
             <Property name="Appearance.FontColor">0; 0; 0</Property>
             <Property name="Appearance.HorzAlign">0</Property>
             <Property name="Appearance.VertAlign">0</Property>
-            <Property name="Private.ZOrder">167</Property>
+            <Property name="Private.ZOrder">166</Property>
             <Property name="Private.ObjID">154</Property>
           </PropertySet>
         </Properties>
@@ -4699,7 +4614,7 @@ Specificités techniques
             <Property name="Appearance.FontColor">0; 0; 0</Property>
             <Property name="Appearance.HorzAlign">0</Property>
             <Property name="Appearance.VertAlign">0</Property>
-            <Property name="Private.ZOrder">16</Property>
+            <Property name="Private.ZOrder">17</Property>
             <Property name="Private.ObjID">158</Property>
           </PropertySet>
         </Properties>
@@ -4722,7 +4637,7 @@ Specificités techniques
             <Property name="Appearance.FontColor">0; 0; 0</Property>
             <Property name="Appearance.HorzAlign">0</Property>
             <Property name="Appearance.VertAlign">0</Property>
-            <Property name="Private.ZOrder">14</Property>
+            <Property name="Private.ZOrder">15</Property>
             <Property name="Private.ObjID">161</Property>
           </PropertySet>
         </Properties>
@@ -5594,22 +5509,6 @@ Specificités techniques
         </Properties>
       </Link>
       <Link>
-        <Pin block="346" id="output_data" type="source"/>
-        <Pin block="694" id="string" target_type="input" type="target"/>
-        <Properties>
-          <PropertySet name="gui-mdi">
-            <Property name="Private.SrcPinDelta">0;0</Property>
-            <Property name="Private.SrcPinNdx">-1</Property>
-            <Property name="Private.DstPinDelta">0;0</Property>
-            <Property name="Private.DstPinNdx">-1</Property>
-            <Property name="Private.NumPins">0</Property>
-            <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">38</Property>
-            <Property name="Private.ObjID">127</Property>
-          </PropertySet>
-        </Properties>
-      </Link>
-      <Link>
         <Pin block="4571" id="output_data" type="source"/>
         <Pin block="5340" id="string" target_type="input" type="target"/>
         <Properties>
@@ -5620,7 +5519,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">11</Property>
+            <Property name="Private.ZOrder">12</Property>
             <Property name="Private.ObjID">166</Property>
           </PropertySet>
         </Properties>
@@ -5860,7 +5759,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">26</Property>
+            <Property name="Private.ZOrder">27</Property>
             <Property name="Private.ObjID">139</Property>
           </PropertySet>
         </Properties>
@@ -5876,7 +5775,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">25</Property>
+            <Property name="Private.ZOrder">26</Property>
             <Property name="Private.ObjID">140</Property>
           </PropertySet>
         </Properties>
@@ -5892,7 +5791,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">24</Property>
+            <Property name="Private.ZOrder">25</Property>
             <Property name="Private.ObjID">141</Property>
           </PropertySet>
         </Properties>
@@ -5908,7 +5807,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">23</Property>
+            <Property name="Private.ZOrder">24</Property>
             <Property name="Private.ObjID">142</Property>
           </PropertySet>
         </Properties>
@@ -5924,7 +5823,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">22</Property>
+            <Property name="Private.ZOrder">23</Property>
             <Property name="Private.ObjID">143</Property>
           </PropertySet>
         </Properties>
@@ -5940,7 +5839,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">21</Property>
+            <Property name="Private.ZOrder">22</Property>
             <Property name="Private.ObjID">144</Property>
           </PropertySet>
         </Properties>
@@ -5956,7 +5855,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">20</Property>
+            <Property name="Private.ZOrder">21</Property>
             <Property name="Private.ObjID">145</Property>
           </PropertySet>
         </Properties>
@@ -5972,7 +5871,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">19</Property>
+            <Property name="Private.ZOrder">20</Property>
             <Property name="Private.ObjID">146</Property>
           </PropertySet>
         </Properties>
@@ -5988,7 +5887,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">18</Property>
+            <Property name="Private.ZOrder">19</Property>
             <Property name="Private.ObjID">147</Property>
           </PropertySet>
         </Properties>
@@ -6004,7 +5903,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">17</Property>
+            <Property name="Private.ZOrder">18</Property>
             <Property name="Private.ObjID">148</Property>
           </PropertySet>
         </Properties>
@@ -6020,7 +5919,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">10</Property>
+            <Property name="Private.ZOrder">11</Property>
             <Property name="Private.ObjID">175</Property>
           </PropertySet>
         </Properties>
@@ -6036,7 +5935,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">36</Property>
+            <Property name="Private.ZOrder">37</Property>
             <Property name="Private.ObjID">128</Property>
           </PropertySet>
         </Properties>
@@ -6052,7 +5951,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">35</Property>
+            <Property name="Private.ZOrder">36</Property>
             <Property name="Private.ObjID">129</Property>
           </PropertySet>
         </Properties>
@@ -6068,7 +5967,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">34</Property>
+            <Property name="Private.ZOrder">35</Property>
             <Property name="Private.ObjID">130</Property>
           </PropertySet>
         </Properties>
@@ -6084,7 +5983,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">33</Property>
+            <Property name="Private.ZOrder">34</Property>
             <Property name="Private.ObjID">131</Property>
           </PropertySet>
         </Properties>
@@ -6100,7 +5999,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">32</Property>
+            <Property name="Private.ZOrder">33</Property>
             <Property name="Private.ObjID">132</Property>
           </PropertySet>
         </Properties>
@@ -6116,7 +6015,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">31</Property>
+            <Property name="Private.ZOrder">32</Property>
             <Property name="Private.ObjID">133</Property>
           </PropertySet>
         </Properties>
@@ -6132,7 +6031,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">30</Property>
+            <Property name="Private.ZOrder">31</Property>
             <Property name="Private.ObjID">134</Property>
           </PropertySet>
         </Properties>
@@ -6148,7 +6047,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">29</Property>
+            <Property name="Private.ZOrder">30</Property>
             <Property name="Private.ObjID">135</Property>
           </PropertySet>
         </Properties>
@@ -6164,7 +6063,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">28</Property>
+            <Property name="Private.ZOrder">29</Property>
             <Property name="Private.ObjID">136</Property>
           </PropertySet>
         </Properties>
@@ -6180,7 +6079,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">27</Property>
+            <Property name="Private.ZOrder">28</Property>
             <Property name="Private.ObjID">137</Property>
           </PropertySet>
         </Properties>
@@ -6196,7 +6095,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">9</Property>
+            <Property name="Private.ZOrder">10</Property>
             <Property name="Private.ObjID">178</Property>
           </PropertySet>
         </Properties>
@@ -6212,7 +6111,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">8</Property>
+            <Property name="Private.ZOrder">9</Property>
             <Property name="Private.ObjID">179</Property>
           </PropertySet>
         </Properties>
@@ -6228,7 +6127,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">7</Property>
+            <Property name="Private.ZOrder">8</Property>
             <Property name="Private.ObjID">180</Property>
           </PropertySet>
         </Properties>
@@ -6244,7 +6143,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">3</Property>
+            <Property name="Private.ZOrder">6</Property>
             <Property name="Private.ObjID">205</Property>
           </PropertySet>
         </Properties>
@@ -6260,7 +6159,7 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">1</Property>
+            <Property name="Private.ZOrder">4</Property>
             <Property name="Private.ObjID">210</Property>
           </PropertySet>
         </Properties>
@@ -6276,8 +6175,24 @@ Specificités techniques
             <Property name="Private.DstPinNdx">-1</Property>
             <Property name="Private.NumPins">0</Property>
             <Property name="Private.Selected">0</Property>
-            <Property name="Private.ZOrder">0</Property>
+            <Property name="Private.ZOrder">3</Property>
             <Property name="Private.ObjID">211</Property>
+          </PropertySet>
+        </Properties>
+      </Link>
+      <Link>
+        <Pin block="10831" id="OutputTrajectory" type="source"/>
+        <Pin block="792" id="InputTrajectory" target_type="input" type="target"/>
+        <Properties>
+          <PropertySet name="gui-mdi">
+            <Property name="Private.SrcPinDelta">0;0</Property>
+            <Property name="Private.SrcPinNdx">-1</Property>
+            <Property name="Private.DstPinDelta">0;0</Property>
+            <Property name="Private.DstPinNdx">-1</Property>
+            <Property name="Private.NumPins">0</Property>
+            <Property name="Private.Selected">0</Property>
+            <Property name="Private.ZOrder">0</Property>
+            <Property name="Private.ObjID">225</Property>
           </PropertySet>
         </Properties>
       </Link>

@@ -1,24 +1,23 @@
 TODO :
+Virer les données parasites - une perte de signal fait un retour à 0 et change dramatiquement le maxVolume de DrawShape, ça fausse le reste de la visu
+
+------------------------------------------------------------
+
+
+
+
+
+
+-----------------------------------------------------------
+
+
+
+
 finir le pb de connexion failed lors de l'enregistrement en coroutine
-
-pour demain : 
-*
-rémi tracker 3 et 4
-asaf tracker 5 et 7
-
-
-- 1.5 secondes pour les trails
-- très intéressant les deux face au miroir / de chaque côté -> mettre tout le monde de la même couleur
-- mettre un bouton miroir on/off
-- couleur random mais la même pour les deux
-
-
-
-Tracker Righthand - °.15 / 0 / -0.05
 
 
 !!! Objectifs : !!!
-- que les gens intéragissent ensemble
+- que les gens interagissent ensemble
 - que le rendu soit intéressant à regarder
 - que les gens dansent en soi
 
