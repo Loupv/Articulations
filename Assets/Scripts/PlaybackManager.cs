@@ -13,12 +13,15 @@ public class PlaybackManager : MonoBehaviour
     PerformanceLine currentLine;
     public int playerNumber, mode;
     public float performanceMaxTime;
+    Clock clock;
+    private double startTs;
     string currentViz;
     [HideInInspector]
     
 
     void Start(){
         //ChangePlaybackMode();
+        clock = FindObjectOfType<Clock>();
     }
 
     public void StartPlayback(GameEngine ge){
@@ -26,6 +29,7 @@ public class PlaybackManager : MonoBehaviour
         play = true;
         if(addGestureAnalyser) GameObject.Instantiate(gestureAnalyserPrefab);
         Invoke("UpdatePlayback",0f);
+        startTs = clock.GetUnixTs();
     }
 
     void UpdatePlayback()
@@ -57,11 +61,25 @@ public class PlaybackManager : MonoBehaviour
 
             gameEngine.uiHandler.playbackTime.text = "Playback Time : "+(currentLine.Time/1000).ToString()+" / "+performanceMaxTime;
 
-            float timeToWait = (float)(currentLine.Time - lastTime)/1000;
+            //float timeToWait = (float)(currentLine.Time - lastTime)/1000;
+            double realTimeElapsed = (clock.GetUnixTs() - startTs)/1000;
+            double csvTimeElapsed =  (currentLine.TimeStamp - performanceFile.lines[0].TimeStamp)/1000 ;
+
             lastTime = currentLine.Time;
+            
+            float timeToWait = 0;
+
+            if(Mathf.Abs((float)realTimeElapsed - (float)csvTimeElapsed) > 1/gameEngine.targetFrameRate){ // if csv playback is ahead or too late
+                timeToWait = (float)(csvTimeElapsed - realTimeElapsed);
+                if(timeToWait <0 ) timeToWait = 0;
+            }
+
+            Debug.Log(realTimeElapsed+", "+csvTimeElapsed);
             currentRecordLine += 1 ;
-            if(currentRecordLine >= performanceFile.lines.Count) currentRecordLine = 0;
-            Invoke("UpdatePlayback", timeToWait);   
+            if(currentRecordLine >= performanceFile.lines.Count) currentRecordLine = 0;           
+            
+            Invoke("UpdatePlayback", timeToWait);
+    
         }
     }
 
