@@ -59,11 +59,15 @@ public class UserManager : MonoBehaviour
 
     public UserData InitLocalUser(GameEngine gameEngine, int ID, string name, string address, int localPort, bool isMe, UserRole userRole) {
 
-        if (userRole == UserRole.Player|| userRole == UserRole.Playback) _userGameObject = Instantiate(playerPrefab);
+        if (userRole == UserRole.Player) _userGameObject = Instantiate(playerPrefab);
         else if (userRole == UserRole.Tracker) _userGameObject = Instantiate(trackerPrefab);
         else if (userRole == UserRole.Viewer || userRole == UserRole.Server) _userGameObject = Instantiate(viewerPrefab);
+        else if (userRole == UserRole.Playback) {
+            _userGameObject = Instantiate(playerPrefab);
+            _userGameObject.AddComponent<ViewerController>();
+        }
 
-        if (userRole == UserRole.Viewer || userRole == UserRole.Tracker || userRole == UserRole.Server) {
+        if (userRole == UserRole.Viewer || userRole == UserRole.Tracker || userRole == UserRole.Server || userRole == UserRole.Playback) {
             gameEngine.uiHandler.viewerController = _userGameObject.GetComponent<ViewerController>();
             gameEngine.uiHandler.viewerController.InitViewerController(isMe);
         }

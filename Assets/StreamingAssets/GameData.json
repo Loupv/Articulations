@@ -1,6 +1,6 @@
 {
    "networkID" :"player1",
-   "runInLocal":0,
+   "runInLocal":1,
    "DebugMode":0,
    "keepNamesVisibleForPlayers":0,
    "useVr":0,

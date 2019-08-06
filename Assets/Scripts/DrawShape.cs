@@ -115,10 +115,10 @@ public class DrawShape : MonoBehaviour
 		// here we do max(0.1f, diff) to avoid when diff = 0 => volume = 0 and contracton is inf
         float prismVolume = Mathf.Sqrt(demiperimeter*Mathf.Max(0.1f,alpha1)*Mathf.Max(0.1f,alpha2)*Mathf.Max(0.1f,alpha3)) * Mathf.Max(s1.position.y, s2.position.y, s3.position.y);
 		
-		if(prismVolume == 0){ 
+		/*if(prismVolume == 0){ 
 			Debug.Log(d1+", "+d2+", "+d3+", "+demiperimeter);
 			UnityEditor.EditorApplication.ExecuteMenuItem("Edit/Pause");
-		}
+		}*/
         return prismVolume;
     }
 

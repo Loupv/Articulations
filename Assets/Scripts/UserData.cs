@@ -49,11 +49,12 @@ public class UserData : MonoBehaviour
         // things that change depending on this instance's mode
         if((gameEngine._userRole == UserRole.Player && gameEngine.userManager.keepNamesVisibleForPlayers) // if we're a player and we decided to keep UI
         || ((gameEngine._userRole == UserRole.Viewer || gameEngine._userRole == UserRole.Server 
-        || gameEngine._userRole == UserRole.Tracker || gameEngine._userRole == UserRole.Playback) 
-            && _userRole == UserRole.Player)) // if we're a viewer and we instantiate a plyer
+        || gameEngine._userRole == UserRole.Tracker) && _userRole == UserRole.Player)  // if we're a viewer and we instantiate a plyer
+        || (gameEngine._userRole == UserRole.Playback)) // if we're playback and we instantiate players to watch
         {
             headText = head.transform.Find("Canvas").Find("Text").GetComponent<UnityEngine.UI.Text>();
             headText.text = _playerName;
+            if(gameEngine._userRole == UserRole.Playback) headText.gameObject.SetActive(false); // tmp for screen record
         }
         else if(gameEngine._userRole == UserRole.Player && !gameEngine.userManager.keepNamesVisibleForPlayers) // mask UI for players when not wanted
         {

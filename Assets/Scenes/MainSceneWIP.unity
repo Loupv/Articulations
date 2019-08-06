@@ -4344,7 +4344,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &361027583
 Transform:
   m_ObjectHideFlags: 0
@@ -13564,7 +13564,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1131772037
 Transform:
   m_ObjectHideFlags: 0
@@ -22679,7 +22679,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2028604093
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23298,7 +23298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameEngine: {fileID: 667967430}
   play: 0
-  addGestureAnalyser: 1
+  addGestureAnalyser: 0
   gestureAnalyserPrefab: {fileID: 8773243578296310775, guid: e02730cfb8547e34da537c8d3dbf1d37,
     type: 3}
   currentRecordLine: 0

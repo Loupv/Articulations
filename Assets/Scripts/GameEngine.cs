@@ -149,7 +149,7 @@ public class GameEngine : MonoBehaviour
     public void StartGame()
     {
         int ID = UnityEngine.Random.Range(0, 10000); 
-        clock.SetSceneStartTs();
+        if(clock != null) clock.SetSceneStartTs();
 
         string tmpIp;
         if(gameData.runInLocal == 1) tmpIp = "127.0.0.1";

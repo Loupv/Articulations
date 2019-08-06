@@ -7,10 +7,10 @@ public class ViewerController : MonoBehaviour
 
     Camera camera;
 
-	public float turnSpeed = 4.0f;		// Speed of camera turning when mouse moves in along an axis
-	public float panSpeed = 4.0f;		// Speed of the camera when being panned
+	public float turnSpeed = 2.0f;		// Speed of camera turning when mouse moves in along an axis
+	public float panSpeed = 2.0f;		// Speed of the camera when being panned
 	public float zoomSpeed = 1.0f;		// Speed of the camera going back and forth
-	public float translateSpeed = 0.03f;
+	public float translateSpeed = 0.015f;
 	private Vector3 mouseOrigin;	// Position of cursor when mouse dragging starts
 	private bool isPanning;		// Is the camera being panned?
 	private bool isRotating;	// Is the camera being rotated?

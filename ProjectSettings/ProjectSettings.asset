@@ -237,7 +237,7 @@ PlayerSettings:
   AndroidTargetArchitectures: 5
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
+  AndroidKeystoreName: '{inproject}: '
   AndroidKeyaliasName: 
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 1
@@ -594,7 +594,7 @@ PlayerSettings:
   XboxOneAllowedProductIds: []
   XboxOnePersistentLocalStorageSize: 0
   XboxOneXTitleMemory: 8
-  xboxOneScriptCompiler: 0
+  xboxOneScriptCompiler: 1
   XboxOneOverrideIdentityName: 
   vrEditorSettings:
     daydream:

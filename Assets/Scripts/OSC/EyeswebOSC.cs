@@ -14,7 +14,7 @@ public class EyeswebOSC : MonoBehaviour
 
 	// Use this for initialization
 	public void Init (GameObject[] p1ObjectsToTrack, GameObject[] p2ObjectsToTrack) {
-        osc.Init();
+        if(!osc.initialized) osc.Init();
 		
         osc.SetAddressHandler("/MovementData", GetFloatFromOsc);
         initialized = true;
@@ -79,7 +79,7 @@ public class EyeswebOSC : MonoBehaviour
 
 
     void GetFloatFromOsc(OscMessage message){
-
+        Debug.Log("received");
         int playerID = message.GetInt(0);
         int handedness = message.GetInt(1);
         float f1 = message.GetFloat(2);
