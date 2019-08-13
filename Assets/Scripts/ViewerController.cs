@@ -157,7 +157,19 @@ public class ViewerController : MonoBehaviour
 		isFollowing2 = false;
 		this.transform.position = gameEngine.POVs[0].transform.position;
 		this.transform.rotation = gameEngine.POVs[0].transform.rotation;
-		
+		break;
+		case 4:
+		isFollowing1 = false;
+		isFollowing2 = false;
+		this.transform.position = gameEngine.POVs[1].transform.position;
+		this.transform.rotation = gameEngine.POVs[1].transform.rotation;
+		break;
+
+		case 5:
+		isFollowing1 = false;
+		isFollowing2 = false;
+		this.transform.position = gameEngine.POVs[2].transform.position;
+		this.transform.rotation = gameEngine.POVs[2].transform.rotation;
 		break;
 
 

@@ -233,12 +233,12 @@ public class UIHandler : MonoBehaviour
         int tmp = 0;
 
         switch(pov){
-		case 0: // free mode
+		/*case 0: // free mode
         FreeCam.image.sprite = selectedButtonSprite;
         POVPlayer1.image.sprite = normalButtonSprite;
         POVPlayer2.image.sprite = normalButtonSprite;
         POV3.image.sprite = normalButtonSprite;
-		break;
+		break;*/
 
 		case 1:
         tmp = userManager.ReturnPlayerRank(1);
@@ -259,13 +259,18 @@ public class UIHandler : MonoBehaviour
             POV3.image.sprite = normalButtonSprite;
         }
         break;
-
-        case 3:
+        
+        default:
+        POVPlayer1.image.sprite = normalButtonSprite;
+        POVPlayer2.image.sprite = normalButtonSprite;
+        break;
+        
+        /* case 3:
 		FreeCam.image.sprite = normalButtonSprite;
         POVPlayer1.image.sprite = normalButtonSprite;
         POVPlayer2.image.sprite = normalButtonSprite;
         POV3.image.sprite = selectedButtonSprite;
-		break;
+		break;*/
         }
         viewerController.UpdatePOV(pov, tmp);
     }
