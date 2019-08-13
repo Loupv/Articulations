@@ -27,6 +27,9 @@ public class ReceiveOSC : MonoBehaviour {
             osc.SetAddressHandler("/EnvironmentChange", EnvironmentChangedByServer);
             osc.SetAddressHandler("/CalibrationChange", CalibrationChange);
             osc.SetAddressHandler("/StartAudioRecording", StartAudioRecording);
+            osc.SetAddressHandler("/StartPlayback", StartPlaybackOrder);
+            osc.SetAddressHandler("/PausePlayback", PausePlaybackOrder);
+            osc.SetAddressHandler("/StopPlayback", StopPlaybackOrder);
 
             //osc.SetAddressHandler("/AudioData", DebugTemp); // debugtest
 
@@ -260,6 +263,20 @@ public class ReceiveOSC : MonoBehaviour {
             }
         }
     }
+
+
+    void StartPlaybackOrder(OscMessage message){
+        if(gameEngine._userRole == UserRole.Playback) gameEngine.playbackManager.StartPlayback();
+    }
+
+    void PausePlaybackOrder(OscMessage message){
+        if(gameEngine._userRole == UserRole.Playback) gameEngine.playbackManager.PausePlayback();
+    }
+
+    void StopPlaybackOrder(OscMessage message){
+        if(gameEngine._userRole == UserRole.Playback) gameEngine.playbackManager.StopPlayback();
+    }
+
 
     public void StartAudioRecording(OscMessage message){
         Debug.Log(message);

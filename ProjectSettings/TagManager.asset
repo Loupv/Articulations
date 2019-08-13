@@ -17,6 +17,7 @@ TagManager:
   - SoundHandler
   - FileInOut
   - NetworkManager
+  - Viewer
   layers:
   - Default
   - TransparentFX

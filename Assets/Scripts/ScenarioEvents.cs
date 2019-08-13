@@ -100,12 +100,14 @@ public class ScenarioEvents : MonoBehaviour
         timerPaused = false;
         gameEngine.uiHandler.ToggleScenarioButton(1);
         gameEngine.uiHandler.conditionTimeRemaining.gameObject.SetActive(true);
+        gameEngine.osc.sender.StartOnlinePlaybacks(gameEngine.userManager.usersPlaying);
         InvokeRepeating("RunCondition", 0f, 1f);
     }
 
     public void PauseScenario(){
         if(gameEngine.uiHandler.autoRecordPerformance.isOn) performanceRecorder.PauseRecording();
         timerPaused = !timerPaused;
+        gameEngine.osc.sender.PauseOnlinePlaybacks(gameEngine.userManager.usersPlaying);
         gameEngine.uiHandler.ToggleScenarioButton(2);
     }
 

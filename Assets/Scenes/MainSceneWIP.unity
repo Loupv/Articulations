@@ -7058,7 +7058,7 @@ MonoBehaviour:
   viveHeadName: Camera
   viveLeftHandName: Controller (left)
   viveRightHandName: Controller (right)
-  debugMode: 1
+  debugMode: 0
   debugPrefab: {fileID: 2656459893160420101, guid: fd1ed9442d1b4a94b8a9ec29aeceaebc,
     type: 3}
   targetFrameRate: 60

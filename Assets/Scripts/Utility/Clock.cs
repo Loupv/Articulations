@@ -40,11 +40,11 @@ public class Clock : MonoBehaviour
     }
 
     public double GetTimeSinceSceneStart(){
-        return(ts-sceneStartTs);
+        return(Math.Round(System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000,2)-sceneStartTs);
     }
 
     public double GetTimeSinceRecordingStart(){
-        return(ts-recordingStartTs);
+        return(Math.Round(System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000,2)-recordingStartTs);
     }
 
 }

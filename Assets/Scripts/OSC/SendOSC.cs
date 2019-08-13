@@ -286,6 +286,44 @@ public class SendOSC : MonoBehaviour {
 
     }
 
+    public void StartOnlinePlaybacks(List<UserData> usersPlaying){
+        
+        foreach (UserData userToSend in usersPlaying)
+        {
+            osc.OscPacketIO.RemoteHostName = userToSend.oscEndPoint.ip;
+            osc.OscPacketIO.RemotePort = userToSend.oscEndPoint.remotePort;
+            message = new OscMessage();
+            message.address = "/StartPlayback";
+            osc.Send(message);
+            Debug.Log("Sending : " + message);  
+        }
+    }
+
+    public void PauseOnlinePlaybacks(List<UserData> usersPlaying){
+        
+        foreach (UserData userToSend in usersPlaying)
+        {
+            osc.OscPacketIO.RemoteHostName = userToSend.oscEndPoint.ip;
+            osc.OscPacketIO.RemotePort = userToSend.oscEndPoint.remotePort;
+            message = new OscMessage();
+            message.address = "/PausePlayback";
+            osc.Send(message);
+            Debug.Log("Sending : " + message);  
+        }
+    }
+
+    public void StopOnlinePlaybacks(List<UserData> usersPlaying){
+        
+        foreach (UserData userToSend in usersPlaying)
+        {
+            osc.OscPacketIO.RemoteHostName = userToSend.oscEndPoint.ip;
+            osc.OscPacketIO.RemotePort = userToSend.oscEndPoint.remotePort;
+            message = new OscMessage();
+            message.address = "/StopPlayback";
+            osc.Send(message);
+            Debug.Log("Sending : " + message);  
+        }
+    }
 
     public void StartAudioRecording(int postScenarioRecordingLenght, List<UserData> usersPlaying){
 

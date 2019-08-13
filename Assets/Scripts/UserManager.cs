@@ -435,7 +435,9 @@ public class UserManager : MonoBehaviour
             Destroy(p);
         }
         usersPlaying.Clear();
-
+        foreach(GameObject go in GameObject.FindGameObjectsWithTag("Viewer")){
+            Destroy(go);
+        }
     }
 
 

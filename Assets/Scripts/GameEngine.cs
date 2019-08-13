@@ -190,21 +190,21 @@ public class GameEngine : MonoBehaviour
             if(playbackManager.mode == 0) // online
             {
                 appState = AppState.WaitingForServer;
-                networkManager.RegisterUSer(_user, _userRole);
+                InvokeRepeating("AskForRegistration",0f,1f);
                 canvasHandler.ChangeCanvas("waitingCanvas");
             }
             else if(playbackManager.mode == 1){ // offline
                 appState = AppState.Running;
                 canvasHandler.ChangeCanvas("playbackCanvasOff");
                 userManager.AddNewUser(this, 777, "ghost2", osc.outIP, osc.outPort, UserRole.Playback, 2);
-                playbackManager.StartPlayback(this);
+                playbackManager.StartPlayback();
             }
         }
 
         else
         {
             appState = AppState.WaitingForServer;
-            networkManager.RegisterUSer(_user, _userRole);
+            InvokeRepeating("AskForRegistration",0f,1f);
             canvasHandler.ChangeCanvas("waitingCanvas");
         }
     }
@@ -214,6 +214,8 @@ public class GameEngine : MonoBehaviour
     // player/tracker 
     public void EndStartProcess(int sessionID, int playerID, int requestedPort, string visualisationMode, int rank, int recordAudio, int recordLength)
     {
+        CancelInvoke("AskForRegistration");
+
         if (_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker || _userRole == UserRole.Playback)
         {
             userManager.ChangeVisualisationMode(visualisationMode, this, false);
@@ -234,7 +236,7 @@ public class GameEngine : MonoBehaviour
                 canvasHandler.ChangeCanvas("viewerCanvas");
             else if(_user._userRole == UserRole.Playback){
                 canvasHandler.ChangeCanvas("playbackCanvasOn");
-                playbackManager.StartPlayback(this);
+                if(playbackManager.mode == 1) playbackManager.StartPlayback(); // if online, we wait for server order
             } 
         }
     }
@@ -266,6 +268,11 @@ public class GameEngine : MonoBehaviour
     }
 
 
+    void AskForRegistration(){
+        networkManager.RegisterUSer(_user, _userRole);
+    }
+
+
 
     public void UpdateGame()
     {
@@ -293,17 +300,17 @@ public class GameEngine : MonoBehaviour
     public void Restart() {
         Debug.Log("Restart");
         
-        if(userManager.me._userRole == UserRole.Playback){
+        if(_userRole == UserRole.Playback){
             playbackManager.StopPlayback();
         } 
-        else if (userManager.me._userRole == UserRole.Server){
+        else if (_userRole == UserRole.Server){
             osc.Close();
         }
 
         Camera.main.transform.parent = GameObject.Find("--------- Scene Objects ------------").transform;
         userManager.EraseAllPlayers();
         userManager = new UserManager();
-
+        osc.sender.SendQuitMessage(_userRole);
         StartCoroutine(InitApplication());
 
         /*string[] endings = new string[]{

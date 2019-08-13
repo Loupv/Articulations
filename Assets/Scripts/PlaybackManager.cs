@@ -12,17 +12,17 @@ public class PlaybackManager : MonoBehaviour
     PerformanceLine currentLine;
     public int playerNumber, mode;
     public float performanceMaxTime;
-    public double floatTimeTracker, playbackSpeed;
+    public double floatTimeTracker, playbackSpeed, lastSpeed;
     string currentViz = "null";
-    [HideInInspector]
+    bool paused;
+
     
 
     void Start(){
 
     }
 
-    public void StartPlayback(GameEngine ge){
-        gameEngine = ge;
+    public void StartPlayback(){
         play = true;
         currentRecordLine = 0;
         if(addGestureAnalyser) GameObject.Instantiate(gestureAnalyserPrefab);
@@ -83,6 +83,18 @@ public class PlaybackManager : MonoBehaviour
         else if(mode == 1){ 
             gameEngine.uiHandler.switchPlaybackPlayer.gameObject.SetActive(false);
             gameEngine.uiHandler.OSCServerAddressInput.gameObject.SetActive(false);
+        }
+    }
+
+    public void PausePlayback(){
+        if(!paused){ // pause
+            lastSpeed = playbackSpeed;
+            playbackSpeed = 0;
+            paused = true;
+        }
+        else {
+            playbackSpeed = lastSpeed; // resume
+            paused = false;
         }
     }
 
