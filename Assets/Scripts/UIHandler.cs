@@ -168,8 +168,8 @@ public class UIHandler : MonoBehaviour
             pauseScenario.gameObject.SetActive(true);
         }
         else if(value == 2){ // pause
-            if(scenarioEvents.timerPaused) pauseScenario.image.sprite = normalButtonSprite;
-            else pauseScenario.image.sprite = selectedButtonSprite;
+            if(scenarioEvents.timerPaused) pauseScenario.image.sprite = selectedButtonSprite;
+            else pauseScenario.image.sprite = normalButtonSprite;
         }
         else if(value == 0){ // stop
             launchScenario.gameObject.SetActive(true);

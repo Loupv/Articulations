@@ -155,6 +155,8 @@ public class ScenarioEvents : MonoBehaviour
         timeRemaining = 0;
         gameEngine.uiHandler.conditionTimeRemaining.text = "Time Remaining : "+timeRemaining;
         gameEngine.uiHandler.conditionTimeRemaining.gameObject.SetActive(false);
+        
+        gameEngine.osc.sender.StopOnlinePlaybacks(gameEngine.userManager.usersPlaying);
 
         CancelInvoke("RunCondition");
         //userManager.ChangeVisualisationMode(scenarioId, gameEngine);

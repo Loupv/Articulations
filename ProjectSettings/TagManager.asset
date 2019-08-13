@@ -18,6 +18,7 @@ TagManager:
   - FileInOut
   - NetworkManager
   - Viewer
+  - GestureAnalyser
   layers:
   - Default
   - TransparentFX

@@ -25,8 +25,9 @@ public class PlaybackManager : MonoBehaviour
     public void StartPlayback(){
         play = true;
         currentRecordLine = 0;
+        floatTimeTracker = 0;
         if(addGestureAnalyser) GameObject.Instantiate(gestureAnalyserPrefab);
-        
+        Debug.Log("Launching playback");
         InvokeRepeating("UpdatePlayback",0f,1/(float)gameEngine.targetFrameRate);
     }
 
@@ -51,10 +52,10 @@ public class PlaybackManager : MonoBehaviour
                     gameEngine.userManager.ChangeVisualisationMode(currentLine.Condition, gameEngine, false);
                     currentViz = currentLine.Condition;
                 }
-                gameEngine.userManager.usersPlaying[0].SetPlayerPosition(currentLine.p1HeadPosition,currentLine.p1LeftHandPosition,currentLine.p1RightHandPosition);
-                gameEngine.userManager.usersPlaying[0].SetPlayerRotation(currentLine.p1HeadRotation,currentLine.p1LeftHandRotation,currentLine.p1RightHandRotation);
-                gameEngine.userManager.usersPlaying[1].SetPlayerPosition(currentLine.p2HeadPosition,currentLine.p2LeftHandPosition,currentLine.p2RightHandPosition);
-                gameEngine.userManager.usersPlaying[1].SetPlayerRotation(currentLine.p2HeadRotation,currentLine.p2LeftHandRotation,currentLine.p2RightHandRotation);
+                gameEngine.userManager.usersPlaying[1].SetPlayerPosition(currentLine.p1HeadPosition,currentLine.p1LeftHandPosition,currentLine.p1RightHandPosition);
+                gameEngine.userManager.usersPlaying[1].SetPlayerRotation(currentLine.p1HeadRotation,currentLine.p1LeftHandRotation,currentLine.p1RightHandRotation);
+                gameEngine.userManager.usersPlaying[2].SetPlayerPosition(currentLine.p2HeadPosition,currentLine.p2LeftHandPosition,currentLine.p2RightHandPosition);
+                gameEngine.userManager.usersPlaying[2].SetPlayerRotation(currentLine.p2HeadRotation,currentLine.p2LeftHandRotation,currentLine.p2RightHandRotation);
             } 
 
             gameEngine.uiHandler.playbackTime.text = "Playback Time : "+(currentLine.Time/1000).ToString()+" / "+performanceMaxTime;
@@ -99,6 +100,9 @@ public class PlaybackManager : MonoBehaviour
     }
 
     public void StopPlayback(){
+        Debug.Log("Playback Stopped");
+        if(paused) PausePlayback(); // unpause
+        if(addGestureAnalyser) Destroy(GameObject.FindGameObjectWithTag("GestureAnalyser"));
         CancelInvoke("UpdatePlayback");
     }
     

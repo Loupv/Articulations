@@ -61,7 +61,7 @@ public class CanvasHandler : MonoBehaviour
         else if(canvasName == "playbackCanvasOff"){
             initCanvas.SetActive(false);
             gameCanvas.SetActive(true);
-            viewerCanvas.SetActive(false);
+            viewerCanvas.SetActive(true);
             waitingCanvas.SetActive(false);
             serverCanvas.SetActive(false);
             playbackCanvasOn.SetActive(false);

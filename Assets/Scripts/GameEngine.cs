@@ -196,7 +196,8 @@ public class GameEngine : MonoBehaviour
             else if(playbackManager.mode == 1){ // offline
                 appState = AppState.Running;
                 canvasHandler.ChangeCanvas("playbackCanvasOff");
-                userManager.AddNewUser(this, 777, "ghost2", osc.outIP, osc.outPort, UserRole.Playback, 2);
+                userManager.AddNewUser(this, 776, "ghost1", osc.outIP, osc.outPort, UserRole.Playback);
+                userManager.AddNewUser(this, 777, "ghost2", osc.outIP, osc.outPort, UserRole.Playback);
                 playbackManager.StartPlayback();
             }
         }

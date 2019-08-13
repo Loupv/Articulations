@@ -81,7 +81,7 @@ public class ReceiveOSC : MonoBehaviour {
 
             if (portAvailable || gameEngine.gameData.runInLocal == 0)
             {
-                UserData user = userManager.AddNewUser(gameEngine, playerID, playerName, playerIP, requestedPort, role, userManager.usersPlaying.Count);
+                UserData user = userManager.AddNewUser(gameEngine, playerID, playerName, playerIP, requestedPort, role);
                 if (role == UserRole.Player)
                 {
                     sender.AddNewPlayerToClientsGames(playerID, playerName, userManager.usersPlaying, isPlayer, userManager.usersPlaying.Count - 1); // minus1 because server had already added user in list
@@ -210,7 +210,7 @@ public class ReceiveOSC : MonoBehaviour {
         if ((gameEngine._userRole == UserRole.Player || gameEngine._userRole == UserRole.Viewer || gameEngine._userRole == UserRole.Tracker) && playerID != gameEngine._user._ID)
         {
             Debug.Log(playerID+" vs "+gameEngine._user._ID);
-            userManager.AddNewUser(gameEngine, playerID, playerName, "null", -1, userRole, rank);
+            userManager.AddNewUser(gameEngine, playerID, playerName, "null", -1, userRole);
             gameEngine.userManager.ChangeVisualisationMode(gameEngine.currentVisualisationMode, gameEngine, false); // trigger the change mode again, to actualize to new players
         }
     }

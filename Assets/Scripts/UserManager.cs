@@ -61,8 +61,10 @@ public class UserManager : MonoBehaviour
 
         if (userRole == UserRole.Player) _userGameObject = Instantiate(playerPrefab);
         else if (userRole == UserRole.Tracker) _userGameObject = Instantiate(trackerPrefab);
-        else if (userRole == UserRole.Viewer || userRole == UserRole.Server) _userGameObject = Instantiate(viewerPrefab);
-        else if (userRole == UserRole.Playback) {
+        else if (userRole == UserRole.Viewer || userRole == UserRole.Server
+        || (userRole == UserRole.Playback && gameEngine.playbackManager.mode == 1)) // offline playback is considered as a normal viewer
+            _userGameObject = Instantiate(viewerPrefab);
+        else if (userRole == UserRole.Playback && gameEngine.playbackManager.mode == 0) {
             _userGameObject = Instantiate(playerPrefab);
             _userGameObject.AddComponent<ViewerController>();
         }
@@ -73,7 +75,7 @@ public class UserManager : MonoBehaviour
         }
 
         UserData user = _userGameObject.GetComponent<UserData>();
-        user.Init(gameEngine, CountPlayers(), ID, name, address, localPort, _userGameObject, isMe, userRole);
+        user.InitUserData(gameEngine, CountPlayers(), ID, name, address, localPort, _userGameObject, isMe, userRole);
 
         if (userRole != UserRole.Server )
         {
@@ -91,7 +93,7 @@ public class UserManager : MonoBehaviour
     }
 
 
-    public UserData AddNewUser(GameEngine gameEngine, int ID, string name, string address, int port, UserRole role, int rank)
+    public UserData AddNewUser(GameEngine gameEngine, int ID, string name, string address, int port, UserRole role)
     {
         GameObject go;
 
@@ -110,7 +112,7 @@ public class UserManager : MonoBehaviour
 
         UserData p = go.GetComponent<UserData>();
 
-        p.Init(gameEngine, CountPlayers(), ID, name, address, port, go, false, role);
+        p.InitUserData(gameEngine, CountPlayers(), ID, name, address, port, go, false, role);
         
         if (role == UserRole.Player) {
             ChangePlayerColor(p, whiteColor);
@@ -122,11 +124,12 @@ public class UserManager : MonoBehaviour
 
 
     public int CountPlayers(){
-        int i=0;
+        int i=0, j=0;
         foreach(UserData user in usersPlaying){
-            if(user._userRole == UserRole.Player) i+=1;
+            if(user._userRole == UserRole.Player || user._userRole == UserRole.Playback) i+=1;
+            if(user._userRole == UserRole.Playback) j =1;
         }
-        return i;
+        return i-j;
     }
 
 
@@ -154,8 +157,8 @@ public class UserManager : MonoBehaviour
                     if(user._userRole == UserRole.Player) ChangePlayerColor(user, whiteColor);
                 }
             else if(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == 1){
-                if(usersPlaying.Count>0) ChangePlayerColor(usersPlaying[0], playbackColor1);
-                if(usersPlaying.Count>1) ChangePlayerColor(usersPlaying[1], playbackColor2);
+                if(usersPlaying.Count>1) ChangePlayerColor(usersPlaying[1], playbackColor1);
+                if(usersPlaying.Count>2) ChangePlayerColor(usersPlaying[2], playbackColor2);
             }
             if (mode != "3B" && mode != "3Ca" && mode != "3Cb" && mode != "3Cc")
             {
@@ -388,10 +391,11 @@ public class UserManager : MonoBehaviour
 
     public int ReturnPlayerRank(int n) { // n may be equal to 1 or 2 (player1 or 2) 
         int r = 0;
-        int i = 0;
+        int i = 0, j = 0;
         foreach (UserData user in usersPlaying) {
-            if (user._userRole == UserRole.Player) r += 1; // if we find a player thats number r
-            if (r == n) return i; // if r was needed, return it
+            if (user._userRole == UserRole.Player || (user._userRole == UserRole.Playback)) r += 1; // if we find a player thats number r
+            if (user._userRole == UserRole.Playback ) j =1;
+            if (r == n) return i+j; // if r was needed, return it
             i++;
         }
         Debug.Log("Player not found");

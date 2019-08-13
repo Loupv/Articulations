@@ -1326,8 +1326,8 @@ GameObject:
   - component: {fileID: 8773243578296310769}
   - component: {fileID: 8773243578296310780}
   m_Layer: 0
-  m_Name: GestureDrawer
-  m_TagString: Untagged
+  m_Name: GestureAnalyser
+  m_TagString: GestureAnalyser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -26,7 +26,7 @@ public class UserData : MonoBehaviour
     public int _registeredRank;
 
 
-    public void Init(GameEngine gameEngine, int rank, int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, UserRole userRole)
+    public void InitUserData(GameEngine gameEngine, int rank, int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, UserRole userRole)
     {
         
         _ID = ID;
@@ -39,28 +39,23 @@ public class UserData : MonoBehaviour
         oscEndPoint.ip = address;
         oscEndPoint.remotePort = localPort;
 
-        if(userRole == UserRole.Player || userRole == UserRole.Playback){
+        if(userRole == UserRole.Player || (!isMe && userRole == UserRole.Playback)){
             head = pGameObject.transform.Find("Head").gameObject;
             leftHand = pGameObject.transform.Find("LeftHand").gameObject;
             rightHand = pGameObject.transform.Find("RightHand").gameObject;
         }
 
 
-        // things that change depending on this instance's mode
-        if((gameEngine._userRole == UserRole.Player && gameEngine.userManager.keepNamesVisibleForPlayers) // if we're a player and we decided to keep UI
-        || ((gameEngine._userRole == UserRole.Viewer || gameEngine._userRole == UserRole.Server 
-        || gameEngine._userRole == UserRole.Tracker) && _userRole == UserRole.Player)  // if we're a viewer and we instantiate a plyer
-        || (gameEngine._userRole == UserRole.Playback)) // if we're playback and we instantiate players to watch
-        {
-            headText = head.transform.Find("Canvas").Find("Text").GetComponent<UnityEngine.UI.Text>();
-            headText.text = _playerName;
-            if(gameEngine._userRole == UserRole.Playback) headText.gameObject.SetActive(false); // tmp for screen record
-        }
-        else if(gameEngine._userRole == UserRole.Player && !gameEngine.userManager.keepNamesVisibleForPlayers) // mask UI for players when not wanted
+        if(gameEngine._userRole == UserRole.Player && !gameEngine.userManager.keepNamesVisibleForPlayers) // mask UI for players when not wanted
         {
             headText = head.transform.Find("Canvas").Find("Text").GetComponent<UnityEngine.UI.Text>();
             headText.text = _playerName;
             headText.gameObject.SetActive(false);
+        }
+        else if(head != null){
+            headText = head.transform.Find("Canvas").Find("Text").GetComponent<UnityEngine.UI.Text>();
+            headText.text = _playerName;
+            if(gameEngine._userRole == UserRole.Playback) headText.gameObject.SetActive(false); // tmp for screen record
         }
 
 
@@ -86,7 +81,8 @@ public class UserData : MonoBehaviour
         else if (userRole == UserRole.Playback)
         {            
             PlaceUserPartsInScene(gameEngine, gameEngine.useVRHeadset, pGameObject, isMe); 
-            pGameObject.name = "Player" + _ID.ToString();
+            if(isMe) pGameObject.name = "Playback" + _ID.ToString();
+            else pGameObject.name = "PlaybackPlayer" + _ID.ToString();
             playerGameObject = pGameObject;
         }
         // VIEWER //
