@@ -33,8 +33,10 @@ public class Clock : MonoBehaviour
         recordingStartTs = Math.Round(System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000,2);
     }
 
+    // get timestamp in ms
     public double GetUnixTs(){
-        return(ts);
+        //return(ts);
+        return(Math.Round(System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000,2));
     }
 
     public double GetTimeSinceSceneStart(){

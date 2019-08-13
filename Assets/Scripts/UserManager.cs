@@ -422,6 +422,22 @@ public class UserManager : MonoBehaviour
         }
     }
 
+    public void EraseAllPlayers(){
+        foreach (UserData p in usersPlaying)
+        {
+            pendingPositionsActualizations.Remove(p._ID + "Head");
+            pendingPositionsActualizations.Remove(p._ID + "LeftHand");
+            pendingPositionsActualizations.Remove(p._ID + "RightHand");
+            pendingRotationsActualizations.Remove(p._ID + "Head");
+            pendingRotationsActualizations.Remove(p._ID + "LeftHand");
+            pendingRotationsActualizations.Remove(p._ID + "RightHand");
+            Destroy(p.gameObject);
+            Destroy(p);
+        }
+        usersPlaying.Clear();
+
+    }
+
 
     public void TranslateUser(){
         me.gameObject.transform.position += me.calibrationPositionGap;

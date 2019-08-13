@@ -22,7 +22,7 @@ public class UIHandler : MonoBehaviour
     public Sprite selectedButtonSprite, normalButtonSprite;
     public Toggle sendToAudioDeviceToggle, autoRecordPerformance, recordAudioAfterScenario;
     public Slider trailsDecaySlider;
-    public Text trailTime, conditionTimeRemaining, recordingTimeRemaining, currentConditionText, playbackTime;
+    public Text trailTime, conditionTimeRemaining, recordingTimeRemaining, currentConditionText, playbackTime, currentViz;
     private string scenarioMode;
     int tmpTimer;
 

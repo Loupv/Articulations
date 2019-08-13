@@ -83,7 +83,6 @@ public class GameEngine : MonoBehaviour
     public GameObject debugPrefab;
     public int targetFrameRate = 60;
 
-
     private void Start()
     {
         StartCoroutine(InitApplication());   
@@ -170,7 +169,7 @@ public class GameEngine : MonoBehaviour
 
         networkManager.InitNetwork(_userRole, gameData, uiHandler.OSCServerAddressInput.text);
 
-        userManager.ChangeVisualisationMode("0", this, false);
+        if(_userRole != UserRole.Playback) userManager.ChangeVisualisationMode("0", this, false);
 
 
         if (_userRole == UserRole.Server)
@@ -261,6 +260,9 @@ public class GameEngine : MonoBehaviour
         {
             UpdateGame();
         }
+
+
+        if(Input.GetKeyDown(KeyCode.Escape) && appState != AppState.Initializing) Restart();
     }
 
 
@@ -286,6 +288,38 @@ public class GameEngine : MonoBehaviour
 #if UnityEditor
         EditorApplication.ExecuteMenuItem("Edit/Play");
 #endif
+    }
+
+    public void Restart() {
+        Debug.Log("Restart");
+        
+        if(userManager.me._userRole == UserRole.Playback){
+            playbackManager.StopPlayback();
+        } 
+        else if (userManager.me._userRole == UserRole.Server){
+            osc.Close();
+        }
+
+        Camera.main.transform.parent = GameObject.Find("--------- Scene Objects ------------").transform;
+        userManager.EraseAllPlayers();
+        userManager = new UserManager();
+
+        StartCoroutine(InitApplication());
+
+        /*string[] endings = new string[]{
+            "exe", "x86", "x86_64", "app"
+        };
+        string executablePath = Application.dataPath + "/..";
+        foreach (string file in System.IO.Directory.GetFiles(executablePath)) {
+            foreach (string ending in endings) {
+                if (file.ToLower ().EndsWith ("." + ending)) {
+                    System.Diagnostics.Process.Start (executablePath + file);
+                    Application.Quit ();
+                    return;
+                }
+            }
+                
+        }*/
     }
 
 

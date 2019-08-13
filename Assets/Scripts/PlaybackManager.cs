@@ -8,28 +8,26 @@ public class PlaybackManager : MonoBehaviour
     public GameEngine gameEngine;
     public bool play, addGestureAnalyser;
     public GameObject gestureAnalyserPrefab;
-    public int currentRecordLine = 0;
-    double lastTime;
+    public int currentRecordLine;
     PerformanceLine currentLine;
     public int playerNumber, mode;
     public float performanceMaxTime;
-    Clock clock;
-    private double startTs;
-    string currentViz;
+    public double floatTimeTracker, playbackSpeed;
+    string currentViz = "null";
     [HideInInspector]
     
 
     void Start(){
-        //ChangePlaybackMode();
-        clock = FindObjectOfType<Clock>();
+
     }
 
     public void StartPlayback(GameEngine ge){
         gameEngine = ge;
         play = true;
+        currentRecordLine = 0;
         if(addGestureAnalyser) GameObject.Instantiate(gestureAnalyserPrefab);
-        Invoke("UpdatePlayback",0f);
-        startTs = clock.GetUnixTs();
+        
+        InvokeRepeating("UpdatePlayback",0f,1/(float)gameEngine.targetFrameRate);
     }
 
     void UpdatePlayback()
@@ -60,26 +58,14 @@ public class PlaybackManager : MonoBehaviour
             } 
 
             gameEngine.uiHandler.playbackTime.text = "Playback Time : "+(currentLine.Time/1000).ToString()+" / "+performanceMaxTime;
+            gameEngine.uiHandler.currentViz.text = "Current viz : "+currentLine.Condition;
 
-            //float timeToWait = (float)(currentLine.Time - lastTime)/1000;
-            double realTimeElapsed = (clock.GetUnixTs() - startTs)/1000;
-            double csvTimeElapsed =  (currentLine.TimeStamp - performanceFile.lines[0].TimeStamp)/1000 ;
-
-            lastTime = currentLine.Time;
-            
-            float timeToWait = 0;
-
-            if(Mathf.Abs((float)realTimeElapsed - (float)csvTimeElapsed) > 1/gameEngine.targetFrameRate){ // if csv playback is ahead or too late
-                timeToWait = (float)(csvTimeElapsed - realTimeElapsed);
-                if(timeToWait <0 ) timeToWait = 0;
-            }
-
-            Debug.Log(realTimeElapsed+", "+csvTimeElapsed);
-            currentRecordLine += 1 ;
-            if(currentRecordLine >= performanceFile.lines.Count) currentRecordLine = 0;           
-            
-            Invoke("UpdatePlayback", timeToWait);
-    
+            // the loop is set to run at 60fps, the record file has 60fps, so we need to read 1 lines per frame * desired speed
+            floatTimeTracker += (double)gameEngine.targetFrameRate/(double)gameEngine.gameData.saveFileFrequency * playbackSpeed;
+            currentRecordLine = (int)floatTimeTracker ; // we round the frame number
+            if(currentRecordLine >= performanceFile.lines.Count){
+                currentRecordLine = 0;
+            } 
         }
     }
 
@@ -98,6 +84,10 @@ public class PlaybackManager : MonoBehaviour
             gameEngine.uiHandler.switchPlaybackPlayer.gameObject.SetActive(false);
             gameEngine.uiHandler.OSCServerAddressInput.gameObject.SetActive(false);
         }
+    }
+
+    public void StopPlayback(){
+        CancelInvoke("UpdatePlayback");
     }
     
 }
