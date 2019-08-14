@@ -40,6 +40,8 @@ public class EyeswebOSC : MonoBehaviour
             foreach(GameObject objectToTrack in gestureVisualiser.p1ObjectsToTrack){
                 message = new OscMessage();
                 message.address = "/P1_"+objectToTrack.name+"_PositionXYZ";
+                //message.values.Add(Math.Round(objectToTrack.transform.position.x,2);
+                
                 message.values.Add(objectToTrack.transform.position.x);
                 message.values.Add(objectToTrack.transform.position.y);
                 message.values.Add(objectToTrack.transform.position.z);

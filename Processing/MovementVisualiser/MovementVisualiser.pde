@@ -231,4 +231,17 @@ void oscEvent(OscMessage message)
 
     dataListP2.add(new SummarySample(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, timeStamp, h1));
   }
+  else if (message.checkAddrPattern("/Tests") == true)
+  {
+
+    float f1 = message.get(0).floatValue();
+    float f2 = message.get(1).floatValue();
+    float f3 = message.get(2).floatValue();
+    
+    String timeStamp = message.get(3).stringValue();
+    //float h1 = message.get(11).floatValue();
+
+
+    dataListP2.add(new SummarySample(f1, f2, f3, 0,0,0,0,0,0,0, timeStamp, 0));
+  }
 }
