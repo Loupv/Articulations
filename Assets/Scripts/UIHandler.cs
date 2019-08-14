@@ -14,14 +14,14 @@ public class UIHandler : MonoBehaviour
         autoMode, manualMode, launchScenario, pauseScenario;
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
     public ViewerController viewerController;
-    public InputField OSCServerAddressInput, sessionIDInputBox;
+    public InputField OSCServerAddressInput, sessionIDInputBox, playbackSpeedInputField;
     public GameObject serverManualModeParent, serverAutoModeParent;
     public GameObject clientGOParent, playerNameTextBox, serverGOParent, playbackGOParent;
     public GameObject recordGizmo, pauseGizmo;
     public Dropdown scenarioDropDown, onlineOfflinePlaybackMode, switchPerformanceDataFile, switchPlaybackPlayer;
     public Sprite selectedButtonSprite, normalButtonSprite;
     public Toggle sendToAudioDeviceToggle, autoRecordPerformance, recordAudioAfterScenario;
-    public Slider trailsDecaySlider;
+    public Slider trailsDecaySlider, playbackSpeedSlider;
     public Text trailTime, conditionTimeRemaining, recordingTimeRemaining, currentConditionText, playbackTime, currentViz;
     private string scenarioMode;
     int tmpTimer;
@@ -209,7 +209,17 @@ public class UIHandler : MonoBehaviour
         userManager.ChangeVisualisationMode(i, gameEngine, false);
     }
 
-    
+    public void ChangePlaybackSpeedSlider(){
+        gameEngine.playbackManager.playbackSpeed = playbackSpeedSlider.value;
+        playbackSpeedInputField.text = Math.Round(playbackSpeedSlider.value, 1).ToString().Replace(",",".");
+    }
+    public void ChangePlaybackSpeedTextField(){
+        float tmpValue = float.Parse(playbackSpeedInputField.text.Replace(".",","));
+        if(tmpValue > playbackSpeedSlider.maxValue) tmpValue = playbackSpeedSlider.maxValue;
+        else if(tmpValue < playbackSpeedSlider.minValue) tmpValue = playbackSpeedSlider.minValue;
+        playbackSpeedSlider.value = tmpValue;
+        gameEngine.playbackManager.playbackSpeed = tmpValue;
+    }
 
 
     public void ActualizeGizmos(bool isRecording, bool isPaused){

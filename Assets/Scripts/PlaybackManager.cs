@@ -24,7 +24,6 @@ public class PlaybackManager : MonoBehaviour
 
     public void StartPlayback(){
         play = true;
-        currentRecordLine = 0;
         floatTimeTracker = 0;
         if(addGestureAnalyser) GameObject.Instantiate(gestureAnalyserPrefab);
         Debug.Log("Launching playback");
@@ -64,8 +63,14 @@ public class PlaybackManager : MonoBehaviour
             // the loop is set to run at 60fps, the record file has 60fps, so we need to read 1 lines per frame * desired speed
             floatTimeTracker += (double)gameEngine.targetFrameRate/(double)gameEngine.gameData.saveFileFrequency * playbackSpeed;
             currentRecordLine = (int)floatTimeTracker ; // we round the frame number
-            if(currentRecordLine >= performanceFile.lines.Count){
+            
+            if(floatTimeTracker >= performanceFile.lines.Count){
+                floatTimeTracker = 0;
                 currentRecordLine = 0;
+            } 
+            else if(floatTimeTracker < 0){
+                floatTimeTracker = performanceFile.lines.Count-1;
+                currentRecordLine = performanceFile.lines.Count-1;
             } 
         }
     }
@@ -85,6 +90,10 @@ public class PlaybackManager : MonoBehaviour
             gameEngine.uiHandler.switchPlaybackPlayer.gameObject.SetActive(false);
             gameEngine.uiHandler.OSCServerAddressInput.gameObject.SetActive(false);
         }
+    }
+
+    public void JumpToCondition(int i){
+        floatTimeTracker = performanceFile.lines.Count/3 * (i-1);
     }
 
     public void PausePlayback(){

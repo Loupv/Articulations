@@ -112,7 +112,7 @@ public class ScenarioEvents : MonoBehaviour
     }
 
 
-
+    // run every second, actualize timer and checks if condition needs to be changes
     public void RunCondition(){
 
         if(!timerPaused){

@@ -53,15 +53,15 @@ public class GestureVisualiser : MonoBehaviour
             
             if(usersPlaying.Count > 0){
                 p1ObjectsToTrack = new GameObject[3];
-                p1ObjectsToTrack[0] = usersPlaying[0].head;
-                p1ObjectsToTrack[1] = usersPlaying[0].leftHand;
-                p1ObjectsToTrack[2] = usersPlaying[0].rightHand;
+                p1ObjectsToTrack[0] = usersPlaying[1].head;
+                p1ObjectsToTrack[1] = usersPlaying[1].leftHand;
+                p1ObjectsToTrack[2] = usersPlaying[1].rightHand;
             }
             if(usersPlaying.Count > 0){
                 p2ObjectsToTrack = new GameObject[3];
-                p2ObjectsToTrack[0] = usersPlaying[1].head;
-                p2ObjectsToTrack[1] = usersPlaying[1].leftHand;
-                p2ObjectsToTrack[2] = usersPlaying[1].rightHand;
+                p2ObjectsToTrack[0] = usersPlaying[2].head;
+                p2ObjectsToTrack[1] = usersPlaying[2].leftHand;
+                p2ObjectsToTrack[2] = usersPlaying[2].rightHand;
             }
 
         usersPerformanceData.Add(new UserPerformanceData());

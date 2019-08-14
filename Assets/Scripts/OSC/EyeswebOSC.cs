@@ -79,7 +79,6 @@ public class EyeswebOSC : MonoBehaviour
 
 
     void GetFloatFromOsc(OscMessage message){
-        Debug.Log("received");
         int playerID = message.GetInt(0);
         int handedness = message.GetInt(1);
         float f1 = message.GetFloat(2);
