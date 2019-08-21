@@ -18,7 +18,7 @@ public class EyeswebOSC : MonoBehaviour
 		
         osc.SetAddressHandler("/MovementData", GetFloatFromOsc);
         initialized = true;
-
+        Debug.Log("eyesweb osc init");
         gameEngine = FindObjectOfType<GameEngine>();
         
         drawer1 = gestureVisualiser.transform.Find("Mesh1").GetComponent<DrawShape>();
@@ -88,6 +88,7 @@ public class EyeswebOSC : MonoBehaviour
         float f3 = message.GetFloat(4);
         float f4 = message.GetFloat(5);
         float f5 = message.GetFloat(6);
+        int activity = message.GetInt(7);
 
         if(handedness == 1){
             gestureVisualiser.usersPerformanceData[playerID-1].leftHand.speed = f1;
@@ -95,6 +96,7 @@ public class EyeswebOSC : MonoBehaviour
             gestureVisualiser.usersPerformanceData[playerID-1].leftHand.jerk = f3;
             gestureVisualiser.usersPerformanceData[playerID-1].leftHand.curvature = f4;
             gestureVisualiser.usersPerformanceData[playerID-1].leftHand.smoothness = f5;
+            gestureVisualiser.usersPerformanceData[playerID-1].leftHand.activity = activity;
         } 
         else if(handedness == 2){
             gestureVisualiser.usersPerformanceData[playerID-1].rightHand.speed = f1;
@@ -102,6 +104,7 @@ public class EyeswebOSC : MonoBehaviour
             gestureVisualiser.usersPerformanceData[playerID-1].rightHand.jerk = f3;
             gestureVisualiser.usersPerformanceData[playerID-1].rightHand.curvature = f4;
             gestureVisualiser.usersPerformanceData[playerID-1].rightHand.smoothness = f5;
+            gestureVisualiser.usersPerformanceData[playerID-1].rightHand.activity = activity;
         } 
 
     }

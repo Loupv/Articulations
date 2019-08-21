@@ -17,6 +17,7 @@ public class PlayerPartInfos{
     public float curvature;
     public float smoothness;
     public float contraction;
+    public int activity;
 
 }
 
@@ -101,12 +102,14 @@ public class GestureVisualiser : MonoBehaviour
         p1DebugText[2].text = "p1jerk : "+usersPerformanceData[0].leftHand.jerk.ToString();
         p1DebugText[3].text = "p1curv : "+usersPerformanceData[0].leftHand.curvature.ToString();
         p1DebugText[4].text = "p1smooth : "+usersPerformanceData[0].leftHand.smoothness.ToString();
+        p1DebugText[5].text = "p1activity : "+usersPerformanceData[0].leftHand.activity.ToString();
 
-        p1DebugText[5].text = "p1speed : "+usersPerformanceData[0].rightHand.speed.ToString();
-        p1DebugText[6].text = "p1acc : "+usersPerformanceData[0].rightHand.acceleration.ToString();
-        p1DebugText[7].text = "p1jerk : "+usersPerformanceData[0].rightHand.jerk.ToString();
-        p1DebugText[8].text = "p1curv : "+usersPerformanceData[0].rightHand.curvature.ToString();
-        p1DebugText[9].text = "p1smooth : "+usersPerformanceData[0].rightHand.smoothness.ToString();
+        p1DebugText[6].text = "p1speed : "+usersPerformanceData[0].rightHand.speed.ToString();
+        p1DebugText[7].text = "p1acc : "+usersPerformanceData[0].rightHand.acceleration.ToString();
+        p1DebugText[8].text = "p1jerk : "+usersPerformanceData[0].rightHand.jerk.ToString();
+        p1DebugText[9].text = "p1curv : "+usersPerformanceData[0].rightHand.curvature.ToString();
+        p1DebugText[10].text = "p1smooth : "+usersPerformanceData[0].rightHand.smoothness.ToString();
+        p1DebugText[11].text = "p1activity : "+usersPerformanceData[0].rightHand.activity.ToString();
 
         p2DebugText[0].text = "p2speed : "+usersPerformanceData[1].leftHand.speed.ToString();
         p2DebugText[1].text = "p2acc : "+usersPerformanceData[1].leftHand.acceleration.ToString();
