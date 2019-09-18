@@ -145,7 +145,7 @@ public class UserManager : MonoBehaviour
             if(mode == "0") gameEngine.scenarioEvents.SetTimeOfDay(6);            
             else gameEngine.scenarioEvents.SetTimeOfDay(8);
 
-            if(_hasLerped && (mode != "1Ca" || mode != "1Cb" || mode != "1Cc")) RevertLerping();
+            if(_hasLerped && (mode != "1Ca" || mode != "1Cb" || mode != "1Cc")) RevertLerping(); // TODO corriger ici
 
             if((mode != "2B" && mode !="2C" && gameEngine.scenarioEvents.mirrorAct) || 
             ((mode == "2B" || mode =="2C") && !gameEngine.scenarioEvents.mirrorAct)) 

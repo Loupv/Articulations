@@ -80,10 +80,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd4374478a25bf49bfc0a878d9fbd71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnSpeed: 4
-  panSpeed: 4
-  zoomSpeed: 4
-  translateSpeed: 0.3
+  turnSpeed: 1
+  panSpeed: 1
+  zoomSpeed: 1
+  translateSpeed: 0.01
   isFollowing1: 0
   isFollowing2: 0
   followingPlayerID: 0

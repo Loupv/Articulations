@@ -307,11 +307,15 @@ public class GameEngine : MonoBehaviour
         else if (_userRole == UserRole.Server){
             osc.Close();
         }
-
+        else if(_userRole == UserRole.Player){
+            if(audioRecordManager.isRecording) audioRecordManager.Stop();
+        }
+        
         Camera.main.transform.parent = GameObject.Find("--------- Scene Objects ------------").transform;
         userManager.EraseAllPlayers();
         userManager = new UserManager();
         osc.sender.SendQuitMessage(_userRole);
+        StopAllCoroutines();
         StartCoroutine(InitApplication());
 
         /*string[] endings = new string[]{
