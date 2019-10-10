@@ -173,17 +173,18 @@ public class ReceiveOSC : MonoBehaviour {
         if(gameEngine.debugMode) Debug.Log("Received : "+message);
         
         int playerID = message.GetInt(0);
+        int registeredRank = message.GetInt(1);
         string playerPart="none";
-        if(message.GetInt(1) == 0) playerPart = "Head";
-        else if (message.GetInt(1) == 1) playerPart = "LeftHand";
-        else if (message.GetInt(1) == 2) playerPart = "RightHand";
-        float xPos = message.GetFloat(2);
-        float yPos = message.GetFloat(3);
-        float zPos = message.GetFloat(4);
-        float xRot = message.GetFloat(5);
-        float yRot = message.GetFloat(6);
-        float zRot = message.GetFloat(7);
-        float wRot = message.GetFloat(8);
+        if(message.GetInt(2) == 0) playerPart = "Head";
+        else if (message.GetInt(2) == 1) playerPart = "LeftHand";
+        else if (message.GetInt(2) == 2) playerPart = "RightHand";
+        float xPos = message.GetFloat(3);
+        float yPos = message.GetFloat(4);
+        float zPos = message.GetFloat(5);
+        float xRot = message.GetFloat(6);
+        float yRot = message.GetFloat(7);
+        float zRot = message.GetFloat(8);
+        float wRot = message.GetFloat(9);
 
         if (playerID != gameEngine._user._ID) // if is not me
         {

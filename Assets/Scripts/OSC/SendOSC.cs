@@ -86,6 +86,7 @@ public class SendOSC : MonoBehaviour {
             message = new OscMessage();
             message.address =  "/PlayerData";
             message.values.Add(userData._ID);
+            message.values.Add(userData._registeredRank);
 
             if(playerPart == 0){ 
                 pos = userData.head.transform.position- userData.calibrationPositionGap;
@@ -122,6 +123,18 @@ public class SendOSC : MonoBehaviour {
         }
     }
 
+    public void SendTimeStampData(OSCEndPoint targetEndPoint){
+        double ts = gameEngine.clock.GetTimeSinceSceneStart();
+        
+        message = new OscMessage();
+        message.address = "/TimeStamp";
+        message.values.Add(ts.ToString());
+
+        osc.OscPacketIO.RemoteHostName = targetEndPoint.ip;
+        osc.OscPacketIO.RemotePort = targetEndPoint.remotePort;
+
+        osc.Send(message);
+    }
 
     public void SendUserDataToAudioSystem(UserData userData, OSCEndPoint audioHandlerEndPoint){
         
@@ -340,6 +353,8 @@ public class SendOSC : MonoBehaviour {
         }
 
     }
+
+
 
 /*
     -------------------------------------

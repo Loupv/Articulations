@@ -119,9 +119,16 @@ public class GameEngine : MonoBehaviour
         // load jsons
         fileInOut.LoadPreferencesFiles(this);
 
-        // change UI and gameData depending on actual conditions
-        gameData = uiHandler.AdjustBasicUIParameters(gameData, CheckIp()); 
+        if (gameData.runInLocal == 1) {
+            gameData.OSC_LocalIP = "127.0.0.1";
+        }
+        else {
+            gameData.OSC_LocalIP = CheckIp();
+        }
 
+        // change UI's server IP field
+        uiHandler.FillServerIPField(gameData.runInLocal, gameData.OSC_ServerIP); 
+        
         userManager.keepNamesVisibleForPlayers = (gameData.keepNamesVisibleForPlayers == 1);
 
         // sonification
@@ -147,14 +154,19 @@ public class GameEngine : MonoBehaviour
     // Start the performance when button's pressed
     public void StartGame()
     {
+        
         int ID = UnityEngine.Random.Range(0, 10000); 
         if(clock != null) clock.SetSceneStartTs();
 
         string tmpIp;
-        if(gameData.runInLocal == 1) tmpIp = "127.0.0.1";
+        if(gameData.runInLocal == 1){ 
+            tmpIp = gameData.OSC_LocalIP;
+            if(_userRole != UserRole.Server && !(_userRole == UserRole.Playback && playbackManager.mode == 1)) 
+                gameData.OSC_ClientPort = UnityEngine.Random.Range(5555,8888);
+        }
         else {
             tmpIp = uiHandler.OSCServerAddressInput.text;
-            gameData.OSC_ServerIP = tmpIp;
+            gameData.OSC_ServerIP = tmpIp; // put back written address into gamedata object
         }
 
         string n = uiHandler.playerNameTextBox.GetComponentInChildren<UnityEngine.UI.InputField>().text;
@@ -279,7 +291,7 @@ public class GameEngine : MonoBehaviour
     {
         
         if(_userRole == UserRole.Player || (_userRole == UserRole.Playback && playbackManager.mode == 0)){
-            networkManager.SendOwnPosition(_user, networkManager.serverEndpoint); // don't send if you're viewer
+            networkManager.SendOwnPosition(_user); // don't send if you're viewer
         }
         else if(_userRole == UserRole.Server){
             networkManager.SendAllPositionsToClients(userManager.usersPlaying);
@@ -299,6 +311,7 @@ public class GameEngine : MonoBehaviour
     }
 
     public void Restart() {
+        OnApplicationQuit();
         Debug.Log("Restart");
         
         if(_userRole == UserRole.Playback){
@@ -317,7 +330,10 @@ public class GameEngine : MonoBehaviour
         osc.sender.SendQuitMessage(_userRole);
         StopAllCoroutines();
         StartCoroutine(InitApplication());
-
+        
+        networkManager.eyeswebOSC.gameObject.SetActive(true);
+        networkManager.eyeswebOSC.initialized = false;
+        
         /*string[] endings = new string[]{
             "exe", "x86", "x86_64", "app"
         };

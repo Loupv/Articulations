@@ -36,19 +36,15 @@ public class UIHandler : MonoBehaviour
         ScenarioModeSwitch(1);
     }
 
-    public GameData AdjustBasicUIParameters(GameData gameData, string tmpIp){
+    public void FillServerIPField(int runInLocal, string serverIP){
 
-        if (gameData.runInLocal == 1) {
+        if (runInLocal == 1) {
             OSCServerAddressInput.text = "127.0.0.1";
-            gameData.OSC_LocalIP = "127.0.0.1";
-            gameData.OSC_ClientPort = UnityEngine.Random.Range(5555,8888);
         }
         else {
-            OSCServerAddressInput.text = gameData.OSC_ServerIP;
-            gameData.OSC_LocalIP = tmpIp;
+            OSCServerAddressInput.text = serverIP;
+            
         }
-        return gameData;
-
     }
 
     public void SetPlayerNetworkType(int i) // 0 for server, 1 for client

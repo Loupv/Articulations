@@ -13,6 +13,7 @@ public class NetworkManager : MonoBehaviour
     public string serverAddress;  
     public Image oscToggle;
     public OSCEndPoint serverEndpoint;
+    public EyeswebOSC eyeswebOSC;
 
 
     public void InitNetwork(UserRole userRole, GameData gameData, string uiServerIP){
@@ -23,7 +24,7 @@ public class NetworkManager : MonoBehaviour
         int inPort;
         int outPort;
 
-        if (userRole == UserRole.Server)
+        if (userRole == UserRole.Server || (userRole == UserRole.Playback && gameEngine.playbackManager.mode == 1)) // if server of offline playback
         {
             inPort = gameData.OSC_ServerPort;
             outPort = gameData.OSC_ClientPort;
@@ -31,7 +32,7 @@ public class NetworkManager : MonoBehaviour
         else
         {
             inPort = gameData.OSC_ClientPort;
-            outPort = gameData.OSC_ServerPort;    
+            outPort = gameData.OSC_ServerPort;   
         }
 
         osc.inPort = inPort;
@@ -39,13 +40,21 @@ public class NetworkManager : MonoBehaviour
         osc.outIP = uiServerIP;
         osc.Init();
 
+        eyeswebOSC = GetComponentInChildren<EyeswebOSC>();
+        if(userRole == UserRole.Server || userRole == UserRole.Playback) {
+            eyeswebOSC.gameObject.SetActive(true);
+            eyeswebOSC.Init(userRole);
+        }
+        else if(eyeswebOSC != null) eyeswebOSC.gameObject.SetActive(false); 
+        
+
         print("OSC Connexion initiation to " + osc.outIP + " : " + osc.outPort + "/" + osc.inPort);
         
     }
 
 
     // client only
-    public void SendOwnPosition(UserData user, OSCEndPoint serverEndPoint)
+    public void SendOwnPosition(UserData user)
     {        
         osc.sender.SendClientOSCPosition(user, 0);
         osc.sender.SendClientOSCPosition(user, 1);

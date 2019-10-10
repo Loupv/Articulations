@@ -321,7 +321,7 @@ GameObject:
   - component: {fileID: 4513076388749458746}
   m_Layer: 0
   m_Name: PlayerPrefab
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -363,6 +363,9 @@ MonoBehaviour:
   leftHand: {fileID: 9222922122757715101}
   rightHand: {fileID: 3032238610968161557}
   headText: {fileID: 0}
+  calibrationPositionGap: {x: 0, y: 0, z: 0}
+  calibrationRotationGap: {x: 0, y: 0, z: 0, w: 0}
+  _registeredRank: 0
 --- !u!114 &4513076388749458746
 MonoBehaviour:
   m_ObjectHideFlags: 0
