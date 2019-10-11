@@ -32,7 +32,7 @@ public class PerformanceRecorder : MonoBehaviour
        filePath = Application.dataPath +"/StreamingAssets/Recordings/";
        if(!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
        sessionID = Directory.GetFiles(filePath).Length +1;
-       uiHandler.sessionIDInputBox.text = sessionID.ToString();
+       uiHandler.sessionIDInputBox.text = sessionID.ToString(); // session ID is by default the number of files in performance folder
        clock = FindObjectOfType<Clock>();
     }
 
@@ -40,7 +40,7 @@ public class PerformanceRecorder : MonoBehaviour
     {
         //startTime = Time.time * 1000;
         saveRate = 1/(float)gameEngine.gameData.saveFileFrequency;
-        fileName = System.DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".csv";
+        fileName = System.DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss")+"_S"+ sessionID + ".csv";
         conditionPattern = gameEngine.scenarioEvents.GetScenarioConditionsPattern();
 
         if (File.Exists(filePath+fileName))

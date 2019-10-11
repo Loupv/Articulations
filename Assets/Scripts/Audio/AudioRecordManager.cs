@@ -20,10 +20,10 @@ public class AudioRecordManager : MonoBehaviour
     {
         sessionID = id;
 
-        audioDirPath = Application.dataPath + "/StreamingAssets/SoundRecords/P" + gameEngine.userManager.me._registeredRank + "_" + System.DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss");
+        audioDirPath = Application.dataPath + "/StreamingAssets/SoundRecords/"+System.DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss")+"_S"+sessionID+"_P" + (gameEngine.userManager.me._registeredRank+1) ;
 
         microphoneName = new string[Microphone.devices.Length];
-       
+        
         postScenarioRecordingLenght = audioRecordTime;
         audioSource = GetComponent<AudioSource>();
 

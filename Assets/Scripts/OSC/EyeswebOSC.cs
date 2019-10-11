@@ -43,6 +43,7 @@ public class EyeswebOSC : MonoBehaviour
     UserPerformanceData player1PerformanceData, player2PerformanceData;
     SharedPerformanceData sharedPerformanceData;
     public int customEyeswebPort;
+    public bool drawBarycenter;
     GameObject barycenter;
     //private DrawShape drawer1, drawer2;
     public bool initialized;
@@ -71,9 +72,11 @@ public class EyeswebOSC : MonoBehaviour
         
         initialized = true;
         Debug.Log("Eyesweb osc initialized");
-        barycenter = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        barycenter.transform.localScale *= 0.15f;
-        //osc = new OSC();
+        if(drawBarycenter){
+            barycenter = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            barycenter.transform.localScale *= 0.15f;
+            //osc = new OSC();
+        }
     }
 	
 
@@ -154,7 +157,7 @@ if(message.address.Contains("P1") || message.address.Contains("P2")){
             sharedPerformanceData.playersBarycenter.x = message.GetFloat(1);
             sharedPerformanceData.playersBarycenter.y = message.GetFloat(2);
             sharedPerformanceData.playersBarycenter.z = message.GetFloat(3);
-            barycenter.transform.position = sharedPerformanceData.playersBarycenter;
+            if(drawBarycenter) barycenter.transform.position = sharedPerformanceData.playersBarycenter;
             Debug.Log("Shared");
         } 
 
