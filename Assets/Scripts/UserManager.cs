@@ -345,13 +345,15 @@ public class UserManager : MonoBehaviour
 
     public void StoreUserParts(UserData user) {
 
-        pendingPositionsActualizations.Add(user._ID + "Head", user.head.transform.position);
-        pendingPositionsActualizations.Add(user._ID + "LeftHand", user.leftHand.transform.position);
-        pendingPositionsActualizations.Add(user._ID + "RightHand", user.rightHand.transform.position);
-        pendingRotationsActualizations.Add(user._ID + "Head", user.head.transform.rotation);
-        pendingRotationsActualizations.Add(user._ID + "LeftHand", user.leftHand.transform.rotation);
-        pendingRotationsActualizations.Add(user._ID + "RightHand", user.rightHand.transform.rotation);
-
+        if (!pendingPositionsActualizations.ContainsKey(user._ID + "Head"))
+        {
+            pendingPositionsActualizations.Add(user._ID + "Head", user.head.transform.position);
+            pendingPositionsActualizations.Add(user._ID + "LeftHand", user.leftHand.transform.position);
+            pendingPositionsActualizations.Add(user._ID + "RightHand", user.rightHand.transform.position);
+            pendingRotationsActualizations.Add(user._ID + "Head", user.head.transform.rotation);
+            pendingRotationsActualizations.Add(user._ID + "LeftHand", user.leftHand.transform.rotation);
+            pendingRotationsActualizations.Add(user._ID + "RightHand", user.rightHand.transform.rotation);
+        }
     }
 
 
@@ -429,7 +431,7 @@ public class UserManager : MonoBehaviour
     }
 
     public void EraseAllPlayers() {
-        foreach (UserData p in usersPlaying)
+        /*foreach (UserData p in usersPlaying)
         {
             pendingPositionsActualizations.Remove(p._ID + "Head");
             pendingPositionsActualizations.Remove(p._ID + "LeftHand");
@@ -439,9 +441,20 @@ public class UserManager : MonoBehaviour
             pendingRotationsActualizations.Remove(p._ID + "RightHand");
             Destroy(p.gameObject);
             Destroy(p);
-        }
+        }*/
+        Debug.Log("Erasing All players");
+        pendingPositionsActualizations.Clear();
+        pendingPositionsActualizations = new Dictionary<string, Vector3>();
+        Debug.Log(pendingPositionsActualizations.Count);
+        pendingRotationsActualizations.Clear();
+        pendingRotationsActualizations = new Dictionary<string, Quaternion>();
         usersPlaying.Clear();
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Viewer")) {
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Viewer"))
+        {
+            Destroy(go);
+        }
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+        {
             Destroy(go);
         }
     }
