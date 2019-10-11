@@ -22,8 +22,8 @@ public class UserManager : MonoBehaviour
     private float lerpDuration;
     private float distanceToMove;
     private bool _isLerping, _hasLerped;
-    private Vector3 [] _startPositionRightHand = new Vector3[8], _startPositionLeftHand = new Vector3[8];
-    private Vector3 [] _endPositionRightHand = new Vector3[8], _endPositionLeftHand = new Vector3[8];
+    private Vector3[] _startPositionRightHand = new Vector3[8], _startPositionLeftHand = new Vector3[8];
+    private Vector3[] _endPositionRightHand = new Vector3[8], _endPositionLeftHand = new Vector3[8];
     private Vector3[] _initialPositionRightHand, _initialPositionLeftHand;
     private float _timeStartedLerping;
     // end of arm extension variables
@@ -49,11 +49,13 @@ public class UserManager : MonoBehaviour
         whiteColor = Color.white;
         cyanColor = Color.cyan;
 
-        playbackColor1 = new Color(0.8f,0.8f,0.8f);
-        playbackColor2 = new Color(0.6f,0.6f,0.6f);
+        playbackColor1 = new Color(0.8f, 0.8f, 0.8f);
+        playbackColor2 = new Color(0.6f, 0.6f, 0.6f);
 
+        GetInitialArmsPositions();  // this is needed once to reverse all arm extension that may occur
         trailsCondition = null;
         trailsRelated = false;
+
     }
 
 
@@ -77,11 +79,11 @@ public class UserManager : MonoBehaviour
         UserData user = _userGameObject.GetComponent<UserData>();
         user.InitUserData(gameEngine, CountPlayers(), ID, name, address, localPort, _userGameObject, isMe, userRole);
 
-        if (userRole != UserRole.Server )
+        if (userRole != UserRole.Server)
         {
             usersPlaying.Add(user);
-            if(userRole == UserRole.Player) StoreUserParts(user);
-            foreach(GameObject model in GameObject.FindGameObjectsWithTag("SteamModel"))
+            if (userRole == UserRole.Player) StoreUserParts(user);
+            foreach (GameObject model in GameObject.FindGameObjectsWithTag("SteamModel"))
             {
                 model.SetActive(false);
             }
@@ -113,7 +115,7 @@ public class UserManager : MonoBehaviour
         UserData p = go.GetComponent<UserData>();
 
         p.InitUserData(gameEngine, CountPlayers(), ID, name, address, port, go, false, role);
-        
+
         if (role == UserRole.Player) {
             ChangePlayerColor(p, whiteColor);
             StoreUserParts(p);
@@ -123,42 +125,42 @@ public class UserManager : MonoBehaviour
     }
 
 
-    public int CountPlayers(){
-        int i=0, j=0;
-        foreach(UserData user in usersPlaying){
-            if(user._userRole == UserRole.Player || user._userRole == UserRole.Playback) i+=1;
-            if(user._userRole == UserRole.Playback) j =1;
+    public int CountPlayers() {
+        int i = 0, j = 0;
+        foreach (UserData user in usersPlaying) {
+            if (user._userRole == UserRole.Player || user._userRole == UserRole.Playback) i += 1;
+            if (user._userRole == UserRole.Playback) j = 1;
         }
-        return i-j;
+        return i - j;
     }
 
 
     public void ChangeVisualisationMode(string mode, GameEngine gameEngine, bool fade) {
 
-        if(!fade){
+        if (!fade) {
             // for clients
-            if(me._userRole == UserRole.Server)
+            if (me._userRole == UserRole.Server)
                 gameEngine.osc.sender.SendVisualisationChange(mode, usersPlaying);
 
             // main parameters
             // TODO CLEAN THIS PART
-            if(mode == "0") gameEngine.scenarioEvents.SetTimeOfDay(6);            
+            if (mode == "0") gameEngine.scenarioEvents.SetTimeOfDay(6);
             else gameEngine.scenarioEvents.SetTimeOfDay(8);
 
-            if(_hasLerped && (mode != "1Ca" || mode != "1Cb" || mode != "1Cc")) RevertLerping(); // TODO corriger ici
+            if (_hasLerped && (mode != "1Ca" || mode != "1Cb" || mode != "1Cc")) ReverseArmsLerping(); // TODO corriger ici
 
-            if((mode != "2B" && mode !="2C" && gameEngine.scenarioEvents.mirrorAct) || 
-            ((mode == "2B" || mode =="2C") && !gameEngine.scenarioEvents.mirrorAct)) 
+            if ((mode != "2B" && mode != "2C" && gameEngine.scenarioEvents.mirrorAct) ||
+            ((mode == "2B" || mode == "2C") && !gameEngine.scenarioEvents.mirrorAct))
                 gameEngine.scenarioEvents.ToggleMirror();
 
-            if (mode != "2C"  && !(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == 1)) // if we're in playback offline mode, we keep different colors
+            if (mode != "2C" && !(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == 1)) // if we're in playback offline mode, we keep different colors
                 foreach (UserData user in usersPlaying)
                 {
-                    if(user._userRole == UserRole.Player) ChangePlayerColor(user, whiteColor);
+                    if (user._userRole == UserRole.Player) ChangePlayerColor(user, whiteColor);
                 }
-            else if(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == 1){
-                if(usersPlaying.Count>1) ChangePlayerColor(usersPlaying[1], playbackColor1);
-                if(usersPlaying.Count>2) ChangePlayerColor(usersPlaying[2], playbackColor2);
+            else if (gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == 1) {
+                if (usersPlaying.Count > 1) ChangePlayerColor(usersPlaying[1], playbackColor1);
+                if (usersPlaying.Count > 2) ChangePlayerColor(usersPlaying[2], playbackColor2);
             }
             if (mode != "3B" && mode != "3Ca" && mode != "3Cb" && mode != "3Cc")
             {
@@ -169,9 +171,9 @@ public class UserManager : MonoBehaviour
             else gameEngine.sendToAudioDevice = true;
             gameEngine.uiHandler.sendToAudioDeviceToggle.isOn = gameEngine.sendToAudioDevice;
 
-            if (mode == "3A" || mode == "3B" || mode == "3Ca" || mode == "3Cb" || mode == "3Cc") 
+            if (mode == "3A" || mode == "3B" || mode == "3Ca" || mode == "3Cb" || mode == "3Cc")
                 gameEngine.uiHandler.trailsDecaySlider.gameObject.SetActive(true);
-            else 
+            else
                 gameEngine.uiHandler.trailsDecaySlider.gameObject.SetActive(false);
 
 
@@ -180,53 +182,53 @@ public class UserManager : MonoBehaviour
 
             // per user parameters
             foreach (UserData user in usersPlaying) {
-                
-                if(user._userRole == UserRole.Player ){
+
+                if (user._userRole == UserRole.Player) {
 
                     if (mode == "0")  // basic condition
                     {
-                        if (me._userRole == UserRole.Server || me._userRole == UserRole.Viewer){
+                        if (me._userRole == UserRole.Server || me._userRole == UserRole.Viewer) {
                             user.ChangeSkin(this, "all");
                         }
-                        else{
+                        else {
                             if (user._ID == me._ID)
                                 user.ChangeSkin(this, "all");
-                            else user.ChangeSkin(this, "nothing");     
+                            else user.ChangeSkin(this, "nothing");
                         }
                     }
 
                     else if (mode == "1A") // every spheres visible
-                    { 
-                        user.ChangeSkin(this, "all");  
+                    {
+                        user.ChangeSkin(this, "all");
                     }
 
                     else if (mode == "1B") // other's hand visible, mine are not
-                    { 
+                    {
                         if (user._ID == me._ID)
                             user.ChangeSkin(this, "noHands");
                         else user.ChangeSkin(this, "all");
-                        
+
                     }
                     else if (mode == "1C" || mode == "1Ca" || mode == "1Cb" || mode == "1Cc") // change arms length
                     {
                         user.ChangeSkin(this, "all");
-                        if (mode == "1Ca"){
+                        if (mode == "1Ca") {
                             Debug.Log("move arms");
                             distanceToMove = -0.3f;
                             lerpDuration = 4f;
-                            StartLerping();
+                            StartArmsLerping();
                         }
                         else if (mode == "1Cb")
                         {
                             distanceToMove = 1f;
                             lerpDuration = 3f;
-                            StartLerping();
+                            StartArmsLerping();
                         }
                         else if (mode == "1Cc")
                         {
                             distanceToMove = 4f;
                             lerpDuration = 6f;
-                            StartLerping();
+                            StartArmsLerping();
                         }
                     }
 
@@ -235,8 +237,8 @@ public class UserManager : MonoBehaviour
                         user.ChangeSkin(this, "all");
                     }
                     else if (mode == "2B") // mirror mode , side to side, same color
-                    { 
-                        user.ChangeSkin(this, "all");   
+                    {
+                        user.ChangeSkin(this, "all");
                     }
                     else if (mode == "2C") // mirror mode, different color
                     {
@@ -250,7 +252,7 @@ public class UserManager : MonoBehaviour
 
                     else if (mode == "3A") // trails individual
                     {
-                        
+
                         if (me._userRole == UserRole.Server || me._userRole == UserRole.Viewer)
                             user.ChangeSkin(this, "trails");
                         else
@@ -261,7 +263,7 @@ public class UserManager : MonoBehaviour
                         }
                         trailsRelated = true;
                         GetAllParticleSystems();
-                       // DeActivateParticleVelocity();
+                        // DeActivateParticleVelocity();
                         trailsCondition = null;
                     }
 
@@ -277,7 +279,7 @@ public class UserManager : MonoBehaviour
                         }
                         trailsRelated = true;
                         GetAllParticleSystems();
-                       // DeActivateParticleVelocity();
+                        // DeActivateParticleVelocity();
                         trailsCondition = "soloR";
                     }
 
@@ -298,23 +300,23 @@ public class UserManager : MonoBehaviour
                     {
                         if (user._ID == me._ID)
                             user.ChangeSkin(this, "noHands");
-                        else user.ChangeSkin(this, "shortTrails");                    
+                        else user.ChangeSkin(this, "shortTrails");
                     }
                     else if (mode == "5A") // one player has left hand visible, other player has right hand visible
                     {
-                        user.ChangeSkin(this, "onehand");   
+                        user.ChangeSkin(this, "onehand");
                     }
-                    else{
+                    else {
                         Debug.Log("%% Wrong VisualisationMode Request ! %%");
                     }
 
                 }
             }
-            Debug.Log("Visualisation changed : "+mode);
-            
+            Debug.Log("Visualisation changed : " + mode);
+
 
         }
-        else{
+        else {
             gameEngine.pendingVisualisationMode = mode;
             Camera.main.GetComponent<CameraFade>().FadeOut();
         }
@@ -394,8 +396,8 @@ public class UserManager : MonoBehaviour
         int i = 0, j = 0;
         foreach (UserData user in usersPlaying) {
             if (user._userRole == UserRole.Player || (user._userRole == UserRole.Playback)) r += 1; // if we find a player thats number r
-            if (user._userRole == UserRole.Playback ) j =1;
-            if (r == n) return i+j; // if r was needed, return it
+            if (user._userRole == UserRole.Playback) j = 1;
+            if (r == n) return i + j; // if r was needed, return it
             i++;
         }
         Debug.Log("Player not found");
@@ -426,7 +428,7 @@ public class UserManager : MonoBehaviour
         }
     }
 
-    public void EraseAllPlayers(){
+    public void EraseAllPlayers() {
         foreach (UserData p in usersPlaying)
         {
             pendingPositionsActualizations.Remove(p._ID + "Head");
@@ -439,31 +441,31 @@ public class UserManager : MonoBehaviour
             Destroy(p);
         }
         usersPlaying.Clear();
-        foreach(GameObject go in GameObject.FindGameObjectsWithTag("Viewer")){
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Viewer")) {
             Destroy(go);
         }
     }
 
 
-    public void TranslateUser(){
+    public void TranslateUser() {
         me.gameObject.transform.position += me.calibrationPositionGap;
     }
 
 
-    public Vector3 GetCalibrationGap(int playerID){
-        foreach(UserData user in usersPlaying){
-            if(user._ID== playerID) return user.calibrationPositionGap;
+    public Vector3 GetCalibrationGap(int playerID) {
+        foreach (UserData user in usersPlaying) {
+            if (user._ID == playerID) return user.calibrationPositionGap;
         }
         return new Vector3();
     }
 
     // arm extension and particle trail functions
 
-    void StartLerping()
-    {
-        
+    void GetInitialArmsPositions(){
+
         int i = 0;
-        if( _initialPositionRightHand == null || _initialPositionLeftHand == null){
+        if (_initialPositionRightHand == null || _initialPositionLeftHand == null)
+        {
             _initialPositionRightHand = new Vector3[8];
             _initialPositionLeftHand = new Vector3[8];
             foreach (UserData user in usersPlaying) // store initial local position 
@@ -476,8 +478,11 @@ public class UserManager : MonoBehaviour
                 }
             }
         }
+    }
 
-        i = 0;
+    void StartArmsLerping()
+    {
+        int i = 0;
         _isLerping = true;
         _timeStartedLerping = Time.time;
         foreach (UserData user in usersPlaying)
@@ -485,9 +490,9 @@ public class UserManager : MonoBehaviour
             if (user._userRole == UserRole.Player)
             {
                 _startPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition;
-                _endPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition + Vector3.up * distanceToMove;
+                _endPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition + (Vector3.up * distanceToMove) - usersPlaying[i].rightHand.transform.localPosition;
                 _startPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition;
-                _endPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition + Vector3.up * distanceToMove;
+                _endPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition + (Vector3.up * distanceToMove) - usersPlaying[i].rightHand.transform.localPosition;
                 i++;
             }
         }
@@ -495,7 +500,7 @@ public class UserManager : MonoBehaviour
     }
 
 
-    void RevertLerping(){
+    void ReverseArmsLerping(){
 
         _isLerping = true;
         _timeStartedLerping = Time.time;
