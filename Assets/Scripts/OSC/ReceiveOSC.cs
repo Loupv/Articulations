@@ -27,6 +27,7 @@ public class ReceiveOSC : MonoBehaviour {
             osc.SetAddressHandler("/EnvironmentChange", EnvironmentChangedByServer);
             osc.SetAddressHandler("/CalibrationChange", CalibrationChange);
             osc.SetAddressHandler("/StartAudioRecording", StartAudioRecording);
+            osc.SetAddressHandler("/StopAudioRecording", StopAudioRecording);
             osc.SetAddressHandler("/StartPlayback", StartPlaybackOrder);
             osc.SetAddressHandler("/PausePlayback", PausePlaybackOrder);
             osc.SetAddressHandler("/StopPlayback", StopPlaybackOrder);
@@ -285,12 +286,18 @@ public class ReceiveOSC : MonoBehaviour {
         if(userManager.me._userRole == UserRole.Player) gameEngine.audioRecordManager.Launch(audioLenght);
     }
 
-    // server has quit
+    public void StopAudioRecording(OscMessage message){
+        Debug.Log(message);
+        if(userManager.me._userRole == UserRole.Player) gameEngine.audioRecordManager.Stop();
+    }
+
+    // i'm client, server has quit
     void GoInsane(OscMessage message)
     {
         Debug.Log("Received : " + message);
         Debug.Log("HAAAAAAAAAAAAAAA");
-        gameEngine.KillApp();
+        //gameEngine.KillApp();
+        gameEngine.Restart();
     }
 
 

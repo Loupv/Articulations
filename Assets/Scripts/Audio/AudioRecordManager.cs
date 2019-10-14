@@ -56,6 +56,7 @@ public class AudioRecordManager : MonoBehaviour
                 audioSource.clip = Microphone.Start (null, true, postScenarioRecordingLenght, frequencyRate); 
                 isRecording = true; 
                 
+                gameEngine.instructionPlayer.PlayInstructions(0);
                 Debug.Log("Audio Recording Started!");
                 gameEngine.osc.sender.RecordAudioConfirmation();
             }  
@@ -64,10 +65,11 @@ public class AudioRecordManager : MonoBehaviour
             Debug.Log("Microphone not connected!");  
         }  
 
-        if(postScenarioRecordingLenght > 0) Invoke("Stop", postScenarioRecordingLenght); // invoke stop when time is passed
+        //if(postScenarioRecordingLenght > 0) Invoke("Stop", postScenarioRecordingLenght); // invoke stop when time is passed
     }
 
 
+    // client - triggered by order from server
     public void Stop ()
     {
         audioSource.clip = SavWav.TrimSilence (audioSource.clip, 0);

@@ -100,6 +100,7 @@ public class ScenarioEvents : MonoBehaviour
         timerPaused = false;
         gameEngine.uiHandler.ToggleScenarioButton(1);
         gameEngine.uiHandler.conditionTimeRemaining.gameObject.SetActive(true);
+        gameEngine.uiHandler.stopScenario.gameObject.SetActive(true);
         gameEngine.osc.sender.StartOnlinePlaybacks(gameEngine.userManager.usersPlaying);
         InvokeRepeating("RunCondition", 0f, 1f);
     }
@@ -147,14 +148,16 @@ public class ScenarioEvents : MonoBehaviour
         if(interrupted == 0){ // if scenario had ended well 
             Debug.Log("Scenario "+(currentScenario+1)+" done !");
             if(gameEngine.audioRecordManager.recordPostScenarioAudio){
-                gameEngine.instructionPlayer.PlayInstructions(0);
+                
                 gameEngine.osc.sender.StartAudioRecording(gameEngine.audioRecordManager.postScenarioRecordingLenght, gameEngine.userManager.usersPlaying);
             }
         }
         else Debug.Log("Scenario "+(currentScenario+1)+" Interrupted !");
+        
         timeRemaining = 0;
         gameEngine.uiHandler.conditionTimeRemaining.text = "Time Remaining : "+timeRemaining;
         gameEngine.uiHandler.conditionTimeRemaining.gameObject.SetActive(false);
+        gameEngine.uiHandler.stopScenario.gameObject.SetActive(false);
         
         gameEngine.osc.sender.StopOnlinePlaybacks(gameEngine.userManager.usersPlaying);
 

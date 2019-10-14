@@ -11,7 +11,7 @@ public class UIHandler : MonoBehaviour
     public UserManager userManager;
     public ScenarioEvents scenarioEvents;
     public Button networkButtonChoice1, networkButtonChoice2, networkButtonChoice3, networkButtonChoice4,networkButtonChoice5, 
-        autoMode, manualMode, launchScenario, pauseScenario;
+        autoMode, manualMode, launchScenario, pauseScenario, stopScenario, stopAudioRecord;
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
     public ViewerController viewerController;
     public InputField OSCServerAddressInput, sessionIDInputBox, playbackSpeedInputField;
@@ -316,20 +316,26 @@ public class UIHandler : MonoBehaviour
     }
 
     public void CountRecordTimeRemaining(){
+        launchScenario.gameObject.SetActive(false);
+        stopAudioRecord.gameObject.SetActive(true);
         recordingTimeRemaining.gameObject.SetActive(true);
-        tmpTimer = gameEngine.audioRecordManager.postScenarioRecordingLenght;
+        //tmpTimer = gameEngine.audioRecordManager.postScenarioRecordingLenght;
+        tmpTimer = 0;
         InvokeRepeating("TimerUI", 0f,1f);
     }
 
     public void CancelRecordTime(){
+        launchScenario.gameObject.SetActive(true);
+        stopAudioRecord.gameObject.SetActive(false);
         recordingTimeRemaining.gameObject.SetActive(false);
         CancelInvoke("TimerUI");
     }
 
     void TimerUI(){
-        recordingTimeRemaining.text = "Record Time Remaining : "+tmpTimer;
-        tmpTimer--;
-        if(tmpTimer < 0) CancelRecordTime();
+        recordingTimeRemaining.text = "Record Time : "+tmpTimer;
+        tmpTimer++;
+        //tmpTimer--;
+        //if(tmpTimer < 0) CancelRecordTime();
     }
 
 

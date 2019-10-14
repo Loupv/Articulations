@@ -354,6 +354,22 @@ public class SendOSC : MonoBehaviour {
 
     }
 
+    public void StopAudioRecording(){
+
+        foreach (UserData targetUser in gameEngine.userManager.usersPlaying)
+        {
+            if(targetUser._userRole == UserRole.Player){
+                osc.OscPacketIO.RemoteHostName = targetUser.oscEndPoint.ip;
+                osc.OscPacketIO.RemotePort = targetUser.oscEndPoint.remotePort;
+                message = new OscMessage();
+                message.address = "/StopAudioRecording";
+                osc.Send(message);
+                Debug.Log("Sending : " + message);  
+            }
+        }
+
+    }
+
 
 
 /*
