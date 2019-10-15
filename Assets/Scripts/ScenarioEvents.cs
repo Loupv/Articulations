@@ -141,7 +141,9 @@ public class ScenarioEvents : MonoBehaviour
 
     public void StopScenario(int interrupted){
 
-        if(gameEngine.uiHandler.autoRecordPerformance.isOn) performanceRecorder.StopRecording();
+        if(gameEngine.uiHandler.autoRecordPerformance.isOn && !gameEngine.uiHandler.recordAudioAfterScenario.isOn) 
+            performanceRecorder.StopRecording(); // if we record sound after performance we let the recording active, otherwise we cut it after sound record
+
         userManager.ChangeVisualisationMode("0", gameEngine, scenarios[currentScenario].toFade == 1);
         gameEngine.uiHandler.ToggleScenarioButton(0);
         

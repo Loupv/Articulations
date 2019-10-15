@@ -144,6 +144,9 @@ public class ReceiveOSC : MonoBehaviour {
             gameEngine.uiHandler.CancelRecordTime();
             clientAnswersPending = 0;
         }
+        if(gameEngine.uiHandler.autoRecordPerformance.isOn && gameEngine.uiHandler.recordAudioAfterScenario.isOn) 
+            gameEngine.scenarioEvents.performanceRecorder.StopRecording();
+        
     }
 
 /*
