@@ -32,6 +32,7 @@ public class UserManager : MonoBehaviour
     bool trailsRelated;
     bool _areFar;
     bool _areClose;
+    public bool playerNameVisible;
     ParticleSystem[] trailSystemsR = new ParticleSystem[4];
     ParticleSystem[] trailSystemsL = new ParticleSystem[4];
 
@@ -56,6 +57,9 @@ public class UserManager : MonoBehaviour
         trailsCondition = null;
         trailsRelated = false;
 
+        
+       
+
     }
 
 
@@ -64,9 +68,9 @@ public class UserManager : MonoBehaviour
         if (userRole == UserRole.Player) _userGameObject = Instantiate(playerPrefab);
         else if (userRole == UserRole.Tracker) _userGameObject = Instantiate(trackerPrefab);
         else if (userRole == UserRole.Viewer || userRole == UserRole.Server
-        || (userRole == UserRole.Playback && gameEngine.playbackManager.mode == 1)) // offline playback is considered as a normal viewer
+        || (userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline)) // offline playback is considered as a normal viewer
             _userGameObject = Instantiate(viewerPrefab);
-        else if (userRole == UserRole.Playback && gameEngine.playbackManager.mode == 0) {
+        else if (userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Online) {
             _userGameObject = Instantiate(playerPrefab);
             _userGameObject.AddComponent<ViewerController>();
         }
@@ -88,6 +92,11 @@ public class UserManager : MonoBehaviour
                 model.SetActive(false);
             }
         }
+
+        // print names above head
+        if(gameEngine._userRole == UserRole.Player || gameEngine.gameData.showNamesAboveHead == 0) // mask UI for players when not wanted
+            gameEngine.userManager.playerNameVisible = false;
+        else gameEngine.userManager.playerNameVisible = true;
 
         me = user;
 
@@ -153,23 +162,23 @@ public class UserManager : MonoBehaviour
             ((mode == "2B" || mode == "2C") && !gameEngine.scenarioEvents.mirrorAct))
                 gameEngine.scenarioEvents.ToggleMirror();
 
-            if (mode != "2C" && !(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == 1)) // if we're in playback offline mode, we keep different colors
+            if (mode != "2C" && !(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline)) // if we're in playback offline mode, we keep different colors
                 foreach (UserData user in usersPlaying)
                 {
                     if (user._userRole == UserRole.Player) ChangePlayerColor(user, whiteColor);
                 }
-            else if (gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == 1) {
+            else if (gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline) {
                 if (usersPlaying.Count > 1) ChangePlayerColor(usersPlaying[1], playbackColor1);
                 if (usersPlaying.Count > 2) ChangePlayerColor(usersPlaying[2], playbackColor2);
             }
             if (mode != "3B" && mode != "3Ca" && mode != "3Cb" && mode != "3Cc")
             {
-                gameEngine.sendToAudioDevice = false;
+                gameEngine.networkManager.sendToAudioDevice = false;
                 trailsCondition = null;
                 trailsRelated = false;
             }
-            else gameEngine.sendToAudioDevice = true;
-            gameEngine.uiHandler.sendToAudioDeviceToggle.isOn = gameEngine.sendToAudioDevice;
+            else gameEngine.networkManager.sendToAudioDevice = true;
+            gameEngine.uiHandler.sendToAudioDeviceToggle.isOn = gameEngine.networkManager.sendToAudioDevice;
 
             if (mode == "3A" || mode == "3B" || mode == "3Ca" || mode == "3Cb" || mode == "3Cc")
                 gameEngine.uiHandler.trailsDecaySlider.gameObject.SetActive(true);

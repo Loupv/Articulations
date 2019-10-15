@@ -45,19 +45,7 @@ public class UserData : MonoBehaviour
             rightHand = pGameObject.transform.Find("RightHand").gameObject;
         }
 
-
-        if(gameEngine._userRole == UserRole.Player && !gameEngine.userManager.keepNamesVisibleForPlayers) // mask UI for players when not wanted
-        {
-            headText = head.transform.Find("Canvas").Find("Text").GetComponent<UnityEngine.UI.Text>();
-            headText.text = _playerName;
-            headText.gameObject.SetActive(false);
-        }
-        else if(head != null){
-            headText = head.transform.Find("Canvas").Find("Text").GetComponent<UnityEngine.UI.Text>();
-            headText.text = _playerName;
-            if(gameEngine._userRole == UserRole.Playback) headText.gameObject.SetActive(false); // tmp for screen record
-        }
-
+        if(_playerName == "") _playerName = "P"+(_registeredRank+1);
 
         // things that change depending on the kind of player we try to instantiate
         // PLAYER //
@@ -91,7 +79,14 @@ public class UserData : MonoBehaviour
             PlaceUserPartsInScene(gameEngine, false, pGameObject, isMe);
         }
 
+        if(head != null){
+            headText = head.transform.Find("Canvas").Find("Text").GetComponent<UnityEngine.UI.Text>();
+            headText.text = _playerName;
 
+            if(gameEngine.userManager.playerNameVisible)
+                headText.gameObject.SetActive(true);
+            else headText.gameObject.SetActive(false);
+        }
 
         calibrationPositionGap = new Vector3();
         calibrationRotationGap = new Quaternion();

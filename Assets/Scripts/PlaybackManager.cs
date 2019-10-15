@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum PlaybackMode{
+    Online, Offline
+}
+
 public class PlaybackManager : MonoBehaviour
 {
     public PerformanceFile performanceFile;
@@ -10,7 +15,8 @@ public class PlaybackManager : MonoBehaviour
     public GameObject gestureAnalyserPrefab;
     public int currentRecordLine;
     PerformanceLine currentLine;
-    public int playerNumber, mode;
+    public int playerNumber;
+    public PlaybackMode mode;
     public float performanceMaxTime;
     public double floatTimeTracker, playbackSpeed, lastSpeed;
     string currentViz = "null";
@@ -35,7 +41,7 @@ public class PlaybackManager : MonoBehaviour
         if(play){
             currentLine = performanceFile.lines[currentRecordLine];
             
-            if(mode == 0){ //online
+            if(mode == PlaybackMode.Online){ //online
                 if(playerNumber == 0){
                     gameEngine.userManager.me.SetPlayerPosition(currentLine.p1HeadPosition,currentLine.p1LeftHandPosition,currentLine.p1RightHandPosition);
                     gameEngine.userManager.me.SetPlayerRotation(currentLine.p1HeadRotation,currentLine.p1LeftHandRotation,currentLine.p1RightHandRotation);
@@ -45,7 +51,7 @@ public class PlaybackManager : MonoBehaviour
                     gameEngine.userManager.me.SetPlayerRotation(currentLine.p2HeadRotation,currentLine.p2LeftHandRotation,currentLine.p2RightHandRotation);
                 }
             }
-            else{
+            else{ //offline
                 if(currentViz != currentLine.Condition){
                     Debug.Log("Changing viz to : "+currentLine.Condition);
                     gameEngine.userManager.ChangeVisualisationMode(currentLine.Condition, gameEngine, false);
@@ -81,14 +87,16 @@ public class PlaybackManager : MonoBehaviour
     }
 
     public void ChangePlaybackMode(){
-        mode = gameEngine.uiHandler.onlineOfflinePlaybackMode.value;
-        if(mode == 0) {
+        int intMode = gameEngine.uiHandler.onlineOfflinePlaybackMode.value;
+        if(intMode == 0) {
             gameEngine.uiHandler.switchPlaybackPlayer.gameObject.SetActive(true);
             gameEngine.uiHandler.OSCServerAddressInput.gameObject.SetActive(true);
+            mode = PlaybackMode.Online;
         }
-        else if(mode == 1){ 
+        else if(intMode == 1){ 
             gameEngine.uiHandler.switchPlaybackPlayer.gameObject.SetActive(false);
             gameEngine.uiHandler.OSCServerAddressInput.gameObject.SetActive(false);
+            mode = PlaybackMode.Offline;
         }
     }
 

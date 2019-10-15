@@ -14,6 +14,7 @@ public class NetworkManager : MonoBehaviour
     public Image oscToggle;
     public OSCEndPoint serverEndpoint;
     public EyeswebOSC eyeswebOSC;
+    public bool sendToAudioDevice, sendToEyesweb;
 
 
     public void InitNetwork(UserRole userRole, GameData gameData, string uiServerIP){
@@ -24,7 +25,7 @@ public class NetworkManager : MonoBehaviour
         int inPort;
         int outPort;
 
-        if (userRole == UserRole.Server || (userRole == UserRole.Playback && gameEngine.playbackManager.mode == 1)) // if server of offline playback
+        if (userRole == UserRole.Server || (userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline))
         {
             inPort = gameData.OSC_ServerPort;
             outPort = gameData.OSC_ClientPort;
@@ -52,6 +53,17 @@ public class NetworkManager : MonoBehaviour
         
     }
 
+
+    public void NetworkGameLoop(UserData _user, UserManager userManager, PlaybackManager playbackManager, SoundHandler soundHandler){
+        if(_user._userRole == UserRole.Player || (_user._userRole == UserRole.Playback && playbackManager.mode == PlaybackMode.Online)){
+            SendOwnPosition(_user); // don't send if you're viewer
+        }
+        else if(_user._userRole == UserRole.Server){
+            SendAllPositionsToClients(userManager.usersPlaying);
+            if(sendToAudioDevice) SendAllPositionsToAudioSystem(userManager.usersPlaying, soundHandler);
+            if(sendToEyesweb && eyeswebOSC.initialized) eyeswebOSC.SendPositionsToEyesWeb();
+        }
+    }
 
     // client only
     public void SendOwnPosition(UserData user)
@@ -112,12 +124,9 @@ public class NetworkManager : MonoBehaviour
         return true;
     }
 
-    public void RegisterUSer(UserData _user, UserRole _userRole){
+    public void RegisterUser(UserData _user, UserRole _userRole){
         osc.sender.RequestUserRegistation(_user, _userRole);
     }
-    /* public void SetUserRole(UserRole userRole){
-        osc.receiver.userRole = userRole;
-    }*/
 
 
     public void SendClientPositionGap()

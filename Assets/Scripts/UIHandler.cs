@@ -29,8 +29,8 @@ public class UIHandler : MonoBehaviour
 
     void Start(){
 
-        if(sendToAudioDeviceToggle.isOn) gameEngine.sendToAudioDevice = true;
-        else gameEngine.sendToAudioDevice = false;
+        if(sendToAudioDeviceToggle.isOn) gameEngine.networkManager.sendToAudioDevice = true;
+        else gameEngine.networkManager.sendToAudioDevice = false;
 
         gameEngine.fileInOut.PopulatePlaybackDataFileDropdown(switchPerformanceDataFile);
         ScenarioModeSwitch(1);
@@ -115,8 +115,8 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice4.image.sprite = normalButtonSprite;
             networkButtonChoice5.image.sprite = selectedButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
-            if(gameEngine.playbackManager.mode == 0) OSCServerAddressInput.gameObject.SetActive(true);
-            else if(gameEngine.playbackManager.mode == 1) OSCServerAddressInput.gameObject.SetActive(false);
+            if(gameEngine.playbackManager.mode == PlaybackMode.Online) OSCServerAddressInput.gameObject.SetActive(true);
+            else if(gameEngine.playbackManager.mode == PlaybackMode.Offline) OSCServerAddressInput.gameObject.SetActive(false);
             clientGOParent.gameObject.SetActive(false);
             serverGOParent.gameObject.SetActive(false);
             playbackGOParent.gameObject.SetActive(true);
@@ -282,7 +282,7 @@ public class UIHandler : MonoBehaviour
     }
 
     public void ToggleSendToAudioHandler(){
-        gameEngine.sendToAudioDevice = !gameEngine.sendToAudioDevice;
+        gameEngine.networkManager.sendToAudioDevice = !gameEngine.networkManager.sendToAudioDevice;
     }
 
     // Is a server function // triggered by UI button

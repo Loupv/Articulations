@@ -28,7 +28,7 @@ public class GameData
     public int OSC_SoundHandlerPort ;
     public int audioRecordLength; // no use in client mode, chosen length is sent by server
     public int DebugMode;
-    public int keepNamesVisibleForPlayers;
+    public int showNamesAboveHead;
 }
 
 public enum UserRole
@@ -73,8 +73,7 @@ public class GameEngine : MonoBehaviour
 
     [HideInInspector]
     public bool useVRHeadset;
-    public bool sendToAudioDevice;
-    public string viveSystemName = "[CameraRig]", 
+        public string viveSystemName = "[CameraRig]", 
         viveHeadName  = "Camera", 
         viveLeftHandName = "Controller (left)", 
         viveRightHandName = "Controller (right)";
@@ -129,7 +128,7 @@ public class GameEngine : MonoBehaviour
         // change UI's server IP field
         uiHandler.FillServerIPField(gameData.runInLocal, gameData.OSC_ServerIP); 
         
-        userManager.keepNamesVisibleForPlayers = (gameData.keepNamesVisibleForPlayers == 1);
+        userManager.keepNamesVisibleForPlayers = (gameData.showNamesAboveHead == 1);
 
         // sonification
         soundHandler.Init(gameData.OSC_SoundHandlerIP, gameData.OSC_SoundHandlerPort);
@@ -161,7 +160,7 @@ public class GameEngine : MonoBehaviour
         string tmpIp;
         if(gameData.runInLocal == 1){ 
             tmpIp = gameData.OSC_LocalIP;
-            if(_userRole != UserRole.Server && !(_userRole == UserRole.Playback && playbackManager.mode == 1)) 
+            if(_userRole != UserRole.Server && !(_userRole == UserRole.Playback && playbackManager.mode == PlaybackMode.Offline)) 
                 gameData.OSC_ClientPort = UnityEngine.Random.Range(5555,8888);
         }
         else {
@@ -169,7 +168,7 @@ public class GameEngine : MonoBehaviour
             gameData.OSC_ServerIP = tmpIp; // put back written address into gamedata object
         }
 
-        string n = uiHandler.playerNameTextBox.GetComponentInChildren<UnityEngine.UI.InputField>().text;
+        string uiChosenName = uiHandler.playerNameTextBox.GetComponentInChildren<UnityEngine.UI.InputField>().text;
 
         if (_userRole == UserRole.Server || _userRole == UserRole.Playback)
         {
@@ -177,7 +176,7 @@ public class GameEngine : MonoBehaviour
             StartCoroutine(EnableDisableVRMode(false));
         }
 
-        _user = userManager.InitLocalUser(this, ID, n, tmpIp, gameData.OSC_ServerPort, true, _userRole);
+        _user = userManager.InitLocalUser(this, ID, uiChosenName, tmpIp, gameData.OSC_ServerPort, true, _userRole);
 
         networkManager.InitNetwork(_userRole, gameData, uiHandler.OSCServerAddressInput.text);
 
@@ -199,17 +198,17 @@ public class GameEngine : MonoBehaviour
         else if(_userRole == UserRole.Playback){
             fileInOut.LoadPerformance(fileInOut.performanceDataFiles[uiHandler.switchPerformanceDataFile.value], playbackManager);
 
-            if(playbackManager.mode == 0) // online
+            if(playbackManager.mode == PlaybackMode.Online) // online
             {
                 appState = AppState.WaitingForServer;
                 InvokeRepeating("AskForRegistration",0f,1f);
                 canvasHandler.ChangeCanvas("waitingCanvas");
             }
-            else if(playbackManager.mode == 1){ // offline
+            else if(playbackManager.mode == PlaybackMode.Offline){
                 appState = AppState.Running;
                 canvasHandler.ChangeCanvas("playbackCanvasOff");
-                userManager.AddNewUser(this, 776, "ghost1", osc.outIP, osc.outPort, UserRole.Playback);
-                userManager.AddNewUser(this, 777, "ghost2", osc.outIP, osc.outPort, UserRole.Playback);
+                userManager.AddNewUser(this, 776, "", osc.outIP, osc.outPort, UserRole.Playback);
+                userManager.AddNewUser(this, 777, "", osc.outIP, osc.outPort, UserRole.Playback);
                 playbackManager.StartPlayback();
             }
         }
@@ -249,7 +248,7 @@ public class GameEngine : MonoBehaviour
                 canvasHandler.ChangeCanvas("viewerCanvas");
             else if(_user._userRole == UserRole.Playback){
                 canvasHandler.ChangeCanvas("playbackCanvasOn");
-                if(playbackManager.mode == 1) playbackManager.StartPlayback(); // if online, we wait for server order
+                if(playbackManager.mode == PlaybackMode.Offline) playbackManager.StartPlayback(); // if online, we wait for server order
             } 
         }
     }
@@ -269,37 +268,21 @@ public class GameEngine : MonoBehaviour
             uiHandler.SetPlayerNetworkType(t);
         }
         
-
-
+        // main game loop
         if (appState == AppState.Running)
         {
-            UpdateGame();
+            networkManager.NetworkGameLoop(_user, userManager, playbackManager, soundHandler);
+            userManager.ActualizePlayersPositions(_user); 
         }
-
 
         if(Input.GetKeyDown(KeyCode.Escape) && appState != AppState.Initializing) Restart();
     }
 
-
+    // triggered by invoke
     void AskForRegistration(){
-        networkManager.RegisterUSer(_user, _userRole);
+        networkManager.RegisterUser(_user, _userRole);
     }
 
-
-
-    public void UpdateGame()
-    {
-        
-        if(_userRole == UserRole.Player || (_userRole == UserRole.Playback && playbackManager.mode == 0)){
-            networkManager.SendOwnPosition(_user); // don't send if you're viewer
-        }
-        else if(_userRole == UserRole.Server){
-            networkManager.SendAllPositionsToClients(userManager.usersPlaying);
-            if(sendToAudioDevice) networkManager.SendAllPositionsToAudioSystem(userManager.usersPlaying, soundHandler);
-        }
-
-        userManager.ActualizePlayersPositions(_user); 
-    }
 
 
     public void KillApp()

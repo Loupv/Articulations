@@ -80,26 +80,8 @@ public class EyeswebOSC : MonoBehaviour
     }
 	
 
-	// Update is called once per frame
-	void Update () {
 
-        /*if(osc.initialized){
-            message = new OscMessage();
-            message.address = "/P_Head_PositionXYZ";               
-            message.values.Add(1);
-            osc.Send(message);
-            Debug.Log (message+ " on port "+osc.outPort+", "+osc.outIP);
-        }*/
-        if(initialized){
-            SendPositionsToEyesWeb();
-        }
-    }
-
-
-
-    void SendPositionsToEyesWeb(){
-
-        
+    public void SendPositionsToEyesWeb(){
 
         int i =0;
 

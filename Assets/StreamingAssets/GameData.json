@@ -2,7 +2,7 @@
    "networkID" :"player1",
    "runInLocal":1,
    "DebugMode":0,
-   "keepNamesVisibleForPlayers":0,
+   "showNamesAboveHead":0,
    "useVr":0,
    "audioRecordLength":60,
    "saveFileFrequency":60,
