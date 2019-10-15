@@ -9,15 +9,15 @@ public class NetworkManager : MonoBehaviour
 {
 
     public OSC osc;
-    public GameEngine gameEngine;
-    public string serverAddress;  
     public Image oscToggle;
     public OSCEndPoint serverEndpoint;
     public EyeswebOSC eyeswebOSC;
+    [HideInInspector] public SoundHandler soundHandler;
+
     public bool sendToAudioDevice, sendToEyesweb;
 
 
-    public void InitNetwork(UserRole userRole, GameData gameData, string uiServerIP){
+    public void InitNetwork(UserRole userRole, GameData gameData, string uiServerIP, PlaybackMode pbmode){
 
         serverEndpoint.ip = gameData.OSC_ServerIP;
         serverEndpoint.remotePort = gameData.OSC_ClientPort;
@@ -25,7 +25,7 @@ public class NetworkManager : MonoBehaviour
         int inPort;
         int outPort;
 
-        if (userRole == UserRole.Server || (userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline))
+        if (userRole == UserRole.Server || (userRole == UserRole.Playback && pbmode == PlaybackMode.Offline))
         {
             inPort = gameData.OSC_ServerPort;
             outPort = gameData.OSC_ClientPort;
@@ -54,13 +54,13 @@ public class NetworkManager : MonoBehaviour
     }
 
 
-    public void NetworkGameLoop(UserData _user, UserManager userManager, PlaybackManager playbackManager, SoundHandler soundHandler){
-        if(_user._userRole == UserRole.Player || (_user._userRole == UserRole.Playback && playbackManager.mode == PlaybackMode.Online)){
-            SendOwnPosition(_user); // don't send if you're viewer
+    public void NetworkGameLoop(UserData me, UserManager userManager, PlaybackManager playbackManager, SoundHandler soundHandler){
+        if(me._userRole == UserRole.Player || (me._userRole == UserRole.Playback && playbackManager.mode == PlaybackMode.Online)){
+            SendOwnPosition(me); // don't send if you're viewer
         }
-        else if(_user._userRole == UserRole.Server){
-            SendAllPositionsToClients(userManager.usersPlaying);
-            if(sendToAudioDevice) SendAllPositionsToAudioSystem(userManager.usersPlaying, soundHandler);
+        else if(me._userRole == UserRole.Server){
+            SendAllPositionsToClients(userManager.usersPlaying, me);
+            if(sendToAudioDevice) SendAllPositionsToAudioSystem(userManager.usersPlaying, soundHandler, me);
             if(sendToEyesweb && eyeswebOSC.initialized) eyeswebOSC.SendPositionsToEyesWeb();
         }
     }
@@ -74,11 +74,11 @@ public class NetworkManager : MonoBehaviour
     }
 
     // server only
-    public void SendAllPositionsToClients(List<UserData> usersPlaying)
+    public void SendAllPositionsToClients(List<UserData> usersPlaying, UserData me)
     {
         foreach (UserData targetUser in usersPlaying)
         {
-            if (targetUser._ID != gameEngine._user._ID) // if this is the actual instance's player
+            if (targetUser._ID != me._ID) // if this is the actual instance's player
             { 
                 foreach(UserData user in usersPlaying){      
                     if(user._userRole == UserRole.Player){  // don't send viewers positions
@@ -91,11 +91,11 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public void SendAllPositionsToAudioSystem(List<UserData> usersPlaying, SoundHandler soundHandler)
+    public void SendAllPositionsToAudioSystem(List<UserData> usersPlaying, SoundHandler soundHandler, UserData me)
     {
         foreach (UserData targetUser in usersPlaying)
         {
-            if (targetUser._ID != gameEngine._user._ID) // if this is the actual instance's player
+            if (targetUser._ID != me._ID) // if this is the actual instance's player
             { 
                 foreach(UserData user in usersPlaying){      
                     if(user._userRole == UserRole.Player){  // don't send viewers positions
@@ -129,11 +129,11 @@ public class NetworkManager : MonoBehaviour
     }
 
 
-    public void SendClientPositionGap()
+    public void SendClientPositionGap(List<UserData> usersPlaying)
     {
-        foreach (UserData targetUser in gameEngine.userManager.usersPlaying) // we take each actual player one by one
+        foreach (UserData targetUser in usersPlaying) // we take each actual player one by one
         {
-            osc.sender.SendCalibrationInfo(targetUser, gameEngine.userManager.usersPlaying); // we send for each of them the list of positiongaps
+            osc.sender.SendCalibrationInfo(targetUser, usersPlaying); // we send for each of them the list of positiongaps
             // upon reception, each user has to adapt its own position to be centered
         }
     }

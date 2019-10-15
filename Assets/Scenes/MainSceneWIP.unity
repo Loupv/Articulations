@@ -4272,29 +4272,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 316388236}
-  - component: {fileID: 316388235}
   m_Layer: 0
-  m_Name: SoundInstructionPlayer
+  m_Name: AudioSources
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &316388235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 316388234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 715a18fb09a91074497d62601dd153d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  instructions:
-  - {fileID: 44067308}
-  - {fileID: 719189201}
 --- !u!4 &316388236
 Transform:
   m_ObjectHideFlags: 0
@@ -4309,7 +4293,7 @@ Transform:
   - {fileID: 44067309}
   - {fileID: 719189202}
   m_Father: {fileID: 2099995900}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &325340534
 GameObject:
@@ -5993,10 +5977,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   osc: {fileID: 1137383004}
-  gameEngine: {fileID: 667967430}
-  serverAddress: 
   oscToggle: {fileID: 1382342789}
   eyeswebOSC: {fileID: 883154768}
+  soundHandler: {fileID: 0}
+  sendToAudioDevice: 0
+  sendToEyesweb: 0
 --- !u!1 &513617101
 GameObject:
   m_ObjectHideFlags: 0
@@ -7751,6 +7736,11 @@ MonoBehaviour:
     type: 3}
   particles4: {fileID: 5241654894757974298, guid: 98b92c6d0458e8f4da9aad7e2ee56ba6,
     type: 3}
+  viewerController: {fileID: 0}
+  viveSystemName: '[CameraRig](Clone)'
+  viveHeadName: Camera
+  viveLeftHandName: Controller (left)
+  viveRightHandName: Controller (right)
   _userGameObject: {fileID: 0}
   keepNamesVisibleForPlayers: 0
   userCol: {r: 0, g: 0, b: 0, a: 0}
@@ -7760,6 +7750,7 @@ MonoBehaviour:
   playbackColor2: {r: 0, g: 0, b: 0, a: 0}
   trailsCondition: 
   dist: 0
+  playerNameVisible: 0
 --- !u!1 &659425909
 GameObject:
   m_ObjectHideFlags: 0
@@ -7873,8 +7864,6 @@ MonoBehaviour:
   canvasHandler: {fileID: 667967432}
   uiHandler: {fileID: 2107918503}
   soundHandler: {fileID: 0}
-  instructionPlayer: {fileID: 316388235}
-  audioRecordManager: {fileID: 679619314}
   playbackManager: {fileID: 0}
   clock: {fileID: 0}
   gameData:
@@ -7889,7 +7878,7 @@ MonoBehaviour:
     OSC_SoundHandlerPort: 0
     audioRecordLength: 0
     DebugMode: 0
-    keepNamesVisibleForPlayers: 0
+    showNamesAboveHead: 0
   ViveSystemPrefab: {fileID: 146900, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
   POVs:
   - {fileID: 1960842520}
@@ -7900,11 +7889,6 @@ MonoBehaviour:
   currentVisualisationMode: 1A
   pendingVisualisationMode: none
   useVRHeadset: 1
-  sendToAudioDevice: 0
-  viveSystemName: '[CameraRig](Clone)'
-  viveHeadName: Camera
-  viveLeftHandName: Controller (left)
-  viveRightHandName: Controller (right)
   debugMode: 0
   debugPrefab: {fileID: 2656459893160420101, guid: fd1ed9442d1b4a94b8a9ec29aeceaebc,
     type: 3}
@@ -8034,7 +8018,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 679619312}
-  - component: {fileID: 679619314}
   - component: {fileID: 679619313}
   m_Layer: 0
   m_Name: AudioRecorder
@@ -8055,7 +8038,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2099995900}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &679619313
 AudioSource:
@@ -8068,7 +8051,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -8153,25 +8136,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &679619314
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 679619311}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 208be9e929c39e54ab3c7bf1b7e914e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameEngine: {fileID: 667967430}
-  isRecording: 0
-  recordPostScenarioAudio: 0
-  micConnected: 0
-  audioDirPath: 
-  postScenarioRecordingLenght: 0
-  recordingTimeLeft: 0
 --- !u!1 &682715152
 GameObject:
   m_ObjectHideFlags: 0
@@ -27299,8 +27263,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 316388236}
   - {fileID: 679619312}
+  - {fileID: 316388236}
   m_Father: {fileID: 1324389818}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -27316,6 +27280,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46adc4710f0729040a14ad12f6804da1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameEngine: {fileID: 667967430}
+  instructions:
+  - {fileID: 44067308}
+  - {fileID: 719189201}
+  recordAudioSource: {fileID: 679619313}
+  isRecording: 0
+  recordPostScenarioAudio: 0
+  micConnected: 0
+  audioDirPath: 
+  postScenarioRecordingLenght: 0
+  recordingTimeLeft: 0
 --- !u!1 &2107918502
 GameObject:
   m_ObjectHideFlags: 0
@@ -27348,7 +27323,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameEngine: {fileID: 667967430}
   userManager: {fileID: 655950337}
+  networkManager: {fileID: 504376291}
+  fileInOut: {fileID: 1605414263}
+  playbackManager: {fileID: 2078498828}
   scenarioEvents: {fileID: 1039167018}
+  sender: {fileID: 533229743}
   networkButtonChoice1: {fileID: 1202137671}
   networkButtonChoice2: {fileID: 522398102}
   networkButtonChoice3: {fileID: 477849578}
@@ -27364,7 +27343,6 @@ MonoBehaviour:
   POVPlayer1: {fileID: 207424097}
   POVPlayer2: {fileID: 221952714}
   POV3: {fileID: 1490687388}
-  viewerController: {fileID: 0}
   OSCServerAddressInput: {fileID: 907264587}
   sessionIDInputBox: {fileID: 99534867}
   playbackSpeedInputField: {fileID: 596055847}

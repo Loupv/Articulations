@@ -10,7 +10,12 @@ public class UserManager : MonoBehaviour
     public Dictionary<string, Vector3> pendingPositionsActualizations;
     public Dictionary<string, Quaternion> pendingRotationsActualizations;
     public GameObject playerPrefab, viewerPrefab, trackerPrefab, TrailRendererPrefab, SparkParticlesPrefab, particles3, particles4;
+    public ViewerController viewerController;
 
+    public string viveSystemName = "[CameraRig]", 
+    viveHeadName  = "Camera", 
+    viveLeftHandName = "Controller (left)", 
+    viveRightHandName = "Controller (right)";
 
     [HideInInspector]
     public GameObject _userGameObject;
@@ -57,8 +62,6 @@ public class UserManager : MonoBehaviour
         trailsCondition = null;
         trailsRelated = false;
 
-        
-       
 
     }
 
@@ -76,12 +79,13 @@ public class UserManager : MonoBehaviour
         }
 
         if (userRole == UserRole.Viewer || userRole == UserRole.Tracker || userRole == UserRole.Server || userRole == UserRole.Playback) {
-            gameEngine.uiHandler.viewerController = _userGameObject.GetComponent<ViewerController>();
-            gameEngine.uiHandler.viewerController.InitViewerController(isMe);
+            viewerController = _userGameObject.GetComponent<ViewerController>();
+            viewerController.InitViewerController(isMe);
         }
 
         UserData user = _userGameObject.GetComponent<UserData>();
-        user.InitUserData(gameEngine, CountPlayers(), ID, name, address, localPort, _userGameObject, isMe, userRole);
+        user.InitUserData(CountPlayers(), ID, name, address, localPort, _userGameObject, isMe, playerNameVisible, userRole, gameEngine.ViveSystemPrefab, gameEngine.useVRHeadset, 
+            viveHeadName, viveLeftHandName, viveRightHandName);
 
         if (userRole != UserRole.Server)
         {
@@ -123,7 +127,8 @@ public class UserManager : MonoBehaviour
 
         UserData p = go.GetComponent<UserData>();
 
-        p.InitUserData(gameEngine, CountPlayers(), ID, name, address, port, go, false, role);
+        p.InitUserData(CountPlayers(), ID, name, address, port, go, false, playerNameVisible, role, gameEngine.ViveSystemPrefab, gameEngine.useVRHeadset, 
+            viveHeadName, viveLeftHandName, viveRightHandName);
 
         if (role == UserRole.Player) {
             ChangePlayerColor(p, whiteColor);

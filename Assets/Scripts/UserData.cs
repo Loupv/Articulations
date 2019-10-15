@@ -17,6 +17,7 @@ public class UserData : MonoBehaviour
     public UserRole _userRole;
     //public OSC osc;
     public int _ID;
+    public bool _isMe;
     public string _playerName;
     public GameObject playerGameObject, head, leftHand, rightHand;//, leftHold, rightHold;
     public UnityEngine.UI.Text headText;
@@ -26,7 +27,8 @@ public class UserData : MonoBehaviour
     public int _registeredRank;
 
 
-    public void InitUserData(GameEngine gameEngine, int rank, int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, UserRole userRole)
+    public void InitUserData(int rank, int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, bool playerNameVisible, UserRole userRole,
+         GameObject ViveSystemPrefab, bool useVRHeadset, string viveHeadName, string viveLeftHandName, string viveRightHandName)
     {
         
         _ID = ID;
@@ -34,6 +36,7 @@ public class UserData : MonoBehaviour
         _userRole = userRole;
         _playerName = playerName;
         _registeredRank = rank;
+        _isMe = isMe;
 
         oscEndPoint = new OSCEndPoint();
         oscEndPoint.ip = address;
@@ -52,9 +55,9 @@ public class UserData : MonoBehaviour
         if (_userRole == UserRole.Player)
         {            
             
-            if(!gameEngine.useVRHeadset) Debug.Log("Not looking for Vive System");
+            if(!useVRHeadset) Debug.Log("Not looking for Vive System");
 
-            PlaceUserPartsInScene(gameEngine, gameEngine.useVRHeadset, pGameObject, isMe); 
+            PlaceUserPartsInScene(pGameObject, ViveSystemPrefab, useVRHeadset, viveHeadName, viveLeftHandName, viveRightHandName); 
             
             pGameObject.name = "Player" + _ID.ToString();
             playerGameObject = pGameObject;
@@ -63,12 +66,12 @@ public class UserData : MonoBehaviour
         else if (_userRole == UserRole.Tracker)
         {
             pGameObject.name = "Tracker" + _ID.ToString();
-            PlaceUserPartsInScene(gameEngine, false, pGameObject, isMe);
+            PlaceUserPartsInScene(pGameObject, ViveSystemPrefab, false, viveHeadName, viveLeftHandName, viveRightHandName);
         }
         // PLAYBACK //
         else if (userRole == UserRole.Playback)
         {            
-            PlaceUserPartsInScene(gameEngine, gameEngine.useVRHeadset, pGameObject, isMe); 
+            PlaceUserPartsInScene(pGameObject, ViveSystemPrefab, useVRHeadset, viveHeadName, viveLeftHandName, viveRightHandName); 
             if(isMe) pGameObject.name = "Playback" + _ID.ToString();
             else pGameObject.name = "PlaybackPlayer" + _ID.ToString();
             playerGameObject = pGameObject;
@@ -76,14 +79,14 @@ public class UserData : MonoBehaviour
         // VIEWER //
         else{
             pGameObject.name = "Viewer" + _ID.ToString();
-            PlaceUserPartsInScene(gameEngine, false, pGameObject, isMe);
+            PlaceUserPartsInScene(pGameObject, ViveSystemPrefab, false, viveHeadName, viveLeftHandName, viveRightHandName);
         }
 
         if(head != null){
             headText = head.transform.Find("Canvas").Find("Text").GetComponent<UnityEngine.UI.Text>();
             headText.text = _playerName;
 
-            if(gameEngine.userManager.playerNameVisible)
+            if(playerNameVisible)
                 headText.gameObject.SetActive(true);
             else headText.gameObject.SetActive(false);
         }
@@ -95,14 +98,14 @@ public class UserData : MonoBehaviour
     }
 
 
-    void PlaceUserPartsInScene(GameEngine gameEngine, bool vr, GameObject pGameObject, bool isMe){
+    void PlaceUserPartsInScene(GameObject pGameObject, GameObject viveSystemPrefab, bool vr, string viveHeadName, string viveLeftHandName, string viveRightHandName){
 
         GameObject parent;
 
-        if(vr && isMe){
+        if(vr && _isMe){
 
-            parent = Instantiate(gameEngine.ViveSystemPrefab);
-            GameObject cam = parent.transform.Find(gameEngine.viveHeadName).gameObject;
+            parent = Instantiate(viveSystemPrefab);
+            GameObject cam = parent.transform.Find(viveHeadName).gameObject;
             cam.tag = "MainCamera";
             Camera.main.gameObject.SetActive(false);
             //
@@ -111,8 +114,8 @@ public class UserData : MonoBehaviour
          //   head.layer = 9;
             //
             head.transform.parent = cam.transform;
-            leftHand.transform.parent = parent.transform.Find(gameEngine.viveLeftHandName).gameObject.transform;
-            rightHand.transform.parent = parent.transform.Find(gameEngine.viveRightHandName).gameObject.transform;
+            leftHand.transform.parent = parent.transform.Find(viveLeftHandName).gameObject.transform;
+            rightHand.transform.parent = parent.transform.Find(viveRightHandName).gameObject.transform;
         
             SetPlayerPosition(Vector3.zero,Vector3.zero,Vector3.zero);
 

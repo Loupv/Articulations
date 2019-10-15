@@ -9,11 +9,14 @@ public class UIHandler : MonoBehaviour
 
     public GameEngine gameEngine;
     public UserManager userManager;
+    public NetworkManager networkManager;
+    public FileInOut fileInOut;
+    public PlaybackManager playbackManager;
     public ScenarioEvents scenarioEvents;
+    public SendOSC sender;
     public Button networkButtonChoice1, networkButtonChoice2, networkButtonChoice3, networkButtonChoice4,networkButtonChoice5, 
         autoMode, manualMode, launchScenario, pauseScenario, stopScenario, stopAudioRecord;
     public Button FreeCam, POVPlayer1, POVPlayer2, POV3;
-    public ViewerController viewerController;
     public InputField OSCServerAddressInput, sessionIDInputBox, playbackSpeedInputField;
     public GameObject serverManualModeParent, serverAutoModeParent;
     public GameObject clientGOParent, playerNameTextBox, serverGOParent, playbackGOParent;
@@ -29,12 +32,203 @@ public class UIHandler : MonoBehaviour
 
     void Start(){
 
-        if(sendToAudioDeviceToggle.isOn) gameEngine.networkManager.sendToAudioDevice = true;
-        else gameEngine.networkManager.sendToAudioDevice = false;
+        if(sendToAudioDeviceToggle.isOn) networkManager.sendToAudioDevice = true;
+        else networkManager.sendToAudioDevice = false;
 
-        gameEngine.fileInOut.PopulatePlaybackDataFileDropdown(switchPerformanceDataFile);
+        fileInOut.PopulatePlaybackDataFileDropdown(switchPerformanceDataFile);
         ScenarioModeSwitch(1);
     }
+
+    /* ------------------------------------------------ */
+    /* ------ Methods triggered by UI Component ------- */
+    /* ------------------------------------------------ */
+
+
+    public void StartButtonPressed()
+    {
+        if(!(gameEngine._userRole == UserRole.Server && sessionIDInputBox.GetComponent<InputField>().text == "")) gameEngine.StartGame();
+        else Debug.Log("Please enter session ID");
+    }
+
+
+    /* SERVER ONLY */
+    public void EnvironmentChange(string env)
+    {
+        // change env to server
+        if (env == "sky") scenarioEvents.SetNextSkybox();
+        else if (env == "mirror") scenarioEvents.ToggleMirror();
+
+        // change env to clients
+        networkManager.EnvironmentChangeOrder(userManager.usersPlaying, env);
+    }
+    public void ScenarioDropDownChanged(int value){
+        scenarioEvents.currentScenario = value;
+    }
+    public void ChangeVisualisationMode(string i){
+        userManager.ChangeVisualisationMode(i, gameEngine, false);
+    }
+    public void ToggleSendToAudioHandler(){
+        networkManager.sendToAudioDevice = !networkManager.sendToAudioDevice;
+    }
+    public void TrailsDecaySliderChanged(int id){
+        sender.SendTrailValueChange(id, trailsDecaySlider.value, userManager.usersPlaying);
+        userManager.ChangeVisualisationParameter(id, trailsDecaySlider.value); // update also for server visualisation
+        trailTime.text = "TrailTime : "+trailsDecaySlider.value;
+    }
+
+
+    // this method stores in each user data a gap vector that centers him back to the markers at the center of the field
+    // for a client's instance it translates its own parent and leaves head and hands at 0 (to be used with vive locally)
+    // for a client's other instance, it add the gap to each of the sphere
+    // for the server it adds the gap during the update function (taking data from the pending position dictionnary) 
+
+    public void CalibratePlayersPosition(){
+        scenarioEvents.CalibratePlayersPositions(userManager.usersPlaying);
+           //userManager.CalibratePlayerTransform();
+    }
+
+    /* PLAYBACK ONLY */
+    public void ChangePlaybackSpeedSlider(){
+        playbackManager.playbackSpeed = playbackSpeedSlider.value;
+        playbackSpeedInputField.text = Math.Round(playbackSpeedSlider.value, 1).ToString().Replace(",",".");
+    }
+    public void ChangePlaybackSpeedTextField(){
+        float tmpValue = float.Parse(playbackSpeedInputField.text.Replace(".",","));
+        if(tmpValue > playbackSpeedSlider.maxValue) tmpValue = playbackSpeedSlider.maxValue;
+        else if(tmpValue < playbackSpeedSlider.minValue) tmpValue = playbackSpeedSlider.minValue;
+        playbackSpeedSlider.value = tmpValue;
+        playbackManager.playbackSpeed = tmpValue;
+    }
+
+    /* VIEWER / SERVER */
+    public void ChangeViewerPOV(int pov){
+        
+        int tmp = 0;
+
+        switch(pov){
+
+		case 1:
+        tmp = userManager.ReturnPlayerRank(1);
+		if(tmp != -1){
+            FreeCam.image.sprite = normalButtonSprite;
+            POVPlayer1.image.sprite = selectedButtonSprite;
+            POVPlayer2.image.sprite = normalButtonSprite;
+            POV3.image.sprite = normalButtonSprite;
+        }
+		break;
+
+		case 2:
+        tmp = userManager.ReturnPlayerRank(2);
+		if(tmp != -1){
+            FreeCam.image.sprite = normalButtonSprite;
+            POVPlayer1.image.sprite = normalButtonSprite;
+            POVPlayer2.image.sprite = selectedButtonSprite;
+            POV3.image.sprite = normalButtonSprite;
+        }
+        break;
+        
+        default:
+        POVPlayer1.image.sprite = normalButtonSprite;
+        POVPlayer2.image.sprite = normalButtonSprite;
+        break;
+        
+        }
+        userManager.viewerController.UpdatePOV(pov, tmp);
+    }
+
+    
+
+
+
+    /* -------------------------------------------------------------------- */
+    /* Method triggered by script to de/activate or actualize UI components */
+    /* -------------------------------------------------------------------- */
+
+
+    // switch server UI between automated and manual mode
+    public void ScenarioModeSwitch(int value){
+        if(value == 1){
+            scenarioMode = "Auto";
+            serverAutoModeParent.SetActive(true);
+            serverManualModeParent.SetActive(false);
+            manualMode.image.sprite = normalButtonSprite;
+            autoMode.image.sprite = selectedButtonSprite;
+        }
+        else if(value == 2){
+            scenarioMode = "Manual";
+            serverAutoModeParent.SetActive(false);
+            serverManualModeParent.SetActive(true);
+            manualMode.image.sprite = selectedButtonSprite;
+            autoMode.image.sprite = normalButtonSprite;
+        }
+    }
+
+    public void ToggleScenarioButton(int value){
+        if(value == 1){ // start
+            launchScenario.gameObject.SetActive(false);
+            pauseScenario.gameObject.SetActive(true);
+        }
+        else if(value == 2){ // pause
+            if(scenarioEvents.timerPaused) pauseScenario.image.sprite = selectedButtonSprite;
+            else pauseScenario.image.sprite = normalButtonSprite;
+        }
+        else if(value == 0){ // stop
+            launchScenario.gameObject.SetActive(true);
+            pauseScenario.gameObject.SetActive(false);
+        }
+
+    }
+
+    public void ActualizeGizmos(bool isRecording, bool isPaused){
+        if(isRecording && !isPaused){
+            recordGizmo.SetActive(true);
+            pauseGizmo.SetActive(false);
+        }
+        else if(isRecording && isPaused){    
+            recordGizmo.SetActive(false);
+            pauseGizmo.SetActive(true);
+        }
+        else if(!isRecording){    
+            recordGizmo.SetActive(false);
+            pauseGizmo.SetActive(false);
+        }
+    }
+
+
+    public void PopulateScenariosDropdown(Scenario[] scenarios){
+        scenarioDropDown.ClearOptions();
+
+        foreach(Scenario scenario in scenarios){
+            string cond = "";
+            foreach(string s in scenario.conditions) cond += s;
+            //scenarioDropDown.options.Add(new Dropdown.OptionData("Scenario"+scenario.scenarioId));
+            scenarioDropDown.options.Add(new Dropdown.OptionData("Scenario-"+cond));
+        }
+    }
+
+    public void CountRecordTimeRemaining(){
+        launchScenario.gameObject.SetActive(false);
+        stopAudioRecord.gameObject.SetActive(true);
+        recordingTimeRemaining.gameObject.SetActive(true);
+        //tmpTimer = gameEngine.audioRecordManager.postScenarioRecordingLenght;
+        tmpTimer = 0;
+        InvokeRepeating("TimerUI", 0f,1f);
+    }
+
+    public void CancelRecordTime(){
+        launchScenario.gameObject.SetActive(true);
+        stopAudioRecord.gameObject.SetActive(false);
+        recordingTimeRemaining.gameObject.SetActive(false);
+        CancelInvoke("TimerUI");
+    }
+
+    void TimerUI(){
+        recordingTimeRemaining.text = "Record Time : "+tmpTimer;
+        tmpTimer++;
+        //tmpTimer--;
+        //if(tmpTimer < 0) CancelRecordTime();
+    }
+
 
     public void FillServerIPField(int runInLocal, string serverIP){
 
@@ -115,232 +309,18 @@ public class UIHandler : MonoBehaviour
             networkButtonChoice4.image.sprite = normalButtonSprite;
             networkButtonChoice5.image.sprite = selectedButtonSprite;
             playerNameTextBox.gameObject.SetActive(false);
-            if(gameEngine.playbackManager.mode == PlaybackMode.Online) OSCServerAddressInput.gameObject.SetActive(true);
-            else if(gameEngine.playbackManager.mode == PlaybackMode.Offline) OSCServerAddressInput.gameObject.SetActive(false);
+            if(playbackManager.mode == PlaybackMode.Online) OSCServerAddressInput.gameObject.SetActive(true);
+            else if(playbackManager.mode == PlaybackMode.Offline) OSCServerAddressInput.gameObject.SetActive(false);
             clientGOParent.gameObject.SetActive(false);
             serverGOParent.gameObject.SetActive(false);
             playbackGOParent.gameObject.SetActive(true);
         }
     }
 
-    // server function
-    public void EnvironmentChange(string env)
-    {
-        // change env to server
-        if (env == "sky") gameEngine.scenarioEvents.SetNextSkybox();
-        else if (env == "mirror") gameEngine.scenarioEvents.ToggleMirror();
-
-        // change env to clients
-        gameEngine.networkManager.EnvironmentChangeOrder(userManager.usersPlaying, env);
-    }
-
-    
-    public void ScenarioDropDownChanged(int value){
-        gameEngine.scenarioEvents.currentScenario = value;
-    }
 
 
-    // switch server UI between automated and manual mode
-    public void ScenarioModeSwitch(int value){
-        if(value == 1){
-            scenarioMode = "Auto";
-            serverAutoModeParent.SetActive(true);
-            serverManualModeParent.SetActive(false);
-            manualMode.image.sprite = normalButtonSprite;
-            autoMode.image.sprite = selectedButtonSprite;
-        }
-        else if(value == 2){
-            scenarioMode = "Manual";
-            serverAutoModeParent.SetActive(false);
-            serverManualModeParent.SetActive(true);
-            manualMode.image.sprite = selectedButtonSprite;
-            autoMode.image.sprite = normalButtonSprite;
-        }
-    }
-
-    public void ToggleScenarioButton(int value){
-        if(value == 1){ // start
-            launchScenario.gameObject.SetActive(false);
-            pauseScenario.gameObject.SetActive(true);
-        }
-        else if(value == 2){ // pause
-            if(scenarioEvents.timerPaused) pauseScenario.image.sprite = selectedButtonSprite;
-            else pauseScenario.image.sprite = normalButtonSprite;
-        }
-        else if(value == 0){ // stop
-            launchScenario.gameObject.SetActive(true);
-            pauseScenario.gameObject.SetActive(false);
-        }
-
-    }
-
-/* 
-    public void SetPlayerRole(int i) // 0 for player, 1 for viewer
-    {
-        if (i == 0) // player
-        {
-            gameEngine._userRole = UserRole.Player;
-            roleButtonChoice1.image.sprite = selectedButtonSprite;
-            roleButtonChoice2.image.sprite = normalButtonSprite;
-        }
-
-        else if (i == 1) // viewer
-        {
-            gameEngine._userRole = UserRole.Viewer;
-            roleButtonChoice1.image.sprite = normalButtonSprite;
-            roleButtonChoice2.image.sprite = selectedButtonSprite;
-        }
-    }*/
-
-
-    public void StartButtonPressed()
-    {
-        if(!(gameEngine._userRole == UserRole.Server && sessionIDInputBox.GetComponent<InputField>().text == "")) gameEngine.StartGame();
-        else Debug.Log("Please enter session ID");
-    }
-
-
-    public void ChangeVisualisationMode(string i){
-        // for server
-        userManager.ChangeVisualisationMode(i, gameEngine, false);
-    }
-
-    public void ChangePlaybackSpeedSlider(){
-        gameEngine.playbackManager.playbackSpeed = playbackSpeedSlider.value;
-        playbackSpeedInputField.text = Math.Round(playbackSpeedSlider.value, 1).ToString().Replace(",",".");
-    }
-    public void ChangePlaybackSpeedTextField(){
-        float tmpValue = float.Parse(playbackSpeedInputField.text.Replace(".",","));
-        if(tmpValue > playbackSpeedSlider.maxValue) tmpValue = playbackSpeedSlider.maxValue;
-        else if(tmpValue < playbackSpeedSlider.minValue) tmpValue = playbackSpeedSlider.minValue;
-        playbackSpeedSlider.value = tmpValue;
-        gameEngine.playbackManager.playbackSpeed = tmpValue;
-    }
-
-
-    public void ActualizeGizmos(bool isRecording, bool isPaused){
-        if(isRecording && !isPaused){
-            recordGizmo.SetActive(true);
-            pauseGizmo.SetActive(false);
-        }
-        else if(isRecording && isPaused){    
-            recordGizmo.SetActive(false);
-            pauseGizmo.SetActive(true);
-        }
-        else if(!isRecording){    
-            recordGizmo.SetActive(false);
-            pauseGizmo.SetActive(false);
-        }
-    }
-
-
-    public void ChangeViewerPOV(int pov){
-        
-        int tmp = 0;
-
-        switch(pov){
-		/*case 0: // free mode
-        FreeCam.image.sprite = selectedButtonSprite;
-        POVPlayer1.image.sprite = normalButtonSprite;
-        POVPlayer2.image.sprite = normalButtonSprite;
-        POV3.image.sprite = normalButtonSprite;
-		break;*/
-
-		case 1:
-        tmp = userManager.ReturnPlayerRank(1);
-		if(tmp != -1){
-            FreeCam.image.sprite = normalButtonSprite;
-            POVPlayer1.image.sprite = selectedButtonSprite;
-            POVPlayer2.image.sprite = normalButtonSprite;
-            POV3.image.sprite = normalButtonSprite;
-        }
-		break;
-
-		case 2:
-        tmp = userManager.ReturnPlayerRank(2);
-		if(tmp != -1){
-            FreeCam.image.sprite = normalButtonSprite;
-            POVPlayer1.image.sprite = normalButtonSprite;
-            POVPlayer2.image.sprite = selectedButtonSprite;
-            POV3.image.sprite = normalButtonSprite;
-        }
-        break;
-        
-        default:
-        POVPlayer1.image.sprite = normalButtonSprite;
-        POVPlayer2.image.sprite = normalButtonSprite;
-        break;
-        
-        /* case 3:
-		FreeCam.image.sprite = normalButtonSprite;
-        POVPlayer1.image.sprite = normalButtonSprite;
-        POVPlayer2.image.sprite = normalButtonSprite;
-        POV3.image.sprite = selectedButtonSprite;
-		break;*/
-        }
-        viewerController.UpdatePOV(pov, tmp);
-    }
-
-    public void ToggleSendToAudioHandler(){
-        gameEngine.networkManager.sendToAudioDevice = !gameEngine.networkManager.sendToAudioDevice;
-    }
-
-    // Is a server function // triggered by UI button
-    public void TrailsDecaySliderChanged(int id){
-        gameEngine.osc.sender.SendTrailValueChange(id, trailsDecaySlider.value, userManager.usersPlaying);
-        userManager.ChangeVisualisationParameter(id, trailsDecaySlider.value); // update also for server visualisation
-        trailTime.text = "TrailTime : "+trailsDecaySlider.value;
-    }
-
-
-    // this method stores in each user data a gap vector that centers him back to the markers at the center of the field
-    // for a client's instance it translates its own parent and leaves head and hands at 0 (to be used with vive locally)
-    // for a client's other instance, it add the gap to each of the sphere
-    // for the server it adds the gap during the update function (taking data from the pending position dictionnary) 
-
-    public void CalibratePlayersPosition(){
-        scenarioEvents.CalibratePlayersPositions();
-           //userManager.CalibratePlayerTransform();
-    }
-
-
-    public void PopulateScenariosDropdown(Scenario[] scenarios){
-        scenarioDropDown.ClearOptions();
-
-        foreach(Scenario scenario in scenarios){
-            string cond = "";
-            foreach(string s in scenario.conditions) cond += s;
-            //scenarioDropDown.options.Add(new Dropdown.OptionData("Scenario"+scenario.scenarioId));
-            scenarioDropDown.options.Add(new Dropdown.OptionData("Scenario-"+cond));
-        }
-    }
-
-    public void CountRecordTimeRemaining(){
-        launchScenario.gameObject.SetActive(false);
-        stopAudioRecord.gameObject.SetActive(true);
-        recordingTimeRemaining.gameObject.SetActive(true);
-        //tmpTimer = gameEngine.audioRecordManager.postScenarioRecordingLenght;
-        tmpTimer = 0;
-        InvokeRepeating("TimerUI", 0f,1f);
-    }
-
-    public void CancelRecordTime(){
-        launchScenario.gameObject.SetActive(true);
-        stopAudioRecord.gameObject.SetActive(false);
-        recordingTimeRemaining.gameObject.SetActive(false);
-        CancelInvoke("TimerUI");
-    }
-
-    void TimerUI(){
-        recordingTimeRemaining.text = "Record Time : "+tmpTimer;
-        tmpTimer++;
-        //tmpTimer--;
-        //if(tmpTimer < 0) CancelRecordTime();
-    }
-
-
-    public void quitApp()
+    /*public void quitApp()
     {
         Application.Quit();
-    }
+    }*/
 }

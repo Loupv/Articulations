@@ -149,9 +149,9 @@ public class ScenarioEvents : MonoBehaviour
         
         if(interrupted == 0){ // if scenario had ended well 
             Debug.Log("Scenario "+(currentScenario+1)+" done !");
-            if(gameEngine.audioRecordManager.recordPostScenarioAudio){
+            if(gameEngine.soundHandler.recordPostScenarioAudio){
                 
-                gameEngine.osc.sender.StartAudioRecording(gameEngine.audioRecordManager.postScenarioRecordingLenght, gameEngine.userManager.usersPlaying);
+                gameEngine.osc.sender.StartAudioRecording(gameEngine.soundHandler.postScenarioRecordingLenght, gameEngine.userManager.usersPlaying);
             }
         }
         else Debug.Log("Scenario "+(currentScenario+1)+" Interrupted !");
@@ -232,7 +232,7 @@ public class ScenarioEvents : MonoBehaviour
     }
 
     // server side
-    public void CalibratePlayersPositions(){
+    public void CalibratePlayersPositions(List<UserData> usersPlaying){
 
         int i = 0, j= 0;
         // stores calib gaps into UserData to be sent later to clients and applied server side
@@ -249,7 +249,7 @@ public class ScenarioEvents : MonoBehaviour
         }
 
         // client side
-        gameEngine.networkManager.SendClientPositionGap();
+        gameEngine.networkManager.SendClientPositionGap(usersPlaying);
     }
 
 

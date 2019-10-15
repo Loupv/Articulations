@@ -46,7 +46,7 @@ public class SendOSC : MonoBehaviour {
             message.values.Add(gameEngine.currentVisualisationMode);
             message.values.Add(user._registeredRank);
             
-            if(gameEngine.audioRecordManager.recordPostScenarioAudio) message.values.Add(1);
+            if(gameEngine.soundHandler.recordPostScenarioAudio) message.values.Add(1);
             else message.values.Add(0);
             
             message.values.Add(gameEngine.gameData.audioRecordLength);
@@ -342,7 +342,6 @@ public class SendOSC : MonoBehaviour {
 
         foreach (UserData targetUser in usersPlaying)
         {
-            
             osc.OscPacketIO.RemoteHostName = targetUser.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = targetUser.oscEndPoint.remotePort;
             message = new OscMessage();

@@ -55,8 +55,6 @@ public class GameEngine : MonoBehaviour
     [HideInInspector] public CanvasHandler canvasHandler;
     [HideInInspector] public UIHandler uiHandler;
     [HideInInspector] public SoundHandler soundHandler;
-    [HideInInspector] public SoundInstructionPlayer instructionPlayer;
-    [HideInInspector] public AudioRecordManager audioRecordManager;
     [HideInInspector] public PlaybackManager playbackManager;
     [HideInInspector] public Clock clock;
 
@@ -73,10 +71,7 @@ public class GameEngine : MonoBehaviour
 
     [HideInInspector]
     public bool useVRHeadset;
-        public string viveSystemName = "[CameraRig]", 
-        viveHeadName  = "Camera", 
-        viveLeftHandName = "Controller (left)", 
-        viveRightHandName = "Controller (right)";
+
     
     public bool debugMode = false;//, weFade = false;
     public GameObject debugPrefab;
@@ -108,8 +103,6 @@ public class GameEngine : MonoBehaviour
         
         fileInOut =             (FileInOut)FindObjectOfType(typeof(FileInOut));
         soundHandler =          (SoundHandler)FindObjectOfType(typeof(SoundHandler));
-        audioRecordManager =    soundHandler.gameObject.GetComponentInChildren<AudioRecordManager>();
-        instructionPlayer =     soundHandler.gameObject.GetComponentInChildren<SoundInstructionPlayer>();
         clock =                 (Clock)FindObjectOfType(typeof(Clock));
 
         canvasHandler.ChangeCanvas("initCanvas");
@@ -130,9 +123,7 @@ public class GameEngine : MonoBehaviour
         
         userManager.keepNamesVisibleForPlayers = (gameData.showNamesAboveHead == 1);
 
-        // sonification
-        soundHandler.Init(gameData.OSC_SoundHandlerIP, gameData.OSC_SoundHandlerPort);
-
+        
         // adjust user's parameters
         useVRHeadset = (gameData.useVr ==1);
         StartCoroutine(EnableDisableVRMode(useVRHeadset));
@@ -178,9 +169,12 @@ public class GameEngine : MonoBehaviour
 
         _user = userManager.InitLocalUser(this, ID, uiChosenName, tmpIp, gameData.OSC_ServerPort, true, _userRole);
 
-        networkManager.InitNetwork(_userRole, gameData, uiHandler.OSCServerAddressInput.text);
+        networkManager.InitNetwork(_userRole, gameData, uiHandler.OSCServerAddressInput.text, playbackManager.mode);
 
         if(_userRole != UserRole.Playback) userManager.ChangeVisualisationMode("0", this, false);
+
+
+        soundHandler.Init(gameData.OSC_SoundHandlerIP, gameData.OSC_SoundHandlerPort, _userRole, uiHandler.recordAudioAfterScenario.isOn, gameData.audioRecordLength);
 
 
         if (_userRole == UserRole.Server)
@@ -191,8 +185,8 @@ public class GameEngine : MonoBehaviour
             appState = AppState.Running;
             
             canvasHandler.ChangeCanvas("serverCanvas");
-            audioRecordManager.recordPostScenarioAudio = uiHandler.recordAudioAfterScenario.isOn;
-            audioRecordManager.postScenarioRecordingLenght = gameData.audioRecordLength;
+            // sonification
+
         }
 
         else if(_userRole == UserRole.Playback){
@@ -237,10 +231,10 @@ public class GameEngine : MonoBehaviour
             _user._registeredRank = rank;
             scenarioEvents.performanceRecorder.sessionID = sessionID;
 
-            audioRecordManager.recordPostScenarioAudio = (recordAudio == 1);
+            soundHandler.recordPostScenarioAudio = (recordAudio == 1);
     
-            if(audioRecordManager.recordPostScenarioAudio)  
-                audioRecordManager.InitAudioRecorder(scenarioEvents.performanceRecorder.sessionID, recordLength);
+            if(soundHandler.recordPostScenarioAudio)  
+                soundHandler.InitAudioRecorder(scenarioEvents.performanceRecorder.sessionID, recordLength);
 
             if(_user._userRole == UserRole.Player) 
                 canvasHandler.ChangeCanvas("gameCanvas");
@@ -304,7 +298,7 @@ public class GameEngine : MonoBehaviour
             osc.Close();
         }
         else if(_userRole == UserRole.Player){
-            if(audioRecordManager.isRecording) audioRecordManager.Stop();
+            if(soundHandler.isRecording) soundHandler.Stop();
         }
         
         Camera.main.transform.parent = GameObject.Find("--------- Scene Objects ------------").transform;
@@ -339,7 +333,7 @@ public class GameEngine : MonoBehaviour
         if ((_userRole == UserRole.Player || _userRole == UserRole.Viewer || _userRole == UserRole.Tracker || _userRole == UserRole.Playback) && osc.initialized)
             osc.sender.SendQuitMessage(_userRole);
         else if (_userRole == UserRole.Server && osc.initialized){
-            if(scenarioEvents.performanceRecorder.isRecording) scenarioEvents.performanceRecorder.SaveTofile();
+            if(scenarioEvents.performanceRecorder.isRecording) scenarioEvents.performanceRecorder.StopRecording();
             osc.sender.SendQuitMessage(_userRole); // TODO adapt if server
         }
 

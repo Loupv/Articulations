@@ -143,6 +143,7 @@ public class ReceiveOSC : MonoBehaviour {
             Debug.Log("All recordings are stopped");
             gameEngine.uiHandler.CancelRecordTime();
             clientAnswersPending = 0;
+            gameEngine.uiHandler.ActualizeGizmos(false, false);
         }
         if(gameEngine.uiHandler.autoRecordPerformance.isOn && gameEngine.uiHandler.recordAudioAfterScenario.isOn) 
             gameEngine.scenarioEvents.performanceRecorder.StopRecording();
@@ -255,7 +256,7 @@ public class ReceiveOSC : MonoBehaviour {
 
                 if (userManager.me._ID == user._ID && gameEngine.useVRHeadset && calibVec != Vector3.zero)
                 { // if me with headset
-                    GameObject viveParent = GameObject.Find(gameEngine.viveSystemName);
+                    GameObject viveParent = GameObject.Find(userManager.viveSystemName);
                     GameObject camera = viveParent.transform.Find("Camera").gameObject;
                     viveParent.transform.position += user.calibrationPositionGap - new Vector3(camera.transform.position.x, 0, camera.transform.position.z) 
                         + gameEngine.scenarioEvents.calibrationTransforms[user._registeredRank].transform.position;
@@ -286,12 +287,12 @@ public class ReceiveOSC : MonoBehaviour {
     public void StartAudioRecording(OscMessage message){
         Debug.Log(message);
         int audioLenght = message.GetInt(0);
-        if(userManager.me._userRole == UserRole.Player) gameEngine.audioRecordManager.Launch(audioLenght);
+        if(userManager.me._userRole == UserRole.Player) gameEngine.soundHandler.Launch(audioLenght);
     }
 
     public void StopAudioRecording(OscMessage message){
         Debug.Log(message);
-        if(userManager.me._userRole == UserRole.Player) gameEngine.audioRecordManager.Stop();
+        if(userManager.me._userRole == UserRole.Player) gameEngine.soundHandler.Stop();
     }
 
     // i'm client, server has quit
