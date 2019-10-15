@@ -31,12 +31,16 @@ public class Workshop : MonoBehaviour
      */
 
     public OSC osc;
+    public List<UserData> _usersPlaying;
+    bool initialized;
 
 
     // Start is called before the first frame update
-    void Init()
+    void Init(List<UserData> usersPlaying)
     {
         StartListening();
+        _usersPlaying = usersPlaying;
+        initialized = true;
     }
 
 
@@ -45,6 +49,12 @@ public class Workshop : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        foreach(UserData user in _usersPlaying){
+
+            // do blablabla
+
+        }
+
         
     }
 
