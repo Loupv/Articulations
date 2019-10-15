@@ -166,7 +166,6 @@ public class DrawShape : MonoBehaviour
 }
 
 
-    // Update is called once per frame
     public float DrawContraction(Transform s1,Transform s2,Transform s3)
     {
         //CreatePrism();

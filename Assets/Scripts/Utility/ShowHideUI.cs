@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShowHideUI : MonoBehaviour
 {
-    public Camera camera;
+    public Camera cam;
     public bool visible = true;
 
     // Start is called before the first frame update
@@ -24,11 +24,11 @@ public class ShowHideUI : MonoBehaviour
     }
 
     private void Show(){
-        camera.cullingMask |= 1 << LayerMask.NameToLayer("UI");
+        cam.cullingMask |= 1 << LayerMask.NameToLayer("UI");
         visible = true;
     }
     private void Hide() {
-        camera.cullingMask &=  ~(1 << LayerMask.NameToLayer("UI"));
+        cam.cullingMask &=  ~(1 << LayerMask.NameToLayer("UI"));
         visible = false;
     }
 

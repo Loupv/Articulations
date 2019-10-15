@@ -24,6 +24,11 @@ public class SendOSC : MonoBehaviour {
         }
     }
 
+    public void SendCustomMessage(OscMessage customMessage, OSCEndPoint oscEndPoint){
+        osc.OscPacketIO.RemoteHostName = oscEndPoint.ip;
+        osc.OscPacketIO.RemotePort = oscEndPoint.remotePort;
+        osc.Send(customMessage);
+    }
 
 
 /*
