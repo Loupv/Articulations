@@ -96,6 +96,10 @@ public class PlaybackManager : MonoBehaviour
         floatTimeTracker = performanceFile.lines.Count/3 * (i-1);
     }
 
+    public void JumpInTime(int timeGap){
+        floatTimeTracker += timeGap * (double)gameEngine.gameData.saveFileFrequency;
+    }
+
     public void PausePlayback(){
         if(!paused){ // pause
             lastSpeed = playbackSpeed;
