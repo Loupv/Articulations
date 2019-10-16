@@ -121,7 +121,7 @@ public class FileInOut : MonoBehaviour {
         string[] files = Directory.GetFiles(Application.dataPath +"/StreamingAssets/Recordings/");
 
         foreach(string file in files){
-            if(!file.Contains(".meta")){
+            if (!file.Contains(".meta") && !file.Contains(".DS_Store")) {
                 dropdown.options.Add(new UnityEngine.UI.Dropdown.OptionData(file.Replace(Application.dataPath +"/StreamingAssets/Recordings/", "")));
                 performanceDataFiles.Add(file);
             }

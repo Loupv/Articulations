@@ -49,6 +49,7 @@ public class EyeswebOSC : MonoBehaviour
     public bool initialized;
     double ts, oldTs;
 
+
 	// Use this for initialization
 	public void Init (UserRole userRole) {
         
@@ -150,6 +151,18 @@ if(message.address.Contains("P1") || message.address.Contains("P2")){
 
         //if(_userRole == UserRole.Server) SendEyesWebDataToPlayers(); // if we have real players to send data coming back from eyesweb
         
+    }
+
+
+    public UserPerformanceData GetUserPerformanceData(int id)
+    {
+        if (id == 1) return player1PerformanceData;
+        else if (id == 2) return player2PerformanceData;
+        else return null;
+    }
+    public SharedPerformanceData GetUserPerformanceData()
+    {
+        return sharedPerformanceData;
     }
 
 

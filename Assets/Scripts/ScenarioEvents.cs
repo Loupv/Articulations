@@ -49,46 +49,6 @@ public class ScenarioEvents : MonoBehaviour
         //particleList = new List<GameObject>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        /*/if (Input.GetKeyUp(KeyCode.M))
-            ToggleMirror();
-
-
-        if (Input.GetKeyUp(KeyCode.B))
-            bubblesAct = !bubblesAct;
-
-        if (bubblesAct)
-        {
-            bubbles.SetActive(true);
-        }
-        else 
-        {
-            bubbles.SetActive(false);
-        }
-
-        if (Input.GetKeyUp(KeyCode.S))
-        {
-            SetNextSkybox();
-        }
-
-        if (Input.GetKeyUp(KeyCode.P))
-        {
-
-            shortTrails = particleSystems[j];
-            longTrails = particleSystems[j+1];
-            j += 2;
-            Debug.Log(j);
-        }
-
-        if (j > particleSystems.Length - 1)
-        j = 0;
-
-        */
-
-    }
-
 
     public void StartScenario(){
 

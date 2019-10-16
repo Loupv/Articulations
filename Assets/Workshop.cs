@@ -6,6 +6,14 @@ public class Workshop : MonoBehaviour
 {
 
     /*
+     * Workshop is handles as :
+     *
+     *  clients are autonomous from server, they receive all gesture qualities from server and use it as they want
+     *  it's made easy to log in/off quickly and implement new things
+     *  server stays running, visual changes are only done on client side
+
+
+    Example of things to work with :
     - Link to user parts
 
     - Examples on how to change the environment / lights
@@ -24,16 +32,17 @@ public class Workshop : MonoBehaviour
 
     - Possibilité d'envoyer un ordre OSC custom côté server / et de le recevoir côté client
 
-    
-    
-    
-    
-     */
+    */
+
 
     public OSC osc;
+    public GameEngine gameEngine;
+    public EyeswebOSC eyeswebOSC;
     public List<UserData> _usersPlaying;
     bool initialized;
 
+    UserPerformanceData player1PerformanceData, player2PerformanceData;
+    SharedPerformanceData sharedPerformanceData;
 
     // Start is called before the first frame update
     void Init(List<UserData> usersPlaying)
@@ -49,13 +58,34 @@ public class Workshop : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        foreach(UserData user in _usersPlaying){
 
-            // do blablabla
+        // Actualize gesture data
+        player1PerformanceData = eyeswebOSC.GetUserPerformanceData(1);
+        player2PerformanceData = eyeswebOSC.GetUserPerformanceData(2);
+        sharedPerformanceData = eyeswebOSC.GetUserPerformanceData();
+
+
+        // actualize things on players
+        //if (initialized)
+        {
+            foreach (UserData user in _usersPlaying)
+            {
+                // do blablabla
+                user.leftHand.GetComponentInChildren<ParticleSystem>().startSpeed = Mathf.Sin((float)gameEngine.clock.GetTimeSinceSceneStart() * Mathf.PI);
+                user.leftHand.GetComponentInChildren<ParticleSystem>().startSize = Mathf.Sin((float)gameEngine.clock.GetTimeSinceSceneStart() * Mathf.PI);
+
+
+            }
 
         }
 
-        
+
+        // modify environment parameters
+
+        //gameEngine.scenarioEvents.SetTimeOfDay(12); // 24h format
+        // visual FXs
+
+
     }
 
 
