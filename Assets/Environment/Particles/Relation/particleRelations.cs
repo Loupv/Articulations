@@ -93,7 +93,7 @@ public class particleRelations : MonoBehaviour
                         veloModulee.enabled = false;
                         _areClose = true;
                     }
-                    float lfTime = dist.Remap(1.5f, 0f, 3f, 12f);
+                    float lfTime = dist.Remap(1.5f, 0f, 3f, 20f);
                     myparticles.startLifetime = lfTime;
                 }
 

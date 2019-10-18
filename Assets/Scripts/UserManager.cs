@@ -29,7 +29,10 @@ public class UserManager : MonoBehaviour
     private bool _isLerping, _hasLerped;
     private Vector3[] _startPositionRightHand = new Vector3[8], _startPositionLeftHand = new Vector3[8];
     private Vector3[] _endPositionRightHand = new Vector3[8], _endPositionLeftHand = new Vector3[8];
-    private Vector3[] _initialPositionRightHand, _initialPositionLeftHand;
+    //private Vector3[] _initialPositionRightHand, _initialPositionLeftHand;
+   // private List<Vector3> _startPositionRightHand = new List<Vector3>(), _startPositionLeftHand = new List<Vector3>();
+  //  private List<Vector3> _endPositionRightHand = new List<Vector3>(), _endPositionLeftHand = new List<Vector3>();
+    private List<Vector3> _initialPositionRightHand = new List<Vector3>(), _initialPositionLeftHand = new List<Vector3>();
     private float _timeStartedLerping;
     // end of arm extension variables
     public string trailsCondition;
@@ -38,8 +41,9 @@ public class UserManager : MonoBehaviour
     bool _areFar;
     bool _areClose;
     public bool playerNameVisible;
-    ParticleSystem[] trailSystemsR = new ParticleSystem[4];
-    ParticleSystem[] trailSystemsL = new ParticleSystem[4];
+    List<ParticleSystem> trailSystems = new List<ParticleSystem>();
+    //ParticleSystem[] trailSystemsR = new ParticleSystem[4];
+    //ParticleSystem[] trailSystemsL = new ParticleSystem[4];
 
 
 
@@ -58,11 +62,9 @@ public class UserManager : MonoBehaviour
         playbackColor1 = new Color(0.8f, 0.8f, 0.8f);
         playbackColor2 = new Color(0.6f, 0.6f, 0.6f);
 
-        GetInitialArmsPositions();  // this is needed once to reverse all arm extension that may occur
+
         trailsCondition = null;
         trailsRelated = false;
-
-
     }
 
 
@@ -205,6 +207,8 @@ public class UserManager : MonoBehaviour
                             user.ChangeSkin(this, "all");
                         }
                         else {
+                            GetInitialArmsPositions();  // this is needed once to reverse all arm extension that may occur
+
                             if (user._ID == me._ID)
                                 user.ChangeSkin(this, "all");
                             else user.ChangeSkin(this, "nothing");
@@ -225,11 +229,12 @@ public class UserManager : MonoBehaviour
                     }
                     else if (mode == "1C" || mode == "1Ca" || mode == "1Cb" || mode == "1Cc") // change arms length
                     {
+                        Debug.Log("extension arms");
                         user.ChangeSkin(this, "all");
                         if (mode == "1Ca") {
                             Debug.Log("move arms");
                             distanceToMove = -0.3f;
-                            lerpDuration = 4f;
+                            lerpDuration = 3f;
                             StartArmsLerping();
                         }
                         else if (mode == "1Cb")
@@ -272,11 +277,14 @@ public class UserManager : MonoBehaviour
                         else
                         {
                             if (user._ID == me._ID)
+                            {
                                 user.ChangeSkin(this, "trails");
+
+                            }
                             else user.ChangeSkin(this, "trails");
                         }
-                        trailsRelated = true;
-                        GetAllParticleSystems();
+                       // trailsRelated = true;
+                       // GetAllParticleSystems();
                         // DeActivateParticleVelocity();
                         trailsCondition = null;
                     }
@@ -291,8 +299,8 @@ public class UserManager : MonoBehaviour
                                 user.ChangeSkin(this, "trails");
                             else user.ChangeSkin(this, "trails");
                         }
-                        trailsRelated = true;
-                        GetAllParticleSystems();
+                      //  trailsRelated = true;
+                       // GetAllParticleSystems();
                         // DeActivateParticleVelocity();
                         trailsCondition = "soloR";
                     }
@@ -304,6 +312,7 @@ public class UserManager : MonoBehaviour
                         trailsCondition = "relation";
                         trailsRelated = true;
                         GetAllParticleSystems();
+                       // ActivateParticleVelocity();
                         _areFar = true;
                         _areClose = true;
                     }
@@ -490,18 +499,28 @@ public class UserManager : MonoBehaviour
 
     void GetInitialArmsPositions(){
 
-        int i = 0;
-        if (_initialPositionRightHand == null || _initialPositionLeftHand == null)
+        // _initialPositionRightHand.Clear();
+        // _initialPositionLeftHand.Clear();
+
+        // int i = 0;
+        //  if (_initialPositionRightHand == null || _initialPositionLeftHand == null)
+        if (_initialPositionRightHand.Count == 0 || _initialPositionLeftHand.Count == 0)
         {
-            _initialPositionRightHand = new Vector3[8];
-            _initialPositionLeftHand = new Vector3[8];
+            // _initialPositionRightHand = new Vector3[8];
+            //  _initialPositionLeftHand = new Vector3[8];
             foreach (UserData user in usersPlaying) // store initial local position 
             {
                 if (user._userRole == UserRole.Player)
                 {
-                    _initialPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition;
-                    _initialPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition;
-                    i++;
+                    if (user._ID == me._ID)
+                    {
+                       // _initialPositionRightHand[i] = user.rightHand.transform.localPosition;
+                      //  _initialPositionLeftHand[i] = user.leftHand.transform.localPosition;
+                _initialPositionRightHand.Add(user.rightHand.transform.localPosition);
+                _initialPositionLeftHand.Add(user.leftHand.transform.localPosition);
+                Debug.Log("initial list filled with " + _initialPositionLeftHand.Count);
+               // i++;
+                    }
                 }
             }
         }
@@ -516,11 +535,14 @@ public class UserManager : MonoBehaviour
         {
             if (user._userRole == UserRole.Player)
             {
-                _startPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition;
-                _endPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition + (Vector3.up * distanceToMove) - usersPlaying[i].rightHand.transform.localPosition;
-                _startPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition;
-                _endPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition + (Vector3.up * distanceToMove) - usersPlaying[i].rightHand.transform.localPosition;
-                i++;
+                if (user._ID == me._ID)
+                {
+                    _startPositionRightHand[i] = user.rightHand.transform.localPosition;
+                    _endPositionRightHand[i] = user.rightHand.transform.localPosition + (Vector3.up * distanceToMove) - user.rightHand.transform.localPosition;
+                    _startPositionLeftHand[i] = user.leftHand.transform.localPosition;
+                    _endPositionLeftHand[i] = user.leftHand.transform.localPosition + (Vector3.up * distanceToMove) - user.rightHand.transform.localPosition;
+                   i++;
+                }
             }
         }
         _hasLerped = true;
@@ -536,11 +558,14 @@ public class UserManager : MonoBehaviour
         {
             if (user._userRole == UserRole.Player)
             {
-                _startPositionRightHand[i] = usersPlaying[i].rightHand.transform.localPosition;
-                _endPositionRightHand[i] = _initialPositionRightHand[i];
-                _startPositionLeftHand[i] = usersPlaying[i].leftHand.transform.localPosition;
-                _endPositionLeftHand[i] = _initialPositionLeftHand[i];
-                i++;
+                if (user._ID == me._ID)
+                {
+                    _startPositionRightHand[i] = user.rightHand.transform.localPosition;
+                    _endPositionRightHand[i] = _initialPositionRightHand[i];
+                    _startPositionLeftHand[i] = user.leftHand.transform.localPosition;
+                    _endPositionLeftHand[i] = _initialPositionLeftHand[i];
+                    i++;
+                }
             }
         }
         _hasLerped = false;
@@ -550,6 +575,7 @@ public class UserManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        // arms extension
         if (_isLerping)
         {
 
@@ -562,9 +588,12 @@ public class UserManager : MonoBehaviour
             {
                 if (user._userRole == UserRole.Player)
                 {
-                    usersPlaying[i].rightHand.transform.localPosition = Vector3.Lerp(_startPositionRightHand[i], _endPositionRightHand[i], percentageComplete);
-                    usersPlaying[i].leftHand.transform.localPosition = Vector3.Lerp(_startPositionLeftHand[i], _endPositionLeftHand[i], percentageComplete);
-                    i++;
+                    if (user._ID == me._ID)
+                    {
+                        user.rightHand.transform.localPosition = Vector3.Lerp(_startPositionRightHand[i], _endPositionRightHand[i], percentageComplete);
+                        user.leftHand.transform.localPosition = Vector3.Lerp(_startPositionLeftHand[i], _endPositionLeftHand[i], percentageComplete);
+                        i++;
+                    }
                 }
             }
 
@@ -573,7 +602,9 @@ public class UserManager : MonoBehaviour
                 _isLerping = false;
             }
         }
-
+        // end of arms extension
+        if (Input.GetKeyUp(KeyCode.P))
+            ActivateParticleVelocity();
         // trails proximity
         if (trailsCondition == "relation")
         {
@@ -621,59 +652,74 @@ public class UserManager : MonoBehaviour
 
     void GetAllParticleSystems()
     {
-            if (trailsRelated == true)
+        if (trailsRelated == true)
+        {
+            if (trailSystems.Count == 0)
             {
-                int i = 0;
+                //trailSystems.Clear();
+                // int i = 0;
                 foreach (UserData user in usersPlaying)
                 {
                     if (user._userRole == UserRole.Player)
                     {
-                        trailSystemsR[i] = usersPlaying[i].rightHand.GetComponentInChildren<ParticleSystem>();
-                        trailSystemsL[i] = usersPlaying[i].leftHand.GetComponentInChildren<ParticleSystem>();
-                        i++;
+                        if (user._ID == me._ID)
+                        {
+                            //trailSystemsR[i] = user.rightHand.GetComponentInChildren<ParticleSystem>();
+                            // trailSystemsL[i] = user.leftHand.GetComponentInChildren<ParticleSystem>();
+                            trailSystems.Add(user.rightHand.GetComponentInChildren<ParticleSystem>());
+                            //trailSystems[i].startLifetime = 100f;
+                            //var veloModule = trailSystems[i].inheritVelocity;
+                            //veloModule.enabled = true;
+                           //  i++;
+                            trailSystems.Add(user.leftHand.GetComponentInChildren<ParticleSystem>());
+                            //var veloModule = trailSystems[i].inheritVelocity;
+                            //veloModule.enabled = true;
+                           // trailSystems[i].startLifetime = 50f;
+                          //  i++;
+                        }
                     }
                 }
-            Debug.Log("got that many particle systems: " + trailSystemsR.Length);
-                 trailsRelated = false;
-            }                
+                Debug.Log("got that many particle systems: " + trailSystems.Count);
+                Debug.Log(trailSystems.GetType());
+                // Debug.Log("got that many particle systems: " + trailSystemsR.Length);
+                //      trailsRelated = false;
+            }
+        }
     }
 
     void ActivateParticleVelocity()
     {
-        int i = 0;
-        foreach (ParticleSystem p in trailSystemsR)
-        {
-            var veloModuleR = trailSystemsR[i].inheritVelocity;
-            veloModuleR.enabled = true;
-            var veloModuleL = trailSystemsL[i].inheritVelocity;
-            veloModuleL.enabled = true;
-            i++;
-        }
+                    foreach (ParticleSystem p in trailSystems)
+                    {
+                        var velomoduler = p.inheritVelocity;
+                        velomoduler.enabled = true;
+            p.startLifetime = 100f;
+                    }
     }
 
-    void DeActivateParticleVelocity()
-    {
-        int i = 0;
-        foreach (ParticleSystem p in trailSystemsR)
-        {
-            var veloModuleR = trailSystemsR[i].inheritVelocity;
-            veloModuleR.enabled = false;
-            var veloModuleL = trailSystemsL[i].inheritVelocity;
-            veloModuleL.enabled = false;
-            i++;
-        }
-    }
+    //void DeActivateParticleVelocity()
+    //{
+    //    int i = 0;
+    //    foreach (ParticleSystem p in trailSystemsR)
+    //    {
+    //        var veloModuleR = trailSystemsR[i].inheritVelocity;
+    //        veloModuleR.enabled = false;
+    //        var veloModuleL = trailSystemsL[i].inheritVelocity;
+    //        veloModuleL.enabled = false;
+    //        i++;
+    //    }
+    //}
 
-    void SetParticleLifetime(float lf)
-    {
-        int i = 0;
-        foreach (ParticleSystem p in trailSystemsR)
-        {
-            trailSystemsR[i].startLifetime = lf;
-            trailSystemsL[i].startLifetime = lf;
-            i++;
-        }
-    }
+    //void SetParticleLifetime(float lf)
+    //{
+    //    int i = 0;
+    //    foreach (ParticleSystem p in trailSystemsR)
+    //    {
+    //        trailSystemsR[i].startLifetime = lf;
+    //        trailSystemsL[i].startLifetime = lf;
+    //        i++;
+    //    }
+    //}
 
     // end of arm extension and particle trail functions
 
