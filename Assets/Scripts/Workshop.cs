@@ -62,7 +62,7 @@ public class Workshop : MonoBehaviour
         // Actualize gesture data
         player1PerformanceData = eyeswebOSC.GetUserPerformanceData(1);
         player2PerformanceData = eyeswebOSC.GetUserPerformanceData(2);
-        sharedPerformanceData = eyeswebOSC.GetUserPerformanceData();
+        sharedPerformanceData = eyeswebOSC.GetSharedPerformanceData();
 
 
         // actualize things on players
@@ -71,12 +71,13 @@ public class Workshop : MonoBehaviour
             foreach (UserData user in _usersPlaying)
             {
                 // do blablabla
-                user.leftHand.GetComponentInChildren<ParticleSystem>().startSpeed = Mathf.Sin((float)gameEngine.clock.GetTimeSinceSceneStart() * Mathf.PI);
-                user.leftHand.GetComponentInChildren<ParticleSystem>().startSize = Mathf.Sin((float)gameEngine.clock.GetTimeSinceSceneStart() * Mathf.PI);
+                //user.leftHand.GetComponentInChildren<ParticleSystem>().startSpeed = Mathf.Sin((float)gameEngine.clock.GetTimeSinceSceneStart() * Mathf.PI);
+                //user.leftHand.GetComponentInChildren<ParticleSystem>().startSize = Mathf.Sin((float)gameEngine.clock.GetTimeSinceSceneStart() * Mathf.PI);
 
-
+                
             }
 
+            Debug.Log(player1PerformanceData.handsVelocityMean);
         }
 
 

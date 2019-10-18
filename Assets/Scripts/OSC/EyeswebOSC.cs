@@ -100,8 +100,8 @@ public class EyeswebOSC : MonoBehaviour
     }
 
     void GetFloatFromOsc(OscMessage message){
-
-if(message.address.Contains("P1") || message.address.Contains("P2")){
+     
+        if(message.address.Contains("P1") || message.address.Contains("P2")){
         float f1 = message.GetFloat(2);
         float f2 = message.GetFloat(3);
         float f3 = message.GetFloat(4);
@@ -120,7 +120,6 @@ if(message.address.Contains("P1") || message.address.Contains("P2")){
             player1PerformanceData.handsActivity = activity;
             player1PerformanceData.leftHandActivity = lhactivity;
             player1PerformanceData.rightHandActivity = rhactivity;
-            Debug.Log("P1");
         }
 
         if(message.address.Contains("P2")){
@@ -132,7 +131,6 @@ if(message.address.Contains("P1") || message.address.Contains("P2")){
             player2PerformanceData.handsActivity = activity;
             player2PerformanceData.leftHandActivity = lhactivity;
             player2PerformanceData.rightHandActivity = rhactivity;
-            Debug.Log("P2");
         } 
 }
         if(message.address.Contains("Shared")){
@@ -141,13 +139,7 @@ if(message.address.Contains("P1") || message.address.Contains("P2")){
             sharedPerformanceData.playersBarycenter.y = message.GetFloat(2);
             sharedPerformanceData.playersBarycenter.z = message.GetFloat(3);
             if(drawBarycenter) barycenter.transform.position = sharedPerformanceData.playersBarycenter;
-            Debug.Log("Shared");
         } 
-
-        int playerID = message.GetInt(0);
-        int handedness = message.GetInt(1);
-        
-       
 
         //if(_userRole == UserRole.Server) SendEyesWebDataToPlayers(); // if we have real players to send data coming back from eyesweb
         
@@ -160,7 +152,7 @@ if(message.address.Contains("P1") || message.address.Contains("P2")){
         else if (id == 2) return player2PerformanceData;
         else return null;
     }
-    public SharedPerformanceData GetUserPerformanceData()
+    public SharedPerformanceData GetSharedPerformanceData()
     {
         return sharedPerformanceData;
     }
