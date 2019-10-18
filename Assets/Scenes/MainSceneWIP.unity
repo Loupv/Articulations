@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.437
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.2930864, g: 0.3203239, b: 0.34878978, a: 0.437}
+  m_IndirectSpecularColor: {r: 0.29308647, g: 0.32032403, b: 0.34878978, a: 0.437}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5981,7 +5981,7 @@ MonoBehaviour:
   eyeswebOSC: {fileID: 883154768}
   soundHandler: {fileID: 0}
   sendToAudioDevice: 0
-  sendToEyesweb: 0
+  sendToEyesweb: 1
 --- !u!1 &513617101
 GameObject:
   m_ObjectHideFlags: 0

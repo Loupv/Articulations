@@ -63,6 +63,10 @@ public class NetworkManager : MonoBehaviour
             if(sendToAudioDevice) SendAllPositionsToAudioSystem(userManager.usersPlaying, soundHandler, me);
             if(sendToEyesweb && eyeswebOSC.initialized) eyeswebOSC.SendPositionsToEyesWeb();
         }
+        else if(me._userRole == UserRole.Playback && playbackManager.mode == PlaybackMode.Offline){
+            if(sendToEyesweb && eyeswebOSC.initialized) eyeswebOSC.SendPositionsToEyesWeb();
+        }
+        
     }
 
     // client only
