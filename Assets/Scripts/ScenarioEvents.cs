@@ -138,12 +138,34 @@ public class ScenarioEvents : MonoBehaviour
         //if (skyboxID == 4)
         if (skyboxID > skyboxes.Length - 1) skyboxID = 0;
 
+
         if (skyboxID == 3)
-            scenography[3].SetActive(true);
-        else scenography[3].SetActive(false);
-        if (skyboxID ==2)
+        {
+            scenography[0].SetActive(false);
+            scenography[1].SetActive(false);
             scenography[2].SetActive(true);
-        else scenography[2].SetActive(false);
+            RenderSettings.fog = true;
+            RenderSettings.sun = scenography[3].GetComponentInChildren<Light>();
+            RenderSettings.fogMode = FogMode.ExponentialSquared;
+            RenderSettings.fogDensity = 0.015f;
+            RenderSettings.fogColor = new Color(0.3867925f, 0.2827964f, 0.3604879f);
+        }
+        else if (skyboxID == 4)
+        {
+            scenography[1].SetActive(true);
+            scenography[2].SetActive(false);
+            scenography[3].SetActive(true);
+
+
+
+        }
+        else
+        {
+            scenography[3].SetActive(false);
+            scenography[0].SetActive(true);
+            RenderSettings.sun = GameObject.FindGameObjectWithTag("Sun").GetComponent<Light>();
+        }
+
     }
 
     public void SetSkybox(int id){

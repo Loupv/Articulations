@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.113187216, g: 0.108223386, b: 0.06871999, a: 1}
+  m_IndirectSpecularColor: {r: 0.11770045, g: 0.1116293, b: 0.0669717, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2482,6 +2482,40 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 477849576}
   m_CullTransparentMesh: 0
+--- !u!21 &500373263
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - PixelSnap: 0
+    - _EnableExternalAlpha: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &504376289
 GameObject:
   m_ObjectHideFlags: 0
@@ -2526,9 +2560,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   osc: {fileID: 1137383004}
-  gameEngine: {fileID: 667967430}
-  serverAddress: 
   oscToggle: {fileID: 1382342789}
+  eyeswebOSC: {fileID: 0}
+  soundHandler: {fileID: 0}
+  sendToAudioDevice: 0
+  sendToEyesweb: 0
 --- !u!1 &522398100
 GameObject:
   m_ObjectHideFlags: 0
@@ -2737,166 +2773,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 542061096}
   m_CullTransparentMesh: 0
---- !u!43 &552216181
-Mesh:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 9
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 24
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 8
-    localAABB:
-      m_Center: {x: 0, y: 0.01, z: 0}
-      m_Extent: {x: 1.65, y: 0, z: 1.275}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexFormat: 0
-  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
-  m_VertexData:
-    serializedVersion: 2
-    m_VertexCount: 8
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 28
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 288
-    _typelessdata: 0000c03f0ad7233c000090bf000000000000803f0000803f0000803f00000000000000000000c0bf0ad7233c000090bf000000000000803f0000803f0000803f0000803f000000000000c0bf0ad7233c0000903f000000000000803f0000803f0000803f00000000000000000000c03f0ad7233c0000903f000000000000803f0000803f0000803f0000803f000000003333d33f0ad7233c3333a3bf000000000000803f0000803f00000000000000000000803f3333d3bf0ad7233c3333a3bf000000000000803f0000803f000000000000803f0000803f3333d3bf0ad7233c3333a33f000000000000803f0000803f00000000000000000000803f3333d33f0ad7233c3333a33f000000000000803f0000803f000000000000803f0000803f
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0.01, z: 0}
-    m_Extent: {x: 1.65, y: 0, z: 1.275}
-  m_MeshUsageFlags: 0
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 1
-  m_MeshOptimized: 0
-  m_StreamData:
-    offset: 0
-    size: 0
-    path: 
 --- !u!1 &553928080
 GameObject:
   m_ObjectHideFlags: 0
@@ -3113,11 +2989,11 @@ PrefabInstance:
     - target: {fileID: 2348914, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2107090984}
+      objectReference: {fileID: 500373263}
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 552216181}
+      objectReference: {fileID: 634010643}
     - target: {fileID: 20000014031267948, guid: 4d293c8e162f3874b982baadd71153d2,
         type: 3}
       propertyPath: m_ClearFlags
@@ -3392,6 +3268,166 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 20
   m_TargetDisplay: 0
+--- !u!43 &634010643
+Mesh:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 9
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 24
+    topology: 0
+    baseVertex: 0
+    firstVertex: 0
+    vertexCount: 8
+    localAABB:
+      m_Center: {x: 0, y: 0.01, z: 0}
+      m_Extent: {x: 1.65, y: 0, z: 1.275}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexFormat: 0
+  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
+  m_VertexData:
+    serializedVersion: 2
+    m_VertexCount: 8
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 4
+    - stream: 0
+      offset: 28
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 288
+    _typelessdata: 0000c03f0ad7233c000090bf000000000000803f0000803f0000803f00000000000000000000c0bf0ad7233c000090bf000000000000803f0000803f0000803f0000803f000000000000c0bf0ad7233c0000903f000000000000803f0000803f0000803f00000000000000000000c03f0ad7233c0000903f000000000000803f0000803f0000803f0000803f000000003333d33f0ad7233c3333a3bf000000000000803f0000803f00000000000000000000803f3333d3bf0ad7233c3333a3bf000000000000803f0000803f000000000000803f0000803f3333d3bf0ad7233c3333a33f000000000000803f0000803f00000000000000000000803f3333d33f0ad7233c3333a33f000000000000803f0000803f000000000000803f0000803f
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0.01, z: 0}
+    m_Extent: {x: 1.65, y: 0, z: 1.275}
+  m_MeshUsageFlags: 0
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  m_MeshMetrics[0]: 1
+  m_MeshMetrics[1]: 1
+  m_MeshOptimized: 0
+  m_StreamData:
+    offset: 0
+    size: 0
+    path: 
 --- !u!1 &652059166
 GameObject:
   m_ObjectHideFlags: 0
@@ -3576,13 +3612,21 @@ MonoBehaviour:
   SparkParticlesPrefab: {fileID: 0}
   particles3: {fileID: 0}
   particles4: {fileID: 0}
+  viewerController: {fileID: 0}
+  viveSystemName: '[CameraRig]'
+  viveHeadName: Camera
+  viveLeftHandName: Controller (left)
+  viveRightHandName: Controller (right)
   _userGameObject: {fileID: 0}
   keepNamesVisibleForPlayers: 0
   userCol: {r: 0, g: 0, b: 0, a: 0}
   whiteColor: {r: 0, g: 0, b: 0, a: 0}
   cyanColor: {r: 0, g: 0, b: 0, a: 0}
+  playbackColor1: {r: 0, g: 0, b: 0, a: 0}
+  playbackColor2: {r: 0, g: 0, b: 0, a: 0}
   trailsCondition: 
   dist: 0
+  playerNameVisible: 0
 --- !u!4 &659367854 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4071923053233047209, guid: b501bcc5f0116a9439638feeb7644884,
@@ -3619,15 +3663,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5ae4d59c68a4520b70fdc30a3e1c5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasHandler: {fileID: 667967432}
-  networkManager: {fileID: 504376291}
-  userManager: {fileID: 655950337}
   _user: {fileID: 0}
+  userManager: {fileID: 655950337}
+  scenarioEvents: {fileID: 0}
+  fileInOut: {fileID: 0}
   osc: {fileID: 1137383004}
+  networkManager: {fileID: 504376291}
+  canvasHandler: {fileID: 667967432}
   uiHandler: {fileID: 2107918503}
   soundHandler: {fileID: 28622096}
-  scenarioEvents: {fileID: 0}
-  audioRecordManager: {fileID: 0}
+  playbackManager: {fileID: 0}
+  clock: {fileID: 0}
   gameData:
     runInLocal: 0
     OSC_ServerIP: 
@@ -3640,21 +3686,15 @@ MonoBehaviour:
     OSC_SoundHandlerPort: 0
     audioRecordLength: 0
     DebugMode: 0
-    keepNamesVisibleForPlayers: 0
+    showNamesAboveHead: 0
   ViveSystemPrefab: {fileID: 146900, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
   POVs:
   - {fileID: 1960842520}
-  performanceRecorder: {fileID: 1899021880}
   _userRole: 0
   appState: 0
   currentVisualisationMode: 1
   pendingVisualisationMode: none
   useVRHeadset: 1
-  sendToAudioDevice: 0
-  viveSystemName: '[CameraRig](Clone)'
-  viveHeadName: Camera
-  viveLeftHandName: Controller (left)
-  viveRightHandName: Controller (right)
   debugMode: 0
   debugPrefab: {fileID: 2656459893160420101, guid: fd1ed9442d1b4a94b8a9ec29aeceaebc,
     type: 3}
@@ -3692,10 +3732,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initCanvas: {fileID: 1019832747}
-  gameCanvas: {fileID: 1014337917}
   waitingCanvas: {fileID: 1648315868}
+  gameCanvas: {fileID: 1014337917}
   serverCanvas: {fileID: 1301616527}
   viewerCanvas: {fileID: 196510125}
+  playbackCanvasOn: {fileID: 0}
+  playbackCanvasOff: {fileID: 0}
 --- !u!1 &687875271
 GameObject:
   m_ObjectHideFlags: 0
@@ -7474,6 +7516,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1382342787}
   m_CullTransparentMesh: 0
+--- !u!1001 &1388091761
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 227, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+      propertyPath: m_Name
+      value: nightTerrain
+      objectReference: {fileID: 0}
+    - target: {fileID: 227, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 283, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 283, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.26000002
+      objectReference: {fileID: 0}
+    - target: {fileID: 283, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 283, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 283, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 283, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 283, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 283, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 283, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 283, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 283, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
 --- !u!1 &1389005781
 GameObject:
   m_ObjectHideFlags: 0
@@ -10281,6 +10384,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: 0
   moveRatio: 0
+  _manager: {fileID: 0}
+  dist: 0
 --- !u!4 &2000937171
 Transform:
   m_ObjectHideFlags: 0
@@ -10308,9 +10413,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d3a732d3e02a094d8ff9b32f2577d2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skyboxes: {fileID: 2100000, guid: 619e741266180e840aafb47355c4e700, type: 2}
-  minimum: -1
-  maximum: 1
 --- !u!1001 &2044756898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10897,40 +10999,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2094678179}
   m_CullTransparentMesh: 0
---- !u!21 &2107090984
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - PixelSnap: 0
-    - _EnableExternalAlpha: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &2107918502
 GameObject:
   m_ObjectHideFlags: 0
@@ -10962,31 +11030,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameEngine: {fileID: 667967430}
   userManager: {fileID: 655950337}
+  networkManager: {fileID: 0}
+  fileInOut: {fileID: 0}
+  playbackManager: {fileID: 0}
   scenarioEvents: {fileID: 0}
+  sender: {fileID: 0}
   networkButtonChoice1: {fileID: 1202137671}
   networkButtonChoice2: {fileID: 522398102}
   networkButtonChoice3: {fileID: 477849578}
   networkButtonChoice4: {fileID: 392389490}
+  networkButtonChoice5: {fileID: 0}
   autoMode: {fileID: 0}
   manualMode: {fileID: 0}
   launchScenario: {fileID: 0}
   pauseScenario: {fileID: 0}
+  stopScenario: {fileID: 0}
+  stopAudioRecord: {fileID: 0}
   FreeCam: {fileID: 1125196006}
   POVPlayer1: {fileID: 207424097}
   POVPlayer2: {fileID: 221952714}
   POV3: {fileID: 1490687388}
-  viewerController: {fileID: 0}
   OSCServerAddressInput: {fileID: 907264587}
-  PlayerName: {fileID: 1015297339}
   sessionIDInputBox: {fileID: 0}
+  playbackSpeedInputField: {fileID: 0}
   serverManualModeParent: {fileID: 0}
   serverAutoModeParent: {fileID: 0}
   clientGOParent: {fileID: 0}
   playerNameTextBox: {fileID: 230827603}
   serverGOParent: {fileID: 0}
+  playbackGOParent: {fileID: 0}
   recordGizmo: {fileID: 775172754}
   pauseGizmo: {fileID: 211391146}
   scenarioDropDown: {fileID: 0}
+  onlineOfflinePlaybackMode: {fileID: 0}
+  switchPerformanceDataFile: {fileID: 0}
+  switchPlaybackPlayer: {fileID: 0}
   selectedButtonSprite: {fileID: 21300000, guid: 6c9b7cd0d25afa64e8571f5cce274839,
     type: 3}
   normalButtonSprite: {fileID: 21300000, guid: b183381bd4fb6c6488485e268758bb2c, type: 3}
@@ -10994,9 +11072,13 @@ MonoBehaviour:
   autoRecordPerformance: {fileID: 0}
   recordAudioAfterScenario: {fileID: 0}
   trailsDecaySlider: {fileID: 1380436368}
+  playbackSpeedSlider: {fileID: 0}
   trailTime: {fileID: 406090010}
   conditionTimeRemaining: {fileID: 0}
   recordingTimeRemaining: {fileID: 0}
+  currentConditionText: {fileID: 0}
+  playbackTime: {fileID: 0}
+  currentViz: {fileID: 0}
 --- !u!4 &2107918504
 Transform:
   m_ObjectHideFlags: 0

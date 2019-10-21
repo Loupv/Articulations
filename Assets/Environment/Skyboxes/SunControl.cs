@@ -18,6 +18,16 @@ public class SunControl : MonoBehaviour {
         StartCoroutine(sunsetSky());
     }
 
+    void OnDisable()
+    {
+        StopCoroutine(sunsetSky());
+    }
+
+    void OnEnable()
+    {
+        StartCoroutine(sunsetSky());
+    }
+
 
     // Sun Movement
     IEnumerator sunsetSky() {

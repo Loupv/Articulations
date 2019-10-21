@@ -10,9 +10,19 @@ public class night_SceneSky : MonoBehaviour
     void Start()
     {
         skyboxes = RenderSettings.skybox;
+
         StartCoroutine(nightSky());
     }
 
+    void OnDisable()
+    {
+        StopCoroutine(nightSky());
+    }
+
+    void OnEnable()
+    {
+        StartCoroutine(nightSky());
+    }
     // animate the game object from -1 to +1 and back
     float minimum = -.3F;
     float maximum = .3F;
