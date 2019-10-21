@@ -35,6 +35,7 @@ public class ScenarioEvents : MonoBehaviour
     GameObject shortTrails;
     GameObject longTrails;
     public Material[] skyboxes;
+    public GameObject[] scenography;
     public bool timerPaused, scenarioIsRunning;
     int skyboxID, timeRemaining, hourOfDay;
     public float lerpSunSpeed = 0.1f;
@@ -136,6 +137,13 @@ public class ScenarioEvents : MonoBehaviour
         skyboxID++;
         //if (skyboxID == 4)
         if (skyboxID > skyboxes.Length - 1) skyboxID = 0;
+
+        if (skyboxID == 3)
+            scenography[3].SetActive(true);
+        else scenography[3].SetActive(false);
+        if (skyboxID ==2)
+            scenography[2].SetActive(true);
+        else scenography[2].SetActive(false);
     }
 
     public void SetSkybox(int id){

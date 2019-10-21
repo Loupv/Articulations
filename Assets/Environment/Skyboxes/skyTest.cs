@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class skyTest : MonoBehaviour
+public class sky_Test : MonoBehaviour
 {
-    public Material skyboxes;
+    Material skyboxes;
     float seedPing;
     // Start is called before the first frame update
     void Start()
     {
-        RenderSettings.skybox = skyboxes;
+        skyboxes = RenderSettings.skybox;
     }
 
     // animate the game object from -1 to +1 and back
-    float minimum = -1.0F;
-    float maximum = 1.0F;
+    float minimum = -.3F;
+    float maximum = .3F;
 
     // starting value for the Lerp
     static float t = 0.0f;

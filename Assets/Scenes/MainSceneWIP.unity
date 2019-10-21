@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.437
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.29308647, g: 0.32032403, b: 0.34878978, a: 0.437}
+  m_IndirectSpecularColor: {r: 0.2930869, g: 0.3203242, b: 0.34879014, a: 0.437}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -13937,6 +13937,12 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 3dadc9ecc9c53b74281cf557c8634a89, type: 2}
   - {fileID: 2100000, guid: 1462712281a5ba847b018bcaf53f5d5d, type: 2}
   - {fileID: 2100000, guid: 59fcf32dc2fce034d849cdab0525e944, type: 2}
+  scenography:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 3421983246777497047, guid: 356237857e6a4c943903e5683232a0d0, type: 3}
+  - {fileID: 6035519526203547130, guid: 8ea8b71c529b07344a1b531dc0b592d0, type: 3}
+  - {fileID: 0}
   timerPaused: 0
   scenarioIsRunning: 0
   lerpSunSpeed: 150
