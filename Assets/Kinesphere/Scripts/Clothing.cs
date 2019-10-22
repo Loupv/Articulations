@@ -10,26 +10,32 @@ public class Clothing : MonoBehaviour
     List<GameObject> parts = new List<GameObject>();
     List<GameObject> lines = new List<GameObject>();
 
+    bool inited = false;
     // Start is called before the first frame update
     void Start()
     {
-        UserData Player1 = GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying[0];
-        parts.Add(Player1.leftHand);
-        parts.Add(Player1.rightHand);
-        UserData Player2 = GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying[1];
-        parts.Add(Player2.leftHand);
-        parts.Add(Player2.rightHand);
-        for (int i = 0; i < 50; i++)
-        {
-            GameObject gc = Instantiate(line);
-            gc.transform.SetParent(transform);
-            lines.Add(gc);
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(inited == false)
+        {
+            if (GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying.Count < 2) return;
+            UserData Player1 = GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying[0];
+            parts.Add(Player1.leftHand);
+            parts.Add(Player1.rightHand);
+            UserData Player2 = GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying[1];
+            parts.Add(Player2.leftHand);
+            parts.Add(Player2.rightHand);
+            for (int i = 0; i < 50; i++)
+            {
+                GameObject gc = Instantiate(line);
+                gc.transform.SetParent(transform);
+                lines.Add(gc);
+            }
+            inited = true;
+        }
         Vector3 centroid1 = Vector3.Lerp(parts[0].transform.position, parts[1].transform.position, 0.5f);
         Vector3 centroid2 = Vector3.Lerp(parts[2].transform.position, parts[3].transform.position, 0.5f);
         float length1 = Vector3.Distance(parts[0].transform.position, parts[1].transform.position);
