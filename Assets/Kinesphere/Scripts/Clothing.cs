@@ -31,7 +31,7 @@ public class Clothing : MonoBehaviour
             UserData Player1 = GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying[0];
             parts.Add(Player1.leftHand);
             parts.Add(Player1.rightHand);
-            UserData Player2 = GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying[1];
+            UserData Player2 = GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying[GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying.Count-1];
             parts.Add(Player2.leftHand);
             parts.Add(Player2.rightHand);
             inited = true;
