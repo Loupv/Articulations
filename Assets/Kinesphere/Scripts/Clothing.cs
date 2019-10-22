@@ -14,6 +14,12 @@ public class Clothing : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        for (int i = 0; i < 50; i++)
+        {
+            GameObject gc = Instantiate(line);
+            gc.transform.SetParent(transform);
+            lines.Add(gc);
+        }
     }
 
     // Update is called once per frame
@@ -28,14 +34,19 @@ public class Clothing : MonoBehaviour
             UserData Player2 = GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying[1];
             parts.Add(Player2.leftHand);
             parts.Add(Player2.rightHand);
-            for (int i = 0; i < 50; i++)
-            {
-                GameObject gc = Instantiate(line);
-                gc.transform.SetParent(transform);
-                lines.Add(gc);
-            }
             inited = true;
         }
+
+        foreach (var part in parts)
+        {
+            if (part == null)
+            {
+                parts.Clear();
+                inited = false;
+                return;
+            }
+        }
+
         Vector3 centroid1 = Vector3.Lerp(parts[0].transform.position, parts[1].transform.position, 0.5f);
         Vector3 centroid2 = Vector3.Lerp(parts[2].transform.position, parts[3].transform.position, 0.5f);
         float length1 = Vector3.Distance(parts[0].transform.position, parts[1].transform.position);
