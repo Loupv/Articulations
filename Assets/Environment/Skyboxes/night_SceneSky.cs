@@ -24,8 +24,8 @@ public class night_SceneSky : MonoBehaviour
         StartCoroutine(nightSky());
     }
     // animate the game object from -1 to +1 and back
-    float minimum = -.3F;
-    float maximum = .3F;
+    float minimum = -.1F;
+    float maximum = .1F;
 
     // starting value for the Lerp
     static float t = 0.0f;
@@ -60,7 +60,7 @@ public class night_SceneSky : MonoBehaviour
             yield return new WaitForEndOfFrame();
             if (t>=1.0f)
             {
-                yield return new WaitForSeconds(15f);
+                yield return new WaitForSeconds(40f);
                 float temp = maximum;
                 maximum = minimum;
                 minimum = temp;

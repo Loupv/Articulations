@@ -48,7 +48,7 @@ public class SunControl : MonoBehaviour {
             }
 
             // sun goes down...
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(40f);
             startTime = Time.time;
             t = 0.0f;
             while (t <= 1.0f)

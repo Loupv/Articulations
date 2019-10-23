@@ -233,20 +233,20 @@ public class UserManager : MonoBehaviour
                         user.ChangeSkin(this, "all");
                         if (mode == "1Ca") {
                             Debug.Log("move arms");
-                            distanceToMove = -0.3f;
+                            distanceToMove = -0.2f;
                             lerpDuration = 3f;
                             StartArmsLerping();
                         }
                         else if (mode == "1Cb")
                         {
                             distanceToMove = 1f;
-                            lerpDuration = 3f;
+                            lerpDuration = 5f;
                             StartArmsLerping();
                         }
                         else if (mode == "1Cc")
                         {
                             distanceToMove = 4f;
-                            lerpDuration = 6f;
+                            lerpDuration = 10f;
                             StartArmsLerping();
                         }
                     }

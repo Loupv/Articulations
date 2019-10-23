@@ -1916,7 +1916,7 @@ PrefabInstance:
     - target: {fileID: 1671509202329457758, guid: c75a5713b26b810488b2a06603513f68,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1671509202329457759, guid: c75a5713b26b810488b2a06603513f68,
         type: 3}
@@ -1933,6 +1933,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1671509202329457759, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1671509202329457759, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1671509202329457759, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.2
+      objectReference: {fileID: 0}
     - target: {fileID: 1671509201743998422, guid: c75a5713b26b810488b2a06603513f68,
         type: 3}
       propertyPath: m_LocalRotation.y
@@ -1948,6 +1963,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1671509202329457755, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_canvasOriginWorldPosition.y
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1671509202329457755, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_anchorWorldPosition.y
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6344632088436320229, guid: c75a5713b26b810488b2a06603513f68,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d371b540042426346add70be2cf31d64, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c75a5713b26b810488b2a06603513f68, type: 3}
 --- !u!1 &127356183 stripped
