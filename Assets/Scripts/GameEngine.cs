@@ -310,7 +310,9 @@ public class GameEngine : MonoBehaviour
         
         networkManager.eyeswebOSC.gameObject.SetActive(true);
         networkManager.eyeswebOSC.initialized = false;
-        
+
+        osc.Close();
+
         /*string[] endings = new string[]{
             "exe", "x86", "x86_64", "app"
         };
@@ -336,7 +338,7 @@ public class GameEngine : MonoBehaviour
             if(scenarioEvents.performanceRecorder.isRecording) scenarioEvents.performanceRecorder.StopRecording();
             osc.sender.SendQuitMessage(_userRole); // TODO adapt if server
         }
-
+        
         StartCoroutine(EnableDisableVRMode(false));
 
         Debug.Log("Closing Game Engine...");
