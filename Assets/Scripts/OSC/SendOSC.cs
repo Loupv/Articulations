@@ -141,7 +141,20 @@ public class SendOSC : MonoBehaviour {
         osc.Send(message);
     }
 
-    public void SendUserDataToAudioSystem(UserData userData, OSCEndPoint audioHandlerEndPoint){
+    public void InitGenerativeAudioSystem(UserData user, int rank)
+    {
+
+        osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
+        osc.OscPacketIO.RemotePort = 8889;
+
+        message = new OscMessage();
+        message.address = "/GenerativeAudioInit";
+        message.values.Add(rank);
+        Debug.Log("sending "+message);
+        osc.Send(message);
+    }
+
+    public void SendUserDataToAudioSystem(UserData userData, OSCEndPoint targetEndPoint){
         
         Vector3 pos = new Vector3();
         Quaternion rot = new Quaternion();
@@ -149,8 +162,8 @@ public class SendOSC : MonoBehaviour {
         if (osc.initialized)
         {   
             
-            osc.OscPacketIO.RemoteHostName = audioHandlerEndPoint.ip;
-            osc.OscPacketIO.RemotePort = audioHandlerEndPoint.remotePort;
+            osc.OscPacketIO.RemoteHostName = targetEndPoint.ip;
+            osc.OscPacketIO.RemotePort = 8889;
 
             for(int i = 0; i < 3; i++){
 
