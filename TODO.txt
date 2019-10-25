@@ -23,16 +23,6 @@ finir le pb de connexion failed lors de l'enregistrement en coroutine
 
 
 
-Checklist si problème :
-- Couper tous les parefeux dans un sens ou dans l'autre
-- avoir une adresse en 192.168... - 169.. -> pas bon
-- quelle adresse OSC ?
-- Runinlocal checked ? 
-- Wifi + ethernet activé quelque part ? (peut créer une communication à sens unique)
-- pb trackers : dongle connecté au wifi à un moment ?
-- openvr même version ?
-- si les deux controllers sont masqués -> Reboot
-
 
 Dionysis : 
 - Avoir les manettes à disposition pour le public 

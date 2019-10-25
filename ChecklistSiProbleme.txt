@@ -1,0 +1,9 @@
+
+Checklist si problème (update pouchet) :
+- Couper tous les parefeux dans un sens ou dans l'autre (des fois les parefeux se remettent automatiquement lors d'un changement de réseau)
+- avoir une adresse en 192.168... - 169.. -> pas bon (veut dire qu'aucune communication n'a été faite)
+- quelle adresse OSC ?
+- Runinlocal checked ? 
+- Wifi + ethernet activé quelque part ? (peut créer une communication à sens unique)
+- Si les trackers sont verts mais clignotent sur steamVR, relancer steamVR ou reboot
+- Si le casque est tracké mais pas d'image, reboot steamVR, relancer la scène unity
