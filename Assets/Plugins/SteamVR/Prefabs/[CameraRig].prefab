@@ -496,7 +496,6 @@ GameObject:
   - component: {fileID: 1929726443494840470}
   - component: {fileID: 1929726443494840469}
   - component: {fileID: 1929726443494840468}
-  - component: {fileID: 1929726443494840471}
   - component: {fileID: 1929726443494840457}
   - component: {fileID: 1929726443494840456}
   m_Layer: 0
@@ -571,31 +570,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1929726443494840467}
   m_Enabled: 1
---- !u!114 &1929726443494840471
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1929726443494840467}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf843f68ee6a544da177995c7d5e199, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FadeImage: {fileID: 1929726443729943071}
-  m_PostProcessVolume: {fileID: 1929726443494840457}
-  m_DefaultSnapshot: {fileID: 0}
-  m_FadedSnapshot: {fileID: 0}
-  m_FadeColor: {r: 0, g: 0, b: 0, a: 1}
-  m_FadeDuration: 0.1
-  m_FadeInOnSceneLoad: 0
-  m_FadeInOnStart: 0
-  m_timer: 0
-  m_IsFadingIn: 0
-  m_IsFadingOut: 0
-  gameEngine: {fileID: 0}
-  fadingMode: 1
 --- !u!114 &1929726443494840457
 MonoBehaviour:
   m_ObjectHideFlags: 0
