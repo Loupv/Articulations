@@ -1,15 +1,15 @@
 {
    "networkID" :"player1",
-   "runInLocal":1,
+   "runInLocal":0,
    "DebugMode":0,
    "showNamesAboveHead":1,
-   "useVr":0,
+   "useVr":1,
    "audioRecordLength":60,
    "saveFileFrequency":60,
-   "OSC_ServerIP":"172.30.41.65",
+   "OSC_ServerIP":"192.168.75.65",
    "OSC_LocalIP":"",
-   "OSC_SoundHandlerIP":"192.168.1.5",
-   "OSC_SoundHandlerPort":8888,
+   "OSC_SoundHandlerIP":"192.168.200.133",
+   "OSC_SoundHandlerPort":8889,
    "OSC_ServerPort":5555,
    "OSC_ClientPort":8888
 }

@@ -2,387 +2,147 @@
 	"scenarios" : 
 	[
 		{
-			"scenarioId" : 101,
+			"scenarioId" : 1,
 			"toFade" : 0,
 			"conditions" : 
 			[
-				"1A","1B","1Ca"
+				"1A","1B","2B", "2C"
 			],
 			"durations"  : 
 			[
-				3,3,3
+				190,190,190,190
 			]
 		},
 		{
-			"scenarioId" : 101,
+			"scenarioId" : 2,
 			"toFade" : 0,
 			"conditions" : 
 			[
-				"1A","1B","1Ca"
+				"1B","1A","2B", "2C"
 			],
 			"durations"  : 
 			[
-				190,190,190
+				190,190,190,190
 			]
 		},
 		{
-			"scenarioId" : 102,
+			"scenarioId" : 3,
 			"toFade" : 0,
 			"conditions" : 
 			[
-				"1A","1B","1Cb"
+				"1A","1B","2C", "2B"
 			],
 			"durations"  : 
 			[
-				190,190,190
+				190,190,190,190
 			]
 		},
 		{
-			"scenarioId" : 103,
+			"scenarioId" : 4,
 			"toFade" : 0,
 			"conditions" : 
 			[
-				"1A","1B","1Cc"
+				"1B","1A","2C", "2B"
 			],
 			"durations"  : 
 			[
-				190,190,190
+				190,190,190,190
 			]
 		},
 		{
-			"scenarioId" : 111,
+			"scenarioId" : 5,
 			"toFade" : 0,
 			"conditions" : 
 			[
-				"1B","1A","1Ca"
+				"2B", "2C","1A","1B"
 			],
 			"durations"  : 
 			[
-				190,190,190
+				190,190,190,190
 			]
 		},
 		{
-			"scenarioId" : 112,
+			"scenarioId" : 6,
 			"toFade" : 0,
 			"conditions" : 
 			[
-				"1B","1A","1Cb"
+				"2B", "2C","1B","1A"
 			],
 			"durations"  : 
 			[
-				190,190,190
+				190,190,190,190
 			]
 		},
 		{
-			"scenarioId" : 113,
+			"scenarioId" : 7,
 			"toFade" : 0,
 			"conditions" : 
 			[
-				"1B","1A","1Cc"
+				"2C", "2B","1A","1B"
 			],
 			"durations"  : 
 			[
-				190,190,190
+				190,190,190,190
 			]
 		},
 		{
-			"scenarioId" : 121,
+			"scenarioId" : 8,
 			"toFade" : 0,
 			"conditions" : 
 			[
-				"1Ca","1B","1A"
+				"2C", "2B","1B","1A"
 			],
 			"durations"  : 
 			[
-				190,190,190
+				190,190,190,190
 			]
 		},
 		{
-			"scenarioId" : 122,
+			"scenarioId" : 11,
 			"toFade" : 0,
 			"conditions" : 
 			[
-				"1Cb","1B","1A"
+				"1A"
 			],
 			"durations"  : 
 			[
-				190,190,190
+				380
 			]
 		},
 		{
-			"scenarioId" : 123,
+			"scenarioId" : 12,
 			"toFade" : 0,
 			"conditions" : 
 			[
-				"1Cc","1B","1A"
+				"1B"
 			],
 			"durations"  : 
 			[
-				190,190,190
+				380
 			]
 		},
 		{
-			"scenarioId" : 131,
+			"scenarioId" : 13,
 			"toFade" : 0,
 			"conditions" : 
 			[
-				"1B","1Ca","1A"
+				"2B"
 			],
 			"durations"  : 
 			[
-				190,190,190
+				380
 			]
 		},
 		{
-			"scenarioId" : 132,
+			"scenarioId" : 14,
 			"toFade" : 0,
 			"conditions" : 
 			[
-				"1B","1Cb","1A"
+				"2C"
 			],
 			"durations"  : 
 			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 133,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"1B","1Cc","1A"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 133,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"1Ca","1A","1B"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 133,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"1Cb","1A","1B"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 133,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"1Cc","1A","1B"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 201,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"2A","2B","2C"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 202,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"2A","2C","2B"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 203,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"2C","2B","2A"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 204,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"2B","2C","2A"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 301,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"3A","3B","3Ca"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 302,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"3A","3B","3Cb"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 303,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"3A","3B","3Cc"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 311,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"3B","3A","3Ca"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 312,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"3B","3A","3Cb"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 313,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"3B","3A","3Cc"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 321,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"3B","3Ca","3A"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 322,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"3B","3Cb","3A"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 323,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"3B","3Cc","3A"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 133,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"3Ca","3A","3B"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 133,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"3Cb","3A","3B"
-			],
-			"durations"  : 
-			[
-				190,190,190
-			]
-		},
-		{
-			"scenarioId" : 133,
-			"toFade" : 0,
-			"conditions" : 
-			[
-				"3Cc","3A","3B"
-			],
-			"durations"  : 
-			[
-				190,190,190
+				380
 			]
 		}
 	]

@@ -46,8 +46,7 @@ public class NetworkManager : MonoBehaviour
             eyeswebOSC.gameObject.SetActive(true);
             eyeswebOSC.Init(userRole);
         }
-        else if(eyeswebOSC != null) eyeswebOSC.gameObject.SetActive(false); 
-        
+        else if(eyeswebOSC != null) eyeswebOSC.gameObject.SetActive(false);
 
         print("OSC Connexion initiation to " + osc.outIP + " : " + osc.outPort + "/" + osc.inPort);
         
@@ -60,7 +59,7 @@ public class NetworkManager : MonoBehaviour
         }
         else if(me._userRole == UserRole.Server){
             SendAllPositionsToClients(userManager.usersPlaying, me);
-            if(sendToAudioDevice) SendAllPositionsToAudioSystem(userManager.usersPlaying, soundHandler, me);
+            if(sendToAudioDevice) SendAllPositionsToAudioSystem(userManager.usersPlaying);
             if(sendToEyesweb && eyeswebOSC.initialized) eyeswebOSC.SendPositionsToEyesWeb();
         }
         else if(me._userRole == UserRole.Playback && playbackManager.mode == PlaybackMode.Offline){
@@ -95,15 +94,15 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public void SendAllPositionsToAudioSystem(List<UserData> usersPlaying, SoundHandler soundHandler, UserData me)
+    public void SendAllPositionsToAudioSystem(List<UserData> usersPlaying)
     {
         foreach (UserData targetUser in usersPlaying)
         {
-            if (targetUser._ID != me._ID) // if this is the actual instance's player
-            { 
+            if (targetUser._userRole == UserRole.Player) // players computers execute the audio script
+            {    
                 foreach(UserData user in usersPlaying){      
                     if(user._userRole == UserRole.Player){  // don't send viewers positions
-                        osc.sender.SendUserDataToAudioSystem(user, soundHandler.oscEndPoint);
+                        osc.sender.SendUserDataToAudioSystem(user, targetUser.oscEndPoint);
                     }
                 }
             }
@@ -124,6 +123,33 @@ public class NetworkManager : MonoBehaviour
         foreach(UserData user in users)
         {
             if (user.oscEndPoint.remotePort==requestedPort) return false;
+        }
+        return true;
+    }
+
+
+    // if w're in local, player ask for registration on same ip but on different ports
+    // if not in local, player ask for registration on different ip and different ports, if same ip wants to register we erase previous player
+    public bool CheckAvailability(UserManager userManager, int requestedPort, string requestedIp, int runInLocal) // same as above but checks also ip address - consider to remove method above
+    {
+        Debug.Log("Checking availability for :" + requestedPort+" & "+ requestedIp);
+
+        if (runInLocal == 0) // if not local, check for identical ips and ports
+            foreach (UserData user in userManager.usersPlaying)
+            {
+                Debug.Log(user.oscEndPoint.remotePort + " & " + requestedPort + " , " + user.oscEndPoint.ip +" & "+ requestedIp);
+                if (user.oscEndPoint.ip == requestedIp && !(requestedIp==userManager.me.oscEndPoint.ip)) // if someone wants to register on previously registered ip, but not on this computer
+                {
+                    userManager.ErasePlayer(user._ID);
+                }
+                    
+            }
+        else if(runInLocal == 1)
+        {
+            foreach (UserData user in userManager.usersPlaying)
+            {
+                if (user.oscEndPoint.remotePort == requestedPort) return false;
+            }
         }
         return true;
     }

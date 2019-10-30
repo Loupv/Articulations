@@ -59,7 +59,7 @@ public class SendOSC : MonoBehaviour {
             osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
             osc.Send(message);
-            if(gameEngine.debugMode) Debug.Log("Sending : " + message);
+            if(gameEngine.debugMode) Debug.Log("Sending : " + message+", "+osc.OscPacketIO.RemoteHostName);
 
             AddEveryPlayerToClientDict(user, userManager.usersPlaying);
         }

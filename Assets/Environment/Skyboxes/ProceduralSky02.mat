@@ -73,7 +73,7 @@ Material:
     - _NumStars: 0.5
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Seed: -0.26820025
+    - _Seed: -0.017244799
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

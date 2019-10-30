@@ -78,15 +78,17 @@ public class ReceiveOSC : MonoBehaviour {
 
             string playerName = message.GetString(4);
 
-            bool portAvailable = gameEngine.networkManager.CheckPortAvailability(userManager.usersPlaying, requestedPort);
+            bool available = gameEngine.networkManager.CheckAvailability(userManager, requestedPort, playerIP, gameEngine.gameData.runInLocal);
 
-            if (portAvailable || gameEngine.gameData.runInLocal == 0)
+            if (available)
             {
                 UserData user = userManager.AddNewUser(gameEngine, playerID, playerName, playerIP, requestedPort, role);
                 if (role == UserRole.Player)
                 {
                     sender.AddNewPlayerToClientsGames(playerID, playerName, userManager.usersPlaying, isPlayer, userManager.usersPlaying.Count - 1); // minus1 because server had already added user in list
                     sender.SendCalibrationInfo(user, userManager.usersPlaying);
+                    if(gameEngine.networkManager.sendToAudioDevice) sender.InitGenerativeAudioSystem(user, user._registeredRank);
+
                 }
                 sender.SendRegistrationConfirmation(user);
             }
