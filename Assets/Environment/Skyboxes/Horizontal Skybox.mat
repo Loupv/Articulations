@@ -25,13 +25,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _Exponent: 20
-    - _Exponent1: 9.74
-    - _Exponent2: 13.58
+    - _Exponent1: 18.58
+    - _Exponent2: 70.3
     - _Exposure: 2.5
     - _Intensity: 1.4
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color1: {r: 0, g: 0, b: 0, a: 0}
-    - _Color2: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0}
+    - _Color2: {r: 0.14150941, g: 0.14150941, b: 0.14150941, a: 0}
     - _Color3: {r: 0.028301895, g: 0.028301895, b: 0.028301895, a: 0}
     - _UpVector: {r: 0, g: 0.43774354, b: -0.8990999, a: 0}
