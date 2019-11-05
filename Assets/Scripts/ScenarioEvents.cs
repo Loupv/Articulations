@@ -44,7 +44,7 @@ public class ScenarioEvents : MonoBehaviour
 
     void Start()
     {
-        skyboxID = 1;
+        skyboxID = 0;
         shortTrails = userManager.TrailRendererPrefab;
         longTrails = userManager.SparkParticlesPrefab;
         //particleList = new List<GameObject>();
@@ -136,13 +136,28 @@ public class ScenarioEvents : MonoBehaviour
         RenderSettings.skybox = skyboxes[skyboxID];
         skyboxID++;
         //if (skyboxID == 4)
-        if (skyboxID > skyboxes.Length - 1) skyboxID = 0;
+        if (skyboxID == skyboxes.Length ) skyboxID = 0;
+        Debug.Log("skybox ID " + skyboxID);
 
-
-        if (skyboxID == 3)
+        if (skyboxID == 0)
         {
+            RenderSettings.skybox = skyboxes[skyboxID];
+            scenography[1].SetActive(true);
+            scenography[4].SetActive(false);
+            scenography[0].SetActive(true);
+            RenderSettings.sun = GameObject.FindGameObjectWithTag("Sun").GetComponent<Light>();
+        }
+        else if (skyboxID == 1)
+        {
+            RenderSettings.skybox = skyboxes[skyboxID];
             scenography[0].SetActive(false);
+            scenography[5].SetActive(true);
+        }
+        else if(skyboxID == 2)
+        {
+            RenderSettings.skybox = skyboxes[skyboxID];
             scenography[1].SetActive(false);
+            scenography[5].SetActive(false);
             scenography[2].SetActive(true);
             RenderSettings.fog = true;
             RenderSettings.sun = scenography[3].GetComponentInChildren<Light>();
@@ -150,22 +165,20 @@ public class ScenarioEvents : MonoBehaviour
             RenderSettings.fogDensity = 0.015f;
             RenderSettings.fogColor = new Color(0.3867925f, 0.2827964f, 0.3604879f);
         }
-        else if (skyboxID == 4)
+        else if (skyboxID == 3)
         {
-            scenography[1].SetActive(true);
+            RenderSettings.skybox = skyboxes[skyboxID];
             scenography[2].SetActive(false);
             scenography[3].SetActive(true);
-
-
-
+            RenderSettings.fog = false;
+            RenderSettings.sun = null;
         }
-        else
+        else if (skyboxID == 4)
         {
+            RenderSettings.skybox = skyboxes[skyboxID];
             scenography[3].SetActive(false);
-            scenography[0].SetActive(true);
-            RenderSettings.sun = GameObject.FindGameObjectWithTag("Sun").GetComponent<Light>();
+            scenography[4].SetActive(true);
         }
-
     }
 
     public void SetSkybox(int id){
