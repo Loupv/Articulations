@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1755465132610454029}
   - component: {fileID: 4513076388749458746}
   - component: {fileID: 7874997042257960207}
+  - component: {fileID: 7802168112842270704}
   m_Layer: 0
   m_Name: ViewerPrefab
   m_TagString: Viewer
@@ -47,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _userRole: 0
   _ID: 0
+  _isMe: 0
   _playerName: 
   playerGameObject: {fileID: 6075620792603371976}
   head: {fileID: 0}
@@ -87,3 +89,17 @@ MonoBehaviour:
   isFollowing1: 0
   isFollowing2: 0
   followingPlayerID: 0
+--- !u!114 &7802168112842270704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6075620792603371976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2628f343ecd51647a346fc5cb2f45c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+  visible: 1

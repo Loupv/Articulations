@@ -14382,7 +14382,7 @@ MonoBehaviour:
   userManager: {fileID: 655950337}
   skyboxes:
   - {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 59fcf32dc2fce034d849cdab0525e944, type: 2}
   - {fileID: 2100000, guid: 3dadc9ecc9c53b74281cf557c8634a89, type: 2}
   - {fileID: 2100000, guid: 1462712281a5ba847b018bcaf53f5d5d, type: 2}
   - {fileID: 2100000, guid: 59fcf32dc2fce034d849cdab0525e944, type: 2}

@@ -6,11 +6,13 @@ public class ShowHideUI : MonoBehaviour
 {
     public Camera cam;
     public bool visible = true;
+    public bool init;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        if (cam == null) cam = GameObject.Find("CanvasCamera").GetComponent<Camera>();
+        init = true;
     }
 
     // Update is called once per frame
