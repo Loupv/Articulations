@@ -77,10 +77,15 @@ public class particleRelations : MonoBehaviour
                     {
                         var veloModule = myparticles.inheritVelocity;
                         veloModule.enabled = true;
+                       // veloModule.curveMultiplier = dist.Remap(4f, 1.5f, 1f, 0f);
+
                         var veloModulee = myparticles.noise;
                         veloModulee.enabled = true;
                         _areFar = true;
                     }
+                    var veloModuleee = myparticles.inheritVelocity;
+                    veloModuleee.curveMultiplier = dist.Remap(4f, 1.5f, 1f, 0f);
+
                 }
                 else if (dist <= 1.5f)
                 {

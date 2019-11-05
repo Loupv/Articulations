@@ -197,11 +197,14 @@ public class ScenarioEvents : MonoBehaviour
 
     void LerpHourOfDay(){
         GameObject sun = UnityEngine.GameObject.FindGameObjectWithTag("Sun");
-
-        sun.transform.rotation = Quaternion.RotateTowards(sun.transform.rotation, Quaternion.Euler(new Vector3(hourOfDay*360/24-90, sun.transform.rotation.y,sun.transform.rotation.z)), lerpSunSpeed * Time.deltaTime);
-        if(Mathf.Abs(sun.transform.rotation.eulerAngles.x - (hourOfDay*360/24-90)) < 0.1) {
-            CancelInvoke("LerpHourOfDay");
-            Debug.Log("Sun lerping ended");
+        if (sun != null)
+        {
+            sun.transform.rotation = Quaternion.RotateTowards(sun.transform.rotation, Quaternion.Euler(new Vector3(hourOfDay * 360 / 24 - 90, sun.transform.rotation.y, sun.transform.rotation.z)), lerpSunSpeed * Time.deltaTime);
+            if (Mathf.Abs(sun.transform.rotation.eulerAngles.x - (hourOfDay * 360 / 24 - 90)) < 0.1)
+            {
+                CancelInvoke("LerpHourOfDay");
+                Debug.Log("Sun lerping ended");
+            }
         }
     }
 
