@@ -246,6 +246,7 @@ public class ReceiveOSC : MonoBehaviour {
 
         if (envType == "mirror") gameEngine.scenarioEvents.ToggleMirror();
         else if (envType == "sky") gameEngine.scenarioEvents.SetNextSkybox();
+        else if (envType == "naoto") gameEngine.scenarioEvents.ToggleNaoto();
     }
 
     void CalibrationChange(OscMessage message){

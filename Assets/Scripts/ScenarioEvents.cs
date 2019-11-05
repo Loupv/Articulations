@@ -22,10 +22,11 @@ public class ScenarioEvents : MonoBehaviour
     public GameEngine gameEngine;
     public GameObject [] calibrationTransforms;
     public List<GameObject> mirrors, mirrorsNoVR;
-    public GameObject bubbles, terrainCenter;
+    public GameObject bubbles, terrainCenter, naotoCloth;
     public PerformanceRecorder performanceRecorder;
     public bool mirrorAct;
     public bool bubblesAct;
+    public bool naotoAct;
     //public GameObject[] particleSystems;
     public Scenario[] scenarios;
     public int currentScenario;
@@ -234,6 +235,24 @@ public class ScenarioEvents : MonoBehaviour
                 }
             }
             
+        Debug.Log("Mirror Toggled");
+    }
+
+    public void ToggleNaoto()
+    {
+        //foreach (GameObject mirror in mirrors) mirror.SetActive(!mirror.activeSelf);
+        //if (gameEngine.gameData.useVr == 1) // quick fix
+        //{
+        naotoAct = !naotoAct;
+        if (naotoAct)
+        {
+            naotoCloth.SetActive(true);
+        }
+        else
+        {
+            naotoCloth.SetActive(false);
+        }
+
         Debug.Log("Mirror Toggled");
     }
 
