@@ -9,7 +9,6 @@ public class Clothing : MonoBehaviour
 
     List<GameObject> parts = new List<GameObject>();
     List<GameObject> lines = new List<GameObject>();
-
     bool inited = false;
     // Start is called before the first frame update
     void Start()
@@ -28,10 +27,36 @@ public class Clothing : MonoBehaviour
         if(inited == false)
         {
             if (GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying.Count < 2) return;
-            UserData Player1 = GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying[0];
+            
+            UserData Player1 = new UserData(), Player2 = new UserData();
+            UserManager userManager = GameObject.Find("UserManager").GetComponent<UserManager>();
+
+            int i = 0;
+            
+            bool player1found = false, player2found = false;
+
+            while(!(player1found && player2found)){
+                if(!player1found){
+                    if(userManager.usersPlaying[i]._userRole == UserRole.Player) {
+                        Player1 = userManager.usersPlaying[i];
+                        Debug.Log("Player 1 id :"+Player1._ID);
+                        player1found = true;
+                    }
+                    i+=1;
+                }
+                else{
+                    if(userManager.usersPlaying[i]._userRole == UserRole.Player) {
+                        Player2 = userManager.usersPlaying[i];
+                        Debug.Log("Player 2 id :"+Player2._ID);
+                        player2found = true;
+                    }
+                    else i+=1;
+                }
+            }
+
             parts.Add(Player1.leftHand);
             parts.Add(Player1.rightHand);
-            UserData Player2 = GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying[GameObject.Find("UserManager").GetComponent<UserManager>().usersPlaying.Count-1];
+
             parts.Add(Player2.leftHand);
             parts.Add(Player2.rightHand);
             inited = true;

@@ -167,7 +167,7 @@ public class UserManager : MonoBehaviour
 
             if ((mode != "2B" && mode != "2C" && gameEngine.scenarioEvents.mirrorAct) ||
             ((mode == "2B" || mode == "2C") && !gameEngine.scenarioEvents.mirrorAct))
-                gameEngine.scenarioEvents.ToggleMirror();
+                gameEngine.scenarioEvents.ToggleMirror(!gameEngine.scenarioEvents.mirrorAct);
 
             if (mode != "2C" && !(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline)) // if we're in playback offline mode, we keep different colors
                 foreach (UserData user in usersPlaying)

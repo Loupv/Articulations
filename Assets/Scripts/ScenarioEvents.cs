@@ -38,7 +38,8 @@ public class ScenarioEvents : MonoBehaviour
     public Material[] skyboxes;
     public GameObject[] scenography;
     public bool timerPaused, scenarioIsRunning;
-    int skyboxID, timeRemaining, hourOfDay;
+    public int skyboxID;
+    int timeRemaining, hourOfDay;
     public float lerpSunSpeed = 0.1f;
     // Start is called before the first frame update
 
@@ -83,7 +84,8 @@ public class ScenarioEvents : MonoBehaviour
             if(timeRemaining <= 0){
                 if(currentCondition < scenarios[currentScenario].conditions.Length){
                     // remove previous condition parameters
-                    if(mirrorAct) ToggleMirror();
+                    if(mirrorAct) ToggleMirror(false);
+                    if(naotoAct) ToggleNaoto(false);
                     // change visualisation
                     if(gameEngine.uiHandler.autoRecordPerformance.isOn && !performanceRecorder.isRecording) performanceRecorder.StartRecording();
                     userManager.ChangeVisualisationMode(scenarios[currentScenario].conditions[currentCondition], gameEngine, scenarios[currentScenario].toFade == 1);
@@ -134,7 +136,7 @@ public class ScenarioEvents : MonoBehaviour
 
     public void SetNextSkybox()
     {
-        RenderSettings.skybox = skyboxes[skyboxID];
+        //RenderSettings.skybox = skyboxes[skyboxID];
         skyboxID++;
         //if (skyboxID == 4)
         if (skyboxID == skyboxes.Length ) skyboxID = 0;
@@ -143,23 +145,33 @@ public class ScenarioEvents : MonoBehaviour
         if (skyboxID == 0)
         {
             RenderSettings.skybox = skyboxes[skyboxID];
-            scenography[1].SetActive(true);
-            scenography[4].SetActive(false);
             scenography[0].SetActive(true);
+            scenography[1].SetActive(true);
+            scenography[2].SetActive(false);
+            scenography[3].SetActive(false);
+            scenography[4].SetActive(false);
+            scenography[5].SetActive(false);
             RenderSettings.sun = GameObject.FindGameObjectWithTag("Sun").GetComponent<Light>();
         }
         else if (skyboxID == 1)
         {
             RenderSettings.skybox = skyboxes[skyboxID];
             scenography[0].SetActive(false);
+            scenography[1].SetActive(true);
+            scenography[2].SetActive(false);
+            scenography[3].SetActive(false);
+            scenography[4].SetActive(false);
             scenography[5].SetActive(true);
         }
         else if(skyboxID == 2)
         {
             RenderSettings.skybox = skyboxes[skyboxID];
+            scenography[0].SetActive(false);
             scenography[1].SetActive(false);
-            scenography[5].SetActive(false);
             scenography[2].SetActive(true);
+            scenography[3].SetActive(false);
+            scenography[4].SetActive(false);
+            scenography[5].SetActive(false);
             RenderSettings.fog = true;
             RenderSettings.sun = scenography[3].GetComponentInChildren<Light>();
             RenderSettings.fogMode = FogMode.ExponentialSquared;
@@ -169,22 +181,31 @@ public class ScenarioEvents : MonoBehaviour
         else if (skyboxID == 3)
         {
             RenderSettings.skybox = skyboxes[skyboxID];
+            scenography[0].SetActive(false);
+            scenography[1].SetActive(false);
             scenography[2].SetActive(false);
             scenography[3].SetActive(true);
+            scenography[4].SetActive(false);
+            scenography[5].SetActive(false);
             RenderSettings.fog = false;
             RenderSettings.sun = null;
         }
         else if (skyboxID == 4)
         {
             RenderSettings.skybox = skyboxes[skyboxID];
+            scenography[0].SetActive(false);
+            scenography[1].SetActive(false);
+            scenography[2].SetActive(false);
             scenography[3].SetActive(false);
             scenography[4].SetActive(true);
+            scenography[5].SetActive(false);
         }
     }
 
     public void SetSkybox(int id){
-        skyboxID = id;
-        RenderSettings.skybox = skyboxes[skyboxID];
+        skyboxID = id-1;
+        SetNextSkybox();
+        //RenderSettings.skybox = skyboxes[skyboxID];
     }
 
     // 0h is -90°, 6h is 0°, 12h is 90°, 18h is 180°
@@ -210,13 +231,12 @@ public class ScenarioEvents : MonoBehaviour
     }
 
 
-    public void ToggleMirror()
+    public void ToggleMirror(bool b)
     {
         //foreach (GameObject mirror in mirrors) mirror.SetActive(!mirror.activeSelf);
         //if (gameEngine.gameData.useVr == 1) // quick fix
         //{
-            mirrorAct = !mirrorAct;
-            if (mirrorAct)
+            if (!mirrorAct && b)
             {
                 if(gameEngine.useVRHeadset){ 
                     foreach(GameObject mirror in mirrors) mirror.SetActive(true);
@@ -224,8 +244,9 @@ public class ScenarioEvents : MonoBehaviour
                 else{
                     foreach(GameObject mirror in mirrorsNoVR) mirror.SetActive(true);
                 }
+                mirrorAct = !mirrorAct;
             }
-            else
+            else if(mirrorAct && !b)
             {
                 if(gameEngine.useVRHeadset){ 
                     foreach(GameObject mirror in mirrors) mirror.SetActive(false);
@@ -233,27 +254,30 @@ public class ScenarioEvents : MonoBehaviour
                 else{
                     foreach(GameObject mirror in mirrorsNoVR) mirror.SetActive(false);
                 }
+                mirrorAct = !mirrorAct;
             }
             
         Debug.Log("Mirror Toggled");
     }
 
-    public void ToggleNaoto()
+    public void ToggleNaoto(bool b)
     {
         //foreach (GameObject mirror in mirrors) mirror.SetActive(!mirror.activeSelf);
         //if (gameEngine.gameData.useVr == 1) // quick fix
         //{
-        naotoAct = !naotoAct;
-        if (naotoAct)
+        if (!naotoAct && b)
         {
             naotoCloth.SetActive(true);
+            naotoAct = !naotoAct;
+            Debug.Log("Naoto Toggled");
         }
-        else
+        else if(naotoAct && !b )
         {
             naotoCloth.SetActive(false);
+            naotoAct = !naotoAct;
+            Debug.Log("Naoto Toggled");
         }
 
-        Debug.Log("Mirror Toggled");
     }
 
     // server side

@@ -480,6 +480,23 @@ public class SendOSC : MonoBehaviour {
             message = new OscMessage();
             message.address = "/EnvironmentChange";
             message.values.Add(newEnv);
+
+            int val =-1;
+
+            if(newEnv == "mirror") {
+                if(gameEngine.scenarioEvents.mirrorAct) val = 1;
+                else val =0;
+            }
+            else if(newEnv == "sky") {
+                val = gameEngine.scenarioEvents.skyboxID;
+            }
+            else if(newEnv == "naoto"){ 
+                if(gameEngine.scenarioEvents.naotoAct) val = 1;
+                else val =0;
+            }
+
+            message.values.Add(val);
+
             osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;
             osc.Send(message);

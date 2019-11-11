@@ -54,10 +54,11 @@ public class UIHandler : MonoBehaviour
     /* SERVER ONLY */
     public void EnvironmentChange(string env)
     {
+        Debug.Log(env);
         // change env to server
         if (env == "sky") scenarioEvents.SetNextSkybox();
-        else if (env == "mirror") scenarioEvents.ToggleMirror();
-        else if (env == "naoto") scenarioEvents.ToggleNaoto();
+        else if (env == "mirror") scenarioEvents.ToggleMirror(!scenarioEvents.mirrorAct);
+        else if (env == "naoto") scenarioEvents.ToggleNaoto(!scenarioEvents.naotoAct);
 
         // change env to clients
         networkManager.EnvironmentChangeOrder(userManager.usersPlaying, env);
