@@ -18,11 +18,12 @@ public class PlaybackManager : MonoBehaviour
     public int playerNumber;
     public PlaybackMode mode;
     public float performanceMaxTime;
+    public int conditionCount = 4;
     public double floatTimeTracker, playbackSpeed, lastSpeed;
     string currentViz = "null";
     bool paused;
 
-    
+
 
     void Start(){
 
@@ -101,7 +102,7 @@ public class PlaybackManager : MonoBehaviour
     }
 
     public void JumpToCondition(int i){
-        floatTimeTracker = performanceFile.lines.Count/3 * (i-1);
+        floatTimeTracker = performanceFile.lines.Count/conditionCount * (i-1);
     }
 
     public void JumpInTime(int timeGap){

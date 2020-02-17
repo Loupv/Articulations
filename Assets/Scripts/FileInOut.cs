@@ -14,7 +14,7 @@ public class PerformanceFile
 
 public class PerformanceLine{
     public int SessionID { get; set; }
-    public double TimeStamp {get;set;}
+    //public double TimeStamp {get;set;}
     public double Time { get; set; }
     public string Condition{get; set;}
     public Vector3 p1HeadPosition { get; set; } 
@@ -162,7 +162,7 @@ public class FileInOut : MonoBehaviour {
             {
                 PerformanceLine record = new PerformanceLine(){
                     SessionID = csv.GetField<int>(0),
-                    TimeStamp = csv.GetField<double>(1),
+                    //TimeStamp = double.TryParse(csv.GetField<string>(1)),
                     Time = csv.GetField<double>(2),
                     Condition = csv.GetField<string>(4),
                     p1HeadPosition = new Vector3(float.Parse(csv.GetField(5), cul), 

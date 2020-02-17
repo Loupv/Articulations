@@ -59,8 +59,8 @@ public class UserManager : MonoBehaviour
         whiteColor = Color.white;
         cyanColor = Color.cyan;
 
-        playbackColor1 = new Color(0.8f, 0.8f, 0.8f);
-        playbackColor2 = new Color(0.6f, 0.6f, 0.6f);
+        playbackColor1 = whiteColor;//new Color(0.8f, 0.8f, 0.8f);
+        playbackColor2 = cyanColor;//new Color(0.6f, 0.6f, 0.6f);
 
 
         trailsCondition = null;
@@ -169,15 +169,17 @@ public class UserManager : MonoBehaviour
             ((mode == "2B" || mode == "2C") && !gameEngine.scenarioEvents.mirrorAct))
                 gameEngine.scenarioEvents.ToggleMirror(!gameEngine.scenarioEvents.mirrorAct);
 
-            if (mode != "2C" && !(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline)) // if we're in playback offline mode, we keep different colors
-                foreach (UserData user in usersPlaying)
-                {
-                    if (user._userRole == UserRole.Player) ChangePlayerColor(user, whiteColor);
-                }
+            if (mode != "2C")// && !(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline)) // if we're in playback offline mode, we keep different colors
+            {
+                if (usersPlaying.Count > 1) ChangePlayerColor(usersPlaying[1], whiteColor);
+                if (usersPlaying.Count > 2) ChangePlayerColor(usersPlaying[2], whiteColor);
+            }
+            
             else if (gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline) {
                 if (usersPlaying.Count > 1) ChangePlayerColor(usersPlaying[1], playbackColor1);
                 if (usersPlaying.Count > 2) ChangePlayerColor(usersPlaying[2], playbackColor2);
             }
+
             if (mode != "3B" && mode != "3Ca" && mode != "3Cb" && mode != "3Cc")
             {
                 gameEngine.networkManager.sendToAudioDevice = false;
