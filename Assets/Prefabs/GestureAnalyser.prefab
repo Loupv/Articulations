@@ -1484,6 +1484,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8773243578296310769}
+  - component: {fileID: 2535849279859436376}
   - component: {fileID: 8773243578296310780}
   m_Layer: 0
   m_Name: GestureAnalyser
@@ -1509,7 +1510,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8773243578296310780
+--- !u!114 &2535849279859436376
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1517,6 +1518,20 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8773243578296310775}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2dc89b1c06381941b150035046bac28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bufferSize: 30
+  activityBufferSize: 200
+--- !u!114 &8773243578296310780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8773243578296310775}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18521ce0822157e4d93d44a31c69274e, type: 3}
   m_Name: 
@@ -1577,7 +1592,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8773243578461554718
 RectTransform:
   m_ObjectHideFlags: 0
