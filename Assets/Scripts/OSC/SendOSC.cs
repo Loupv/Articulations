@@ -563,6 +563,33 @@ public class SendOSC : MonoBehaviour {
     }
 
 
+    public void SendWekinatorInfos(bool active)
+    {
+        osc.OscPacketIO.RemoteHostName = "127.0.0.1";
+        osc.OscPacketIO.RemotePort = 6448;
+        message = new OscMessage();
+        message.address = "/wek/inputs";
+        if (active)
+        {
+            message.values.Add(1.0f);
+            message.values.Add(2.0f);
+            message.values.Add(3.0f);
+            message.values.Add(2.0f);
+            message.values.Add(1.0f);
+        }
+        else
+        {
+            message.values.Add(0.0f);
+            message.values.Add(0.0f);
+            message.values.Add(0.0f);
+            message.values.Add(0.0f);
+            message.values.Add(0.0f);
+        }
+        osc.Send(message);
+        Debug.Log(message);
+    }
+
+
 
 
 }

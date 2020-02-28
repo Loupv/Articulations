@@ -44,6 +44,8 @@ public class ReceiveOSC : MonoBehaviour {
             osc.SetAddressHandler("/AudioRecordingStopped", AudioRecordingStopped);
         }
 
+        osc.SetAddressHandler("/wek/outputs", WekinatorInfosReceived);
+
     }
 	
     void DebugTemp(OscMessage message){
@@ -315,6 +317,11 @@ public class ReceiveOSC : MonoBehaviour {
         int valueId = message.GetInt(0);
         float value = message.GetFloat(1);
         userManager.ChangeVisualisationParameter(valueId, value);
+    }
+
+    void WekinatorInfosReceived(OscMessage message)
+    {
+        Debug.Log(message);
     }
 
 }
