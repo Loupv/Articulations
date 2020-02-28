@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<OSCInputGroup>
+  <oscMessage>/P1SummaryMatrix</oscMessage>
+  <numInputs>8</numInputs>
+  <groupName>Inputs</groupName>
+  <inputNames>
+    <string>P1SummaryMatrix-1</string>
+    <string>P1SummaryMatrix-2</string>
+    <string>P1SummaryMatrix-3</string>
+    <string>P1SummaryMatrix-4</string>
+    <string>P1SummaryMatrix-5</string>
+    <string>P1SummaryMatrix-6</string>
+    <string>P1SummaryMatrix-7</string>
+    <string>P1SummaryMatrix-8</string>
+  </inputNames>
+</OSCInputGroup>

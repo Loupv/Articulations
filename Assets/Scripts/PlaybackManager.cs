@@ -14,7 +14,7 @@ public class PlaybackManager : MonoBehaviour
     public bool play, addGestureAnalyser;
     public GameObject gestureAnalyserPrefab;
     public int currentRecordLine;
-    PerformanceLine currentLine;
+    public PerformanceLine currentLine;
     public int playerNumber;
     public PlaybackMode mode;
     public float performanceMaxTime;

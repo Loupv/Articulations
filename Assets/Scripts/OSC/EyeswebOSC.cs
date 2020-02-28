@@ -87,7 +87,8 @@ public class EyeswebOSC : MonoBehaviour
         int i =0;
 
         foreach(UserData user in userManager.usersPlaying){
-            if(user._ID != userManager.me._ID && user._userRole == UserRole.Player){
+            if(user._ID != userManager.me._ID && 
+                (user._userRole == UserRole.Player || (user._userRole == UserRole.Playback && !user._isMe))){
 
                 osc.sender.SendOSCPosition(user, 0, oscEndPoint);
                 osc.sender.SendOSCPosition(user, 1, oscEndPoint);

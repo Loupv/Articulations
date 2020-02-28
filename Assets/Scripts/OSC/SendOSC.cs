@@ -129,15 +129,23 @@ public class SendOSC : MonoBehaviour {
     }
 
     public void SendTimeStampData(OSCEndPoint targetEndPoint){
-        double ts = gameEngine.clock.GetTimeSinceSceneStart();
-        
         message = new OscMessage();
         message.address = "/TimeStamp";
-        message.values.Add(ts.ToString());
 
+        double ts;
+
+        if(gameEngine._userRole == UserRole.Playback){
+            ts = gameEngine.playbackManager.currentLine.Time / 1000;
+        }
+        else {
+            ts = gameEngine.clock.GetTimeSinceSceneStart();
+        }
+
+        message.values.Add(ts.ToString());
+        //message.values.Add(ts);
+        
         osc.OscPacketIO.RemoteHostName = targetEndPoint.ip;
         osc.OscPacketIO.RemotePort = targetEndPoint.remotePort;
-
         osc.Send(message);
     }
 
