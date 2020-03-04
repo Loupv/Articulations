@@ -19,6 +19,8 @@ public class UserManager : MonoBehaviour
 
     [HideInInspector]
     public GameObject _userGameObject;
+    public GameObject barycenterPrefab;
+    Barycenter barycenter;
     public bool keepNamesVisibleForPlayers;
     public Color userCol, whiteColor, cyanColor, playbackColor1, playbackColor2;
 
@@ -193,6 +195,15 @@ public class UserManager : MonoBehaviour
                 gameEngine.uiHandler.trailsDecaySlider.gameObject.SetActive(true);
             else
                 gameEngine.uiHandler.trailsDecaySlider.gameObject.SetActive(false);
+
+            if(mode == "9A"){
+                if(barycenter == null) barycenter = GameObject.Instantiate(barycenterPrefab).GetComponent<Barycenter>();
+                barycenter.Activate(0);
+            }
+            else if(mode == "9B"){
+                if(barycenter == null) barycenter = GameObject.Instantiate(barycenterPrefab).GetComponent<Barycenter>();
+                barycenter.Activate(1);
+            }
 
 
             gameEngine.currentVisualisationMode = mode;

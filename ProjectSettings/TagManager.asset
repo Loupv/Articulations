@@ -31,8 +31,8 @@ TagManager:
   - PostProcessing
   - StereoRender_Ignore
   - InGameUI
-  - 
-  - 
+  - Side1ParticleAttraction
+  - Side2ParticleAttraction
   - 
   - 
   - 
