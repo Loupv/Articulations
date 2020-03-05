@@ -57,7 +57,7 @@ public class UIHandler : MonoBehaviour
         Debug.Log(env);
         // change env to server
         if (env == "sky") scenarioEvents.SetNextSkybox();
-        else if (env == "mirror") scenarioEvents.ToggleMirror(!scenarioEvents.mirrorAct);
+        else if (env == "mirror" || env == "mirrorAlt") scenarioEvents.ToggleMirror(!scenarioEvents.mirrorAct, 0);
         else if (env == "naoto") scenarioEvents.ToggleNaoto(!scenarioEvents.naotoAct);
 
         // change env to clients

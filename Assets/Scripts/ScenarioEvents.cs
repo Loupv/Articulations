@@ -40,6 +40,7 @@ public class ScenarioEvents : MonoBehaviour
     public bool timerPaused, scenarioIsRunning;
     public int skyboxID;
     int timeRemaining, hourOfDay;
+    public int oldMirrorMask;
     public float lerpSunSpeed = 0.1f;
     // Start is called before the first frame update
 
@@ -50,6 +51,12 @@ public class ScenarioEvents : MonoBehaviour
         shortTrails = userManager.TrailRendererPrefab;
         longTrails = userManager.SparkParticlesPrefab;
         //particleList = new List<GameObject>();
+        
+        if(gameEngine.useVRHeadset)
+            oldMirrorMask = mirrors[0].GetComponent<MirrorScript>().ReflectLayers;    
+        else
+            oldMirrorMask = mirrorsNoVR[0].GetComponent<MirrorScript>().ReflectLayers;
+        
     }
 
 
@@ -84,7 +91,7 @@ public class ScenarioEvents : MonoBehaviour
             if(timeRemaining <= 0){
                 if(currentCondition < scenarios[currentScenario].conditions.Length){
                     // remove previous condition parameters
-                    if(mirrorAct) ToggleMirror(false);
+                    if(mirrorAct) ToggleMirror(false, 0);
                     if(naotoAct) ToggleNaoto(false);
                     // change visualisation
                     if(gameEngine.uiHandler.autoRecordPerformance.isOn && !performanceRecorder.isRecording) performanceRecorder.StartRecording();
@@ -231,7 +238,7 @@ public class ScenarioEvents : MonoBehaviour
     }
 
 
-    public void ToggleMirror(bool b)
+    public void ToggleMirror(bool b, int maskMode) // maskmode 0 = tous les reflets sont visibles, maskmode 1&2 = chaque danseur voit l'autre dans le miroir mais ne se voit pas
     {
         //foreach (GameObject mirror in mirrors) mirror.SetActive(!mirror.activeSelf);
         //if (gameEngine.gameData.useVr == 1) // quick fix
@@ -256,6 +263,39 @@ public class ScenarioEvents : MonoBehaviour
                 }
                 mirrorAct = !mirrorAct;
             }
+
+
+            // check mirror layers
+            if(gameEngine.useVRHeadset){ 
+                
+                foreach(GameObject go in GameObject.FindObjectsOfType(typeof(Camera)))
+                {
+                    if(go.name == "Stereo Camera Eye [Mirror Plane]") {
+                        go.GetComponent<Camera>().cullingMask = oldMirrorMask; // revert back each layer
+                        if(maskMode == 1) go.GetComponent<Camera>().cullingMask &=  ~(1 << LayerMask.NameToLayer("Player1")); // we're player1, off player1 in mirror
+                        else if(maskMode == 2) go.GetComponent<Camera>().cullingMask &=  ~(1 << LayerMask.NameToLayer("Player2")); // we're player2, off player2 in mirror
+                    }
+                }
+            }
+            else{
+                if(maskMode == 0){
+                    foreach(GameObject mirror in mirrorsNoVR) {
+                        mirror.GetComponent<MirrorScript>().ReflectLayers = oldMirrorMask;
+                    }
+                }
+                else{
+                    foreach(GameObject mirror in mirrorsNoVR){ 
+                        mirror.GetComponent<MirrorScript>().ReflectLayers = oldMirrorMask;
+                        if(maskMode == 1) mirror.GetComponent<MirrorScript>().ReflectLayers &=  ~(1 << LayerMask.NameToLayer("Player1"));
+                        else if(maskMode == 2) mirror.GetComponent<MirrorScript>().ReflectLayers &=  ~(1 << LayerMask.NameToLayer("Player2"));
+                    }
+                    
+                }
+            }
+            
+            Camera.main.cullingMask = oldMirrorMask;
+            if(maskMode == 1) Camera.main.cullingMask &=  ~(1 << LayerMask.NameToLayer("Player2"));
+            else if(maskMode == 2) Camera.main.cullingMask &=  ~(1 << LayerMask.NameToLayer("Player1")); // if no reflect mode, we only see us in real
             
         Debug.Log("Mirror Toggled");
     }

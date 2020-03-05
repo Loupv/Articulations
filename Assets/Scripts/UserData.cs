@@ -27,7 +27,7 @@ public class UserData : MonoBehaviour
     public int _registeredRank;
 
 
-    public void InitUserData(int rank, int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, bool playerNameVisible, UserRole userRole,
+    public void InitUserData(int ID, string playerName, string address, int localPort, GameObject pGameObject, bool isMe, bool playerNameVisible, UserRole userRole,
          GameObject ViveSystemPrefab, bool useVRHeadset, string viveHeadName, string viveLeftHandName, string viveRightHandName)
     {
         
@@ -35,7 +35,6 @@ public class UserData : MonoBehaviour
 
         _userRole = userRole;
         _playerName = playerName;
-        _registeredRank = rank;
         _isMe = isMe;
 
         oscEndPoint = new OSCEndPoint();
@@ -244,6 +243,15 @@ public class UserData : MonoBehaviour
         head.transform.rotation = headRotation;
         leftHand.transform.rotation = leftHandRotation;
         rightHand.transform.rotation = rightHandRotation;
+    }
+
+    public void ChangeLayers(Transform trans, string name)
+    {
+        trans.gameObject.layer = LayerMask.NameToLayer(name);
+        foreach (Transform child in trans)
+         {
+                 child.gameObject.layer = LayerMask.NameToLayer(name);;
+         }
     }
 
     

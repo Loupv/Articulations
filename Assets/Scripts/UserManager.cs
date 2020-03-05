@@ -88,7 +88,13 @@ public class UserManager : MonoBehaviour
         }
 
         UserData user = _userGameObject.GetComponent<UserData>();
-        user.InitUserData(CountPlayers(), ID, name, address, localPort, _userGameObject, isMe, playerNameVisible, userRole, gameEngine.ViveSystemPrefab, gameEngine.useVRHeadset, 
+    
+        //int rank;
+
+        //if(userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline) rank = -1;
+        //else rank = CountPlayers();
+
+        user.InitUserData(ID, name, address, localPort, _userGameObject, isMe, playerNameVisible, userRole, gameEngine.ViveSystemPrefab, gameEngine.useVRHeadset, 
             viveHeadName, viveLeftHandName, viveRightHandName);
 
         if (userRole != UserRole.Server)
@@ -112,7 +118,7 @@ public class UserManager : MonoBehaviour
     }
 
 
-    public UserData AddNewUser(GameEngine gameEngine, int ID, string name, string address, int port, UserRole role)
+    public UserData AddNewUser(GameEngine gameEngine, int ID, string name, string address, int port, UserRole role, int rank)
     {
         GameObject go;
 
@@ -131,8 +137,12 @@ public class UserManager : MonoBehaviour
 
         UserData p = go.GetComponent<UserData>();
 
-        p.InitUserData(CountPlayers(), ID, name, address, port, go, false, playerNameVisible, role, gameEngine.ViveSystemPrefab, gameEngine.useVRHeadset, 
+        p.InitUserData(ID, name, address, port, go, false, playerNameVisible, role, gameEngine.ViveSystemPrefab, gameEngine.useVRHeadset, 
             viveHeadName, viveLeftHandName, viveRightHandName);
+
+        p._registeredRank = rank;
+        if(p._registeredRank == 0) p.ChangeLayers(p.transform, "Player1");
+        else if(p._registeredRank == 1) p.ChangeLayers(p.transform, "Player2");
 
         if (role == UserRole.Player) {
             ChangePlayerColor(p, whiteColor);
@@ -160,6 +170,9 @@ public class UserManager : MonoBehaviour
             if (me._userRole == UserRole.Server)
                 gameEngine.osc.sender.SendVisualisationChange(mode, usersPlaying);
 
+            if(gameEngine.currentVisualisationMode == "2D") Camera.main.cullingMask = gameEngine.scenarioEvents.oldMirrorMask; // revert camera layers if last mode was 2D
+
+
             // main parameters
             // TODO CLEAN THIS PART
             if (mode == "0") gameEngine.scenarioEvents.SetTimeOfDay(6);
@@ -167,9 +180,12 @@ public class UserManager : MonoBehaviour
 
             if (_hasLerped && (mode != "1Ca" || mode != "1Cb" || mode != "1Cc")) ReverseArmsLerping(); // TODO corriger ici
 
-            if ((mode != "2B" && mode != "2C" && gameEngine.scenarioEvents.mirrorAct) ||
-            ((mode == "2B" || mode == "2C") && !gameEngine.scenarioEvents.mirrorAct))
-                gameEngine.scenarioEvents.ToggleMirror(!gameEngine.scenarioEvents.mirrorAct);
+            if((mode == "2B" || mode == "2C" || mode == "2D")){
+                if(mode == "2D" && gameEngine._userRole == UserRole.Player) gameEngine.scenarioEvents.ToggleMirror(true, ReturnMyRank()+1); // only the others reflection
+                else gameEngine.scenarioEvents.ToggleMirror(true, 0); // normal mode 
+            }
+            else if (gameEngine.scenarioEvents.mirrorAct) gameEngine.scenarioEvents.ToggleMirror(false, 0);
+            
 
             if (mode != "2C")// && !(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline)) // if we're in playback offline mode, we keep different colors
             {
@@ -206,13 +222,13 @@ public class UserManager : MonoBehaviour
             }
 
 
-            gameEngine.currentVisualisationMode = mode;
-
 
             // per user parameters
             foreach (UserData user in usersPlaying) {
 
                 if (user._userRole == UserRole.Player) {
+
+                    if(gameEngine.currentVisualisationMode == "2C" && mode != "2C") ChangePlayerColor(user, whiteColor); // revert
 
                     if (mode == "0")  // basic condition
                     {
@@ -268,7 +284,7 @@ public class UserManager : MonoBehaviour
                     else if (mode == "2A") { // every sphere visible
                         user.ChangeSkin(this, "all");
                     }
-                    else if (mode == "2B") // mirror mode , side to side, same color
+                    else if (mode == "2B" || mode == "2D") // mirror mode , side to side, same color
                     {
                         user.ChangeSkin(this, "all");
                     }
@@ -350,6 +366,7 @@ public class UserManager : MonoBehaviour
             }
             Debug.Log("Visualisation changed : " + mode);
 
+            gameEngine.currentVisualisationMode = mode;
 
         }
         else {
@@ -442,7 +459,12 @@ public class UserManager : MonoBehaviour
         return -1;
     }
 
-
+    public int ReturnMyRank(){
+        foreach (UserData user in usersPlaying) {
+            if(user._isMe) return user._registeredRank;
+        }
+        return 0;
+    }
 
     // server's reaction to clienthasleft message
     public void ErasePlayer(int playerID)

@@ -490,11 +490,17 @@ public class SendOSC : MonoBehaviour {
             message.values.Add(newEnv);
 
             int val =-1;
+            int val2 = -1;
 
             if(newEnv == "mirror") {
                 if(gameEngine.scenarioEvents.mirrorAct) val = 1;
                 else val =0;
             }
+            if(newEnv == "mirrorAlt") {
+                if(gameEngine.scenarioEvents.mirrorAct) val = 1;
+                else val =0;
+            }
+
             else if(newEnv == "sky") {
                 val = gameEngine.scenarioEvents.skyboxID;
             }
@@ -504,6 +510,7 @@ public class SendOSC : MonoBehaviour {
             }
 
             message.values.Add(val);
+            if(val2 != -1) message.values.Add(val2);
 
             osc.OscPacketIO.RemoteHostName = user.oscEndPoint.ip;
             osc.OscPacketIO.RemotePort = user.oscEndPoint.remotePort;

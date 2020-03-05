@@ -201,8 +201,12 @@ public class GameEngine : MonoBehaviour
             else if(playbackManager.mode == PlaybackMode.Offline){
                 appState = AppState.Running;
                 canvasHandler.ChangeCanvas("playbackCanvasOff");
-                userManager.AddNewUser(this, 776, "", osc.outIP, osc.outPort, UserRole.Playback);
-                userManager.AddNewUser(this, 777, "", osc.outIP, osc.outPort, UserRole.Playback);
+                UserData p1 = userManager.AddNewUser(this, 776, "", osc.outIP, osc.outPort, UserRole.Playback, 0);
+                UserData p2 = userManager.AddNewUser(this, 777, "", osc.outIP, osc.outPort, UserRole.Playback, 1);
+                
+                p1.ChangeLayers(p1.transform, "Player1");
+                p2.ChangeLayers(p2.transform, "Player2");
+
                 playbackManager.StartPlayback();
             }
         }
@@ -229,6 +233,10 @@ public class GameEngine : MonoBehaviour
             appState = AppState.Running;
             //networkManager.ShowConnexionState();
             _user._registeredRank = rank;
+
+            if(_user._registeredRank == 0) _user.ChangeLayers(_user.transform, "Player1");
+            else if(_user._registeredRank == 1) _user.ChangeLayers(_user.transform, "Player2");
+
             scenarioEvents.performanceRecorder.sessionID = sessionID;
 
             soundHandler.recordPostScenarioAudio = (recordAudio == 1);

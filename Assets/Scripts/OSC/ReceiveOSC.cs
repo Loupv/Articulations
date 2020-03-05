@@ -84,7 +84,7 @@ public class ReceiveOSC : MonoBehaviour {
 
             if (available)
             {
-                UserData user = userManager.AddNewUser(gameEngine, playerID, playerName, playerIP, requestedPort, role);
+                UserData user = userManager.AddNewUser(gameEngine, playerID, playerName, playerIP, requestedPort, role, userManager.CountPlayers());
                 if (role == UserRole.Player)
                 {
                     sender.AddNewPlayerToClientsGames(playerID, playerName, userManager.usersPlaying, isPlayer, userManager.usersPlaying.Count - 1); // minus1 because server had already added user in list
@@ -220,7 +220,7 @@ public class ReceiveOSC : MonoBehaviour {
         if ((gameEngine._userRole == UserRole.Player || gameEngine._userRole == UserRole.Viewer || gameEngine._userRole == UserRole.Tracker) && playerID != gameEngine._user._ID)
         {
             Debug.Log(playerID+" vs "+gameEngine._user._ID);
-            userManager.AddNewUser(gameEngine, playerID, playerName, "null", -1, userRole);
+            userManager.AddNewUser(gameEngine, playerID, playerName, "null", -1, userRole, rank);
             gameEngine.userManager.ChangeVisualisationMode(gameEngine.currentVisualisationMode, gameEngine, false); // trigger the change mode again, to actualize to new players
         }
     }
@@ -247,7 +247,7 @@ public class ReceiveOSC : MonoBehaviour {
         string envType = message.GetString(0);
         int val = message.GetInt(1);
 
-        if (envType == "mirror") gameEngine.scenarioEvents.ToggleMirror(val == 1);
+        if (envType == "mirror") gameEngine.scenarioEvents.ToggleMirror(val == 1, message.GetInt(2));
         else if (envType == "sky") gameEngine.scenarioEvents.SetSkybox(val);
         else if (envType == "naoto") gameEngine.scenarioEvents.ToggleNaoto(val == 1);
     }

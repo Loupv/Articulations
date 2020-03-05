@@ -2,6 +2,17 @@
 	"scenarios" : 
 	[
 		{
+			"scenarioId" : 0,
+			"toFade" : 0,
+			"conditions" : 
+			[
+				"2D","9A","9B", "2C"
+			],
+			"durations"  : 
+			[
+				190,190,190,190
+			]
+		},{
 			"scenarioId" : 1,
 			"toFade" : 0,
 			"conditions" : 
