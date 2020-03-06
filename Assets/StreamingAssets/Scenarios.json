@@ -6,11 +6,11 @@
 			"toFade" : 0,
 			"conditions" : 
 			[
-				"2D","9A","9B", "2C"
+				"2D","2E","9B", "9A"
 			],
 			"durations"  : 
 			[
-				190,190,190,190
+				10,10,10,10
 			]
 		},{
 			"scenarioId" : 1,

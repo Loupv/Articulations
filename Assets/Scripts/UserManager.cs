@@ -180,11 +180,12 @@ public class UserManager : MonoBehaviour
 
             if (_hasLerped && (mode != "1Ca" || mode != "1Cb" || mode != "1Cc")) ReverseArmsLerping(); // TODO corriger ici
 
-            if((mode == "2B" || mode == "2C" || mode == "2D")){
-                if(mode == "2D" && gameEngine._userRole == UserRole.Player) gameEngine.scenarioEvents.ToggleMirror(true, ReturnMyRank()+1); // only the others reflection
-                else gameEngine.scenarioEvents.ToggleMirror(true, 0); // normal mode 
+            if((mode == "2B" || mode == "2C" || mode == "2D" || mode == "2E")){
+                if(mode == "2D" && gameEngine._userRole == UserRole.Player) gameEngine.scenarioEvents.ToggleMirror(true, 1, ReturnMyRank()+1); // only the others reflection
+                else if(mode == "2E" && gameEngine._userRole == UserRole.Player) gameEngine.scenarioEvents.ToggleMirror(true, 2, ReturnMyRank()+1); // only the others reflection
+                else gameEngine.scenarioEvents.ToggleMirror(true, 0, 0); // normal mode 
             }
-            else if (gameEngine.scenarioEvents.mirrorAct) gameEngine.scenarioEvents.ToggleMirror(false, 0);
+            else if (gameEngine.scenarioEvents.mirrorAct) gameEngine.scenarioEvents.ToggleMirror(false, 0, 0);
             
 
             if (mode != "2C")// && !(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline)) // if we're in playback offline mode, we keep different colors

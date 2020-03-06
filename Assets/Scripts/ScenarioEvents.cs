@@ -91,7 +91,7 @@ public class ScenarioEvents : MonoBehaviour
             if(timeRemaining <= 0){
                 if(currentCondition < scenarios[currentScenario].conditions.Length){
                     // remove previous condition parameters
-                    if(mirrorAct) ToggleMirror(false, 0);
+                    if(mirrorAct) ToggleMirror(false, 0, 0);
                     if(naotoAct) ToggleNaoto(false);
                     // change visualisation
                     if(gameEngine.uiHandler.autoRecordPerformance.isOn && !performanceRecorder.isRecording) performanceRecorder.StartRecording();
@@ -238,7 +238,7 @@ public class ScenarioEvents : MonoBehaviour
     }
 
 
-    public void ToggleMirror(bool b, int maskMode) // maskmode 0 = tous les reflets sont visibles, maskmode 1&2 = chaque danseur voit l'autre dans le miroir mais ne se voit pas
+    public void ToggleMirror(bool b, int maskMode, int rank) // maskmode 0 -> tous les reflets sont visibles, maskmode 1 -> only my reflect, maskmode 2 -> chaque danseur voit l'autre dans le miroir mais ne se voit pas
     {
         //foreach (GameObject mirror in mirrors) mirror.SetActive(!mirror.activeSelf);
         //if (gameEngine.gameData.useVr == 1) // quick fix
@@ -286,16 +286,30 @@ public class ScenarioEvents : MonoBehaviour
                 else{
                     foreach(GameObject mirror in mirrorsNoVR){ 
                         mirror.GetComponent<MirrorScript>().ReflectLayers = oldMirrorMask;
-                        if(maskMode == 1) mirror.GetComponent<MirrorScript>().ReflectLayers &=  ~(1 << LayerMask.NameToLayer("Player1"));
-                        else if(maskMode == 2) mirror.GetComponent<MirrorScript>().ReflectLayers &=  ~(1 << LayerMask.NameToLayer("Player2"));
+                        if(maskMode == 1){
+                            if(rank == 1) mirror.GetComponent<MirrorScript>().ReflectLayers &=  ~(1 << LayerMask.NameToLayer("Player2"));
+                            else if(rank == 2) mirror.GetComponent<MirrorScript>().ReflectLayers &=  ~(1 << LayerMask.NameToLayer("Player1"));
+                        } 
+                        else if(maskMode == 2) {
+                            if(rank == 1) mirror.GetComponent<MirrorScript>().ReflectLayers &=  ~(1 << LayerMask.NameToLayer("Player1"));
+                            else if(rank == 2) mirror.GetComponent<MirrorScript>().ReflectLayers &=  ~(1 << LayerMask.NameToLayer("Player2"));
+                        }
                     }
                     
                 }
             }
             
             Camera.main.cullingMask = oldMirrorMask;
-            if(maskMode == 1) Camera.main.cullingMask &=  ~(1 << LayerMask.NameToLayer("Player2"));
-            else if(maskMode == 2) Camera.main.cullingMask &=  ~(1 << LayerMask.NameToLayer("Player1")); // if no reflect mode, we only see us in real
+            //if(maskMode == 1){
+            //    if(rank == 1) Camera.main.cullingMask &=  ~(1 << LayerMask.NameToLayer("Player1"));
+            //    else if(rank == 2) Camera.main.cullingMask &=  ~(1 << LayerMask.NameToLayer("Player2")); 
+            //} 
+            //else if(maskMode == 2){
+            if(maskMode == 1 || maskMode ==  2){
+                if(rank == 1) Camera.main.cullingMask &=  ~(1 << LayerMask.NameToLayer("Player2"));
+                else if(rank == 2)Camera.main.cullingMask &=  ~(1 << LayerMask.NameToLayer("Player1")); // if no reflect mode, we only see us in real
+            }
+            //}
             
         Debug.Log("Mirror Toggled");
     }
