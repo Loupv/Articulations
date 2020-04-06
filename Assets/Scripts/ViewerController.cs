@@ -21,7 +21,7 @@ public class ViewerController : MonoBehaviour
 	private GameEngine gameEngine;
 	private UIHandler UIHandler;
 	private UserManager userManager;
-
+	private int standaloneFOV=60, vrFOV=110;
 	
 
 	public void InitViewerController(bool isMe){
@@ -32,12 +32,15 @@ public class ViewerController : MonoBehaviour
 		UIHandler = GameObject.FindGameObjectWithTag("UIHandler").GetComponent<UIHandler>();
 
 		if(isMe){
-			this.transform.position = camera.transform.position;
-			this.transform.rotation = camera.transform.rotation;
-			camera.transform.parent = this.transform; 
+			transform.position = camera.transform.position;
+			transform.rotation = camera.transform.rotation;
+			camera.transform.parent = transform; 
 			//camera.transform.position = Vector3.zero;
-			initialTransform = this.transform;
+			initialTransform = transform;
+			UpdatePOV(3, 0);
 		}
+
+		
 	}
 	
 	void Update () 
@@ -174,6 +177,8 @@ public class ViewerController : MonoBehaviour
 
 
 		}
+		if (pov == 1 || pov == 2) camera.fieldOfView = vrFOV;
+		else camera.fieldOfView = standaloneFOV;
 	}
 }
 

@@ -201,8 +201,8 @@ public class GameEngine : MonoBehaviour
             else if(playbackManager.mode == PlaybackMode.Offline){
                 appState = AppState.Running;
                 canvasHandler.ChangeCanvas("playbackCanvasOff");
-                UserData p1 = userManager.AddNewUser(this, 776, "", osc.outIP, osc.outPort, UserRole.Playback, 0);
-                UserData p2 = userManager.AddNewUser(this, 777, "", osc.outIP, osc.outPort, UserRole.Playback, 1);
+                UserData p1 = userManager.AddNewUser(this, 776, "P1", osc.outIP, osc.outPort, UserRole.Playback, 0);
+                UserData p2 = userManager.AddNewUser(this, 777, "P2", osc.outIP, osc.outPort, UserRole.Playback, 1);
                 
                 p1.ChangeLayers(p1.transform, "Player1");
                 p2.ChangeLayers(p2.transform, "Player2");
