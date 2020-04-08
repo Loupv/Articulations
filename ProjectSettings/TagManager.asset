@@ -19,6 +19,8 @@ TagManager:
   - NetworkManager
   - Viewer
   - GestureAnalyser
+  - GazeCheck
+  - Mirror
   layers:
   - Default
   - TransparentFX

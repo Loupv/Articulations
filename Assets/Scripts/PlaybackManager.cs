@@ -13,6 +13,7 @@ public class PlaybackManager : MonoBehaviour
     public GameEngine gameEngine;
     public bool play, addGestureAnalyser;
     public GameObject gestureAnalyserPrefab;
+    public IsInsightCheck isInsightCheck;
     public int currentRecordLine;
     public PerformanceLine currentLine;
     public int playerNumber;
@@ -26,7 +27,7 @@ public class PlaybackManager : MonoBehaviour
 
 
     void Start(){
-
+        ChangePlaybackMode(); // in start to actualize if quick mode change is made in editor
     }
 
     public void StartPlayback(){
@@ -124,6 +125,7 @@ public class PlaybackManager : MonoBehaviour
     public void StopPlayback(){
         Debug.Log("Playback Stopped");
         if(paused) PausePlayback(); // unpause
+        if (isInsightCheck.active) isInsightCheck.StopInsightCheck();
         if(addGestureAnalyser) Destroy(GameObject.FindGameObjectWithTag("GestureAnalyser"));
         CancelInvoke("UpdatePlayback");
     }

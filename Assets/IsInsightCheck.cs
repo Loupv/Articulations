@@ -5,11 +5,16 @@ using UnityEngine;
 public class IsInsightCheck : MonoBehaviour
 {
 
+    public Transform mirrorGazeLeft, mirrorGazeRight;
+    public UnityEngine.UI.Image p1MirrorGazeSignal, p2MirrorGazeSignal;
+    public GameObject p1SphereMirrorGazeSignal, p2SphereMirrorGazeSignal;
+    public UnityEngine.UI.Toggle switchToggle;
     public bool inited, active;
     public int hFov = 110;
 
     public bool p1SeesP2Head, p1SeesP2LeftHand, p1SeesP2RightHand,
         p2SeesP1Head, p2SeesP1LeftHand, p2SeesP1RightHand;
+    public bool p1SeesLeftPartOfMirror, p1SeesRightPartOfMirror,p2SeesLeftPartOfMirror, p2SeesRightPartOfMirror;
 
     Transform p1Head,p1LeftHand,p1RightHand;
     Transform p2Head,p2LeftHand,p2RightHand;
@@ -45,17 +50,20 @@ public class IsInsightCheck : MonoBehaviour
 
         if (count == 6) inited = true;
 
+        p1MirrorGazeSignal.gameObject.SetActive(true);
+        p2MirrorGazeSignal.gameObject.SetActive(true);
+        p1SphereMirrorGazeSignal.SetActive(true);
+        p2SphereMirrorGazeSignal.SetActive(true);
         //headed = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         //headed.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        if (!inited) Init();
-        else if(active)
-            CheckIfInsight();
+        if(active) CheckIfInsight();
     }
 
 
@@ -64,12 +72,11 @@ public class IsInsightCheck : MonoBehaviour
     {
 
         float dot;
-        Vector3 horizontalHeading; // avoid up/down fov
+        Vector3 horizontalHeading; // avoid up/down fov, calculate angle only on horizontal axis
 
-        // P1
+        // P1 Look at P2
         horizontalHeading = new Vector3(p2Head.transform.position.x - p1Head.transform.position.x, 0, p2Head.transform.position.z - p1Head.transform.position.z);
         dot = Vector3.Dot((horizontalHeading).normalized, p1Head.gameObject.transform.forward.normalized);
-        Debug.Log(dot);
         if (dot > Mathf.Cos(hFov / 2))
             p1SeesP2Head = true;
         else p1SeesP2Head = false;
@@ -88,10 +95,9 @@ public class IsInsightCheck : MonoBehaviour
 
         //headed.transform.position = p1Head.transform.position + new Vector3(p1Head.transform.forward.x, 0, p1Head.transform.forward.z);
 
-        // P2
+        // P2 Look at P1
         horizontalHeading = new Vector3(p1Head.transform.position.x - p2Head.transform.position.x, 0, p1Head.transform.position.z - p2Head.transform.position.z);
         dot = Vector3.Dot((horizontalHeading).normalized, p2Head.gameObject.transform.forward.normalized);
-        Debug.Log(dot);
         if (dot > Mathf.Cos(hFov / 2))
             p2SeesP1Head = true;
         else p2SeesP1Head = false;
@@ -121,28 +127,88 @@ public class IsInsightCheck : MonoBehaviour
         if (p2SeesP1RightHand) p1RightHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.red;
         else p1RightHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
 
-        if (p1SeesP2Head) p2Head.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.red;
+        if (p1SeesP2Head) p2Head.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.magenta;
         else p2Head.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
-        if (p1SeesP2LeftHand) p2LeftHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.red;
+        if (p1SeesP2LeftHand) p2LeftHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.magenta;
         else p2LeftHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
-        if (p1SeesP2RightHand) p2RightHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.red;
+        if (p1SeesP2RightHand) p2RightHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.magenta;
         else p2RightHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
 
+        p1SeesLeftPartOfMirror = false;
+        p1SeesRightPartOfMirror = false;
+        p2SeesLeftPartOfMirror = false;
+        p2SeesRightPartOfMirror = false;
 
+        if (GameObject.FindWithTag("Mirror") != null)
+        {
+            // P1 Look at mirror - we check if left and right side of the mirror is seen
+            horizontalHeading = new Vector3(mirrorGazeLeft.position.x - p1Head.transform.position.x, 0, mirrorGazeLeft.transform.position.z - p1Head.transform.position.z);
+            dot = Vector3.Dot((horizontalHeading).normalized, p1Head.gameObject.transform.forward.normalized);
+            if (dot > Mathf.Cos(hFov / 2))
+                p1SeesLeftPartOfMirror = true;
+
+            horizontalHeading = new Vector3(mirrorGazeRight.transform.position.x - p1Head.transform.position.x, 0, mirrorGazeRight.transform.position.z - p1Head.transform.position.z);
+            dot = Vector3.Dot((horizontalHeading).normalized, p1Head.gameObject.transform.forward.normalized);
+            if (dot > Mathf.Cos(hFov / 2))
+                p1SeesRightPartOfMirror = true;
+
+            // P2 Look at mirror
+            horizontalHeading = new Vector3(mirrorGazeLeft.position.x - p2Head.transform.position.x, 0, mirrorGazeLeft.transform.position.z - p2Head.transform.position.z);
+            dot = Vector3.Dot((horizontalHeading).normalized, p2Head.gameObject.transform.forward.normalized);
+            if (dot > Mathf.Cos(hFov / 2))
+                p2SeesLeftPartOfMirror = true;
+
+            horizontalHeading = new Vector3(mirrorGazeRight.transform.position.x - p2Head.transform.position.x, 0, mirrorGazeRight.transform.position.z - p2Head.transform.position.z);
+            dot = Vector3.Dot((horizontalHeading).normalized, p2Head.gameObject.transform.forward.normalized);
+            if (dot > Mathf.Cos(hFov / 2))
+                p2SeesRightPartOfMirror = true;
+        }
+        // following is out of upper loop to revert to white if mirror is gone
+        if (p1SeesLeftPartOfMirror && p1SeesRightPartOfMirror)
+        {
+            p1MirrorGazeSignal.color = Color.red;
+            p1SphereMirrorGazeSignal.GetComponent<MeshRenderer>().materials[0].color = Color.red;
+        }
+        else
+        {
+            p1MirrorGazeSignal.color = Color.white;
+            p2SphereMirrorGazeSignal.GetComponent<MeshRenderer>().materials[0].color = Color.white;
+        }
+        if (p2SeesLeftPartOfMirror && p2SeesRightPartOfMirror)
+        {
+            p2MirrorGazeSignal.color = Color.magenta;
+            p2SphereMirrorGazeSignal.GetComponent<MeshRenderer>().materials[0].color = Color.magenta;
+        }
+        else
+        {
+            p2MirrorGazeSignal.color = Color.white;
+            p2SphereMirrorGazeSignal.GetComponent<MeshRenderer>().materials[0].color = Color.white;
+        }
     }
 
     public void Switch()
     {
-        active = !active;
+        active = switchToggle.isOn;
+        if (active) Init();
+        else StopInsightCheck();
+    }
 
-        if (!active)
-        {            
-            p1Head.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
-            p1LeftHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
-            p1RightHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
-            p2Head.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
-            p2LeftHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
-            p2RightHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
-        }
+
+    public void StopInsightCheck()
+    {
+        p1Head.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
+        p1LeftHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
+        p1RightHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
+        p2Head.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
+        p2LeftHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
+        p2RightHand.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.white;
+
+        p1MirrorGazeSignal.gameObject.SetActive(false);
+        p2MirrorGazeSignal.gameObject.SetActive(false);
+        p1SphereMirrorGazeSignal.SetActive(false);
+        p2SphereMirrorGazeSignal.SetActive(false);
+
+        active = false;
+        switchToggle.isOn = false;
     }
 }
