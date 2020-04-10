@@ -36,6 +36,7 @@ public class PlaybackManager : MonoBehaviour
         if(addGestureAnalyser) GameObject.Instantiate(gestureAnalyserPrefab);
         Debug.Log("Launching playback");
         InvokeRepeating("UpdatePlayback",0f,1/(float)gameEngine.targetFrameRate);
+        gameEngine.uiHandler.playPauseButtonImage.sprite = gameEngine.uiHandler.pauseSprite;
     }
 
     void UpdatePlayback()

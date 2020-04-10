@@ -22,12 +22,13 @@ public class UIHandler : MonoBehaviour
     public GameObject clientGOParent, playerNameTextBox, serverGOParent, playbackGOParent;
     public GameObject recordGizmo, pauseGizmo;
     public Dropdown scenarioDropDown, onlineOfflinePlaybackMode, switchPerformanceDataFile, switchPlaybackPlayer;
-    public Sprite selectedButtonSprite, normalButtonSprite;
+    public Sprite selectedButtonSprite, normalButtonSprite, playSprite, pauseSprite;
     public Toggle sendToAudioDeviceToggle, autoRecordPerformance, recordAudioAfterScenario;
     public Slider trailsDecaySlider, playbackSpeedSlider;
     public Text trailTime, conditionTimeRemaining, recordingTimeRemaining, currentConditionText, playbackTime, currentViz;
     private string scenarioMode;
     int tmpTimer;
+    public Image playPauseButtonImage;
 
 
     void Start(){
@@ -37,6 +38,7 @@ public class UIHandler : MonoBehaviour
 
         fileInOut.PopulatePlaybackDataFileDropdown(switchPerformanceDataFile);
         ScenarioModeSwitch(1);
+
     }
 
     /* ------------------------------------------------ */
@@ -320,6 +322,11 @@ public class UIHandler : MonoBehaviour
     }
 
 
+    public void PlayPauseIconSwitch()
+    {
+        if (playPauseButtonImage.sprite == playSprite) playPauseButtonImage.sprite = pauseSprite;
+        else playPauseButtonImage.sprite = playSprite;
+    }
 
     /*public void quitApp()
     {
