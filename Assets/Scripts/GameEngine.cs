@@ -314,6 +314,7 @@ public class GameEngine : MonoBehaviour
         userManager = new UserManager();
         osc.sender.SendQuitMessage(_userRole);
         StopAllCoroutines();
+        CancelInvoke("AskForRegistration");
         StartCoroutine(InitApplication());
         
         networkManager.eyeswebOSC.gameObject.SetActive(true);

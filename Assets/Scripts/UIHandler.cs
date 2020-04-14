@@ -328,6 +328,14 @@ public class UIHandler : MonoBehaviour
         else playPauseButtonImage.sprite = playSprite;
     }
 
+    public void ShowPlayerNoses(Toggle tog)
+    {
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            go.GetComponent<UserData>().head.transform.GetChild(1).gameObject.SetActive(tog.isOn);
+        }
+    }
+
     /*public void quitApp()
     {
         Application.Quit();

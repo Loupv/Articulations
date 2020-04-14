@@ -163,32 +163,31 @@ public class UserManager : MonoBehaviour
     }
 
 
-    public void ChangeVisualisationMode(string mode, GameEngine gameEngine, bool fade) {
+    public void ChangeVisualisationMode(string newVisualisationMode, GameEngine gameEngine, bool fade) {
 
-        if (!fade) {
             // for clients
             if (me._userRole == UserRole.Server)
-                gameEngine.osc.sender.SendVisualisationChange(mode, usersPlaying);
+                gameEngine.osc.sender.SendVisualisationChange(newVisualisationMode, usersPlaying);
 
             if(gameEngine.currentVisualisationMode == "2D") Camera.main.cullingMask = gameEngine.scenarioEvents.oldMirrorMask; // revert camera layers if last mode was 2D
 
 
             // main parameters
             // TODO CLEAN THIS PART
-            if (mode == "0") gameEngine.scenarioEvents.SetTimeOfDay(6);
+            if (newVisualisationMode == "0") gameEngine.scenarioEvents.SetTimeOfDay(6);
             else gameEngine.scenarioEvents.SetTimeOfDay(8);
 
-            if (_hasLerped && (mode != "1Ca" || mode != "1Cb" || mode != "1Cc")) ReverseArmsLerping(); // TODO corriger ici
+            if (_hasLerped && (newVisualisationMode != "1Ca" || newVisualisationMode != "1Cb" || newVisualisationMode != "1Cc")) ReverseArmsLerping(); // TODO corriger ici
 
-            if((mode == "2B" || mode == "2C" || mode == "2D" || mode == "2E")){
-                if(mode == "2D" && gameEngine._userRole == UserRole.Player) gameEngine.scenarioEvents.ToggleMirror(true, 1, ReturnMyRank()+1); // only the others reflection
-                else if(mode == "2E" && gameEngine._userRole == UserRole.Player) gameEngine.scenarioEvents.ToggleMirror(true, 2, ReturnMyRank()+1); // only the others reflection
+            if((newVisualisationMode == "2B" || newVisualisationMode == "2C" || newVisualisationMode == "2D" || newVisualisationMode == "2E")){
+                if(newVisualisationMode == "2D" && gameEngine._userRole == UserRole.Player) gameEngine.scenarioEvents.ToggleMirror(true, 1, ReturnMyRank()+1); // only the others reflection
+                else if(newVisualisationMode == "2E" && gameEngine._userRole == UserRole.Player) gameEngine.scenarioEvents.ToggleMirror(true, 2, ReturnMyRank()+1); // only the others reflection
                 else gameEngine.scenarioEvents.ToggleMirror(true, 0, 0); // normal mode 
             }
             else if (gameEngine.scenarioEvents.mirrorAct) gameEngine.scenarioEvents.ToggleMirror(false, 0, 0);
             
 
-            if (mode != "2C")// && !(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline)) // if we're in playback offline mode, we keep different colors
+            if (newVisualisationMode != "2C")// && !(gameEngine._userRole == UserRole.Playback && gameEngine.playbackManager.mode == PlaybackMode.Offline)) // if we're in playback offline mode, we keep different colors
             {
                 if (usersPlaying.Count > 1) ChangePlayerColor(usersPlaying[1], whiteColor);
                 if (usersPlaying.Count > 2) ChangePlayerColor(usersPlaying[2], whiteColor);
@@ -199,7 +198,7 @@ public class UserManager : MonoBehaviour
                 if (usersPlaying.Count > 2) ChangePlayerColor(usersPlaying[2], playbackColor2);
             }
 
-            if (mode != "3B" && mode != "3Ca" && mode != "3Cb" && mode != "3Cc")
+            if (newVisualisationMode != "3B" && newVisualisationMode != "3Ca" && newVisualisationMode != "3Cb" && newVisualisationMode != "3Cc")
             {
                 gameEngine.networkManager.sendToAudioDevice = false;
                 trailsCondition = null;
@@ -208,16 +207,16 @@ public class UserManager : MonoBehaviour
             else gameEngine.networkManager.sendToAudioDevice = true;
             gameEngine.uiHandler.sendToAudioDeviceToggle.isOn = gameEngine.networkManager.sendToAudioDevice;
 
-            if (mode == "3A" || mode == "3B" || mode == "3Ca" || mode == "3Cb" || mode == "3Cc")
+            if (newVisualisationMode == "3A" || newVisualisationMode == "3B" || newVisualisationMode == "3Ca" || newVisualisationMode == "3Cb" || newVisualisationMode == "3Cc")
                 gameEngine.uiHandler.trailsDecaySlider.gameObject.SetActive(true);
             else
                 gameEngine.uiHandler.trailsDecaySlider.gameObject.SetActive(false);
 
-            if(mode == "9A"){
+            if(newVisualisationMode == "9A"){
                 if(barycenter == null) barycenter = GameObject.Instantiate(barycenterPrefab).GetComponent<Barycenter>();
                 barycenter.Activate(0);
             }
-            else if(mode == "9B"){
+            else if(newVisualisationMode == "9B"){
                 if(barycenter == null) barycenter = GameObject.Instantiate(barycenterPrefab).GetComponent<Barycenter>();
                 barycenter.Activate(1);
             }
@@ -229,9 +228,10 @@ public class UserManager : MonoBehaviour
 
                 if (user._userRole == UserRole.Player) {
 
-                    if(gameEngine.currentVisualisationMode == "2C" && mode != "2C") ChangePlayerColor(user, whiteColor); // revert
+                    if(gameEngine.currentVisualisationMode == "2C" && newVisualisationMode != "2C") ChangePlayerColor(user, whiteColor); // revert
 
-                    if (mode == "0")  // basic condition
+
+                    if (newVisualisationMode == "0")  // basic condition
                     {
                         if (me._userRole == UserRole.Server || me._userRole == UserRole.Viewer) {
                             user.ChangeSkin(this, "all");
@@ -245,35 +245,36 @@ public class UserManager : MonoBehaviour
                         }
                     }
 
-                    else if (mode == "1A") // every spheres visible
+                    else if (newVisualisationMode == "1A") // every spheres visible
                     {
                         user.ChangeSkin(this, "all");
                     }
 
-                    else if (mode == "1B") // other's hand visible, mine are not
+                    else if (newVisualisationMode == "1B") // other's hand visible, mine are not
                     {
                         if (user._ID == me._ID)
                             user.ChangeSkin(this, "noHands");
                         else user.ChangeSkin(this, "all");
 
                     }
-                    else if (mode == "1C" || mode == "1Ca" || mode == "1Cb" || mode == "1Cc") // change arms length
+
+                    else if (newVisualisationMode == "1C" || newVisualisationMode == "1Ca" || newVisualisationMode == "1Cb" || newVisualisationMode == "1Cc") // change arms length
                     {
                         Debug.Log("extension arms");
                         user.ChangeSkin(this, "all");
-                        if (mode == "1Ca") {
+                        if (newVisualisationMode == "1Ca") {
                             Debug.Log("move arms");
                             distanceToMove = -0.2f;
                             lerpDuration = 3f;
                             StartArmsLerping();
                         }
-                        else if (mode == "1Cb")
+                        else if (newVisualisationMode == "1Cb")
                         {
                             distanceToMove = 1f;
                             lerpDuration = 5f;
                             StartArmsLerping();
                         }
-                        else if (mode == "1Cc")
+                        else if (newVisualisationMode == "1Cc")
                         {
                             distanceToMove = 4f;
                             lerpDuration = 10f;
@@ -282,14 +283,14 @@ public class UserManager : MonoBehaviour
                     }
 
 
-                    else if (mode == "2A") { // every sphere visible
+                    else if (newVisualisationMode == "2A") { // every sphere visible
                         user.ChangeSkin(this, "all");
                     }
-                    else if (mode == "2B" || mode == "2D") // mirror mode , side to side, same color
+                    else if (newVisualisationMode == "2B" || newVisualisationMode == "2D") // mirror mode , side to side, same color
                     {
                         user.ChangeSkin(this, "all");
                     }
-                    else if (mode == "2C") // mirror mode, different color
+                    else if (newVisualisationMode == "2C") // mirror mode, different color
                     {
                         user.ChangeSkin(this, "all");
                         if (user._ID == me._ID)
@@ -299,7 +300,7 @@ public class UserManager : MonoBehaviour
                     }
 
 
-                    else if (mode == "3A") // trails individual
+                    else if (newVisualisationMode == "3A") // trails individual
                     {
 
                         if (me._userRole == UserRole.Server || me._userRole == UserRole.Viewer)
@@ -319,7 +320,7 @@ public class UserManager : MonoBehaviour
                         trailsCondition = null;
                     }
 
-                    else if (mode == "3B") // trails individual + sound
+                    else if (newVisualisationMode == "3B") // trails individual + sound
                     { // trails mode2
                         if (me._userRole == UserRole.Server || me._userRole == UserRole.Viewer)
                             user.ChangeSkin(this, "trails");
@@ -335,7 +336,7 @@ public class UserManager : MonoBehaviour
                         trailsCondition = "soloR";
                     }
 
-                    else if (mode == "3Ca" || mode == "3Cb" || mode == "3Cc") // intersubject
+                    else if (newVisualisationMode == "3Ca" || newVisualisationMode == "3Cb" || newVisualisationMode == "3Cc") // intersubject
                     { // trails mode2
                         Debug.Log("TO DO (sound)");
                         user.ChangeSkin(this, "trails");
@@ -349,13 +350,13 @@ public class UserManager : MonoBehaviour
 
 
                     // other modes
-                    else if (mode == "4A") // trails mode3
+                    else if (newVisualisationMode == "4A") // trails mode3
                     {
                         if (user._ID == me._ID)
                             user.ChangeSkin(this, "noHands");
                         else user.ChangeSkin(this, "shortTrails");
                     }
-                    else if (mode == "5A") // one player has left hand visible, other player has right hand visible
+                    else if (newVisualisationMode == "5A") // one player has left hand visible, other player has right hand visible
                     {
                         user.ChangeSkin(this, "onehand");
                     }
@@ -365,15 +366,10 @@ public class UserManager : MonoBehaviour
 
                 }
             }
-            Debug.Log("Visualisation changed : " + mode);
+            Debug.Log("Visualisation changed : " + newVisualisationMode);
 
-            gameEngine.currentVisualisationMode = mode;
+            gameEngine.currentVisualisationMode = newVisualisationMode;
 
-        }
-        else {
-            gameEngine.pendingVisualisationMode = mode;
-            Camera.main.GetComponent<CameraFade>().FadeOut();
-        }
     }
 
 

@@ -56,8 +56,10 @@ public class UserData : MonoBehaviour
             
             if(!useVRHeadset) Debug.Log("Not looking for Vive System");
 
-            PlaceUserPartsInScene(pGameObject, ViveSystemPrefab, useVRHeadset, viveHeadName, viveLeftHandName, viveRightHandName); 
-            
+            PlaceUserPartsInScene(pGameObject, ViveSystemPrefab, useVRHeadset, viveHeadName, viveLeftHandName, viveRightHandName);
+
+            if (!useVRHeadset) SetAsDraggable(this);
+
             pGameObject.name = "Player" + _ID.ToString();
             playerGameObject = pGameObject;
         }
@@ -252,6 +254,17 @@ public class UserData : MonoBehaviour
          {
                  child.gameObject.layer = LayerMask.NameToLayer(name);;
          }
+    }
+
+
+    void SetAsDraggable(UserData user)
+    {
+        user.head.GetComponent<GizmoController>().draggable = true;
+        user.leftHand.GetComponent<GizmoController>().draggable = true;
+        user.rightHand.GetComponent<GizmoController>().draggable = true;
+        user.head.GetComponent<GizmoController>().draggable = true;
+        user.leftHand.GetComponent<GizmoController>().draggable = true;
+        user.rightHand.GetComponent<GizmoController>().draggable = true;
     }
 
     

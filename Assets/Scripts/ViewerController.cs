@@ -177,8 +177,10 @@ public class ViewerController : MonoBehaviour
 
 
 		}
-		if (pov == 1 || pov == 2) camera.fieldOfView = vrFOV;
+		if (pov == 1 || pov == 2)
+			camera.fieldOfView = vrFOV;
 		else camera.fieldOfView = standaloneFOV;
+
 	}
 }
 

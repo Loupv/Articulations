@@ -172,7 +172,7 @@ public class IsInsightCheck : MonoBehaviour
         else
         {
             p1MirrorGazeSignal.color = Color.white;
-            p2SphereMirrorGazeSignal.GetComponent<MeshRenderer>().materials[0].color = Color.white;
+            p1SphereMirrorGazeSignal.GetComponent<MeshRenderer>().materials[0].color = Color.white;
         }
         if (p2SeesLeftPartOfMirror && p2SeesRightPartOfMirror)
         {
