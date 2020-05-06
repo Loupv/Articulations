@@ -58,3 +58,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Smoke
+    uniqueID: 2300203895
+    locked: 0
+  - name: Flames
+    uniqueID: 804834383
+    locked: 0

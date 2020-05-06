@@ -106,7 +106,16 @@ public class GameEngine : MonoBehaviour
         clock =                 (Clock)FindObjectOfType(typeof(Clock));
 
         canvasHandler.ChangeCanvas("initCanvas");
-        _userRole = UserRole.Server; // base setting
+        //_userRole = UserRole.Server; // base setting
+        int t=0;
+        switch (_userRole)
+        {
+            case UserRole.Server: {t = 0; break;}
+            case UserRole.Player: {t = 1; ; break;}
+            case UserRole.Viewer: {t = 2; ; break;}
+            case UserRole.Tracker: {t = 3; ; break;}
+            case UserRole.Playback: {t = 4; break;}
+        }
         
         // load jsons
         fileInOut.LoadPreferencesFiles(this);
@@ -128,7 +137,7 @@ public class GameEngine : MonoBehaviour
         useVRHeadset = (gameData.useVr ==1);
         StartCoroutine(EnableDisableVRMode(useVRHeadset));
         if(useVRHeadset) uiHandler.SetPlayerNetworkType(1);
-        else uiHandler.SetPlayerNetworkType(0);
+        else uiHandler.SetPlayerNetworkType(t);
         
         // do we print sent and received messages
         if(gameData.DebugMode == 1){

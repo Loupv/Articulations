@@ -9,7 +9,7 @@ public class UserManager : MonoBehaviour
     public UserData me;
     public Dictionary<string, Vector3> pendingPositionsActualizations;
     public Dictionary<string, Quaternion> pendingRotationsActualizations;
-    public GameObject playerPrefab, viewerPrefab, trackerPrefab, TrailRendererPrefab, SparkParticlesPrefab, particles3, particles4;
+    public GameObject playerPrefab, viewerPrefab, trackerPrefab, playbackPrefab, TrailRendererPrefab, SparkParticlesPrefab, particles3, particles4;
     public ViewerController viewerController;
 
     public string viveSystemName = "[CameraRig]", 
@@ -122,7 +122,7 @@ public class UserManager : MonoBehaviour
     {
         GameObject go;
 
-        if (role == UserRole.Player || role == UserRole.Playback) go = Instantiate(playerPrefab);
+        if (role == UserRole.Player) go = Instantiate(playerPrefab);
         else if (role == UserRole.Tracker)
         {
             go = Instantiate(trackerPrefab);
@@ -133,6 +133,8 @@ public class UserManager : MonoBehaviour
             go = Instantiate(viewerPrefab);
             go.GetComponent<ViewerController>().InitViewerController(false);
         }
+        else if (role == UserRole.Playback)
+            go = Instantiate(playbackPrefab);
         else go = new GameObject(); // useless
 
         UserData p = go.GetComponent<UserData>();
