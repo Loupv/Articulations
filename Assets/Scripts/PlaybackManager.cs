@@ -16,7 +16,7 @@ public class PlaybackManager : MonoBehaviour
     public IsInsightCheck isInsightCheck;
     public int currentRecordLine;
     public PerformanceLine currentLine;
-    public MovementAnalyser movementAnalyser;
+    public GestureAnalyser movementAnalyser;
     public int playerNumber;
     public PlaybackMode mode;
     public float performanceMaxTime;
@@ -38,8 +38,6 @@ public class PlaybackManager : MonoBehaviour
         Debug.Log("Launching playback");
         InvokeRepeating("UpdatePlayback",0f,1/(float)gameEngine.targetFrameRate);
         gameEngine.uiHandler.playPauseButtonImage.sprite = gameEngine.uiHandler.pauseSprite;
-
-        movementAnalyser.Init(gameEngine.userManager);
     }
 
     void UpdatePlayback()

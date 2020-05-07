@@ -44,12 +44,12 @@ public class GestureVisualiser : MonoBehaviour
                 p1ObjectsToTrack[1] = usersPlaying[1].leftHand;
                 p1ObjectsToTrack[2] = usersPlaying[1].rightHand;
             }
-            if(usersPlaying.Count > 0){
+            /*if(usersPlaying.Count > 0){
                 p2ObjectsToTrack = new GameObject[3];
                 p2ObjectsToTrack[0] = usersPlaying[2].head;
                 p2ObjectsToTrack[1] = usersPlaying[2].leftHand;
                 p2ObjectsToTrack[2] = usersPlaying[2].rightHand;
-            }
+            }*/
          
 
         
@@ -68,7 +68,7 @@ public class GestureVisualiser : MonoBehaviour
 
     void DrawContraction(){
         shapeDrawer1.DrawContraction(p1ObjectsToTrack[0].transform,p1ObjectsToTrack[1].transform,p1ObjectsToTrack[2].transform);                        
-        shapeDrawer2.DrawContraction(p2ObjectsToTrack[0].transform,p2ObjectsToTrack[1].transform,p2ObjectsToTrack[2].transform);
+        //shapeDrawer2.DrawContraction(p2ObjectsToTrack[0].transform,p2ObjectsToTrack[1].transform,p2ObjectsToTrack[2].transform);
     }
 
     void DebugText(){

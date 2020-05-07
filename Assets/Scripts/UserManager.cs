@@ -174,10 +174,15 @@ public class UserManager : MonoBehaviour
             if(gameEngine.currentVisualisationMode == "2D") Camera.main.cullingMask = gameEngine.scenarioEvents.oldMirrorMask; // revert camera layers if last mode was 2D
 
 
-            // main parameters
-            // TODO CLEAN THIS PART
+        // main parameters
+        // TODO CLEAN THIS PART
+        Debug.Log("here " + newVisualisationMode);
             if (newVisualisationMode == "0") gameEngine.scenarioEvents.SetTimeOfDay(6);
+
+            else if (newVisualisationMode == "9x") gameEngine.scenarioEvents.SetTimeOfDay(0);
+
             else gameEngine.scenarioEvents.SetTimeOfDay(8);
+
 
             if (_hasLerped && (newVisualisationMode != "1Ca" || newVisualisationMode != "1Cb" || newVisualisationMode != "1Cc")) ReverseArmsLerping(); // TODO corriger ici
 

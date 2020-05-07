@@ -48,6 +48,7 @@ public class ScenarioEvents : MonoBehaviour
     void Start()
     {
         skyboxID = 0;
+        hourOfDay = -1;
         shortTrails = userManager.TrailRendererPrefab;
         longTrails = userManager.SparkParticlesPrefab;
         //particleList = new List<GameObject>();

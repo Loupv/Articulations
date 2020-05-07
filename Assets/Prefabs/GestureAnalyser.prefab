@@ -1484,15 +1484,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8773243578296310769}
-  - component: {fileID: 2535849279859436376}
-  - component: {fileID: 8773243578296310780}
+  - component: {fileID: 1067215291}
+  - component: {fileID: 1067215290}
   m_Layer: 0
   m_Name: GestureAnalyser
   m_TagString: GestureAnalyser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8773243578296310769
 Transform:
   m_ObjectHideFlags: 0
@@ -1510,7 +1510,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2535849279859436376
+--- !u!114 &1067215291
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1519,12 +1519,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 8773243578296310775}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2dc89b1c06381941b150035046bac28, type: 3}
+  m_Script: {fileID: 11500000, guid: 08894ae5177694c579815ad833e68a66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inited: 0
+  p1HeadActivity: 0
+  p1LeftHandActivity: 0
+  p1RightHandActivity: 0
   bufferSize: 30
-  activityBufferSize: 200
---- !u!114 &8773243578296310780
+  frameRate: 60
+  activityBufferSize: 5
+  p1HSpeed: 0
+  p1LHSpeed: 0
+  p1RHSpeed: 0
+  activityThreshold: 0.002
+  leftHandHeightRatio: 0
+  rightHandHeightRatio: 0
+--- !u!114 &1067215290
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1533,47 +1544,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8773243578296310775}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18521ce0822157e4d93d44a31c69274e, type: 3}
+  m_Script: {fileID: 11500000, guid: 3eba8d5cf522647efb75f5dfddee93cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawContraction: 0
-  debugText: 0
+  drawContraction: 1
+  debugText: 1
   initialised: 0
   usersPlaying: []
-  p1ObjectsToTrack:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  p2ObjectsToTrack:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  p1ObjectsToTrack: []
+  p2ObjectsToTrack: []
   meshDrawer1: {fileID: 2320959622878413050}
   meshDrawer2: {fileID: 7644597784855079296}
-  p1DebugText:
-  - {fileID: 8773243577686021276}
-  - {fileID: 8773243578673680434}
-  - {fileID: 8773243578952476355}
-  - {fileID: 8773243579049408316}
-  - {fileID: 8773243577648211831}
-  - {fileID: 7317047505378953201}
-  - {fileID: 8773243578175524814}
-  - {fileID: 8773243577292728370}
-  - {fileID: 8773243578294938574}
-  - {fileID: 8773243577362235782}
-  - {fileID: 8773243578851032958}
-  - {fileID: 5316221380082539500}
-  p2DebugText:
-  - {fileID: 9041418970593425792}
-  - {fileID: 8599715164318782132}
-  - {fileID: 7512653633251374106}
-  - {fileID: 8767626975502388667}
-  - {fileID: 3405022677477887786}
-  - {fileID: 1070308475778168855}
-  - {fileID: 9090584773708156072}
-  - {fileID: 7052457249182952619}
-  - {fileID: 3922797136874453180}
-  - {fileID: 4522679146470606423}
+  p1DebugText: []
+  p2DebugText: []
 --- !u!1 &8773243578461554717
 GameObject:
   m_ObjectHideFlags: 0
