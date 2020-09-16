@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.437
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.2930864, g: 0.3203239, b: 0.34878978, a: 0.437}
+  m_IndirectSpecularColor: {r: 0.29308647, g: 0.32032403, b: 0.34878978, a: 0.437}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -8971,6 +8971,8 @@ MonoBehaviour:
   viewerPrefab: {fileID: 6075620792603371976, guid: c5732bc9e74ce8e4d9894a361334bf4b,
     type: 3}
   trackerPrefab: {fileID: 6075620792603371976, guid: 14c6ae8e882b0974caa177b074ae4559,
+    type: 3}
+  playbackPrefab: {fileID: 6075620792603371976, guid: c96008b568c3f421988c4928ce10b066,
     type: 3}
   TrailRendererPrefab: {fileID: 4071923053233047380, guid: 9b2d0f8543a6b084b8b9ef046f927ee4,
     type: 3}
@@ -29414,6 +29416,7 @@ MonoBehaviour:
     type: 3}
   isInsightCheck: {fileID: 99710497}
   currentRecordLine: 0
+  movementAnalyser: {fileID: 0}
   playerNumber: 0
   mode: 1
   performanceMaxTime: 0
