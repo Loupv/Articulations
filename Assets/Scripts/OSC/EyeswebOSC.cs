@@ -42,6 +42,7 @@ public class EyeswebOSC : MonoBehaviour
     private UserRole _userRole;
     UserPerformanceData player1PerformanceData, player2PerformanceData;
     SharedPerformanceData sharedPerformanceData;
+    public string customEyeswebAddress = "192.168.1.80";
     public int customEyeswebPort;
     public bool drawBarycenter;
     GameObject barycenter;
@@ -56,7 +57,7 @@ public class EyeswebOSC : MonoBehaviour
         if(!osc.initialized) osc.Init();
 
         oscEndPoint.remotePort = customEyeswebPort;
-        oscEndPoint.ip = "127.0.0.1";
+        oscEndPoint.ip = customEyeswebAddress;
 
         osc.SetAddressHandler("/P1SummaryMatrix", GetFloatFromOsc);
         osc.SetAddressHandler("/P2SummaryMatrix", GetFloatFromOsc);
